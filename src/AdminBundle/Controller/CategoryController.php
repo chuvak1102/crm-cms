@@ -27,7 +27,7 @@ class CategoryController extends Controller
             return $this->render('AdminBundle:category/index', array(
                 'category' => $tree->getTree(),
                 'templates' => Helpers::getFilesInDir('/app/Views/default/')
-            ));
+            ), false);
 
         } else {
 

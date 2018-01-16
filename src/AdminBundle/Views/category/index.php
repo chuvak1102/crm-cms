@@ -1,3 +1,5 @@
+{% extends 'AdminBundle:layout' %}
+{% block 'cat_index' %}
 <div class="tree">
     <div class="up btn-set" id="btn-set">
         <a class="active" href="/admin/category/new/1">Создать категорию</a>
@@ -8,7 +10,7 @@
                 <ul>
                     <?if(!empty($data['category'])){?>
                         <?foreach($data['category'] as $i){?>
-                            <li style="padding-left: <?=20 + $i['level']*15?>px" id="<?=$i['id']?>">
+                            <li class="<?=$i['level'] == 1 ? 'green' : ''?>" style="padding-left: <?=20 + $i['level']*15?>px" id="<?=$i['id']?>">
                                 <?=$i['name']?>
                             </li>
                         <?}?>
@@ -25,6 +27,6 @@
     </div>
 </div>
 <div class="clear"></div>
+{% endblock %}
 
-
-
+<?dump($data)?>

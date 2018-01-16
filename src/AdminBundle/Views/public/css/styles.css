@@ -11,7 +11,7 @@ html, body {  height: 100%;  font-family: Verdana, sans-serif  }
 #messages_page{  background-position: -38px -357px;  }
 #notepad_page{  background-position: -759px 2px;  }
 #important_page{  background-position: -398px -37px;  }
-#constructor_page{  background-position: -79px -398px;  }
+#category{  background-position: -79px -398px;  }
 #settings_page{  background-position: -21px 0;  }
 #search_page {  background-position: 1px 1px;  }
 #recycle_page{  background-position: -38px 1px;  }
@@ -24,9 +24,15 @@ html, body {  height: 100%;  font-family: Verdana, sans-serif  }
 #card_page {  background-position: -599px -398px;  }
 #block {  background-position: -479px -76px;  }
 .background {  border-left: 1px solid rgb(213,213,213);  position: absolute;  right: 0;  top: 0;  width: calc(100% - 45px);  height: 100%;  background-color: #B8B8B8;  }
-#content {  overflow-x: hidden;  overflow-y: auto;  width: calc(100% - 20px);  height: calc(100% - 20px);  background-color: #fff;  margin: auto;  margin-top: 10px;  border-radius: 5px;  border: 1px solid rgb(118,118,118);  }
+#content {padding: 10px;  overflow-x: hidden;  overflow-y: auto;  width: calc(100% - 20px);  height: calc(100% - 20px);  background-color: #fff;  margin: auto;  margin-top: 10px;  border-radius: 5px;  border: 1px solid rgb(118,118,118);  }
 
+.green{background-color: #b1ffac;}
 
+/*category tree*/
+.tree .mid ul li{position: relative}
+.tree .mid ul li:before{content: ""; position: absolute; margin-left: -20px; width: 17px; height: 17px; background: url("../images/folder.png") no-repeat scroll center center; background-size: 17px}
+.tree .mid ul li:hover{cursor: pointer}
+.tree .mid ul li.active{background-color: #b1ffac;}
 
 
 
