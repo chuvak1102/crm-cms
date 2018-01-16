@@ -1,0 +1,25 @@
+RewriteEngine On
+
+<Files ~ "\.php$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "index.php$">
+    Order allow,deny
+    Allow from all
+</Files>
+
+<Files ~ "^\.htaccess">
+  Order allow,deny
+  Deny from all
+</Files>
+
+RewriteCond %{HTTP_REFERER} !^http://(www\.)?localhost [NC]
+RewriteCond %{HTTP_REFERER} !^http://(www\.)?localhost.*$ [NC]
+#RewriteRule \.(gif|jpg|png|jpeg|pdf|xlxs|csv|mp3)$ - [F]
+
+Options -Indexes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php [L]

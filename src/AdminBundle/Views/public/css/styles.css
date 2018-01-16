@@ -1,0 +1,40 @@
+*{  margin: 0;  padding: 0;  box-sizing: border-box;  text-decoration: none;  outline: none;  list-style: none;  }
+html, body {  height: 100%;  font-family: Verdana, sans-serif  }
+.wrapper {  position: relative;  height: 100%;  width: 100%;  }
+.menu {  background-color: #B8B8B8;  height: 100%;  width: 45px;  border-right: 1px solid rgb(118,118,118);  }
+.vert_line {  height: 100%;  width: 2px;  top: 0;  left: 42px;  background-color: #000;  position: absolute;  border-left: 1px solid rgb(199,199,199);  border-right: 1px solid rgb(141,141,141);  }
+.menu div {  width: 45px;  height: 45px;  background: url("../images/icons.png") no-repeat;  }
+.menu a {  display: block;  width: 45px;  height: 45px;  background: url("../images/icons.png") no-repeat;  }
+.menu .active {  border-right: 1px solid #999;  background-color: #fff;  }
+.menu div:hover {  background-color: #fff;  border-right: 1px solid rgb(118,118,118);  }
+#home_page {  background-position: -319px 2px;  }
+#messages_page{  background-position: -38px -357px;  }
+#notepad_page{  background-position: -759px 2px;  }
+#important_page{  background-position: -398px -37px;  }
+#constructor_page{  background-position: -79px -398px;  }
+#settings_page{  background-position: -21px 0;  }
+#search_page {  background-position: 1px 1px;  }
+#recycle_page{  background-position: -38px 1px;  }
+#delivery_page {  background-position: -119px -117px;  }
+#calendar_page {  background-position: -439px -118px;  }
+#workers_page {  background-position: -278px -197px;  }
+#settings_page {  background-position: -758px -197px;  }
+#groups_page {  background-position: -38px -357px;  }
+#documents_page {  background-position: -319px -398px;  }
+#card_page {  background-position: -599px -398px;  }
+#block {  background-position: -479px -76px;  }
+.background {  border-left: 1px solid rgb(213,213,213);  position: absolute;  right: 0;  top: 0;  width: calc(100% - 45px);  height: 100%;  background-color: #B8B8B8;  }
+#content {  overflow-x: hidden;  overflow-y: auto;  width: calc(100% - 20px);  height: calc(100% - 20px);  background-color: #fff;  margin: auto;  margin-top: 10px;  border-radius: 5px;  border: 1px solid rgb(118,118,118);  }
+
+
+
+
+
+
+
+
+
+
+
+
+

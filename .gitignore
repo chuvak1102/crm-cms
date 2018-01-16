@@ -1,0 +1,11 @@
+web/**
+favicon.ico
+app/cache/**
+app/logs/**
+app/Views/default/**
+!app/cache/placeholder
+!app/logs/placeholder
+!app/Views/default/placeholder
+!web/placeholder
+vendor/*
+!vendor/Framework
