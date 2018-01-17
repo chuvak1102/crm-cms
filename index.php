@@ -21,6 +21,7 @@ $router->run();
 
 \Framework\Component\System\System::stopScriptTime();
 
+/*
 if(\app\Config\Config::Production === false)
 {
     ?>
@@ -35,6 +36,7 @@ if(\app\Config\Config::Production === false)
     </div>
     <?
 }
+*/
 
 function dump($data)
 {

@@ -1,43 +1,55 @@
-<?use Framework\Core\App;?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ADMIN</title>
-
+    <title>F-Admin</title>
+    <link rel="stylesheet" href="/src/AdminBundle/Views/public/css/styles.css">
     <script src="https://use.fontawesome.com/bea432bde8.js"></script>
     <script src="/src/AdminBundle/Views/public/js/jquery.js"></script>
-
-    <link rel="stylesheet" href="/src/AdminBundle/Views/public/css/styles.css">
-<!--    <link rel="stylesheet" href="/src/AdminBundle/Views/public/css/framework.css">-->
 </head>
 <body>
-<div class="wrapper">
-    <div class="menu" id="menu">
-        <a class="active" id="home_page" href="/admin" title="Главная"></a>
-        <div id="category" title="Структура"></div>
-        <div id="messages_page" title="Сообщения"></div>
-        <div id="calendar_page" title="Календарь"></div>
-        <div id="notepad_page" title="Блокнот"></div>
-        <div id="documents_page" title="Прайсы"></div>
-        <div id="search_page" title="Поиск"></div>
-        <div id="important_page" title="Важно"></div>
-        <div id="recycle_page" title="Корзина"></div>
-        <div id="delivery_page" title="Заказы"></div>
-        <div id="workers_page" title="Персонал"></div>
-        <div id="card_page" title="Карточка сотрудника"></div>
-        <div id="settings_page" title="Настройки системы"></div>
-    </div>
-    <div class="background" id="background">
-        <div class="content" id="content">
-            <?include App::$template?>
-        </div>
-    </div>
-</div>
 
+<div class="container">
+    <table class="menu" id="menu">
+        <tr>
+            <td id="p_1_1"><div class="page"><button class="btn"><i class="fa fa-sitemap"></i></button></div></td>
+            <td id="p_1_2"><div class="page"><button class="btn"><i class="fa fa-newspaper-o"></i></button></div></td>
+            <td id="p_1_3"><div class="page"><button class="btn"><i class="fa fa-envelope badge"></i></button></div></td>
+            <td id="p_1_4"><div class="page"><button class="btn"><i class="fa fa-newspaper-o"></i></button></div></td>
+            <td id="p_1_5"><div class="page"><button class="btn"><i class="fa fa-user"></i></button></div></td>
+        </tr>
+        <tr>
+            <td id="p_2_1"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+            <td id="p_2_2"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+            <td id="p_2_3"><div class="page"><button class="btn"><i class="fa fa-sitemap"></i></button></div></td>
+            <td id="p_2_4"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+            <td id="p_2_5"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+        </tr>
+        <tr>
+            <td id="p_3_1"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+            <td id="p_3_2"><div class="page"><button class="btn"><i class="fa fa-gift"></i></button></div></td>
+            <td id="p_3_3"><div class="page"><button class="btn"><i class="fa fa-photo"></i></button></div></td>
+            <td id="p_3_4"><div class="page"><button class="btn"><i class="fa fa-shopping-cart"></i></button></div></td>
+            <td id="p_3_5"><div class="page"><button class="btn"><i class="fa fa-upload"></i></button></div></td>
+        </tr>
+        <tr>
+            <td id="p_4_1"><div class="page"><button class="btn"><i class="fa fa-bug"></i></button></div></td>
+            <td id="p_4_2"><div class="page"><button class="btn"><i class="fa fa-bell"></i></button></div></td>
+            <td id="p_4_3"><div class="page"><button class="btn"><i class="fa fa-"></i></button></div></td>
+            <td id="p_4_4"><div class="page"><button class="btn"><i class="fa fa-calendar"></i></button></div></td>
+            <td id="p_4_5"><div class="page"><button class="btn"><i class="fa fa-sliders"></i></button></div></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><div class="page"><button class="mbtn" id="back"><i class="fa fa-rotate-left"></i></button></div></td>
+            <td><div class="page"><button class="mbtn" id="home"><i class="fa fa-home"></i></button></div></td>
+            <td><div class="page"><button class="mbtn" id="subm"><i class="fa fa-bars"></i></button></div></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
 <script src="/src/AdminBundle/Views/public/js/admin.js"></script>
 </body>
 </html>
