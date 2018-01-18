@@ -2,18 +2,10 @@ $(document).ready(function()
 {
     var set = {
 
-        page : {
-            x : null,
-            y : null,
-            current : null,
-            inProcess : false,
-            animationSpeed : 600
-        },
-
         map : {
             "p_1_1" : {
                 icon : "fa-sitemap",
-                url : "/admin/category/",
+                url : "/admin/category/empty",
                 screens : {
                     0 : {},
                     1 : {},
@@ -36,7 +28,6 @@ $(document).ready(function()
                 icon : "fa-user",
                 url : "/admin/category/"
             },
-
             "p_2_1" : {
                 icon : "",
                 url : "/admin/category/"
@@ -97,6 +88,14 @@ $(document).ready(function()
                 icon : "fa-sliders",
                 url : "/admin/category3/"
             }
+        },
+
+        page : {
+            x : null,
+            y : null,
+            current : null,
+            inProcess : false,
+            animationSpeed : 600
         },
 
         menuCellWidth : 20,

@@ -272,4 +272,14 @@ class CategoryController extends Controller
 
         return null;
     }
+
+    /**
+     * @Route("/empty")
+     */
+    public function emptyAction()
+    {
+        return $this->render('AdminBundle:category/empty', array(
+
+        ), false);
+    }
 }

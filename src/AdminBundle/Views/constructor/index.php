@@ -50,6 +50,7 @@
                         <select name="method" id="template">
                             <option value="">Метод</option>
                             <option value="GetCTypeByAlias">GetCTypeByAlias</option>
+                            <option value="GetProductTreeByNode">GetProductTreeByNode</option>
                         </select>
                     </td>
                     <td class="ta-l">

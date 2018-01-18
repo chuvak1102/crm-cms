@@ -1,6 +1,11 @@
 *{  margin: 0;  padding: 0;  box-sizing: border-box;  text-decoration: none;  outline: none;  list-style: none;  }
+@font-face {  font-family: "Open Sans";  src: url("../font/open-sans.ttf") format("woff2")  }
+
 html{height: 100%;}
-body{height: 100%; overflow: hidden}
+body{height: 100%; overflow: hidden; font-family: "Open Sans", "Arial", sans-serif}
+
+/*boot css*/
+.p-30{padding: 30px}
 
 /*main css*/
 .container{height: 100%;}
@@ -8,7 +13,7 @@ i.fa.badge::after{z-index: 1;  content: "";  position: absolute;  width: 15px;  
 table.menu{width: 100%; height: 100%; position: absolute; border-collapse: collapse}
 table.menu tr{height: 22.5%}
 table.menu tr td{ width: 20%; height: 23%; background-color: #000}
-table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid rgb(213,213,213);  border-bottom: 1px solid #999;  border-right: 1px solid #999;  border-top: 1px solid rgb(213,213,213);}
+table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid rgb(213,213,213);  border-bottom: 1px solid #999999;  border-right: 1px solid #999;  border-top: 1px solid rgb(213,213,213);}
 table.menu tr:last-child{height: 10%;}
 table.menu tr:last-child td{height: 8%; border: none; border-bottom: 1px solid #000}
 table.menu tr:last-child td .page{border: 1px solid #000}
@@ -21,21 +26,11 @@ table.menu tr:last-child td .page{border: 1px solid #000}
 .mbtn:active{background-color: #292929}
 
 ul.screen{height: 100%; width: 1000%; font-size: 0; transition: margin-left 0.5s; background-color: #b8b8b8}
-ul.screen > li{display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px;}
+ul.screen > li{display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
 
 /*category*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.category{ height: 100px; margin-bottom: 10px;}
+.category .left{text-align: center;;;;float: left; background-color: #999999; width: 100px; height: 100%; vertical-align: baseline}
+.category .left img{max-width: 100px; max-height: 100px;}
+.category .right{height: 100px;;;float: right; width: calc(100% - 110px); background-color: #fff;}
 
