@@ -3,6 +3,8 @@ favicon.ico
 app/cache/**
 app/logs/**
 app/Views/default/**
+!app/Views/default/layout.php
+!app/Views/default/index.php
 !app/cache/placeholder
 !app/logs/placeholder
 !app/Views/default/placeholder
