@@ -1,8 +1,8 @@
 <?php
-namespace Framework\Core\ORM;
-use app\Config\Config;
-use Framework\Core\Controller\Controller;
-use Framework\Core\ORM\Mapping;
+namespace Framework\Component\ORM;
+//use app\Config\Config;
+//use Framework\Component\Controller\Controller;
+//use Framework\Component\ORM\Mapping;
 
 class ORM{
 

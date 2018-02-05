@@ -1,13 +1,14 @@
 <?php
 namespace AdminBundle\Controller;
 
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use AdminBundle\Services\Helpers;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use AdminBundle\Services\Constructor;
-use Framework\Core\ORM\Extension\NestedSets;
+use Framework\Component\ORM\Extension\NestedSets;
 use Framework\Modules\MySql\MySql;
 use Framework\Modules\Pagination\Pagination;
-use Framework\Core\HttpFoundation\Response;
+use Framework\Component\HttpFoundation\Response;
 
 class ViewController extends Controller{
 
@@ -51,7 +52,16 @@ class ViewController extends Controller{
      */
     public function submitAction($token, MySql $mySql)
     {
+        $token = Helpers::sqlSanitize($token);
 
+        $form = $mySql->findOneBy('E_Form', array(
+            'token' => $token
+        ));
+
+        if($form)
+        {
+
+        }
 
         return $this->redirectToRoute('/');
     }

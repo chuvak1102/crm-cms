@@ -1,6 +1,6 @@
 <?php
 namespace AdminBundle\Entity;
-use Framework\Core\ORM\Entity;
+use Framework\Component\ORM\Entity;
 
 /**
  * @ORM\Table(name="E_Content")

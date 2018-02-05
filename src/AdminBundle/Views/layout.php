@@ -10,11 +10,10 @@
     <script src="/src/AdminBundle/Views/public/js/jquery.js"></script>
 </head>
 <body>
-
 <div class="container">
     <table class="menu" id="menu">
         <tr>
-            <td id="p_1_1"><div class="page"><button class="btn"><i class="fa fa-sitemap"></i></button></div></td>
+            <td id="p_1_1"><div class="page" title="Новый договор ИСЖ"><button class="btn"><i class="fa fa-sitemap"></i></button></div></td>
             <td id="p_1_2"><div class="page"><button class="btn"><i class="fa fa-newspaper-o"></i></button></div></td>
             <td id="p_1_3"><div class="page"><button class="btn"><i class="fa fa-envelope badge"></i></button></div></td>
             <td id="p_1_4"><div class="page"><button class="btn"><i class="fa fa-newspaper-o"></i></button></div></td>

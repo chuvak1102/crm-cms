@@ -1,5 +1,5 @@
 <?php
-namespace Framework\Core\ORM\Extension;
+namespace Framework\Component\ORM\Extension;
 use Framework\Modules\DB\Connection;
 use PDO;
 

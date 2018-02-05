@@ -1,7 +1,7 @@
 <?php
 namespace AdminBundle\Controller;
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use AdminBundle\Entity\Constructor;
 use AdminBundle\Services\Helpers;
 use Framework\Modules\Authorization\Authorization;

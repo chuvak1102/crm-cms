@@ -1,6 +1,5 @@
 <?php
-namespace app\Services;
-use app\Services\Helpers;
+namespace AdminBundle\Services;
 
 class Generator{
 

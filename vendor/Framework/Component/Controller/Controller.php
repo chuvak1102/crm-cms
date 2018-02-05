@@ -1,8 +1,8 @@
 <?php
-namespace Framework\Core\Controller;
-use Framework\Core\App;
+namespace Framework\Component\Controller;
+use Framework\App;
 use Framework\Modules\MySql\MySql;
-use Framework\Core\ORM\ORM;
+use Framework\Component\ORM\ORM;
 
 class Controller {
 

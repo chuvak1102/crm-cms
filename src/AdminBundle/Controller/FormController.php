@@ -2,8 +2,8 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Services\Helpers;
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use Framework\Modules\Authorization\Authorization;
 use Framework\Modules\MySql\MySql;
 

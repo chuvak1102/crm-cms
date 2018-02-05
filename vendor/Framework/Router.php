@@ -1,8 +1,8 @@
 <?php
 use Framework\Modules\Annotation\AnnotationParser;
 use AdminBundle\Controller\viewController;
-use Framework\Core\ORM\Entity;
-use Framework\Core\App;
+use Framework\Component\ORM\Entity;
+use Framework\App;
 use app\Config\Config;
 use Framework\Modules\Logger\Logger;
 

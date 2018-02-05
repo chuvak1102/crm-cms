@@ -1,7 +1,7 @@
 <?php
-namespace Framework\Core\ORM;
+namespace Framework\Component\ORM;
 use Framework\Modules\DB\Connection;
-use Framework\Core\ORM\Mapping;
+use Framework\Component\ORM\Mapping;
 use app\Config\Config;
 use PDO;
 

@@ -1,5 +1,5 @@
 <?php
-namespace Framework\Core\ORM;
+namespace Framework\Component\ORM;
 use Framework\Modules\DB\Connection;
 
 class Entity implements EntityInterface {

@@ -10,83 +10,195 @@ $(document).ready(function()
                     0 : {},
                     1 : {},
                     2 : {}
-                }
+                },
+                screen : 0
             },
             "p_1_2" : {
                 icon : "fa-newspaper-o",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {}
+                },
+                screen : 0
             },
             "p_1_3" : {
                 icon : "fa-envelope badge",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {}
+                },
+                screen : 0
             },
             "p_1_4" : {
                 icon : "fa-newspaper-o",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_1_5" : {
                 icon : "fa-user",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_2_1" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_2_2" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_2_3" : {
                 icon : "fa-sitemap",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_2_4" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_2_5" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_3_1" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_3_2" : {
                 icon : "fa-gift",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_3_3" : {
                 icon : "fa-photo",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_3_4" : {
                 icon : "fa-shopping-cart",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_3_5" : {
                 icon : "fa-upload",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_4_1" : {
                 icon : "fa-bug",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_4_2" : {
                 icon : "fa-bell badge",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_4_3" : {
                 icon : "",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_4_4" : {
                 icon : "fa-calendar",
-                url : "/admin/category/"
+                url : "/admin/category/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             },
             "p_4_5" : {
                 icon : "fa-sliders",
-                url : "/admin/category3/"
+                url : "/admin/category3/",
+                screens : {
+                    0 : {},
+                    1 : {},
+                    2 : {}
+                },
+                screen : 0
             }
         },
 
@@ -95,6 +207,7 @@ $(document).ready(function()
             y : null,
             current : null,
             inProcess : false,
+            enabledListing : false,
             animationSpeed : 600
         },
 

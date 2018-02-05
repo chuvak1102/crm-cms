@@ -5,8 +5,8 @@ ini_set('display_errors', 0);
 
 require_once 'vendor/autoload.php'; // composer autoloader
 require_once 'app/Config/config.php';
-require_once 'vendor/Framework/Core/Router.php';
-require_once 'vendor/Framework/Core/App.php';
+require_once 'vendor/Framework/Router.php';
+require_once 'vendor/Framework/App.php';
 require_once 'vendor/Framework/Autoload.php';
 
 if(\app\Config\Config::DisplayErrors === true)

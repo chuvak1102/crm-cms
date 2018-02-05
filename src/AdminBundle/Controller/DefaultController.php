@@ -1,8 +1,8 @@
 <?php
 namespace AdminBundle\Controller;
-use Framework\Core\Session\Session;
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use Framework\Component\Session\Session;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use Framework\Modules\Authorization\Authorization;
 use AdminBundle\Services\DataChecker;
 

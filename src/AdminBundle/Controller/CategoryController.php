@@ -2,13 +2,13 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Entity\ContentType;
-use Framework\Core\HttpFoundation\JsonResponse;
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use Framework\Component\HttpFoundation\JsonResponse;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use AdminBundle\Services\Helpers;
 use AdminBundle\Entity\CategoryFields as FieldSet;
 use AdminBundle\Entity\Category;
-use Framework\Core\ORM\Extension\NestedSets;
+use Framework\Component\ORM\Extension\NestedSets;
 use Framework\Modules\Authorization\Authorization;
 use Framework\Modules\MySql\MySql;
 

@@ -1,7 +1,7 @@
 <?php
 namespace Framework\Modules\Authorization;
 use Framework\Modules\MySql\MySql;
-use Framework\Core\Session\Session;
+use Framework\Component\Session\Session;
 use LifeBundle\Services\Helpers;
 use LifeBundle\Services\DataChecker;
 

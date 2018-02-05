@@ -1,6 +1,6 @@
 <?php
 namespace AdminBundle\Repository;
-use Framework\Core\ORM\Repository;
+use Framework\Component\ORM\Repository;
 
 class Category extends Repository{
 

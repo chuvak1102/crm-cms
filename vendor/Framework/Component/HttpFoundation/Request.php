@@ -1,5 +1,5 @@
 <?php
-namespace Framework\Core\HttpFoundation;
+namespace Framework\Component\HttpFoundation;
 
 class Request{
 

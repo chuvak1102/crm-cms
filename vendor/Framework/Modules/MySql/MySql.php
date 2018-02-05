@@ -354,7 +354,7 @@ class MySql{
         $stmt = $this->pdo->prepare($query);
         return $stmt->execute();
     }
-    
+
     function query($query)
     {
         $stmt = $this->pdo->prepare($query);

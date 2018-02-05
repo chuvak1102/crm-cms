@@ -1,5 +1,5 @@
 <?php
-namespace Framework\Core\Entity;
+namespace Framework\Component\Entity;
 
 interface EntityInterface{
 

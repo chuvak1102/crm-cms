@@ -1,5 +1,5 @@
 <?php
-use Framework\Core\App;
+use Framework\App;
 ?>
     <!doctype html>
     <html lang="en">

@@ -2,12 +2,12 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Services\Helpers;
-use Framework\Core\HttpFoundation\Request;
-use Framework\Core\Controller\Controller;
+use Framework\Component\HttpFoundation\Request;
+use Framework\Component\Controller\Controller;
 use AdminBundle\Entity\Category;
 use AdminBundle\Entity\CategoryFields;
 use AdminBundle\Entity\ContentType;
-use Framework\Core\ORM\Extension\NestedSets;
+use Framework\Component\ORM\Extension\NestedSets;
 use Framework\Modules\FileUploader\FileUploader;
 use Framework\Modules\Authorization\Authorization;
 
