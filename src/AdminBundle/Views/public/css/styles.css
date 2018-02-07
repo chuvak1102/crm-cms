@@ -1,11 +1,30 @@
 *{  margin: 0;  padding: 0;  box-sizing: border-box;  text-decoration: none;  outline: none;  list-style: none;  }
 @font-face {  font-family: "Open Sans";  src: url("../font/open-sans.ttf") format("woff2")  }
+@font-face {  font-family: "Helvetica Neue";  src: url("../font/HelveticaNeueCyr-Medium.otf")   }
+@font-face {  font-family: "Helvetica Neue Black";  src: url("../font/HelveticaNeueCyr-Black.otf")   }
+
 
 html{height: 100%;}
-body{height: 100%; overflow: hidden; font-family: "Open Sans", "Arial", sans-serif}
+body{height: 100%; overflow: hidden; font-family: "Helvetica Neue", "Open Sans", "Arial", sans-serif}
 
 /*boot css*/
-.p-30{padding: 30px}
+.p-10{padding: 10px}.p-30{padding: 30px} .p-50{padding: 50px}
+
+h1{    color: #fff;  font-size: 40px;  padding: 100px 0 10px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
+.aqua1{background: url("../images/aqua.jpg") no-repeat scroll center center / 100% 100%}
+.aqua2{background: url("../images/aqua2.jpg") no-repeat scroll center center / 100% 100%}
+.aqua3{background: url("../images/aqua3.jpg") no-repeat scroll center center / 100% 100%}
+.aqua4{background: url("../images/aqua4.jpg") no-repeat scroll center center / 100% 100%}
+.aqua5{
+
+
+    background: #bfe5e8;
+    background-image:  url(../images/back3.jpeg);
+    background-position: center center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
 
 /*main css*/
 .container{height: 100%;}
@@ -13,26 +32,78 @@ i.fa.badge::after{z-index: 1;  content: "";  position: absolute;  width: 15px;  
 table.menu{width: 100%; height: 100%; position: absolute; border-collapse: collapse}
 table.menu tr{height: 22.5%}
 table.menu tr td{ width: 20%; height: 23%; background-color: #000}
-table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid rgb(213,213,213);  border-bottom: 1px solid #999999;  border-right: 1px solid #999;  border-top: 1px solid rgb(213,213,213);}
+table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid #ededed;  border-bottom: 1px solid #b6b6b6;  border-right: 1px solid #b6b6b6;  border-top: 1px solid #ededed;}
 table.menu tr:last-child{height: 10%;}
 table.menu tr:last-child td{height: 8%; border: none; border-bottom: 1px solid #000}
 table.menu tr:last-child td .page{border: 1px solid #000}
 
-.btn{width: 100%;height: 100%; border: none; outline: none; background-color: #B8B8B8; font-size: 40px; color: #000000  }
+.btn{width: 100%;height: 100%; border: none; outline: none; background-color: #d4d4d4; font-size: 40px; color: #000000  }
 .btn:active{border: 1px solid #000}
 .btn:focus{border: 1px solid #000}
 
 .mbtn{width: 100%;height: 100%; border: 1px solid #000; outline: none; background-color: #000; font-size: 30px; color: #fff}
 .mbtn:active{background-color: #292929}
 
-ul.screen{height: 100%; width: 1000%; font-size: 0; transition: margin-left 0.5s; background-color: #b8b8b8}
-ul.screen > li{display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
+ul.screen{height: 100%; width: 1000%; font-size: 0; transition: margin-left 0.5s; background-color: #fff}
+ul.screen > li{position: relative;display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
 
-.blue_1{color: #1e73b2}
+/*submenu*/
+.submenu{position: absolute; left: 60%; bottom: 8%; z-index: 100; min-width: 10%; max-width: 40%; width: 40%;}
+.submenu ul li{color: #fff;width:100%; height: 8%; background-color: #000000; line-height: 70px; padding-left: 20px; border-bottom: 1px solid #fff; text-decoration: underline; letter-spacing: 2px}
+.submenu ul li:hover{background-color: #292929}
+
+/*screen nav*/
+.nextScreen{position: fixed; width: 50px; height: 50px; background-color: #fff; border-radius: 50%; right: 5%; bottom: 5%; text-align: center; line-height: 50px; color: #1e73b2; font-weight: bold; font-size: 50px}
 
 /*category*/
-.category{ height: 100px; margin-bottom: 10px;}
-.category .left{text-align: center;;;;float: left; background-color: #999999; width: 100px; height: 100%; vertical-align: baseline}
-.category .left img{max-width: 100px; max-height: 100px;}
-.category .right{height: 100px;;;float: right; width: calc(100% - 110px); background-color: #fff;}
+.category{ height: 50px; margin-bottom: 35px;}
+.category.active{background-color: #e1a600  }
+.category .left{text-align: center;;;float: left; background-color: #fff; width: 50px; height: 100%; vertical-align: baseline}
+.category .left img{max-width: 50px; max-height: 50px;}
+.category .right{height: 75px;;float: right; width: calc(100% - 60px); background-color: #bfe7e9; position: relative; overflow: hidden}
+.category .right .buttons{height: 50px; position: absolute; right: 0; top: 0; }
+.category .right .buttons ul{margin-right: -150px; transition: margin-right 0.3s}
+.category .right .buttons ul li{; background-color: #3d4a5d;list-style: none; width: 50px; float: left; line-height: 50px; text-align: center; font-size: 25px;}
+.category .right .buttons ul a{color: #fff;}
+.category .right .buttons:hover ul { margin-right: 0; }
+
+
+/*new category tree*/
+/*.tree{margin: 15px 0 0 0}*/
+/*.tree table{width: 100%;border-collapse: separate;  border-spacing: 50px 20px; }*/
+/*.tree table tr th{background-color: rgba(255, 255, 255, 0.4) ; padding: 10px 30px 30px 15px }*/
+/*.tree table tr td{background-color: rgba(255, 255, 255, 0.51); color: #000; padding: 5px}*/
+
+/*span.s{padding: 0 7px; border-radius: 7px; margin-right: 1px; font-weight: bold}*/
+
+
+/*flex*/
+.tree{min-width: 960px;max-width: 1280px;margin: auto;margin-top: 50px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; align-content: space-around; }
+.tree-single{display: flex; width: calc(33.3333% - 20px); background-color: #fff; margin-bottom: 40px; min-height: 400px; font-size: 40px;
+}
+
+
+
+
+
+
+
+/*colors*/
+.purple{background-color: #5d3097; color: #bbb0d8}
+.green{background-color: #04a863; color: #c3e2d3}
+.orange{background-color: #f9a81b; color: #ffe5ce}
+.blue{background-color: #046ab5; color: #b0c8e4}
+.cyan{background-color: #00aeaf; color: #bfe5e8}
+.pink{background-color: #ed413d; color: #fdd1c4}
+
+/*adaptive*/
+@media screen and (max-device-width: 640px){
+    .submenu{min-width:100%; max-width: 100%; width: 100%; left: 0;}
+    .submenu ul li{min-width:100%; max-width: 100%; width: 100%}
+}
+
+
+
+
+
 
