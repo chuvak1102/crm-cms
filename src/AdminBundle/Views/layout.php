@@ -7,7 +7,7 @@
     <title>F-Admin</title>
     <link rel="stylesheet" href="/src/AdminBundle/Views/public/css/styles.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script src="/src/AdminBundle/Views/public/js/jquery.js"></script>
+    <script src="/src/AdminBundle/Views/public/js/01_jquery.js"></script>
 </head>
 <body>
 <div class="container">
@@ -50,10 +50,8 @@
     </table>
 </div>
 
-<div class="submenu" style="display: none"></div>
-<!--<script defer src="/src/AdminBundle/Views/public/js/core.js"></script>-->
-<!--<script defer src="/src/AdminBundle/Views/public/js/structure.js"></script>-->
-<script defer src="/src/AdminBundle/Views/public/js/admin.js"></script>
+<script src="/src/AdminBundle/Views/public/js/02_core.js"></script>
+<script src="/src/AdminBundle/Views/public/js/03_admin.js"></script>
 
 </body>
 </html>

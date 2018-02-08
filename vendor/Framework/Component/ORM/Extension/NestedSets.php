@@ -20,9 +20,10 @@ class NestedSets{
            CREATE TABLE IF NOT EXISTS `E_Site_Tree` (
                id INT AUTO_INCREMENT PRIMARY KEY,
                `name` VARCHAR(500) NOT NULL,
+               `alias` VARCHAR(500) DEFAULT '',
                `lft` INT NOT NULL,
                `rgt` INT NOT NULL,
-               `alias` VARCHAR(500) DEFAULT '',
+               `lvl` INT NOT NULL,
                `image` VARCHAR(500) DEFAULT '',
                `description` TEXT(10000) DEFAULT '',
                `created` DATETIME NOT NULL,
@@ -39,7 +40,9 @@ class NestedSets{
         $stmt->execute();
 
         if(!$stmt->fetch()['id']){
-            $query = "INSERT INTO E_Site_Tree(id, name, lft, rgt, image, description, setup, created) VALUES(1, 'ROOT', 1, 2, '', '', 0, now());";
+            $query = "
+              INSERT INTO E_Site_Tree(id, name, alias, lft, rgt, lvl, image, description, created, template, setup) 
+              VALUES(1, 'ROOT', 'ROOT', 1, 2, 0, '', '', now(), '', 1);";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
         }
@@ -118,7 +121,6 @@ class NestedSets{
             'setup' => $result['setup'],
             'created' => $result['created'],
             'template' => $result['template'],
-
         );
     }
 
@@ -126,12 +128,12 @@ class NestedSets{
 
         $query =
             "
-               SELECT @myLeft := lft FROM `E_Site_Tree`
+               SELECT @myLeft := lft, @lvl := lvl FROM `E_Site_Tree`
                WHERE `id` = $targetId;
                UPDATE `E_Site_Tree` SET rgt = rgt + 2 WHERE rgt > @myLeft;
                UPDATE `E_Site_Tree` SET lft = lft + 2 WHERE lft > @myLeft;
-               INSERT INTO E_Site_Tree(`name`, `lft`, `rgt`, `alias`, `image`, `description`, `created`) 
-               VALUES('$name', @myLeft + 1, @myLeft + 2,'$alias', '$image', '$description', now());
+               INSERT INTO E_Site_Tree(`name`,`alias`, `lft`, `rgt`, `lvl`, `image`, `description`, `created`) 
+               VALUES('$name', '$alias', @myLeft + 1, @myLeft + 2, @lvl + 1, '$image', '$description', now());
            ";
 
         $stmt = $this->pdo->prepare($query);

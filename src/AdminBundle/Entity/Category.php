@@ -19,6 +19,11 @@ class Category extends Entity{
     public $name;
 
     /**
+     * @ORM\Column(type="text", length=255)
+     */
+    public $alias;
+
+    /**
      * @ORM\Column(type="integer", length=10)
      */
     public $rgt;
@@ -29,9 +34,9 @@ class Category extends Entity{
     public $lft;
 
     /**
-     * @ORM\Column(type="text", length=255)
+     * @ORM\Column(type="integer", length=10)
      */
-    public $alias;
+    public $lvl;
 
     /**
      * @ORM\Column(type="text", length=255)
@@ -88,6 +93,15 @@ class Category extends Entity{
 
     function setRgt($rgt){
         $this->rgt = $rgt;
+    }
+
+    function getLvl(){
+        return $this->lvl;
+    }
+
+    function setLvl($level)
+    {
+        $this->lvl = $level;
     }
 
     function getAlias(){

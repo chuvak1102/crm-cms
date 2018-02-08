@@ -20,13 +20,14 @@ class CategoryController extends Controller
     /**
      * @Route("/")
      */
-    function indexAction(NestedSets $tree)
+    function indexAction()
     {
         if(Authorization::isConfirmed())
         {
+            $cRepo = $this->getORM()->getRepository(Category::class);
+
             return $this->render('AdminBundle:category/index', array(
-                'category' => $tree->getTree(),
-                'templates' => Helpers::getFilesInDir('/app/Views/default/')
+                'category' => $cRepo->findAll()
             ), false);
 
         } else {
@@ -140,7 +141,7 @@ class CategoryController extends Controller
                 'category' => $tree->getTree(),
                 'name' => $category->getName(),
                 'to' => $category->getId()
-            ));
+            ), false);
 
         } else {
 
