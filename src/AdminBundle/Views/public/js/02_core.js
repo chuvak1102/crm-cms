@@ -51,16 +51,16 @@ $(document).ready(function()
                     {
                         debug('ajax success');
 
-                        var page = $('ul.screen');
-                        var screens = $('ul.screen li');
-                        var newScreen = $('<li></li>');
-                        var currentScreenIndex = window.app.page.screen;
+                        let page = $('ul.screen');
+                        let screens = $('ul.screen li');
+                        let newScreen = $('<li></li>');
+                        let currentScreenIndex = window.app.page.screen;
 
                         debug('deleting next sibling screens...');
 
                         if(screens[currentScreenIndex + 1] !== undefined)
                         {
-                            for(var i = currentScreenIndex + 1; i < screens.length; i++)
+                            for(let i = currentScreenIndex + 1; i < screens.length; i++)
                             {
                                 screens[i].remove();
                             }
@@ -75,6 +75,7 @@ $(document).ready(function()
                         debug('changing screen...');
 
                         page.animate({
+
                             marginLeft : - currentScreenIndex * 100 - 100 + "%"
 
                         }, window.app.animationSpeed, function() {
@@ -115,8 +116,8 @@ $(document).ready(function()
                     success : function(response)
                     {
                         debug('ajax success');
-                        var page = $('ul.screen');
-                        var screens = $('ul.screen li');
+                        let page = $('ul.screen');
+                        let screens = $('ul.screen li');
 
                         debug('append html to first screen');
                         $(screens[0]).html(response);
@@ -129,7 +130,7 @@ $(document).ready(function()
                         }, window.app.animationSpeed, function() {
 
                             debug('removing next sibling screens');
-                            for(var i = 1; i < screens.length; i++)
+                            for(let i = 1; i < screens.length; i++)
                             {
                                 $(screens[i]).remove();
                             }
@@ -153,7 +154,7 @@ $(document).ready(function()
 
     function debug() {
         if (window.app.debug === true) {
-            for (var i = 0; i < arguments.length; ++i) {
+            for (let i = 0; i < arguments.length; ++i) {
                 console.log(arguments[i]);
             }
         }
@@ -165,14 +166,14 @@ $(document).ready(function()
         debug('lock animation');
         window.app.page.busy = true;
 
-        var x = window.app.page.x;
-        var y = window.app.page.y;
+        let x = window.app.page.x;
+        let y = window.app.page.y;
 
-        var defaultHtmlButton = $("<button></button>");
-        var defaultHtmlIcon = $("<i></i>");
+        let defaultHtmlButton = $("<button></button>");
+        let defaultHtmlIcon = $("<i></i>");
         defaultHtmlButton.addClass("btn").addClass(window.app.map[window.app.page.current].color);
         defaultHtmlIcon.addClass(window.app.map[window.app.page.current].icon);
-        var defaultHtml = defaultHtmlButton.append(defaultHtmlIcon);
+        let defaultHtml = defaultHtmlButton.append(defaultHtmlIcon);
 
         debug('inserting default html');
         page.html(defaultHtml);
@@ -220,8 +221,8 @@ $(document).ready(function()
         window.app.page.busy = true;
         window.app.page.current = $(page).parent().attr('id');
 
-        var x = $(page).offset().left;
-        var y = $(page).offset().top;
+        let x = $(page).offset().left;
+        let y = $(page).offset().top;
 
         window.app.page.x = x;
         window.app.page.y = y;
@@ -260,8 +261,8 @@ $(document).ready(function()
                     success : function(data)
                     {
                         debug('ajax complete');
-                        var screens = $('<ul></ul>');
-                        var screen = $('<li></li>');
+                        let screens = $('<ul></ul>');
+                        let screen = $('<li></li>');
                         screens.addClass('screen');
                         screen.append(data);
 
@@ -287,38 +288,27 @@ $(document).ready(function()
     };
 
 // check clicked element for some assigned action
-    $(document).mouseup(function(e){
-
-        if(window.app.page.current)
+    $(document).mouseup(function(e)
+    {
+        if($(e.target).data("event") !== undefined)
         {
-            for(i in window.app.map[window.app.page.current].actions)
+            let controller = window.app.map[window.app.page.current].actions;
+            let action = $(e.target).data("event");
+            let callback = e.type;
+
+            if(typeof controller[action] === "object")
             {
-                if(i === $(e.target).data("event"))
+                if(typeof controller[action][callback] === "function")
                 {
-                    switch(e.type)
-                    {
-                        case 'mouseup' : {
-                            if(typeof window.app.map[window.app.page.current].actions[i].on.mouseup === "function")
-                            {
-                                window.app.map[window.app.page.current].actions[i].on.mouseup(e);
-                            } else {
-                                console.log('No callback function - click!');
-                            }
+                    controller[action][callback](e);
 
-                            return;
-                        }
+                } else {
 
-                        default : {
-                            console.log(e.type + ' event: no callback function assigned!');
-                            return;
-                        }
-                    }
+                    console.error($(e.target).data('event') + ': no callback function assigned!')
                 }
-            }
+            } else {
 
-            if($(e.target).data('event') !== undefined)
-            {
-                console.log($(e.target).data('event') + ': no callback function assigned!')
+                console.error('Action ' + action + ' does not exist!')
             }
         }
     });
@@ -326,7 +316,7 @@ $(document).ready(function()
     // opening and closing menu pages
     $('table#menu tr td').mouseup(function()
     {
-        var pageId = $(this).attr('id');
+        let pageId = $(this).attr('id');
 
         if(pageId && !window.app.page.busy && pageId !== window.app.page.current)
         {

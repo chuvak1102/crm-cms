@@ -7,21 +7,21 @@
 html{height: 100%;}
 body{height: 100%; overflow: hidden; font-family: "Helvetica Neue", "Open Sans", "Arial", sans-serif}
 .clear{clear: both}
-
+.cont{min-width: 960px; max-width: 1280px; display: block; margin: auto}
 /*boot css*/
 .p-10{padding: 10px}.p-30{padding: 30px} .p-50{padding: 50px}
 
-h1{    color: #fff;  font-size: 40px;  padding: 100px 0 10px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
+h1{    color: #fff;  font-size: 40px;  padding: 100px 0 50px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
 
 /*main css*/
 .container{height: 100%;}
 i.fa.badge::after{z-index: 1;  content: "";  position: absolute;  width: 15px;  height: 15px;  border-radius: 50%;  background-color: #ff3700;  margin-right: 25px;  margin-top: 0;  margin-left: -10px;  }
-table.menu{width: 100%; height: 100%; position: absolute; border-collapse: collapse}
+table.menu{width: 100%; height: 100%; position: absolute; border-collapse: collapse; background-color: #000}
 table.menu tr{height: 22.5%}
-table.menu tr td{ width: 20%; height: 23%; background-color: #000}
+table.menu tr td{ width: 20%; height: 23%;}
 table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid #ededed;  border-bottom: 1px solid #b6b6b6;  border-right: 1px solid #b6b6b6;  border-top: 1px solid #ededed;}
 table.menu tr:last-child{height: 10%;}
-table.menu tr:last-child td{height: 8%; border: none; border-bottom: 1px solid #000}
+table.menu tr:last-child td{height: 8%; border: none; }
 table.menu tr:last-child td .page{border: 1px solid #000}
 
 .btn{width: 100%;height: 100%; border: none; outline: none; background-color: #d4d4d4; font-size: 40px; color: #000000  }
@@ -54,7 +54,7 @@ ul.screen > li{
 .tree .tree-single{width: calc(33.3333% - 20px); background-color: #fff; float: left; position: relative; overflow: hidden}
 .tree .tree-single:nth-child(1){border-bottom: 3px solid #000}
 .tree .tree-single:nth-child(2){margin-right: 30px; margin-left: 30px; background-color: transparent}
-.tree .tree-single button{width: 100%; display: block; background-color: #000; border: 1px solid #fff; outline: none; color: #fff; padding: 10px; margin-bottom: 2px}
+.tree .tree-single button{width: 100%; display: block; background-color: #000; border: none; outline: none; color: #fff; padding: 10px; margin-bottom: 2px}
 .tree .tree-single button:hover{cursor: pointer; background-color: #292929}
 .tree .tree-single .img img{display: block; width: 100%; height: 175px; max-height: 175px; max-width: 100%; background-color: #ccc; text-align: center; background-image:  url(../images/noimg.jpg); background-size: 100% ; background-repeat: no-repeat; background-position: center center}
 .tree .tree-single .name{font-weight: bold;padding: 15px;position: absolute; width: 100%; min-height: 50px; top: 0; left: 0; text-align: center; color: #fff;text-shadow: 2px 2px 7px #555; font-size: 22px}
@@ -69,12 +69,20 @@ ul.screen > li{
 .save_category .lft{background-color: #fff; width: 49%; float: left; padding: 20px;}
 .save_category .rgt{background-color: #fff; width: 49%; float: right; padding: 20px; font-size: 16px; }
 .save_category .rgt ul li{height: 25px; border-bottom: 1px solid #000; line-height: 25px}
-
 .save_category .lft button{background-color: #000; font-size: 16px; color: #fff; padding: 10px}
 
 input[type="text"]{width: 100%; border: 1px solid #000; display: block;margin-bottom: 20px; height: 50px; padding-left: 20px; font-size: 16px}
 textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; padding: 20px; font-size: 16px; margin-bottom: 20px; resize: none}
 
+/*setup category*/
+.setup_category {width: 100%; border-spacing: 20px; font-size: 0}
+.setup_category tr td{text-align: start; vertical-align: top}
+.setup_category tr > td:nth-child(1){width: 75%;}
+.setup_category tr > td:nth-child(2){width: 5%;}
+.setup_category tr > td:nth-child(3){width: 20%;}
+.setup_category button{background-color: #000; font-size: 16px; margin-bottom: 10px; color: #fff; padding: 10px; border: none; outline: none}
+.setup_category .inline-input input{;vertical-align: top;display: inline-block; font-size: 16px; padding: 10px; height: 38px; margin: 0 0 10px 0; width: 25%}
+.setup_category .inline-input select{border: 1px solid #000;vertical-align: top;display: inline-block;font-size: 16px; padding-left: 10px; ;margin: 0 0 10px 0; height: 38px;width: 25%}
 
 /*colors*/
 .purple{background-color: #5d3097; color: #bbb0d8}

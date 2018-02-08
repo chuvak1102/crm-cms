@@ -11,6 +11,7 @@ use AdminBundle\Entity\Category;
 use Framework\Component\ORM\Extension\NestedSets;
 use Framework\Modules\Authorization\Authorization;
 use Framework\Modules\MySql\MySql;
+use AdminBundle\Entity\FieldTypes;
 
 /**
  * @Route("/admin/category")
@@ -133,14 +134,15 @@ class CategoryController extends Controller
     /**
      * @Route("/setup/{id}")
      */
-    function setupAction(Category $category, NestedSets $tree)
+    function setupAction(Category $category)
     {
         if(Authorization::isConfirmed())
         {
+            $fRepo = $this->getORM()->getRepository(FieldTypes::class);
+
             return $this->render('AdminBundle:category/setup', array(
-                'category' => $tree->getTree(),
-                'name' => $category->getName(),
-                'to' => $category->getId()
+                'category' => $category,
+                'fields' => $fRepo->findAll()
             ), false);
 
         } else {
