@@ -51,7 +51,9 @@
 </div>
 
 <div class="submenu" style="display: none"></div>
+<!--<script defer src="/src/AdminBundle/Views/public/js/core.js"></script>-->
+<!--<script defer src="/src/AdminBundle/Views/public/js/structure.js"></script>-->
+<script defer src="/src/AdminBundle/Views/public/js/admin.js"></script>
 
-<script src="/src/AdminBundle/Views/public/js/admin.js"></script>
 </body>
 </html>

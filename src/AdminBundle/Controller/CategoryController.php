@@ -61,10 +61,9 @@ class CategoryController extends Controller
         if(Authorization::isConfirmed())
         {
             return $this->render('AdminBundle:category/new', array(
-                'category' => $tree->getTree(),
-                'name' => $category->getName(),
-                'to' => $category->getId()
-            ));
+                'category' => $category,
+                'tree' => $tree->getTree()
+            ), false);
 
         } else {
 
@@ -252,25 +251,6 @@ class CategoryController extends Controller
 
             return $this->redirectToRoute('/admin/login/');
         }
-    }
-
-    /**
-     * @Route("/btn-set/{category}")
-     */
-    public function categoryButtonsAction(Request $request, Category $category)
-    {
-        if($request->isXmlHttpRequest())
-        {
-            if(Authorization::isConfirmed())
-            {
-                return $this->render('AdminBundle:category/tree-buttons', array(
-                    'category' => $category,
-                    'templates' => Helpers::getFilesInDir('/app/Views/default/')
-                ), false);
-            }
-        }
-
-        return null;
     }
 
     /**

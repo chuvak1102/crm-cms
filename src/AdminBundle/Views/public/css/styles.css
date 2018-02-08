@@ -6,25 +6,12 @@
 
 html{height: 100%;}
 body{height: 100%; overflow: hidden; font-family: "Helvetica Neue", "Open Sans", "Arial", sans-serif}
+.clear{clear: both}
 
 /*boot css*/
 .p-10{padding: 10px}.p-30{padding: 30px} .p-50{padding: 50px}
 
 h1{    color: #fff;  font-size: 40px;  padding: 100px 0 10px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
-.aqua1{background: url("../images/aqua.jpg") no-repeat scroll center center / 100% 100%}
-.aqua2{background: url("../images/aqua2.jpg") no-repeat scroll center center / 100% 100%}
-.aqua3{background: url("../images/aqua3.jpg") no-repeat scroll center center / 100% 100%}
-.aqua4{background: url("../images/aqua4.jpg") no-repeat scroll center center / 100% 100%}
-.aqua5{
-
-
-    background: #bfe5e8;
-    background-image:  url(../images/back3.jpeg);
-    background-position: center center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-
-}
 
 /*main css*/
 .container{height: 100%;}
@@ -44,8 +31,15 @@ table.menu tr:last-child td .page{border: 1px solid #000}
 .mbtn{width: 100%;height: 100%; border: 1px solid #000; outline: none; background-color: #000; font-size: 30px; color: #fff}
 .mbtn:active{background-color: #292929}
 
-ul.screen{height: 100%; width: 1000%; font-size: 0; transition: margin-left 0.5s; background-color: #fff}
+ul.screen{height: 100%; width: 1000%; font-size: 0; background-color: #fff; margin-left: -0%}
 ul.screen > li{position: relative;display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
+ul.screen > li{
+    background: #bfe5e8;
+    background-image:  url(../images/back3.jpeg);
+    background-position: center center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
 
 /*submenu*/
 .submenu{position: absolute; left: 60%; bottom: 8%; z-index: 100; min-width: 10%; max-width: 40%; width: 40%;}
@@ -56,36 +50,30 @@ ul.screen > li{position: relative;display: inline-block; width: 10%;height: 100%
 .nextScreen{position: fixed; width: 50px; height: 50px; background-color: #fff; border-radius: 50%; right: 5%; bottom: 5%; text-align: center; line-height: 50px; color: #1e73b2; font-weight: bold; font-size: 50px}
 
 /*category*/
-.category{ height: 50px; margin-bottom: 35px;}
-.category.active{background-color: #e1a600  }
-.category .left{text-align: center;;;float: left; background-color: #fff; width: 50px; height: 100%; vertical-align: baseline}
-.category .left img{max-width: 50px; max-height: 50px;}
-.category .right{height: 75px;;float: right; width: calc(100% - 60px); background-color: #bfe7e9; position: relative; overflow: hidden}
-.category .right .buttons{height: 50px; position: absolute; right: 0; top: 0; }
-.category .right .buttons ul{margin-right: -150px; transition: margin-right 0.3s}
-.category .right .buttons ul li{; background-color: #3d4a5d;list-style: none; width: 50px; float: left; line-height: 50px; text-align: center; font-size: 25px;}
-.category .right .buttons ul a{color: #fff;}
-.category .right .buttons:hover ul { margin-right: 0; }
+.tree{min-width: 960px;max-width: 1280px;margin: auto;margin-top: 30px; display: block; position: relative}
+.tree .tree-single{width: calc(33.3333% - 20px); background-color: #fff; float: left; position: relative; overflow: hidden}
+.tree .tree-single:nth-child(1){border-bottom: 3px solid #000}
+.tree .tree-single:nth-child(2){margin-right: 30px; margin-left: 30px; background-color: transparent}
+.tree .tree-single button{width: 100%; display: block; background-color: #000; border: 1px solid #fff; outline: none; color: #fff; padding: 10px; margin-bottom: 2px}
+.tree .tree-single button:hover{cursor: pointer; background-color: #292929}
+.tree .tree-single .img img{display: block; width: 100%; height: 175px; max-height: 175px; max-width: 100%; background-color: #ccc; text-align: center; background-image:  url(../images/noimg.jpg); background-size: 100% ; background-repeat: no-repeat; background-position: center center}
+.tree .tree-single .name{font-weight: bold;padding: 15px;position: absolute; width: 100%; min-height: 50px; top: 0; left: 0; text-align: center; color: #fff;text-shadow: 2px 2px 7px #555; font-size: 22px}
+.tree .tree-single .info{height: 30px; background-color: #000}
+.tree .tree-single .info span{padding: 10px; background-color: #000;border: 1px solid #fff; color: #fff; margin-left: 5px}
+.tree .tree-single .desc{padding: 15px; font-weight: bold}
+.tree .tree-single:nth-child(3){padding: 15px; font-weight: bold}
+.tree .cat-tri{height: 0px; width: 0px; position: absolute; bottom: -30px; border-right: 20px solid transparent; ; border-left: 20px solid transparent; border-top: 30px solid #000;}
 
+/*save category*/
+.save_category{min-width: 960px; max-width: 1280px; margin: auto; padding-top: 50px;}
+.save_category .lft{background-color: #fff; width: 49%; float: left; padding: 20px;}
+.save_category .rgt{background-color: #fff; width: 49%; float: right; padding: 20px; font-size: 16px; }
+.save_category .rgt ul li{height: 25px; border-bottom: 1px solid #000; line-height: 25px}
 
-/*new category tree*/
-/*.tree{margin: 15px 0 0 0}*/
-/*.tree table{width: 100%;border-collapse: separate;  border-spacing: 50px 20px; }*/
-/*.tree table tr th{background-color: rgba(255, 255, 255, 0.4) ; padding: 10px 30px 30px 15px }*/
-/*.tree table tr td{background-color: rgba(255, 255, 255, 0.51); color: #000; padding: 5px}*/
+.save_category .lft button{background-color: #000; font-size: 16px; color: #fff; padding: 10px}
 
-/*span.s{padding: 0 7px; border-radius: 7px; margin-right: 1px; font-weight: bold}*/
-
-
-/*flex*/
-.tree{min-width: 960px;max-width: 1280px;margin: auto;margin-top: 50px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; align-content: space-around; }
-.tree-single{display: flex; width: calc(33.3333% - 20px); background-color: #fff; margin-bottom: 40px; min-height: 400px; font-size: 40px;
-}
-
-
-
-
-
+input[type="text"]{width: 100%; border: 1px solid #000; display: block;margin-bottom: 20px; height: 50px; padding-left: 20px; font-size: 16px}
+textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; padding: 20px; font-size: 16px; margin-bottom: 20px; resize: none}
 
 
 /*colors*/

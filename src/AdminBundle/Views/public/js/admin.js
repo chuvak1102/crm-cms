@@ -6,14 +6,18 @@ $(document).ready(function()
         menuCellHeight : 23,
         menuNavHeight : 8,
         animationSpeed : 600,
+        debug : true,
 
         page : {
             x : null,
             y : null,
             current : null,
             screen : 0,
-            inProcess : false,
-            enabledListing : false
+            event : null,
+            action : null,
+            requestUri : null,
+            data : null,
+            bisy : false
         },
 
         map : {
@@ -23,94 +27,153 @@ $(document).ready(function()
                 icon : "fa fa-sitemap",
                 url : "/admin/category/",
                 color : "cyan",
-                activeElement : null,
-                activeElements : {
 
-                    0 : {
+                actions : {
 
-                        name : "category",
-                        selector : $('div.category'),
-                        actions : {
+                    category_new : {
 
-                            0 : {
+                        on : {
 
-                                name : "new",
-                                canonical : "Insert Node Here",
-                                url : '/admin/category/new',
-                                param : null,
-                                destination : "/admin/category/save/",
+                            mouseup : function(e)
+                            {
+                                set.page.event = "category_new";
+                                set.page.data = null;
+                                set.page.action = "category_new";
+                                set.page.requestUri = "/admin/category/new/" + parseInt($(e.target).attr('id'));
 
-                                getData : function()
-                                {
-                                    return {
-                                        name : $('input[name="name"]').val(),
-                                        alias : $('input[name="alias"]').val(),
-                                        image : $('input[name="image"]').val(),
-                                        description : $('textarea[name="description"]').val()
-                                    }
-                                }
+                                sendToServer();
                             },
 
-                            1 : {
-                                name : "setup",
-                                canonical : "Setup Node",
-                                url : '/admin/category/setup',
-                                param : null
+                            response : function(html)
+                            {
+                                nextScreen(html);
+                            }
+
+                        }
+                    },
+
+                    category_save :
+                    {
+                        on : {
+
+                            mouseup : function(e)
+                            {
+                                set.page.event = "category_save";
+                                set.page.data = {
+
+                                    name : $('input[name="name"]').val(),
+                                    alias : $('input[name="alias"]').val(),
+                                    image : $('input[name="image"]').val(),
+                                    description : $('textarea[name="description"]').val()
+
+                                };
+                                set.page.action = "category_save";
+                                set.page.requestUri = "/admin/category/save/" + parseInt($(e.target).attr('id'));
+
+                                sendToServer();
                             },
 
-                            2 : {
-                                name : "show",
-                                canonical : "Show Contents",
-                                url : '/admin/category/show',
-                                param : null
+                            response : function(html)
+                            {
+                                redirectToIndex(html);
+                            }
+
+                        }
+                    },
+
+                    category_setup : {
+
+                        url : '/admin/category/setup/',
+                        param : null,
+
+                        on : {
+
+                            click : function(e)
+                            {
+                                console.log($(this));
+                                console.log(this);
+                                 console.log(parseInt($(e.target).attr('id')));
+                            },
+
+                            change : function()
+                            {
+
                             }
 
                         }
 
-                    }
+                    },
+                    category_show : {
 
-                },
-
-                actions : {
-
-                    0 : {
-                        name : "new",
-                        canonical : "Insert Node Here",
-                        url : '/admin/category/new',
+                        url : '/admin/category/show/',
                         param : null,
-                        destination : "/admin/category/save/",
-                        data : {
-                            name : $('input[name="name"]').val(),
-                            alias : $('input[name="alias"]').val(),
-                            image : $('input[name="image"]').val(),
-                            description : $('textarea[name="description"]').val()
+
+                        on : {
+
+                            click : function(e)
+                            {
+                                console.log($(this));
+                                console.log(this);
+                                console.log(parseInt($(e.target).attr('id')));
+                            },
+
+                            change : function()
+                            {
+
+                            }
+
                         }
-                    },
 
-                    1 : {
-                        name : "setup",
-                        canonical : "Setup Node",
-                        url : '/admin/category/setup',
-                        param : null
                     },
+                    category_template : {
 
-                    2 : {
-                        name : "show",
-                        canonical : "Show Contents",
-                        url : '/admin/category/show',
-                        param : null
+                        url : '/admin/category/template/',
+                        param : null,
+
+                        on : {
+
+                            click : function(e)
+                            {
+                                console.log($(this));
+                                console.log(this);
+                                console.log(parseInt($(e.target).attr('id')));
+                            },
+
+                            change : function()
+                            {
+
+                            }
+
+                        }
+
+                    },
+                    category_remove : {
+
+                        url : '/admin/category/remove/',
+                        param : null,
+
+                        on : {
+
+                            click : function(e)
+                            {
+                                console.log($(this));
+                                console.log(this);
+                                console.log(parseInt($(e.target).attr('id')));
+                            },
+
+                            change : function()
+                            {
+
+                            }
+                        }
                     }
                 }
             },
             "p_1_2" : {
                 icon : "fa fa-file-image",
-                url : "/admin/category/empty",
+                url : "/admin/category/empty/",
                 color : "",
-                screens : {
-                    0 : {},
-                    1 : {}
-                },
-                screen : 0
+                actions : {}
             },
             "p_1_3" : {
                 icon : "fa fa-envelope",
@@ -313,12 +376,33 @@ $(document).ready(function()
         }
     };
 
+    function debug() {
+        if (set.debug === true) {
+            for (var i = 0; i < arguments.length; ++i) {
+                console.log(arguments[i]);
+            }
+        }
+    }
+
+    function resetPageParams()
+    {
+        set.page.x = null;
+        set.page.y = null;
+        set.page.current = null;
+        set.page.screen = 0;
+        set.page.event = null;
+        set.page.action = null;
+        set.page.requestUri = null;
+        set.page.data = null;
+        set.page.bisy = false;
+    }
+
     // opening and closing menu pages
     $('table#menu tr td').click(function()
     {
         var pageId = $(this).attr('id');
 
-        if(pageId && !set.page.inProcess && pageId !== set.page.current)
+        if(pageId && !set.page.bisy && pageId !== set.page.current)
         {
             open($('#' + pageId + ' > div.page' ));
         }
@@ -326,7 +410,7 @@ $(document).ready(function()
 
     $('#home').click(function()
     {
-        if(set.page.current && !set.page.inProcess)
+        if(set.page.current && !set.page.bisy)
         {
             close($('#' + set.page.current + ' > div.page' ));
         }
@@ -334,7 +418,7 @@ $(document).ready(function()
 
     function open(page)
     {
-        set.page.inProcess = true;
+        set.page.bisy = true;
         set.page.current = $(page).parent().attr('id');
 
         var x = $(page).offset().left;
@@ -373,13 +457,20 @@ $(document).ready(function()
                     },
                     success : function(data)
                     {
-                        page.html(data);
-                        set.page.inProcess = false;
+                        var screens = $('<ul></ul>');
+                        var screen = $('<li></li>');
+                        screens.addClass('screen');
+                        screen.append(data);
+
+                        screens.append(screen);
+
+                        page.html(screens);
+                        set.page.bisy = false;
                     },
                     error : function(data)
                     {
                         page.html("Ajax request error!");
-                        set.page.inProcess = false;
+                        set.page.bisy = false;
                     }
                 });
 
@@ -390,7 +481,7 @@ $(document).ready(function()
 
     function close(page)
     {
-        set.page.inProcess = true;
+        set.page.bisy = true;
 
         var x = set.page.x;
         var y = set.page.y;
@@ -425,10 +516,7 @@ $(document).ready(function()
                 'height' : '100%'
             });
 
-            set.page.x = null;
-            set.page.y = null;
-            set.page.current = null;
-            set.page.inProcess = false;
+            resetPageParams();
 
         }, set.animationSpeed);
     }
@@ -436,74 +524,183 @@ $(document).ready(function()
     // show submenu
     $('#subm').click(function()
     {
-        if(set.page.current)
-        {
-            var menu = $('.submenu');
-            var ul = $("<ul></ul>");
-
-            for(i in set.map[set.page.current].actions)
-            {
-                var li = $("<li></li></hr>");
-                li.html(set.map[set.page.current].actions[i].canonical);
-                ul.append(li);
-            }
-
-            menu.empty().append(ul);
-            menu.slideToggle(200);
-        }
+        // if(set.page.current)
+        // {
+        //     var menu = $('.submenu');
+        //     var ul = $("<ul></ul>");
+        //
+        //     for(i in set.map[set.page.current].actions)
+        //     {
+        //         var li = $("<li></li></hr>");
+        //         li.html(set.map[set.page.current].actions[i].canonical);
+        //         ul.append(li);
+        //     }
+        //
+        //     menu.empty().append(ul);
+        //     menu.slideToggle(200);
+        // }
     });
 
-    function nextScreen()
+    $('#back').mouseup(function()
     {
+        // $('ul.screen').css({});
 
+        if(!set.page.bisy)
+        {
+            set.page.bisy = true;
+
+            if(set.page.screen > 0)
+            {
+                $( "ul.screen" ).animate({
+                    marginLeft : - set.page.screen * 100 + 100 + "%"
+
+                }, set.animationSpeed, function() {
+
+                    //space and enter detect as click on focused element fix
+                    // $(':focus').remove();
+                });
+
+                set.page.screen = set.page.screen - 1;
+            } else {
+                close($('#' + set.page.current + ' > div.page' ));
+            }
+
+            setTimeout(function()
+            {
+                set.page.bisy = false;
+            }, set.animationSpeed);
+        }
+
+    });
+
+    function nextScreen(html)
+    {
+        if(!set.page.bisy)
+        {
+            set.page.bisy = true;
+
+            var page = $('ul.screen');
+            var screens = $('ul.screen li');
+            var newScreen = $('<li></li>');
+            var currentScreenIndex = set.page.screen;
+
+            if(screens[currentScreenIndex + 1] !== undefined)
+            {
+                for(var i = currentScreenIndex + 1; i < screens.length; i++)
+                {
+                    screens[i].remove();
+                }
+            }
+
+            newScreen.html(html);
+
+            page.append(newScreen);
+
+            page.animate({
+                marginLeft : - currentScreenIndex * 100 - 100 + "%"
+
+            }, set.animationSpeed, function() {
+
+            });
+
+            set.page.screen = set.page.screen + 1;
+
+            setTimeout(function()
+            {
+                set.page.bisy = false;
+
+            }, set.animationSpeed);
+
+        }
     }
 
-    function prevScreen()
+    function redirectToIndex(html)
     {
+        if(!set.page.bisy)
+        {
+            set.page.bisy = true;
 
+            var page = $('ul.screen');
+            var screens = $('ul.screen li');
+
+            $(screens[0]).html(html);
+
+            page.animate({
+                marginLeft : "-0%"
+
+            }, set.animationSpeed, function() {
+
+                for(var i = 1; i < screens.length; i++)
+                {
+                    $(screens[i]).remove();
+                }
+
+            });
+
+            set.page.screen = 0;
+
+            setTimeout(function()
+            {
+                set.page.bisy = false;
+
+            }, set.animationSpeed);
+
+        }
     }
 
-    function goToScreen(screen)
+    function sendToServer()
     {
-
-    }
-
-    function sendToServer(data)
-    {
-        var page = [set.page.current];
-        var param =
-
         $.ajax({
-            url : set.map[set.page.current].url,
+            url : set.page.requestUri,
             type : 'POST',
-            data : data,
+            data : set.page.data,
             success : function(response)
             {
-                return response;
-            },
-            error : function(response)
-            {
-                return false;
+                if(typeof set.map[set.page.current].actions[set.page.action].on.response === "function")
+                {
+                    set.map[set.page.current].actions[set.page.action].on.response(response);
+                }
             }
         });
     }
 
-    // p_1_1
-    $(document).on('click', 'div.category', function(){
+    // check clicked element for some assigned action
+    $(document).mouseup(function(e)
+    {
+        if(set.page.current)
+        {
+            for(i in set.map[set.page.current].actions)
+            {
+                if(i === $(e.target).data("event"))
+                {
+                    switch(e.type)
+                    {
+                        case 'mouseup' :
+                        {
+                            if(typeof set.map[set.page.current].actions[i].on.mouseup === "function")
+                            {
+                                set.map[set.page.current].actions[i].on.mouseup(e);
+                            } else {
+                                console.log('No callback function - click!');
+                            }
 
-        $('div.category').removeClass('active');
-        $(this).addClass('active');
-    });
+                            return;
+                        }
 
-    // category hover
-    $( ".category .right .buttons" ).hover(
-        function() {
+                        default :
+                        {
+                            console.log(e.type + ' event: no callback function assigned!');
+                            return;
+                        }
+                    }
+                }
+            }
 
-            $( this ).append( $( "<span> ***</span>" ) );
-        }, function() {
-
-            $( this ).find( "span:last" ).remove();
+            if($(e.target).data('event') !== undefined)
+            {
+                console.log($(e.target).data('event') + ': no callback function assigned!')
+            }
         }
-    );
+    });
 
 });
