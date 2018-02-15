@@ -26,10 +26,35 @@ $(document).ready(function()
                             name : $('input[name="name"]').val(),
                             alias : $('input[name="alias"]').val(),
                             image : $('input[name="image"]').val(),
+                            template : $('select[name="template"]').val(),
                             description : $('textarea[name="description"]').val()
                         };
 
                         app.redirectToIndex("/admin/category/save/" + parseInt($(e.target).attr('id')), data)
+                    }
+                },
+
+                category_edit :
+                {
+                    mouseup : function(e)
+                    {
+                        app.render("/admin/category/edit/" + parseInt($(e.target).attr('id')))
+                    }
+                },
+
+                category_edit_save :
+                {
+                    mouseup : function(e)
+                    {
+                        let data = {
+                            name : $('input[name="name"]').val(),
+                            alias : $('input[name="alias"]').val(),
+                            image : $('input[name="image"]').val(),
+                            template : $('select[name="template"]').val(),
+                            description : $('textarea[name="description"]').val()
+                        };
+
+                        app.redirectToIndex("/admin/category/edit-save/" + parseInt($(e.target).attr('id')), data);
                     }
                 },
 
@@ -41,6 +66,49 @@ $(document).ready(function()
                     }
                 },
 
+                category_setup_add_field : {
+
+                    mouseup : function(e)
+                    {
+                        let id = parseInt($(e.target).attr('id'));
+                        let alias = $(e.target).val();
+                        let name = $(e.target).html();
+                        let set = $('div#set > .inline-input').clone();
+                        set.find('select[name="fields[]"]').val(id);
+                        set.find('input[name="canonical[]"]').val(name);
+                        set.find('input[name="alias[]"]').val(alias);
+                        set.find('select[name="fieldType[]"]').val(id);
+
+                        $('#fields').append(set);
+                    }
+                },
+
+                category_setup_remove_field : {
+
+                    mouseup : function(e)
+                    {
+                        $(e.target).parent().parent().remove();
+                    }
+                },
+
+                category_setup_save : {
+
+                    mouseup : function(e)
+                    {
+                        $('div#set').remove();
+
+                        let data = {
+                            "fields" : $('select[name="fields[]"]').map(function(){return this.value;}).get(),
+                            "canonical" : $('input[name="canonical[]"]').map(function(){return this.value;}).get(),
+                            "alias" : $('input[name="alias[]"]').map(function(){return this.value;}).get(),
+                            "fieldType" : $('select[name="fieldType[]"]').map(function(){return this.value;}).get(),
+                            "params" : $('input[name="params[]"]').map(function(){return this.value;}).get()
+                        };
+
+                        app.redirectToIndex('/admin/category/complete/' + parseInt($(e.target).attr('id')), data);
+                    }
+                },
+
                 category_show : {
 
                 },
@@ -49,13 +117,11 @@ $(document).ready(function()
                 },
                 category_remove : {
 
-                    on : {
-                        mouseup : function(e)
+                    mouseup : function(e)
+                    {
+                        if(confirm('Удалить?'))
                         {
-                            if(confirm('Удалить?'))
-                            {
-                                app.redirectToIndex("/admin/category/delete/" + parseInt($(e.target).attr('id')))
-                            }
+                            app.redirectToIndex("/admin/category/delete/" + parseInt($(e.target).attr('id')))
                         }
                     }
                 },

@@ -70,19 +70,20 @@ ul.screen > li{
 .save_category .rgt{background-color: #fff; width: 49%; float: right; padding: 20px; font-size: 16px; }
 .save_category .rgt ul li{height: 25px; border-bottom: 1px solid #000; line-height: 25px}
 .save_category .lft button{background-color: #000; font-size: 16px; color: #fff; padding: 10px}
-
+select {width: 100%; background-color: #fff; border: 1px solid; height: 50px; font-size: 16px; padding-left: 17px; margin-bottom: 20px}
 input[type="text"]{width: 100%; border: 1px solid #000; display: block;margin-bottom: 20px; height: 50px; padding-left: 20px; font-size: 16px}
 textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; padding: 20px; font-size: 16px; margin-bottom: 20px; resize: none}
 
 /*setup category*/
 .setup_category {width: 100%; border-spacing: 20px; font-size: 0}
 .setup_category tr td{text-align: start; vertical-align: top}
-.setup_category tr > td:nth-child(1){width: 75%;}
-.setup_category tr > td:nth-child(2){width: 5%;}
-.setup_category tr > td:nth-child(3){width: 20%;}
+.setup_category tr > td:nth-child(1){width: 80%;}
+.setup_category tr > td:nth-child(2){width: 20%;}
 .setup_category button{background-color: #000; font-size: 16px; margin-bottom: 10px; color: #fff; padding: 10px; border: none; outline: none}
-.setup_category .inline-input input{;vertical-align: top;display: inline-block; font-size: 16px; padding: 10px; height: 38px; margin: 0 0 10px 0; width: 25%}
-.setup_category .inline-input select{border: 1px solid #000;vertical-align: top;display: inline-block;font-size: 16px; padding-left: 10px; ;margin: 0 0 10px 0; height: 38px;width: 25%}
+.setup_category .inline-input{clear: both}
+.setup_category .inline-input input{;vertical-align: top;display: inline-block; font-size: 16px; padding: 10px; height: 38px; margin: 0 0 10px 0; width: 19%}
+.setup_category .inline-input select{border: 1px solid #000;vertical-align: top;display: inline-block;font-size: 16px; padding-left: 10px; ;margin: 0 0 10px 0; height: 38px;width: 18%}
+.setup_category tr > td:nth-child(1) button{display: inline; float: right; width: 5%}
 
 /*colors*/
 .purple{background-color: #5d3097; color: #bbb0d8}

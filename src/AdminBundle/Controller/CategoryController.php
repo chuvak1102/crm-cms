@@ -1,7 +1,7 @@
 <?php
 namespace AdminBundle\Controller;
 
-use AdminBundle\Entity\ContentType;
+use AdminBundle\Entity\DataType;
 use Framework\Component\HttpFoundation\JsonResponse;
 use Framework\Component\HttpFoundation\Request;
 use Framework\Component\Controller\Controller;
@@ -21,14 +21,40 @@ class CategoryController extends Controller
     /**
      * @Route("/")
      */
-    function indexAction()
+    function indexAction(NestedSets $tree)
     {
         if(Authorization::isConfirmed())
         {
             $cRepo = $this->getORM()->getRepository(Category::class);
 
+            $categories = $cRepo->findAll();
+
+            foreach($categories as $i)
+            {
+                $paths = $tree->getCategoryPathById($i->getId());
+                $path = array();
+                $url = array();
+
+                if($paths)
+                {
+                    foreach($paths as $p)
+                    {
+                        $path[] = $p['name'];
+                        $url[] = $p['alias'];
+                    }
+
+                    $i->url = implode('/', $url);
+                    $i->path = implode('/', $path);
+
+                    $result[] = $i;
+                } else {
+
+                    $result[] = $i;
+                }
+            }
+
             return $this->render('AdminBundle:category/index', array(
-                'category' => $cRepo->findAll()
+                'category' => $result
             ), false);
 
         } else {
@@ -64,7 +90,8 @@ class CategoryController extends Controller
         {
             return $this->render('AdminBundle:category/new', array(
                 'category' => $category,
-                'tree' => $tree->getTree()
+                'tree' => $tree->getTree(),
+                'templates' => Helpers::getFilesInDir('/app/Views/default')
             ), false);
 
         } else {
@@ -80,9 +107,10 @@ class CategoryController extends Controller
     {
         if(Authorization::isConfirmed())
         {
-            $name = Helpers::sqlSanitize($request->get('name'));
+            $name = $request->get('name');
             $image = $request->get('image');
             $description = $request->get('description');
+            $template = $request->get('template');
             $alias = Helpers::stringToUrl($name);
 
             if(!empty($request->get('alias')))
@@ -90,7 +118,65 @@ class CategoryController extends Controller
                 $alias = Helpers::stringToUrl($request->get('alias'));
             }
 
-            $tree->insertNode($name, $alias, $image, $description, $id);
+            $tree->insertNode($name, $alias, $template, $image, $description, $id);
+
+            $mySql->insert('E_Content', array(
+                'name' => $name,
+                'alias' => $alias,
+                'category' => $id
+            ));
+
+            return $this->redirectToRoute('/admin/category/');
+
+        } else {
+
+            return $this->redirectToRoute('/admin/login/');
+        }
+    }
+
+    /**
+     * @Route("/edit/{id}")
+     */
+    function editAction(Category $category)
+    {
+        $cRepo = $this->getORM()->getRepository(Category::class);
+
+        return $this->render('AdminBundle:category/edit', array(
+            'category' => $category,
+            'tree' => $cRepo->findAll(),
+            'templates' => Helpers::getFilesInDir('/app/Views/default')
+        ), false);
+    }
+
+    /**
+     * @Route("/edit-save/{id}")
+     */
+    function editSaveAction(Request $request, $id, MySql $mySql)
+    {
+        if(Authorization::isConfirmed())
+        {
+            $name = $request->get('name');
+            $image = $request->get('image');
+            $description = $request->get('description');
+            $template = $request->get('template');
+            $alias = Helpers::stringToUrl($name);
+
+            if(!empty($request->get('alias')))
+            {
+                $alias = Helpers::stringToUrl($request->get('alias'));
+            }
+
+            $mySql->update('E_Site_Tree', array(
+                'name' =>$name,
+                'alias' => $alias,
+                'template' => $template,
+                'image' => $image,
+                'description' => $description
+            ), $id);
+
+            $mySql->remove('E_Content', array(
+                'category' => $id
+            ));
 
             $mySql->insert('E_Content', array(
                 'name' => $name,
@@ -138,10 +224,13 @@ class CategoryController extends Controller
     {
         if(Authorization::isConfirmed())
         {
-            $fRepo = $this->getORM()->getRepository(FieldTypes::class);
+            $orm = $this->getORM();
+            $fRepo = $orm->getRepository(FieldTypes::class);
+            $tRepo = $orm->getRepository(DataType::class);
 
             return $this->render('AdminBundle:category/setup', array(
                 'category' => $category,
+                'datatype' => $tRepo->findAll(),
                 'fields' => $fRepo->findAll()
             ), false);
 
@@ -192,9 +281,11 @@ class CategoryController extends Controller
 
             if(!empty($fields)){
 
-                $table = $tree->getCategoryPathById($category->getId())[1]['alias'];
+                $table = $category->getAlias();
 
                 $MySql->createTable($table, $fields);
+
+                $em = $this->getORM()->getManager();
 
                 foreach($fields as $singleSet)
                 {
@@ -205,10 +296,12 @@ class CategoryController extends Controller
                     $fieldSet->setCanonical($singleSet['canonical']);
                     $fieldSet->setParams($singleSet['params']);
 
-                    $MySql->save($fieldSet);
+                    $em->persist($fieldSet);
 
                     $tree->completeSetup($category->getId());
                 }
+
+                $em->flush();
             }
 
             return $this->redirectToRoute('/admin/category/');

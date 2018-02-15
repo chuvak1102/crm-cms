@@ -7,10 +7,8 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
     protected $entity = array();
     protected $original = array();
     protected $persistence = array();
-
-    private $pdo;
-
-    static $length = 0;
+    protected static $length = 0;
+    protected $pdo;
 
     function __construct(){
         $this->pdo = Connection::mysql();

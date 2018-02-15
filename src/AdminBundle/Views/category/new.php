@@ -4,6 +4,12 @@
     <div class="lft">
         <input type="text" name="name" placeholder="Название категории">
         <input type="text" name="alias" placeholder="Алиас категории">
+        <select name="template" id="">
+            <option value="">Страница</option>
+            <?foreach($data['templates'] as $j){?>
+                <option value="<?=$j?>"><?=$j?></option>
+            <?}?>
+        </select>
         <input type="text" name="image" placeholder="Изображение категории">
         <textarea name="description" id="" cols="30" rows="10" placeholder="Описание категории"></textarea>
         <button data-event="category_save" class="btn" id="<?=$data['category']->getId()?>_category_save">SAVE</button>

@@ -4,7 +4,7 @@
     <table class="setup_category">
         <tr>
             <td id="fieldset">
-                <form action="" id="fields">
+                <form action="/admin/category/complete/" id="fields" method="post">
                     <div class="inline-input">
                         <div class="form-single">
                             <select name="fields[]">
@@ -13,52 +13,31 @@
                             <select name="fieldType[]">
                                 <option value="1" selected>По умолчанию</option>
                             </select>
-                            <input type="text" name="canonical[]" placeholder="Название"  value="Название">
+                            <input type="text" name="canonical[]" placeholder="Название" value="Название">
                             <input type="text" name="alias[]" placeholder="Алиас"  value="name">
+                            <input type="text" name="params[]" placeholder="Параметры(;)">
                         </div>
                     </div>
-                    <div class="clear"></div>
-                    <div class="inline-input">
-                        <div class="form-single">
-                            <select name="fieldType[]">Тип данных
-                                <option value="1" selected>Тип данных</option>
-                                <option value="1">Строка</option>
-                                <option value="2">Целое число</option>
-                                <option value="3">Число с плавающей точкой</option>
-                                <option value="4">Дата</option>
-                            </select>
-                            <input type="text" name="canonical[]" placeholder="Название">
-                            <input type="text" name="alias[]" placeholder="Алиас(авто)">
-                            <input type="text" name="params[]" placeholder="Значения поля">
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="inline-input">
-                        <div class="form-single">
-                            <select name="fieldType[]">Тип данных
-                                <option value="1" selected>Тип данных</option>
-                                <option value="1">Строка</option>
-                                <option value="2">Целое число</option>
-                                <option value="3">Число с плавающей точкой</option>
-                                <option value="4">Дата</option>
-                            </select>
-                            <input type="text" name="canonical[]" placeholder="Название поля">
-                            <input type="text" name="alias[]" placeholder="Алиас поля">
-                            <input type="text" name="params[]" placeholder="Значения поля">
-                        </div>
-                    </div>
-                    <div class="clear"></div>
 
+                    <div class="inline-input">
+                        <div class="form-single">
+                            <select name="fields[]">
+                                <option value="1" selected>По умолчанию</option>
+                            </select>
+                            <select name="fieldType[]">
+                                <option value="1" selected>По умолчанию</option>
+                            </select>
+                            <input type="text" name="canonical[]" placeholder="Название" value="Алиас">
+                            <input type="text" name="alias[]" placeholder="Алиас"  value="alias">
+                            <input type="text" name="params[]" placeholder="Параметры(;)">
+                        </div>
+                    </div>
                 </form>
             </td>
-            <td id="removeset">
-                <?foreach($data['fields'] as $i){?>
-                    <button class="btn" id="<?$i->getId()?>_add">-</button>
-                <?}?>
-            </td>
+
             <td id="typeset">
                 <?foreach($data['fields'] as $i){?>
-                    <button class="btn" id="<?$i->getId()?>_add">+ <?=$i->getName()?></button>
+                    <button data-event="category_setup_add_field" class="btn" id="<?=$i->getId()?>_add" value="<?=$i->getAlias()?>"><?=$i->getName()?></button>
                 <?}?>
             </td>
         </tr>
@@ -66,10 +45,9 @@
 
     <table class="setup_category">
         <tr>
-            <td><button class="btn" id="_add">Сохранить</button></td>
+            <td><button data-event="category_setup_save" style="width: 100%" class="btn" id="<?=$data['category']->getId()?>_complete">Сохранить</button></td>
         </tr>
     </table>
-
 </div>
 
 <!--            /admin/category/complete/1-->
@@ -77,25 +55,20 @@
 <div id="set" style="display: none">
     <div class="inline-input">
         <div class="form-single">
-            <select name="fields[]">
+            <select name="fields[]">Тип поля
                 <?foreach($data['fields'] as $i){?>
                     <option value="<?=$i->getId()?>"><?=$i->getName()?></option>
                 <?}?>
             </select>
             <select name="fieldType[]">Тип данных
-                <option value="1" selected>Тип данных</option>
-                <option value="1">String</option>
-                <option value="2">Integer</option>
-                <option value="3">Float</option>
-                <option value="4">DateTime</option>
+                <?foreach($data['datatype'] as $i){?>
+                    <option value="<?=$i->getType()?>"><?=$i->getName()?></option>
+                <?}?>
             </select>
             <input type="text" name="canonical[]" placeholder="Название поля">
-            <input type="text" name="alias[]" placeholder="Алиас поля">
-            <input type="text" name="params[]" placeholder="Значения поля">
+            <input type="text" name="alias[]" placeholder="Алиас(авто)">
+            <input type="text" name="params[]" placeholder="Параметры(;)">
+            <button data-event="category_setup_remove_field" class="btn" type="button">&ndash;</button>
         </div>
     </div>
 </div>
-
-
-<?//dump($data)?>
-

@@ -13,8 +13,8 @@ class NestedSets{
         self::createSchema();
     }
 
-    private function createSchema(){
-
+    private function createSchema()
+    {
         $query =
             "
            CREATE TABLE IF NOT EXISTS `E_Site_Tree` (
@@ -33,22 +33,28 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         $query = "SELECT `id` FROM `E_Site_Tree` WHERE `id` = 1";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
 
-        if(!$stmt->fetch()['id']){
+        if(!$stmt->fetch()['id'])
+        {
             $query = "
               INSERT INTO E_Site_Tree(id, name, alias, lft, rgt, lvl, image, description, created, template, setup) 
-              VALUES(1, 'ROOT', 'ROOT', 1, 2, 0, '', '', now(), '', 1);";
+              VALUES(1, 'ROOT', '/', 1, 2, 0, '', '', now(), '', 1);";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
         }
     }
 
-    public function getTree(){
+    public function getTree()
+    {
         $query =
             "
                SELECT 
@@ -68,7 +74,11 @@ class NestedSets{
            ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -79,18 +89,30 @@ class NestedSets{
         return $data;
     }
 
-    function deleteAll(){
+    function deleteAll()
+    {
         $query = "TRUNCATE TABLE `E_Site_Tree`";
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        return true;
     }
 
-    function getNodeById($id){
-
+    function getNodeById($id)
+    {
         $query = "SELECT * FROM E_Site_Tree WHERE id = $id";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
         $result = $stmt->fetch();
 
         if(!$result) return null;
@@ -103,12 +125,16 @@ class NestedSets{
         );
     }
 
-    function getNodeByAlias($alias){
-
+    function getNodeByAlias($alias)
+    {
         $query = "SELECT * FROM E_Site_Tree WHERE `alias` = '$alias'";
-
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
         $result = $stmt->fetch();
 
         if(!$result) return null;
@@ -124,26 +150,30 @@ class NestedSets{
         );
     }
 
-    public function insertNode($name, $alias, $image, $description, $targetId){
-
+    public function insertNode($name, $alias, $template, $image, $description, $targetId)
+    {
         $query =
             "
                SELECT @myLeft := lft, @lvl := lvl FROM `E_Site_Tree`
                WHERE `id` = $targetId;
                UPDATE `E_Site_Tree` SET rgt = rgt + 2 WHERE rgt > @myLeft;
                UPDATE `E_Site_Tree` SET lft = lft + 2 WHERE lft > @myLeft;
-               INSERT INTO E_Site_Tree(`name`,`alias`, `lft`, `rgt`, `lvl`, `image`, `description`, `created`) 
-               VALUES('$name', '$alias', @myLeft + 1, @myLeft + 2, @lvl + 1, '$image', '$description', now());
+               INSERT INTO E_Site_Tree(`name`,`alias`, `lft`, `rgt`, `lvl`, `image`, `description`, `created`, `template`) 
+               VALUES('$name', '$alias', @myLeft + 1, @myLeft + 2, @lvl + 1, '$image', '$description', now(), '$template');
            ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         return true;
     }
 
-    public function getCategoryPathById($id){
-
+    public function getCategoryPathById($id)
+    {
         if(!is_numeric($id)) return 'getE_Site_TreePathById: (id is not integer)';
 
         $query = "
@@ -154,7 +184,11 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -165,8 +199,8 @@ class NestedSets{
         return $data;
     }
 
-    public function deleteNodeRecursively($id){
-
+    public function deleteNodeRecursively($id)
+    {
         if(!is_numeric($id)) throw new \Exception('deleteNodeRecursively: (id is not integer)');
 
         $query = "
@@ -179,11 +213,17 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        return true;
     }
 
-    public function completeSetup($id){
-
+    public function completeSetup($id)
+    {
         if(!is_numeric($id)) throw new \Exception('completeSetup: (id is not integer)');
 
         $query = "
@@ -193,13 +233,17 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        return true;
     }
 
-    public function getPath($alias){
-
-//        if(!is_numeric($id)) return 'getPathById: (id is not integer)';
-
+    public function getPath($alias)
+    {
         $query = "
             SELECT parent.name, parent.alias
             FROM E_Site_Tree AS node
@@ -210,7 +254,11 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -232,6 +280,12 @@ class NestedSets{
         ";
 
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        return true;
     }
 }

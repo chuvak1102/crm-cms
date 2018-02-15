@@ -1,7 +1,5 @@
 <h1>#Structure</h1>
 
-<?//dump($data)?>
-
 <?if(!empty($data['category'])){?>
     <?foreach($data['category'] as $i){?>
         <div class="tree">
@@ -20,17 +18,19 @@
                     <button data-event="category_new" id="<?=$i->getId()?>_new">INSERT NODE</button>
                 <?}else{?>
                     <button data-event="category_new" id="<?=$i->getId()?>_new">INSERT NODE</button>
-                    <button data-event="category_setup" id="<?=$i->getId()?>_setup">SETUP</button>
-                    <button data-event="category_show" id="<?=$i->getId()?>_show">SHOW</button>
-                    <button data-event="category_template" id="<?=$i->getId()?>_template">SELECT TEMPLATE</button>
+                    <?if($i->getLvl() == 1 && $i->getSetup() != 1){?>
+                        <button data-event="category_setup" id="<?=$i->getId()?>_setup">SETUP FIELDS</button>
+                    <?}?>
+                    <button data-event="category_edit" id="<?=$i->getId()?>_edit">EDIT</button>
                     <button data-event="category_remove" id="<?=$i->getId()?>_remove">REMOVE</button>
                 <?}?>
             </div>
             <div class="tree-single">
-                <p>Создано: </p>
+                <p>Создано: <?=$i->getCreated()->format('d-m-Y H:i')?></p>
                 <p>Шаблон: <?=$i->getTemplate()?></p>
                 <p>Активно: Да</p>
-                <p>Путь: /subroot/subroot/</p>
+                <p>Путь: <?=$i->path?></p>
+                <p>URL: <?=$i->url?></p>
             </div>
 
             <div class="cat-tri" style="left: <?=$i->getLvl()*30?>px"></div>

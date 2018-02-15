@@ -20,7 +20,8 @@ class MySql{
         }
     }
 
-    function getNestedSet(){
+    function getNestedSet()
+    {
         return new NestedSets($this->pdo);
     }
 
@@ -43,7 +44,10 @@ class MySql{
 
         $query = "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         $this->lastId = $this->pdo->lastInsertId();
     }
@@ -67,7 +71,10 @@ class MySql{
 
         $query = "UPDATE `$table` SET $keys WHERE `id` = $id ";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     function findBy($tableName, $where = array()){
@@ -100,7 +107,10 @@ class MySql{
 
         $query = "SELECT * FROM `$tableName` WHERE 1 = 1 $and";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -119,7 +129,10 @@ class MySql{
 
         $isTableExist = "SHOW TABLES LIKE '$tableName'";
         $stmt = $this->pdo->prepare($isTableExist);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
         $exist = $stmt->fetchAll();
 
         if(!$exist) return "Table '$tableName' does not exist!";
@@ -141,7 +154,10 @@ class MySql{
 
         $query = "SELECT * FROM `$tableName` WHERE 1 = 1 $and";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -160,7 +176,10 @@ class MySql{
 
         $isTableExist = "SHOW TABLES LIKE '$table'";
         $stmt = $this->pdo->prepare($isTableExist);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
         $exist = $stmt->fetchAll();
 
         if(!$exist) return "Table '$table' does not exist!";
@@ -174,7 +193,10 @@ class MySql{
 
         $query = "SELECT * FROM `$table` WHERE 1 = 1 $and";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -189,14 +211,20 @@ class MySql{
 
         $isTableExist = "SHOW TABLES LIKE '$table'";
         $stmt = $this->pdo->prepare($isTableExist);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
         $exist = $stmt->fetchAll();
 
         if(!$exist) return "Table '$table' does not exist!";
 
         $query = "SELECT * FROM `$table` ORDER BY `$orderBy`";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -232,7 +260,10 @@ class MySql{
 
         $query = "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
 
         $this->lastId = $this->pdo->lastInsertId();
     }
@@ -259,7 +290,10 @@ class MySql{
         $query = "DELETE FROM `$table` WHERE $keys = $val ";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     function call($name, $params = array()){
@@ -300,7 +334,10 @@ class MySql{
                 $stmt->bindParam($i++, $value, PDO::PARAM_STR, 4000);
             }
 
-            $stmt->execute();
+            try{$stmt->execute();}catch(\PDOException $e)
+            {
+                throw new \Exception($e->getMessage());
+            }
 
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $data[] = $row;
@@ -333,17 +370,42 @@ class MySql{
                     break;
                 }
                 case 9 : {
-                    $append = '`'.$field['alias'].'`'.' DATETIME NOT NULL,';
+                    $append = '`'.$field['alias'].'`'.' DATETIME,';
                     $query = $query.$append;
                     break;
                 }
                 case 10 : {
-                    $append = '`'.$field['alias'].'`'.' DATETIME NOT NULL,';
+                    $append = '`'.$field['alias'].'`'.' DATETIME,';
+                    $query = $query.$append;
+                    break;
+                }
+                case 11 : {
+                    $append = '`'.$field['alias'].'`'.' INTEGER(12),';
+                    $query = $query.$append;
+                    break;
+                }
+                case 12 : {
+                    $append = '`'.$field['alias'].'`'.' DECIMAL(10,1),';
+                    $query = $query.$append;
+                    break;
+                }
+                case 13 : {
+                    $append = '`'.$field['alias'].'`'.' DECIMAL(10,2),';
+                    $query = $query.$append;
+                    break;
+                }
+                case 14 : {
+                    $append = '`'.$field['alias'].'`'.' DECIMAL(10,3),';
+                    $query = $query.$append;
+                    break;
+                }
+                case 15 : {
+                    $append = '`'.$field['alias'].'`'.' DECIMAL(10,4),';
                     $query = $query.$append;
                     break;
                 }
                 default : {
-                    $append = '`'.$field['alias'].'`'.' TEXT(5000) NULL DEFAULT NULL,';
+                    $append = '`'.$field['alias'].'`'.' TEXT(5000) DEFAULT NULL,';
                     $query = $query.$append;
                     break;
                 }
@@ -352,13 +414,20 @@ class MySql{
 
         $query = $query.' PRIMARY KEY (`id`));';
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute();
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     function query($query)
     {
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
         return true;
     }
 }
