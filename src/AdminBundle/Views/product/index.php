@@ -1,30 +1,28 @@
-<?use Framework\Core\App;?>
-<div class="template">
-    <div class="breadcrumbs">
-        <a href="/admin/index/index/">Домой</a>
-        <span>Продукты</span>
-    </div>
-    <h1 class="page">Контент:</h1>
-    <div class="actions">
-        <a class="btn" href="/admin/product/new/">Создать</a>
-    </div>
-    <div class="categories product">
-        <ul>
-            <?if(is_array($data['content'])){?>
-                <?foreach($data['content'] as $i){?>
-                    <li>
-                        <a href=""><?=$i->getName()?>(<span>id <?=$i->getId()?></span>)</a>
-                        <div class="control">
-                            <a class="btn" href="/admin/product/show/<?=$i->getId()?>">Показать продукты</a>
-                            <a class="btn red" href="/admin/product/delete/<?=$i->getId()?>">Удалить все</a>
-                        </div>
-                    </li>
+<h1>#Продукты</h1>
+
+<div class="cont">
+    <div class="mat">
+        <table>
+            <?if(is_array($data['category'])){?>
+                <?foreach($data['category'] as $i){?>
+                    <?if(!empty($i->getAlias())){?>
+                        <tr>
+                            <td><?=$i->getName()?>( <span>id <?=$i->getId()?></span> )</td>
+                            <td>
+                                <button type="button" class="btn" data-event="material_new" id="<?=$i->getId()?>">ДОБАВИТЬ МАТЕРИАЛ</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn" data-event="material_show" id="<?=$i->getId()?>">СПИСОК МАТЕРИАЛОВ</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn" data-event="material_drop_all" id="<?=$i->getId()?>">УДАЛИТЬ ВСЕ</button>
+                            </td>
+                        </tr>
+                    <?}?>
                 <?}?>
             <?}?>
-        </ul>
+        </table>
     </div>
-    <pre>
-        <?print_r($data)?>
-    </pre>
 </div>
 
+<?//dump($data)?>

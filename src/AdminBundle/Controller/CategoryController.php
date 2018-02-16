@@ -249,7 +249,7 @@ class CategoryController extends Controller
         {
             $fields[] = array(
                 'fieldId' => 1,
-                'type' => 2,
+                'type' => 11,
                 'canonical' => 'category',
                 'alias' => 'category',
                 'params' => ''

@@ -65,4 +65,12 @@ class DefaultController extends Controller{
         $session->clear();
         return $this->redirectToRoute('/admin/login/');
     }
+
+    /**
+     * @Route("/disabled")
+     */
+    function disabledAction()
+    {
+        return $this->render('AdminBundle:disabled', null, false);
+    }
 }

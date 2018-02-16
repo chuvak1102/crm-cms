@@ -5,7 +5,7 @@ $(document).ready(function()
         menuCellWidth : 20,
         menuCellHeight : 23,
         menuNavHeight : 8,
-        animationSpeed : 600,
+        animationSpeed : 500,
         debug : true,
         map : {},
 
@@ -32,13 +32,15 @@ $(document).ready(function()
             window.app.page.busy = false;
         },
 
-        render : function(source, data)
+        nextScreen : function(source, data, usingFormDataClass = false)
         {
-            debug('...RENDER...');
+            debug('...RENDER NEXT SCREEN...');
 
             if(!window.app.page.busy)
             {
                 window.app.page.busy = true;
+
+                let formData = usingFormDataClass ? false : "application/x-www-form-urlencoded";
 
                 debug('lock animation');
                 debug('beginning ajax...');
@@ -47,6 +49,8 @@ $(document).ready(function()
                     url : source,
                     type : 'POST',
                     data : data,
+                    processData: formData,
+                    contentType: formData,
                     success : function(response)
                     {
                         debug('ajax success');
@@ -100,19 +104,24 @@ $(document).ready(function()
             }
         },
 
-        redirectToIndex : function(source, data)
+        prevScreen : function(source, data, usingFormDataClass = false)
         {
             if(!window.app.page.busy)
             {
-                debug('...REDIRECT TO INDEX...');
+                debug('...RENDER PREV SCREEN...');
                 debug('lock animation');
                 window.app.page.busy = true;
                 debug('beginning ajax...');
+
+                let formData = usingFormDataClass ? false : "application/x-www-form-urlencoded";
+
                 $.ajax({
 
                     url : source,
                     type : 'POST',
                     data : data,
+                    processData: formData,
+                    contentType: formData,
                     success : function(response)
                     {
                         debug('ajax success');
@@ -144,12 +153,12 @@ $(document).ready(function()
                             debug('unlock animation');
                             window.app.page.busy = false;
 
-                            debug('...REDIRECT COMPLETE...');
+                            debug('...RENDER COMPLETE...');
                         }, window.app.animationSpeed);
                     }
                 });
             }
-        }
+        },
     };
 
     function debug() {
@@ -171,7 +180,8 @@ $(document).ready(function()
 
         let defaultHtmlButton = $("<button></button>");
         let defaultHtmlIcon = $("<i></i>");
-        defaultHtmlButton.addClass("btn").addClass(window.app.map[window.app.page.current].color);
+        defaultHtmlButton.addClass("btn");
+        defaultHtmlButton.addClass(window.app.map[window.app.page.current].color);
         defaultHtmlIcon.addClass(window.app.map[window.app.page.current].icon);
         let defaultHtml = defaultHtmlButton.append(defaultHtmlIcon);
 
@@ -334,7 +344,7 @@ $(document).ready(function()
 
     $('#back').mouseup(function()
     {
-        if(!window.app.page.busy)
+        if(!window.app.page.busy && window.app.page.current)
         {
             window.app.page.busy = true;
 

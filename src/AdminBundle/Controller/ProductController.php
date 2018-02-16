@@ -14,7 +14,7 @@ use Framework\Modules\Authorization\Authorization;
 /**
  * @Route("/admin/product")
  */
-class ProductController extends Controller{
+class ProductController extends Controller {
 
     /**
      * @Route("/")
@@ -38,8 +38,8 @@ class ProductController extends Controller{
             if(empty($data)) $data = null;
 
             return $this->render('AdminBundle:product/index', array(
-                'content' => $data
-            ));
+                'category' => $data
+            ), false);
 
         } else {
 
@@ -58,20 +58,14 @@ class ProductController extends Controller{
             $cRepo = $this->getORM()->getRepository(Category::class);
             $fRepo = $this->getORM()->getRepository(CategoryFields::class);
 
-            $ctype = $cRepo->findBy(array
-                (
-                'alias' => $path[1]['alias']
-                )
-            );
-
-            $fields = $fRepo->findBy(array(
-                'category' => $ctype[0]->getId()
-            ));
+            $ctype = $cRepo->findBy(array('alias' => $path[1]['alias']));
+            $fields = $fRepo->findBy(array('category' => $ctype[0]->getId()));
 
             return $this->render('AdminBundle:product/new', array(
                 'category' => $category,
                 'fields' => $fields,
-            ));
+            ), false);
+
         } else {
 
             return $this->redirectToRoute('/admin/login/');
@@ -123,7 +117,7 @@ class ProductController extends Controller{
 
             $this->getMysql()->insert($ctypeAlias, $values);
 
-            return $this->redirectToRoute('/admin/category/');
+            return $this->redirectToRoute('/admin/product/');
         } else {
 
             return $this->redirectToRoute('/admin/login/');
@@ -161,7 +155,7 @@ class ProductController extends Controller{
                 'fields' => $fields,
                 'category' => $category,
                 'product' => $product
-            ));
+            ), false);
         } else {
 
             return $this->redirectToRoute('/admin/login/');
@@ -200,7 +194,7 @@ class ProductController extends Controller{
 
             $this->getMysql()->update($table, $fields, $id);
 
-            return $this->redirectToRoute('/admin/product/show/'.$category);
+            return $this->redirectToRoute('/admin/product/');
         } else {
 
             return $this->redirectToRoute('/admin/login/');
@@ -232,7 +226,7 @@ class ProductController extends Controller{
                 'category' => $category,
                 'ctype' => $ctype,
                 'products' => $products
-            ));
+            ), false);
 
         } else {
 
@@ -264,7 +258,7 @@ class ProductController extends Controller{
 
             $this->getMysql()->remove($table, array('id' => $id));
 
-            return $this->redirectToRoute('/admin/product/show/'.$category->getId());
+            return $this->redirectToRoute('/admin/product/');
         } else {
 
             return $this->redirectToRoute('/admin/login/');

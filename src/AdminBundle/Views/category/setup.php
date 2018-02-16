@@ -1,4 +1,4 @@
-<h1>#Setup node "<?=$data['category']->getName()?>"</h1>
+<h1>#Настройка полей: "<?=$data['category']->getName()?>"</h1>
 
 <div class="cont">
     <table class="setup_category">
@@ -37,7 +37,7 @@
 
             <td id="typeset">
                 <?foreach($data['fields'] as $i){?>
-                    <button data-event="category_setup_add_field" class="btn" id="<?=$i->getId()?>_add" value="<?=$i->getAlias()?>"><?=$i->getName()?></button>
+                    <button type="button" data-event="category_setup_add_field" class="btn" id="<?=$i->getId()?>_add" value="<?=$i->getAlias()?>"><?=$i->getName()?></button>
                 <?}?>
             </td>
         </tr>
@@ -45,7 +45,7 @@
 
     <table class="setup_category">
         <tr>
-            <td><button data-event="category_setup_save" style="width: 100%" class="btn" id="<?=$data['category']->getId()?>_complete">Сохранить</button></td>
+            <td><button type="button" data-event="category_setup_save" style="width: 100%" class="btn" id="<?=$data['category']->getId()?>_complete">СОХРАНИТЬ</button></td>
         </tr>
     </table>
 </div>

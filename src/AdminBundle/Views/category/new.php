@@ -1,18 +1,20 @@
-<h1>#Insert Node into "<?=$data['category']->getName()?>"</h1>
+<h1>#Добавить подраздел в "<?=$data['category']->getName()?>"</h1>
 
 <div class="save_category">
     <div class="lft">
-        <input type="text" name="name" placeholder="Название категории">
-        <input type="text" name="alias" placeholder="Алиас категории">
-        <select name="template" id="">
-            <option value="">Страница</option>
-            <?foreach($data['templates'] as $j){?>
-                <option value="<?=$j?>"><?=$j?></option>
-            <?}?>
-        </select>
-        <input type="text" name="image" placeholder="Изображение категории">
-        <textarea name="description" id="" cols="30" rows="10" placeholder="Описание категории"></textarea>
-        <button data-event="category_save" class="btn" id="<?=$data['category']->getId()?>_category_save">SAVE</button>
+        <form action="" method="post">
+            <input type="text" name="name" placeholder="Название">
+            <input type="text" name="alias" placeholder="Алиас(авто)">
+            <select name="template" id="">
+                <option value="">Шаблон</option>
+                <?foreach($data['templates'] as $j){?>
+                    <option value="<?=$j?>"><?=$j?></option>
+                <?}?>
+            </select>
+            <input type="text" name="image" placeholder="Изображение">
+            <textarea name="description" id="" cols="30" rows="10" placeholder="Описание"></textarea>
+            <button type="button" data-event="category_save" class="btn" id="<?=$data['category']->getId()?>_category_save">СОХРАНИТЬ</button>
+        </form>
     </div>
     <div class="rgt">
         <ul>
