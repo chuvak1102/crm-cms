@@ -1,4 +1,4 @@
-<h1>Редактировать продукт в категории: <?=$data['category']->getName()?></h1>
+<h1>#Редактировать материал: <?=$data['category']->getName()?></h1>
 
 <div class="cont">
     <div class="mat">

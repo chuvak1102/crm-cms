@@ -21,7 +21,7 @@ class LogController extends Controller
         {
             return $this->render('AdminBundle:log/index', array(
                 'log' => $mySql->findAll('E_Log')
-            ));
+            ), false);
 
         } else {
 

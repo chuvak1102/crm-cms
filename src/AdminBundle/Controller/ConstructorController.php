@@ -25,7 +25,7 @@ class ConstructorController extends Controller{
             return $this->render('AdminBundle:constructor/index', array(
                 'page' => $categories,
                 'constructor' => $constructors
-            ));
+            ), false);
         } else {
 
             return $this->redirectToRoute('/admin/login/');

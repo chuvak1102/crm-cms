@@ -4,7 +4,7 @@ namespace Framework\Component\Session;
 class Session {
 
     protected $session;
-    private $token;
+    private static $token;
 
     function __construct(){
 
@@ -47,8 +47,8 @@ class Session {
         session_destroy();
     }
 
-    function getToken(){
-        return $this->token;
+    static function getToken(){
+        return self::$token;
     }
 
 }

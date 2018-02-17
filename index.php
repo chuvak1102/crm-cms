@@ -38,15 +38,13 @@ if(\app\Config\Config::Production === false)
 }
 */
 
-function dump($data)
+function dump($scope)
 {
-    ?>
-    <div style="clear: both"></div>
-    <div style="background-color: rgba(0,0,0,0.64); width: 100%; padding-bottom: 50px">
-            <pre style="color: #fff">
-            <?print_r($data)?>
-            </pre>
-    </div>
-    <div style="clear: both"></div>
-    <?
+    echo '<div style="clear: both"></div>';
+    echo '<div style="background-color: rgba(0,0,0,0.64); width: 100%; padding-bottom: 50px">';
+    echo '<pre style="color: #fff">';
+    print_r($scope);
+    echo '</pre>';
+    echo '</div>';
+    echo '<div style="clear: both"></div>';
 }

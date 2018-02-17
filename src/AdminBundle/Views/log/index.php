@@ -1,3 +1,7 @@
+<h1>DEBUG</h1>
+
+<?dump($data)?>
+
 <div class="template">
     <div class="breadcrumbs">
         <a href="/admin/index/index/">Домой</a>
@@ -26,3 +30,4 @@
         </div>
     </div>
 </div>
+

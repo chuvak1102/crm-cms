@@ -1,6 +1,6 @@
 <?php
 namespace Framework\Modules\MySql;
-use Framework\Core\ORM\Mapping;
+use Framework\Component\ORM\Mapping;
 use PDO;
 use PDOException;
 use Framework\Modules\DB\Connection;

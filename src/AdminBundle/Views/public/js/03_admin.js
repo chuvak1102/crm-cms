@@ -122,8 +122,25 @@ $(document).ready(function()
         },
         "p_1_2" : {
             icon : "fa fa-file-image",
-            url : "/admin/disabled/",
+            url : "/admin/constructor/",
             color : "",
+            actions : {
+
+                binder_add : {
+
+                    mouseup : function(e){
+                        app.prevScreen("/admin/constructor/save", $('form').serialize());
+                    }
+                },
+
+                binder_remove : {
+
+                    mouseup : function(e){
+                        app.prevScreen("/admin/constructor/delete/" + $(e.target).attr("id"));
+                    }
+                }
+
+            }
         },
         "p_1_3" : {
             icon : "fa fa-envelope",
@@ -254,7 +271,7 @@ $(document).ready(function()
         },
         "p_4_1" : {
             icon : "fa fa-bug",
-            url : "/admin/disabled/",
+            url : "/admin/logs/",
             color : ""
         },
         "p_4_2" : {
