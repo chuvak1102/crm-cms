@@ -1,33 +1,26 @@
-<h1>DEBUG</h1>
+<h1>#Лог приложения</h1>
 
-<?dump($data)?>
-
-<div class="template">
-    <div class="breadcrumbs">
-        <a href="/admin/index/index/">Домой</a>
-        <span>Логи</span>
-    </div>
-    <h1 class="page">Логи</h1>
-    <div class="actions">
-        <a class="btn" href="/admin/log/remove/">Очистить</a>
-    </div>
-
-    <div class="categories">
-        <div class="form">
-            <ul class="log">
-                <?if(is_array($data['log'])){?>
-                    <?foreach($data['log'] as $i){?>
-                        <?$message = 'User: '.$i['user'].' Message: '.$i['message'].' Date: '.$i['date'].' IP: '.$i['ip']?>
-
-                        <?if($i['type'] == 'error'){?>
-                            <li class="error"><?=$message?></li>
-                        <?}else{?>
-                            <li><?=$message?></li>
-                        <?}?>
-                    <?}?>
+<div class="cont">
+    <div class="log">
+        <table>
+            <?if(!empty($data['log']) && is_array($data['log'])){?>
+                <tr>
+                    <td>ID</td>
+                    <td>Юзер</td>
+                    <td>Текст</td>
+                    <td>Создано</td>
+                    <td>IP</td>
+                </tr>
+                <?foreach($data['log'] as $i){?>
+                    <tr>
+                        <td><?=$i->getId()?></td>
+                        <td><?=$i->getUser()?></td>
+                        <td><?=$i->getMessage()?></td>
+                        <td><?=$i->getDate()->format('d-m-Y H:i')?></td>
+                        <td><?=$i->getIp()?></td>
+                    </tr>
                 <?}?>
-            </ul>
-        </div>
+            <?}?>
+        </table>
     </div>
 </div>
-

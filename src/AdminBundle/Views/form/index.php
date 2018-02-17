@@ -1,31 +1,28 @@
-<div class="template">
-    <div class="breadcrumbs">
-        <a href="/admin/index/index/">Домой</a>
-        <span>Формы</span>
-    </div>
-    <h1 class="page">Формы</h1>
-    <div class="actions">
-        <a class="btn" href="/admin/form/new/">Создать</a>
-    </div>
+<h1>#Формы</h1>
 
-    <div class="categories">
-        <ul>
-            <?if(is_array($data['forms'])){?>
+<div class="cont">
+    <div class="mat">
+        <table>
+            <?if(!empty($data['forms']) && is_array($data['forms'])){?>
                 <?foreach($data['forms'] as $i){?>
-                    <li>
-                        <a href=""><?=$i['name']?></a>
-                        <div class="control">
-                            <a class="btn btn" href="/admin/form/show/<?=$i['id']?>">Показать</a>
-                            <a class="btn btn" href="/admin/form/edit/<?=$i['id']?>">Редактировать</a>
-                            <a class="btn red" href="/admin/form/delete/<?=$i['id']?>">X</a>
-                        </div>
-                    </li>
+                    <tr>
+                        <td><?= $i['name'] ?></td>
+                        <td><button type="button" class="btn" data-event="form_show" id="<?=$i['id']?>">ПОКАЗАТЬ</button></td>
+                        <td><button type="button" class="btn" data-event="form_delete" id="<?=$i['id']?>">УДАЛИТЬ</button></td>
+<!--                        <td><button type="button" class="btn" data-event="form_edit" id="--><?//=$i['id']?><!--">РЕДАКТИРОВАТЬ</button></td>-->
+                    </tr>
                 <?}?>
             <?}?>
-        </ul>
+        </table>
     </div>
+</div>
 
-    <pre>
-        <?print_r($data)?>
-    </pre>
+<div class="cont">
+    <div class="mat">
+        <table>
+            <tr>
+                <td><button type="button" class="btn" data-event="form_new">СОЗДАТЬ</button></td>
+            </tr>
+        </table>
+    </div>
 </div>

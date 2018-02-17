@@ -6,6 +6,8 @@ use Framework\Component\HttpFoundation\Request;
 use Framework\Component\Controller\Controller;
 use Framework\Modules\Authorization\Authorization;
 use Framework\Modules\MySql\MySql;
+use AdminBundle\Entity\FieldTypes;
+use AdminBundle\Entity\DataType;
 
 /**
  * @Route("/admin/form")
@@ -21,7 +23,7 @@ class FormController extends Controller
         {
             return $this->render('AdminBundle:form/index', array(
                 'forms' => $mySql->findAll('E_Form')
-            ));
+            ), false);
 
         } else {
 
@@ -32,13 +34,18 @@ class FormController extends Controller
     /**
      * @Route("/new")
      */
-    public function newAction(MySql $mySql)
+    public function newAction()
     {
         if(Authorization::isConfirmed())
         {
+            $orm = $this->getORM();
+            $fRepo = $orm->getRepository(FieldTypes::class);
+            $tRepo = $orm->getRepository(DataType::class);
+
             return $this->render('AdminBundle:form/new', array(
-                'fields' => $mySql->findAll('E_Field_Types')
-            ));
+                'datatype' => $tRepo->findAll(),
+                'fields' => $fRepo->findAll()
+            ), false);
 
         } else {
 
@@ -118,7 +125,7 @@ class FormController extends Controller
                 'fields' => $mySql->findBy('E_Form_Fields', array(
                     'E_Form' => $id
                 )),
-            ));
+            ), false);
 
         } else {
 
@@ -127,10 +134,27 @@ class FormController extends Controller
     }
 
     /**
-     * @Route("/submit/{alias}")
+     * @Route("/delete/{id}")
      */
-    public function submitAction()
+    public function deleteAction(MySql $mySql, $id)
     {
+        $form = $mySql->findOneBy('E_Form', array(
+            'id' => $id
+        ));
 
+        if($form['alias'])
+        {
+            $mySql->remove('E_Form_Fields', array(
+                'E_Form' => $id
+            ));
+            
+            $mySql->remove('E_Form', array(
+                'alias' => $form['alias']
+            ));
+
+            return $this->redirectToRoute('/admin/form/');
+        }
+
+        return $this->redirectToRoute('/admin/form/');
     }
 }

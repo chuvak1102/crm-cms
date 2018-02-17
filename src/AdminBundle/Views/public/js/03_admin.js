@@ -250,9 +250,72 @@ $(document).ready(function()
             color : ""
         },
         "p_3_2" : {
-            icon : "fa fa-gift",
-            url : "/admin/category/",
-            color : "green"
+            icon : "fas fa-columns",
+            url : "/admin/form/",
+            color : "green",
+            actions : {
+
+                form_new : {
+                    mouseup : function(){
+                        app.nextScreen("/admin/form/new");
+                    }
+                },
+
+                form_add_field : {
+                    mouseup : function(e){
+
+                        let id = parseInt($(e.target).attr('id'));
+                        let alias = $(e.target).val();
+                        let name = $(e.target).html();
+                        let set = $('div#set > .inline-input').clone();
+
+                        set.find('select[name="fields[]"]').val(id);
+                        set.find('input[name="canonical[]"]').val(name);
+                        set.find('input[name="column[]"]').val(alias);
+                        set.find('input[name="name[]"]').val(name);
+
+                        $('#fields').append(set);
+                    }
+                },
+
+                form_save : {
+                    mouseup : function(e){
+
+                        $('div#set').remove();
+
+                        let data = {
+                            "form_name" : $('input[name="form_name"]').val(),
+                            "form_alias" : $('input[name="form_alias"]').val(),
+                            "fields" : $('select[name="fields[]"]').map(function(){return this.value;}).get(),
+                            "canonical" : $('input[name="canonical[]"]').map(function(){return this.value;}).get(),
+                            "column" : $('input[name="column[]"]').map(function(){return this.value;}).get(),
+                            "name" : $('input[name="name[]"]').map(function(){return this.value;}).get(),
+                            "value" : $('input[name="value[]"]').map(function(){return this.value;}).get(),
+                            "required" : $('select[name="required[]"]').map(function(){return this.value;}).get()
+                        };
+
+                        app.prevScreen('/admin/form/create', data);
+                    }
+                },
+
+                form_remove_field : {
+                    mouseup : function(e){
+                        $(e.target).parent().parent().remove();
+                    }
+                },
+
+                form_show : {
+                    mouseup : function(e){
+                        app.nextScreen("/admin/form/show/" + $(e.target).attr("id"));
+                    }
+                },
+
+                form_delete : {
+                    mouseup : function(e){
+                        app.prevScreen("/admin/form/delete/" + $(e.target).attr("id"));
+                    }
+                }
+            }
         },
         "p_3_3" : {
             icon : "fa fa-calculator",
@@ -272,7 +335,7 @@ $(document).ready(function()
         "p_4_1" : {
             icon : "fa fa-bug",
             url : "/admin/logs/",
-            color : ""
+            color : "pink"
         },
         "p_4_2" : {
             icon : "fa fa-bell",
@@ -282,7 +345,7 @@ $(document).ready(function()
         "p_4_3" : {
             icon : "fab fa-apple",
             url : "/admin/category/",
-            color : "pink"
+            color : ""
         },
         "p_4_4" : {
             icon : "fa fa-calendar",

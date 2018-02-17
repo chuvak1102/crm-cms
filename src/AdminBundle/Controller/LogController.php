@@ -1,11 +1,9 @@
 <?php
 namespace AdminBundle\Controller;
 
-use AdminBundle\Services\Helpers;
-use Framework\Component\HttpFoundation\Request;
+use AdminBundle\Entity\Log;
 use Framework\Component\Controller\Controller;
 use Framework\Modules\Authorization\Authorization;
-use Framework\Modules\MySql\MySql;
 
 /**
  * @Route("/admin/logs")
@@ -15,12 +13,14 @@ class LogController extends Controller
     /**
      * @Route("/")
      */
-    public function indexAction(MySql $mySql)
+    public function indexAction()
     {
         if(Authorization::isConfirmed())
         {
+            $lRepo = $this->getORM()->getRepository(Log::class);
+
             return $this->render('AdminBundle:log/index', array(
-                'log' => $mySql->findAll('E_Log')
+                'log' => $lRepo->findAll()
             ), false);
 
         } else {

@@ -29,15 +29,15 @@
         </tr>
         <tr>
             <td id="p_3_1"><div class="page"><button class="btn"><i class="fas fa-book"></i></button></div></td>
-            <td id="p_3_2"><div class="page"><button class="btn green"><i class="fa fa-gift"></i></button></div></td>
+            <td id="p_3_2"><div class="page"><button class="btn green"><i class="fas fa-columns"></i></button></div></td>
             <td id="p_3_3"><div class="page"><button class="btn"><i class="fa fa-calculator"></i></button></div></td>
             <td id="p_3_4"><div class="page"><button class="btn orange"><i class="fa fa-shopping-cart"></i></button></div></td>
             <td id="p_3_5"><div class="page"><button class="btn"><i class="fa fa-upload"></i></button></div></td>
         </tr>
         <tr>
-            <td id="p_4_1"><div class="page"><button class="btn"><i class="fa fa-bug"></i></button></div></td>
+            <td id="p_4_1"><div class="page"><button class="btn pink"><i class="fa fa-bug"></i></button></div></td>
             <td id="p_4_2"><div class="page"><button class="btn"><i class="fa fa-bell"></i></button></div></td>
-            <td id="p_4_3"><div class="page"><button class="btn pink"><i class="fab fa-apple"></i></button></div></td>
+            <td id="p_4_3"><div class="page"><button class="btn"><i class="fab fa-apple"></i></button></div></td>
             <td id="p_4_4"><div class="page"><button class="btn"><i class="fa fa-calendar"></i></button></div></td>
             <td id="p_4_5"><div class="page"><button class="btn"><i class="fas fa-battery-half"></i></button></div></td>
         </tr>

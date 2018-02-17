@@ -104,6 +104,15 @@ textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; pad
 .constructor .btn:active{border: none; background-color: #292929}
 .constructor .btn:focus{border: none}
 
+.log ul li{ width: 100%; background-color: #fff; margin-bottom: 1px; height: 40px; line-height: 40px; font-size: 16px; color: #000}
+.log table{width: 100%}
+.log table tr td{background-color: #fff; margin-bottom: 1px; padding: 10px; font-size: 16px; color: #000; text-align: center}
+.log table tr td:nth-child(1){width: 5%}
+.log table tr td:nth-child(2){width: 5%}
+.log table tr td:nth-child(3){width: 60%; text-align: left}
+.log table tr td:nth-child(4){width: 15%}
+.log table tr td:nth-child(5){width: 15%}
+
 /*colors*/
 .purple{background-color: #5d3097; color: #bbb0d8}
 .green{background-color: #04a863; color: #c3e2d3}
