@@ -1,6 +1,5 @@
 <?php
 use Framework\Modules\Annotation\AnnotationParser;
-use AdminBundle\Controller\viewController;
 use Framework\Component\ORM\Entity;
 use Framework\App;
 use app\Config\Config;

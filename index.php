@@ -21,23 +21,6 @@ $router->run();
 
 \Framework\Component\System\System::stopScriptTime();
 
-/*
-if(\app\Config\Config::Production === false)
-{
-    ?>
-    <style>
-        .debug_panel{position: fixed; background-color: #000; bottom: 0; left: 0; height: 30px; width: 100%; border-top: 1px solid #999}
-        .debug_panel ul li{float: left; line-height: 30px; margin-left: 10px; color: #fff}
-    </style>
-    <div class="debug_panel">
-        <ul>
-            <li><?echo \Framework\Component\System\System::scriptExecutionTime()?></li>
-        </ul>
-    </div>
-    <?
-}
-*/
-
 function dump($scope)
 {
     echo '<div style="clear: both"></div>';

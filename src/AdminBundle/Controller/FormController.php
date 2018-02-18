@@ -147,7 +147,7 @@ class FormController extends Controller
             $mySql->remove('E_Form_Fields', array(
                 'E_Form' => $id
             ));
-            
+
             $mySql->remove('E_Form', array(
                 'alias' => $form['alias']
             ));

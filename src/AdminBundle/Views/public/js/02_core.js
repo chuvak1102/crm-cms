@@ -1,5 +1,9 @@
 $(document).ready(function()
 {
+    window.onerror = function(message, url, lineNumber) {
+        alert("Global Error: " + message + "\n(" + url + ":" + lineNumber + ")");
+    };
+    
     window.app = {
 
         menuCellWidth : 20,
@@ -22,14 +26,14 @@ $(document).ready(function()
 
         reset : function()
         {
-            window.app.page.x = null;
-            window.app.page.y = null;
-            window.app.page.current = null;
-            window.app.page.screen = 0;
-            window.app.page.event = null;
-            window.app.page.requestUri = null;
-            window.app.page.data = null;
-            window.app.page.busy = false;
+            this.page.x = null;
+            this.page.y = null;
+            this.page.current = null;
+            this.page.screen = 0;
+            this.page.event = null;
+            this.page.requestUri = null;
+            this.page.data = null;
+            this.page.busy = false;
         },
 
         nextScreen : function(source, data, usingFormDataClass = false)

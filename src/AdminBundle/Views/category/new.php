@@ -21,10 +21,10 @@
             <?if(!empty($data['tree'])){?>
                 <?foreach($data['tree'] as $i){?>
                     <?if($i['id'] == $data['category']->getId()){?>
-                        <li style="padding-left: <?=$i['level']*20?>px"><?=$i['name']?></li>
+                        <li style="padding-left: <?=$i['level']*20?>px"><?=$i['alias']?></li>
                         <li class="green" style="padding-left: <?=$i['level']*20 + 20?>px">placeholder</li>
                     <?}else{?>
-                        <li style="padding-left: <?=$i['level']*20?>px"><?=$i['name']?></li>
+                        <li style="padding-left: <?=$i['level']*20?>px"><?=$i['alias']?></li>
                     <?}?>
                 <?}?>
             <?}?>

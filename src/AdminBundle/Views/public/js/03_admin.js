@@ -29,6 +29,20 @@ $(document).ready(function()
                             description : $('textarea[name="description"]').val()
                         };
 
+                        // data.validate({
+                        //
+                        //     error : function()
+                        //     {
+                        //
+                        //     },
+                        //
+                        //     sucess : function()
+                        //     {
+                        //
+                        //     }
+                        //
+                        // })
+
                         app.prevScreen("/admin/category/save/" + parseInt($(e.target).attr('id')), data)
                     }
                 },
@@ -74,8 +88,8 @@ $(document).ready(function()
                         let name = $(e.target).html();
                         let set = $('div#set > .inline-input').clone();
                         set.find('select[name="fields[]"]').val(id);
-                        set.find('input[name="canonical[]"]').val(name);
-                        set.find('input[name="alias[]"]').val(alias);
+                        // set.find('input[name="canonical[]"]').val(name);
+                        // set.find('input[name="alias[]"]').val(alias);
                         set.find('select[name="fieldType[]"]').val(id);
 
                         $('#fields').append(set);
@@ -123,12 +137,13 @@ $(document).ready(function()
         "p_1_2" : {
             icon : "fa fa-file-image",
             url : "/admin/constructor/",
-            color : "",
+            color : "orange",
             actions : {
 
                 binder_add : {
 
                     mouseup : function(e){
+
                         app.prevScreen("/admin/constructor/save", $('form').serialize());
                     }
                 },
@@ -136,6 +151,7 @@ $(document).ready(function()
                 binder_remove : {
 
                     mouseup : function(e){
+
                         app.prevScreen("/admin/constructor/delete/" + $(e.target).attr("id"));
                     }
                 }
@@ -156,6 +172,7 @@ $(document).ready(function()
                 material_new : {
 
                     mouseup : function(e){
+
                         app.nextScreen("/admin/product/new/" + $(e.target).attr("id"));
                     }
                 },
@@ -163,6 +180,7 @@ $(document).ready(function()
                 material_show : {
 
                     mouseup : function(e){
+
                         app.nextScreen("/admin/product/show/" + $(e.target).attr("id"));
                     }
                 },
@@ -170,6 +188,7 @@ $(document).ready(function()
                 material_delete : {
 
                     mouseup : function(e){
+
                         app.prevScreen("/admin/product/delete/" + $(e.target).attr("id"))
                     }
                 },
@@ -177,6 +196,7 @@ $(document).ready(function()
                 material_edit : {
 
                     mouseup : function(e){
+
                         app.nextScreen("/admin/product/edit/" + $(e.target).attr("id"))
                     }
                 },
@@ -197,6 +217,7 @@ $(document).ready(function()
                 material_drop_all : {
 
                     mouseup : function(e){
+
                         alert($(e.target).attr("id"));
                     }
                 },
@@ -230,9 +251,36 @@ $(document).ready(function()
             color : ""
         },
         "p_2_3" : {
-            icon : "fa fa-sitemap",
-            url : "/admin/disabled/",
-            color : ""
+            icon : "fab fa-mixcloud",
+            url : "/admin/import/",
+            color : "blue",
+            actions : {
+
+                import_new : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/new/");
+                    }
+                },
+
+                import_start : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/new/");
+                    }
+                },
+
+                import_delete : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/new/");
+                    }
+                },
+
+            }
         },
         "p_2_4" : {
             icon : "fa fa-comment",
@@ -257,11 +305,13 @@ $(document).ready(function()
 
                 form_new : {
                     mouseup : function(){
+
                         app.nextScreen("/admin/form/new");
                     }
                 },
 
                 form_add_field : {
+
                     mouseup : function(e){
 
                         let id = parseInt($(e.target).attr('id'));
@@ -279,6 +329,7 @@ $(document).ready(function()
                 },
 
                 form_save : {
+
                     mouseup : function(e){
 
                         $('div#set').remove();
@@ -299,19 +350,25 @@ $(document).ready(function()
                 },
 
                 form_remove_field : {
+
                     mouseup : function(e){
+
                         $(e.target).parent().parent().remove();
                     }
                 },
 
                 form_show : {
+
                     mouseup : function(e){
+
                         app.nextScreen("/admin/form/show/" + $(e.target).attr("id"));
                     }
                 },
 
                 form_delete : {
+
                     mouseup : function(e){
+
                         app.prevScreen("/admin/form/delete/" + $(e.target).attr("id"));
                     }
                 }
@@ -325,7 +382,12 @@ $(document).ready(function()
         "p_3_4" : {
             icon : "fa fa-shopping-cart",
             url : "/admin/disabled/",
-            color : "orange"
+            color : "orange",
+            actions : {
+
+
+
+            }
         },
         "p_3_5" : {
             icon : "ffa fa-upload",
@@ -357,5 +419,24 @@ $(document).ready(function()
             url : "/admin/disabled/",
             color : ""
         }
-    }
+    };
+
 });
+
+// "use strict";
+//
+//
+// var user = {};
+//
+// Object.defineProperty(user, "name", {
+//     value: "Вася",
+//     writable: false, // запретить присвоение "user.name="
+//     configurable: false // запретить удаление "delete user.name"
+// });
+//
+// // Теперь попытаемся изменить это свойство.
+//
+// // в strict mode присвоение "user.name=" вызовет ошибку
+// user.name = "Петя";
+//
+// console.log(user.name)

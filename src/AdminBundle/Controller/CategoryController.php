@@ -265,7 +265,7 @@ class CategoryController extends Controller
                 {
                     $alias = Helpers::stringToUrl($canonical);
                 } else {
-                    $alias = Helpers::stringToUrl($request->get('alias')[$k]);
+                    $alias = ($request->get('alias')[$k]);
                 }
 
                 $values = $request->get('params')[$k];
@@ -291,7 +291,7 @@ class CategoryController extends Controller
                 {
                     $fieldSet = new FieldSet();
                     $fieldSet->setCategory($category->getId());
-                    $fieldSet->setType($singleSet['fieldId']);
+                    $fieldSet->setType($singleSet['type']);
                     $fieldSet->setAlias($singleSet['alias']);
                     $fieldSet->setCanonical($singleSet['canonical']);
                     $fieldSet->setParams($singleSet['params']);

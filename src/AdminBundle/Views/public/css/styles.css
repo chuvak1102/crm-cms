@@ -113,6 +113,20 @@ textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; pad
 .log table tr td:nth-child(4){width: 15%}
 .log table tr td:nth-child(5){width: 15%}
 
+.std_table{width: 100%;}
+.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px; vertical-align: top}
+.std_table input{margin-bottom: 0;}
+.std_table select{margin-bottom: 0;}
+
+.std_table{width: 100%}
+.std_table tr:first-child {height: 50px}
+.std_table tr td{ font-size: 16px; vertical-align: middle; text-align: center; padding: 5px; background-color: #fff}
+.std_table tr td input{margin-bottom: 0; border: none}
+.std_table tr td select{margin-bottom: 0; border: none}
+.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px ;}
+.std_table .btn:active{border: none; background-color: #292929}
+.std_table .btn:focus{border: none}
+
 /*colors*/
 .purple{background-color: #5d3097; color: #bbb0d8}
 .green{background-color: #04a863; color: #c3e2d3}

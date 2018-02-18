@@ -15,7 +15,7 @@
     <table class="menu" id="menu">
         <tr>
             <td id="p_1_1"><div class="page"><button class="btn cyan"><i class="fa fa-sitemap"></i></button></div></td>
-            <td id="p_1_2"><div class="page"><button class="btn"><i class="fa fa-file-image"></i></button></div></td>
+            <td id="p_1_2"><div class="page"><button class="btn orange"><i class="fa fa-file-image"></i></button></div></td>
             <td id="p_1_3"><div class="page"><button class="btn"><i class="fa fa-envelope"></i></button></div></td>
             <td id="p_1_4"><div class="page"><button class="btn purple"><i class="fa fa-cubes"></i></button></div></td>
             <td id="p_1_5"><div class="page"><button class="btn"><i class="fa fa-user"></i></button></div></td>
@@ -23,7 +23,7 @@
         <tr>
             <td id="p_2_1"><div class="page"><button class="btn"><i class="fa fa-align-center"></i></button></div></td>
             <td id="p_2_2"><div class="page"><button class="btn"><i class="fa fa-clone"></i></button></div></td>
-            <td id="p_2_3"><div class="page"><button class="btn"><i class="fa fa-sitemap"></i></button></div></td>
+            <td id="p_2_3"><div class="page"><button class="btn blue"><i class="fab fa-mixcloud"></i></button></div></td>
             <td id="p_2_4"><div class="page"><button class="btn"><i class="fa fa-comment"></i></button></div></td>
             <td id="p_2_5"><div class="page"><button class="btn blue"><i class="fa fa-camera-retro"></i></button></div></td>
         </tr>
@@ -51,8 +51,8 @@
     </table>
 </div>
 
-<script src="/src/AdminBundle/Views/public/js/02_core.js"></script>
-<script src="/src/AdminBundle/Views/public/js/03_admin.js"></script>
+<script defer src="/src/AdminBundle/Views/public/js/02_core.js"></script>
+<script defer src="/src/AdminBundle/Views/public/js/03_admin.js"></script>
 
 </body>
 </html>
