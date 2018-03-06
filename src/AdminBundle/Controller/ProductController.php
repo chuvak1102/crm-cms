@@ -220,7 +220,7 @@ class ProductController extends Controller {
 
             $products = $this->getMysql()->findBy($ctype, array(
                 'category' => $category->getId()
-            ));
+            ), 100);
 
             return $this->render('AdminBundle:product/show', array(
                 'category' => $category,

@@ -3,14 +3,20 @@
 @font-face {  font-family: "Helvetica Neue";  src: url("../font/HelveticaNeueCyr-Medium.otf")   }
 @font-face {  font-family: "Helvetica Neue Black";  src: url("../font/HelveticaNeueCyr-Black.otf")   }
 
-
 html{height: 100%;}
 body{height: 100%; overflow: hidden; font-family: "Helvetica Neue", "Open Sans", "Arial", sans-serif}
 .clear{clear: both}
 .cont{min-width: 960px; max-width: 1280px; display: block; margin: auto}
+
 /*boot css*/
 .p-10{padding: 10px}.p-30{padding: 30px} .p-50{padding: 50px}
-h1{    color: #fff;  font-size: 40px;  padding: 100px 0 50px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
+h1{color: #fff;  font-size: 40px;  padding: 100px 0 50px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
+
+/*spinner*/
+#spinner{z-index: 10000;padding: 25px;width:  150px; height: 150px; position: fixed; top: calc(50% - 100px);left: calc(50% - 100px); background-color: rgb(0, 0, 0); border: 1px solid; border-radius: 10px;}
+#spinner div{  border: 16px solid transparent;  border-radius: 50%;  border-left: 16px solid #fff;  width: 100px;  height: 100px;  -webkit-animation: spin 1s linear infinite;  animation: spin 1s linear infinite;  background-color: transparent;  }
+@-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /*main css*/
 .container{height: 100%;}
@@ -32,14 +38,7 @@ table.menu tr:last-child td .page{border: 1px solid #000}
 
 ul.screen{height: 100%; width: 1000%; font-size: 0; background-color: #fff; margin-left: -0%}
 ul.screen > li{position: relative;display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
-ul.screen > li{
-    background: #bfe5e8;
-    background-image:  url(../images/back3.jpeg);
-    background-position: center center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    padding-bottom: 100px;
-}
+ul.screen > li{  background: #bfe5e8;  background-image:  url(../images/back3.jpeg);  background-position: center center;  background-size: 100% 100%;  background-repeat: no-repeat;  padding-bottom: 100px;  }
 
 /*submenu*/
 .submenu{position: absolute; left: 60%; bottom: 8%; z-index: 100; min-width: 10%; max-width: 40%; width: 40%;}

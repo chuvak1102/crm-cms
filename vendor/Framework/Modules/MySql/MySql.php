@@ -77,7 +77,7 @@ class MySql{
         }
     }
 
-    function findBy($tableName, $where = array()){
+    function findBy($tableName, $where = array(), $limit = 100){
 
         if(!$this->pdo) return null;
 
@@ -105,7 +105,7 @@ class MySql{
             $and = $and.' AND '."`$field`".' '.$expression.' '."'$value'";
         }
 
-        $query = "SELECT * FROM `$tableName` WHERE 1 = 1 $and";
+        $query = "SELECT * FROM `$tableName` WHERE 1 = 1 $and"." LIMIT $limit";
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {
@@ -419,6 +419,24 @@ class MySql{
         {
             throw new \Exception($e->getMessage());
         }
+    }
+
+    function getColumnList($tableName)
+    {
+        $query = "SHOW COLUMNS FROM `$tableName`";
+        $stmt = $this->pdo->prepare($query);
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        }
+
+        if(empty($data)) return 'null';
+        return $data;
+
     }
 
     function query($query)

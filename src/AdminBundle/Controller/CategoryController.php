@@ -111,11 +111,11 @@ class CategoryController extends Controller
             $image = $request->get('image');
             $description = $request->get('description');
             $template = $request->get('template');
-            $alias = Helpers::stringToUrl($name);
+            $alias = Helpers::stringToAlias($name);
 
             if(!empty($request->get('alias')))
             {
-                $alias = Helpers::stringToUrl($request->get('alias'));
+                $alias = Helpers::stringToAlias($request->get('alias'));
             }
 
             $tree->insertNode($name, $alias, $template, $image, $description, $id);
@@ -159,11 +159,11 @@ class CategoryController extends Controller
             $image = $request->get('image');
             $description = $request->get('description');
             $template = $request->get('template');
-            $alias = Helpers::stringToUrl($name);
+            $alias = Helpers::stringToAlias($name);
 
             if(!empty($request->get('alias')))
             {
-                $alias = Helpers::stringToUrl($request->get('alias'));
+                $alias = Helpers::stringToAlias($request->get('alias'));
             }
 
             $mySql->update('E_Site_Tree', array(
@@ -263,9 +263,9 @@ class CategoryController extends Controller
 
                 if(empty($request->get('alias')[$k]))
                 {
-                    $alias = Helpers::stringToUrl($canonical);
+                    $alias = Helpers::stringToAlias($canonical);
                 } else {
-                    $alias = ($request->get('alias')[$k]);
+                    $alias = Helpers::stringToAlias($request->get('alias')[$k]);
                 }
 
                 $values = $request->get('params')[$k];

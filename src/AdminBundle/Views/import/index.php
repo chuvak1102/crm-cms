@@ -1,46 +1,70 @@
-<h1>#Загрузки</h1>
+<h1>#Импорт данных</h1>
 
 <div class="cont">
-    <table class="std_table">
-        <tr>
-            <td>Название</td>
-            <td>Тип Файла</td>
-            <td>Источник файла</td>
-            <td>Назначение</td>
-
-        </tr>
-        <tr>
-            <td>
-                <input type="text" placeholder="Название" value="Новая выгрузка">
-            </td>
-            <td>
-                <select name="" id="">
-                    <option value="">CSV</option>
-                    <option value="">XML</option>
-                    <option value="">DBF</option>
-                </select>
-            </td>
-            <td>
-                <select name="" id="">
-                    <option value="">Локальный</option>
-                    <option value="">URL</option>
-                </select>
-            </td>
-            <td>
-                <select name="" id="">
-                    <option value="">reseller table</option>
-                    <option value="">table items</option>
-                </select>
-            </td>
-            <td>
-                <button type="button" class="btn" data-event="import_new">СОХРАНИТЬ</button>
-            </td>
-            <td>
-                <button type="button" class="btn" data-event="import_start">ИМПОРТ</button>
-            </td>
-            <td>
-                <button type="button" class="btn" data-event="import_delete">УДАЛИТЬ</button>
-            </td>
-        </tr>
-    </table>
+    <form action="">
+        <table class="std_table">
+            <tr>
+                <td>Название</td>
+                <td>Тип Файла</td>
+                <td>Источник файла</td>
+                <td>Таблица для записи</td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="name" type="text" placeholder="Название" value="Новая выгрузка">
+                </td>
+                <td>
+                    <select name="type">
+                        <option value="CSV">CSV</option>
+                        <option value="XML">XML</option>
+                        <option value="DBF">DBF</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="source">
+                        <option value="local">Локальный</option>
+                        <option value="remote">URL</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="table">
+                        <?foreach($data['tables'] as $i){?>
+                            <option value="<?=$i->getAlias()?>"><?=$i->getName()?></option>
+                        <?}?>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="btn" data-event="import_new">СОХРАНИТЬ</button>
+                </td>
+            </tr>
+            <?if(is_array($data['import'])){?>
+                <?foreach($data['import'] as $i){?>
+                    <tr>
+                        <td>
+                            <input type="text" value="<?=$i->getName()?>">
+                        </td>
+                        <td>
+                            <select>
+                                <option value="<?=$i->getType()?>"><?=$i->getType()?></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select>
+                                <option value="<?=$i->getSource()?>"><?=$i->getSource()?></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select>
+                                <option value="<?=$i->getTable()?>"><?=$i->getTable()?></option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn" data-event="import_start" id="<?=$i->getId()?>">ИМПОРТ</button>
+                            <button type="button" class="btn" data-event="import_delete" id="<?=$i->getId()?>">УДАЛИТЬ</button>
+                        </td>
+                    </tr>
+                <?}?>
+            <?}?>
+        </table>
+    </form>
 </div>

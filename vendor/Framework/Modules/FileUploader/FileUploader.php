@@ -1,8 +1,8 @@
 <?php
 namespace Framework\Modules\FileUploader;
 
-class FileUploader {
-
+class FileUploader
+{
     protected $root;
     protected $maxsize = '50mb'; //(int) kb, gb, mb
     protected $allowed = array('rar','zip','doc','docx', 'xls','xlsx', 'csv', 'jpg', 'png', 'gif', 'jpeg', 'txt', 'pdf');
@@ -27,9 +27,9 @@ class FileUploader {
         $this->root = $_SERVER['DOCUMENT_ROOT'].'/web/files/';
     }
 
-    public function save($file){
-
-        if(empty($file)) return 'no file';
+    public function save($file)
+    {
+        if(empty($file)) return null;
 
         $goodName = $this->checkName($file);
         $goodType = $this->checkType($file);
@@ -38,24 +38,28 @@ class FileUploader {
         if($goodName && $goodSize && $goodType){
 
             return $this->persist($file);
+
         } else {
 
             if(!$goodName) $errors[] = 'Недопустимые символы в имени файла.';
             if(!$goodType) $errors[] = 'Данный тип файлов не поддерживается.';
             if(!$goodSize) $errors[] = 'Размер файла превышает максимальный.';
 
-            return !empty($errors) ? $errors : 'Неизвестная ошибка, пожалуйста, обратитесь к разработчику.';
+            return !empty($errors) ? $errors : 'Неизвестная ошибка. Пожалуйста, обратитесь к разработчику.';
         }
     }
 
-    public function check($file){
+    public function check($file)
+    {
         $goodName = $this->checkName($file);
         $goodType = $this->checkType($file);
         $goodSize = $this->checkSize($file);
 
-        if($goodName && $goodSize && $goodType){
+        if($goodName && $goodSize && $goodType)
+        {
 
             return $file;
+
         } else {
 
             return array(
@@ -66,19 +70,20 @@ class FileUploader {
         }
     }
 
-    protected function checkName($file){
-
+    protected function checkName($file)
+    {
         $p = "[]{}<>~@#$%^`&*=|\"\'?\/\\№";
         $catch = substr_count($file['name'], $p);
-        if($catch === 0){
+        if($catch === 0)
+        {
             return true;
         } else {
             return false;
         }
     }
 
-    public function checkType($file){
-
+    public function checkType($file)
+    {
         $type3 = substr($file['name'], -3); // 3 chars extension
         $type4 = substr($file['name'], -4); // 4 chars extension
 
@@ -88,12 +93,13 @@ class FileUploader {
         return false;
     }
 
-    public function checkSize($file){
-
+    public function checkSize($file)
+    {
         $integer = intval($this->maxsize);
         $dimension = preg_replace('/\d/','',$this->maxsize);
 
-        switch ($dimension){
+        switch ($dimension)
+        {
             case 'kb' : $zero = '000';
                 break;
             case 'mb' : $zero = '000000';
@@ -103,26 +109,30 @@ class FileUploader {
             default   : $zero = '000000';
         }
 
-        if($file['size'] < $integer.$zero){
+        if($file['size'] < $integer.$zero)
+        {
             return true;
         } else {
             return false;
         }
     }
 
-    public function getExtension($file){
+    public function getExtension($file)
+    {
         $pos = strpos($file['name'], '.');
         $type = substr($file['name'], ++$pos);
         return $type;
     }
 
-    public function getName($file){
+    public function getName($file)
+    {
         $pos = strpos($file['name'], '.');
         $name = substr($file['name'], 0, $pos);
         return $name;
     }
 
-    public function getPath($file){
+    public function getPath($file)
+    {
         $pos = strpos($file['name'], '.');
         $type = substr($file['name'], ++$pos);
         return '';
@@ -133,8 +143,8 @@ class FileUploader {
         return md5(uniqid($this->getName($file)));
     }
 
-    public function persist($file){
-
+    public function persist($file)
+    {
         $name = $this->generateName($file);
         $exe = $this->getExtension($file);
         $path = $this->getPath($file);
@@ -146,6 +156,7 @@ class FileUploader {
             move_uploaded_file($file['tmp_name'], $uploadedFile);
 
             return $path.$name.'.'.$exe;
+
         } else {
 
             mkdir($this->root.$path, 0755);

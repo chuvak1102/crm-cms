@@ -31,7 +31,7 @@
             <td id="p_3_1"><div class="page"><button class="btn"><i class="fas fa-book"></i></button></div></td>
             <td id="p_3_2"><div class="page"><button class="btn green"><i class="fas fa-columns"></i></button></div></td>
             <td id="p_3_3"><div class="page"><button class="btn"><i class="fa fa-calculator"></i></button></div></td>
-            <td id="p_3_4"><div class="page"><button class="btn orange"><i class="fa fa-shopping-cart"></i></button></div></td>
+            <td id="p_3_4"><div class="page"><button class="btn"><i class="fa fa-shopping-cart"></i></button></div></td>
             <td id="p_3_5"><div class="page"><button class="btn"><i class="fa fa-upload"></i></button></div></td>
         </tr>
         <tr>
@@ -50,6 +50,8 @@
         </tr>
     </table>
 </div>
+
+<div id="spinner" style="display: none"><div></div></div>
 
 <script defer src="/src/AdminBundle/Views/public/js/02_core.js"></script>
 <script defer src="/src/AdminBundle/Views/public/js/03_admin.js"></script>

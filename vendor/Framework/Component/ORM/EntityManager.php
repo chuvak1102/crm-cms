@@ -4,9 +4,11 @@ use Framework\Modules\DB\Connection;
 
 class EntityManager extends AbstractEntityManager implements EntityManagerInterface {
 
-    protected $entity = array();
+    protected $persistEntities = array();
+    protected $removeEntities = array();
     protected $original = array();
     protected $persistence = array();
+    protected $method;
     protected static $length = 0;
     protected $pdo;
 
@@ -14,41 +16,39 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
         $this->pdo = Connection::mysql();
     }
 
-    public function persist($entity)
+    public function persist(Entity $entity)
     {
-        if(is_array($entity))
+        if($entity instanceof Entity)
         {
-            foreach($entity as $e)
+            switch ($this->method)
             {
-                if($e instanceof Entity)
-                {
-                    $this->entity[] = $entity;
-                    self::$length++;
+                case 'remove' : {
 
-                } else {
+                    $this->removeEntities[] = $entity;
+                    break;
+                }
 
-                    throw new \Exception('EntityManager::persist expects parameter 1 to be an instance of Entity!');
+                default : {
+                    $this->persistEntities[] = $entity;
+                    break;
                 }
             }
 
         } else {
 
-            if($entity instanceof Entity)
-            {
-
-                $this->entity[] = $entity;
-                self::$length++;
-
-            } else {
-
-                throw new \Exception('EntityManager::persist expects parameter 1 to be an instance of Entity!');
-            }
+            throw new \Exception('EntityManager::persist expects parameter 1 to be an instance of Entity!');
         }
+    }
+
+    public function remove(Entity $entity)
+    {
+        $this->method = 'remove';
+        $this->persist($entity);
     }
 
     public function flush()
     {
-        foreach($this->entity as $entity)
+        foreach($this->persistEntities as $entity)
         {
             $table = Mapping::getTableName($entity);
             $fields = Mapping::getTableFields($entity);
@@ -69,6 +69,16 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute();
             }
+        }
+
+        foreach($this->removeEntities as $entity)
+        {
+            $table = Mapping::getTableName($entity);
+            $id = $entity->getId();
+
+            $query = "DELETE FROM `$table` WHERE `id` = $id";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
         }
     }
 
@@ -187,4 +197,5 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
 
         return $keys.' WHERE `id` = '.$entity->getId();
     }
+
 }

@@ -260,7 +260,16 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
-                        app.nextScreen("/admin/import/new/");
+                        let data = {
+                            "name" : $('form input[name="name"]').val(),
+                            "type" : $('form select[name="type"]').val(),
+                            "source" : $('form select[name="source"]').val(),
+                            "table" : $('form select[name="table"]').val()
+                        };
+
+                        console.log(data);
+
+                        app.prevScreen("/admin/import/new", data);
                     }
                 },
 
@@ -268,7 +277,7 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
-                        app.nextScreen("/admin/import/new/");
+                        app.nextScreen("/admin/import/setup/" + $(e.target).attr("id"));
                     }
                 },
 
@@ -276,7 +285,9 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
-                        app.nextScreen("/admin/import/new/");
+                        if(confirm("Удалить?")){
+                            app.prevScreen("/admin/import/delete/" + $(e.target).attr("id"));
+                        }
                     }
                 },
 
@@ -382,7 +393,7 @@ $(document).ready(function()
         "p_3_4" : {
             icon : "fa fa-shopping-cart",
             url : "/admin/disabled/",
-            color : "orange",
+            color : "",
             actions : {
 
 

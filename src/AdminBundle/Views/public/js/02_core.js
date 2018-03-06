@@ -3,13 +3,14 @@ $(document).ready(function()
     window.onerror = function(message, url, lineNumber) {
         alert("Global Error: " + message + "\n(" + url + ":" + lineNumber + ")");
     };
-    
+
     window.app = {
 
         menuCellWidth : 20,
         menuCellHeight : 23,
         menuNavHeight : 8,
-        animationSpeed : 500,
+        animationSpeed : 400,
+        spinnerDelay : 1000,
         debug : true,
         map : {},
 
@@ -53,6 +54,13 @@ $(document).ready(function()
                     url : source,
                     type : 'POST',
                     data : data,
+                    beforeSend: function(){
+                        spinnerStop();
+                        spinnerStart();
+                    },
+                    complete : function(){
+                        spinnerStop();
+                    },
                     processData: formData,
                     contentType: formData,
                     success : function(response)
@@ -101,7 +109,6 @@ $(document).ready(function()
                                 debug('...RENDER COMPLETE...');
 
                             }, window.app.animationSpeed);
-
                         });
                     }
                 });
@@ -126,6 +133,13 @@ $(document).ready(function()
                     data : data,
                     processData: formData,
                     contentType: formData,
+                    beforeSend: function(){
+                        spinnerStop();
+                        spinnerStart();
+                    },
+                    complete : function(){
+                        spinnerStop();
+                    },
                     success : function(response)
                     {
                         debug('ajax success');
@@ -172,6 +186,11 @@ $(document).ready(function()
             }
         }
     }
+
+    function spinnerStart(){
+
+        $('#spinner').show()}
+    function spinnerStop(){$('#spinner').hide()}
 
     $.fn.close = function(page)
     {
