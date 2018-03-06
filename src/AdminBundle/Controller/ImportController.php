@@ -79,7 +79,7 @@ class ImportController extends Controller
 
             } else {
 
-                $tags = XMLParser::getTagsFromXml($_SERVER['DOCUMENT_ROOT'].'/web/files/'.$import->getLocation());
+                $tags = XMLParser::getTagsFromXml($import->getLocation());
 
                 return $this->render('AdminBundle:import/import', array(
                     'tags' => $tags,
@@ -146,6 +146,8 @@ class ImportController extends Controller
      */
     public function saveAction(Import $import, Request $request, MySql $mySql)
     {
+
+
 //        $mySql->insert('addrobj', array(
 //            'category' => 84,
 //            'NORMDOC' => $reader->getAttribute('NORMDOC'),

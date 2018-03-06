@@ -230,7 +230,7 @@ class MySql{
             $data[] = $row;
         }
 
-        if(empty($data)) return 'null';
+        if(empty($data)) return null;
 
         return $data;
     }

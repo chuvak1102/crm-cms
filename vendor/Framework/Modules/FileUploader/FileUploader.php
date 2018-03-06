@@ -71,7 +71,7 @@ class FileUploader
         }
     }
 
-    protected function checkName($file)
+    private function checkName($file)
     {
         $p = "[]{}<>~@#$%^`&*=|\"\'?\/\\№";
         $catch = substr_count($file['name'], $p);
@@ -83,7 +83,7 @@ class FileUploader
         }
     }
 
-    public function checkType($file)
+    private function checkType($file)
     {
         $type3 = substr($file['name'], -3); // 3 chars extension
         $type4 = substr($file['name'], -4); // 4 chars extension
@@ -94,7 +94,7 @@ class FileUploader
         return false;
     }
 
-    public function checkSize($file)
+    private function checkSize($file)
     {
         $integer = intval($this->maxsize);
         $dimension = preg_replace('/\d/','',$this->maxsize);
@@ -118,33 +118,33 @@ class FileUploader
         }
     }
 
-    public function getExtension($file)
+    private function getExtension($file)
     {
         $pos = strpos($file['name'], '.');
         $type = substr($file['name'], ++$pos);
         return $type;
     }
 
-    public function getName($file)
+    private function getName($file)
     {
         $pos = strpos($file['name'], '.');
         $name = substr($file['name'], 0, $pos);
         return $name;
     }
 
-    public function getPath($file)
+    private function getPath($file)
     {
         $pos = strpos($file['name'], '.');
         $type = substr($file['name'], ++$pos);
         return '';
     }
 
-    public function generateName($file)
+    private function generateName($file)
     {
         return md5(uniqid($this->getName($file)));
     }
 
-    public function persist($file)
+    private function persist($file)
     {
         $name = $this->generateName($file);
         $exe = $this->getExtension($file);

@@ -7,7 +7,7 @@ class XMLParser {
     public static function getTagsFromXml($filePath)
     {
         $reader = new XMLReader();
-        $reader->open($filePath, null, LIBXML_PARSEHUGE);
+        $reader->open($_SERVER['DOCUMENT_ROOT'].'/web/files/'.$filePath, null, LIBXML_PARSEHUGE);
         $depth = 0;
 
         while($reader->read())
@@ -48,7 +48,7 @@ class XMLParser {
         return $tags;
     }
 
-    public static function getXMLElementsCount()
+    public static function importToDatabase($path, $fields)
     {
 
     }

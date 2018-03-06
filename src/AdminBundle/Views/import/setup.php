@@ -26,7 +26,7 @@
     </form>
 </div>
 
-<?dump($data)?>
+
 
 
 

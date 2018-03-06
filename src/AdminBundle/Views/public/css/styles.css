@@ -123,8 +123,11 @@ textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; pad
 .std_table tr td input{margin-bottom: 0; border: none}
 .std_table tr td select{margin-bottom: 0; border: none}
 .std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px ;}
+.std_table .btn:hover{border: none; background-color: #292929; cursor: pointer}
 .std_table .btn:active{border: none; background-color: #292929}
 .std_table .btn:focus{border: none}
+
+.std_table.import tr td{vertical-align: top}
 
 /*colors*/
 .purple{background-color: #5d3097; color: #bbb0d8}
