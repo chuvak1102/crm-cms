@@ -431,7 +431,8 @@ class MySql{
         }
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            $data[] = $row;
+            if(!in_array($row['Field'], ['id', 'category']))
+            $data[] = $row['Field'];
         }
 
         if(empty($data)) return 'null';

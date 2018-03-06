@@ -29,20 +29,6 @@ $(document).ready(function()
                             description : $('textarea[name="description"]').val()
                         };
 
-                        // data.validate({
-                        //
-                        //     error : function()
-                        //     {
-                        //
-                        //     },
-                        //
-                        //     sucess : function()
-                        //     {
-                        //
-                        //     }
-                        //
-                        // })
-
                         app.prevScreen("/admin/category/save/" + parseInt($(e.target).attr('id')), data)
                     }
                 },
@@ -87,10 +73,10 @@ $(document).ready(function()
                         let alias = $(e.target).val();
                         let name = $(e.target).html();
                         let set = $('div#set > .inline-input').clone();
-                        set.find('select[name="fields[]"]').val(id);
-                        // set.find('input[name="canonical[]"]').val(name);
-                        // set.find('input[name="alias[]"]').val(alias);
-                        set.find('select[name="fieldType[]"]').val(id);
+                        set.find('select[name="FieldType[]"]').val(id);
+                        set.find('input[name="canonical[]"]').val(name);
+                        set.find('input[name="alias[]"]').val(alias);
+                        set.find('select[name="DataType[]"]').val(id);
 
                         $('#fields').append(set);
                     }
@@ -111,10 +97,10 @@ $(document).ready(function()
                         $('div#set').remove();
 
                         let data = {
-                            "fields" : $('select[name="fields[]"]').map(function(){return this.value;}).get(),
+                            "FieldType" : $('select[name="FieldType[]"]').map(function(){return this.value;}).get(),
                             "canonical" : $('input[name="canonical[]"]').map(function(){return this.value;}).get(),
                             "alias" : $('input[name="alias[]"]').map(function(){return this.value;}).get(),
-                            "fieldType" : $('select[name="fieldType[]"]').map(function(){return this.value;}).get(),
+                            "DataType" : $('select[name="DataType[]"]').map(function(){return this.value;}).get(),
                             "params" : $('input[name="params[]"]').map(function(){return this.value;}).get()
                         };
 
@@ -209,7 +195,7 @@ $(document).ready(function()
                         let f = $('form');
                         let form = new FormData(f[0]);
 
-                        app.prevScreen("/admin/product/update/" + id, form, true)
+                        app.prevScreen("/admin/product/update/" + id, form, true);
                     }
 
                 },
@@ -290,6 +276,22 @@ $(document).ready(function()
                         }
                     }
                 },
+
+                import_load_file : {
+
+                    mouseup : function(e){
+
+                        let id = $(e.target).attr("id");
+                        let f = $('#import');
+                        let form = new FormData(f[0]);
+
+                        console.log(form);
+
+                        app.nextScreen("/admin/import/load/" + id, form, true);
+
+                    }
+
+                }
 
             }
         },

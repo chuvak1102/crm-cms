@@ -4,8 +4,8 @@ namespace Framework\Modules\FileUploader;
 class FileUploader
 {
     protected $root;
-    protected $maxsize = '50mb'; //(int) kb, gb, mb
-    protected $allowed = array('rar','zip','doc','docx', 'xls','xlsx', 'csv', 'jpg', 'png', 'gif', 'jpeg', 'txt', 'pdf');
+    protected $maxsize = '50gb'; //(int) kb, gb, mb
+    protected $allowed = array('rar','zip','doc','docx', 'xls','xlsx', 'csv', 'jpg', 'png', 'gif', 'jpeg', 'txt', 'pdf', 'xml');
     protected $path = array(
         'rar' => 'files/',
         'zip' => 'files/',
@@ -20,6 +20,7 @@ class FileUploader
         'png' => 'files/',
         'gif' => 'files/',
         'jpeg' => 'files/',
+        'xml' => 'files/'
     );
 
     function __construct()
@@ -87,8 +88,8 @@ class FileUploader
         $type3 = substr($file['name'], -3); // 3 chars extension
         $type4 = substr($file['name'], -4); // 4 chars extension
 
-        if(array_key_exists($type3, $this->path)) return true;
-        if(array_key_exists($type4, $this->path)) return true;
+        if(array_key_exists(strtolower($type3), $this->path)) return true;
+        if(array_key_exists(strtolower($type4), $this->path)) return true;
 
         return false;
     }
@@ -153,7 +154,7 @@ class FileUploader
 
         if($dirExist)
         {
-            move_uploaded_file($file['tmp_name'], $uploadedFile);
+            $res = move_uploaded_file($file['tmp_name'], $uploadedFile);
 
             return $path.$name.'.'.$exe;
 

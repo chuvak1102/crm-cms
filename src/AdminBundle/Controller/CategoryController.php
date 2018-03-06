@@ -248,18 +248,18 @@ class CategoryController extends Controller
         if(Authorization::isConfirmed())
         {
             $fields[] = array(
-                'fieldId' => 1,
                 'type' => 11,
+                'DataType' => 1,
                 'canonical' => 'category',
                 'alias' => 'category',
                 'params' => ''
             );
 
-            foreach($request->get('fields') as $k => $v)
+            foreach($request->get('FieldType') as $k => $v)
             {
-                $fieldType = $request->get('fields')[$k];
+                $fieldType = $request->get('FieldType')[$k];
                 $canonical = $request->get('canonical')[$k];
-                $type = $request->get('fieldType')[$k];
+                $dataType = $request->get('DataType')[$k];
 
                 if(empty($request->get('alias')[$k]))
                 {
@@ -271,8 +271,8 @@ class CategoryController extends Controller
                 $values = $request->get('params')[$k];
 
                 $fields[] = array(
-                    'fieldId' => $fieldType,
-                    'type' => $type,
+                    'type' => $fieldType,
+                    'DataType' => $dataType,
                     'canonical' => $canonical,
                     'alias' => $alias,
                     'params' => $values

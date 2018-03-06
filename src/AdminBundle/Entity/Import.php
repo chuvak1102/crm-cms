@@ -33,6 +33,11 @@ class Import extends Entity
      */
     public $table;
 
+    /**
+     * @ORM\Column(type="text", length=255)
+     */
+    public $location;
+
     function getId(){
         return $this->id;
     }
@@ -73,5 +78,14 @@ class Import extends Entity
         $this->table = $table;
     }
 
+    function getLocation()
+    {
+        return $this->location;
+    }
+
+    function setLocation($location)
+    {
+        $this->location = $location;
+    }
 
 }

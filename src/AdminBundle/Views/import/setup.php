@@ -1,7 +1,7 @@
-<h1>IMPORT setup</h1>
+<h1>Файлы </h1>
 
 <div class="cont">
-    <form action="" enctype="multipart/form-data">
+    <form action="/admin/import/load/<?=$data['set']->getId()?>" id="import" enctype="multipart/form-data" method="post">
         <?if($data['set']->getSource() == 'local'){?>
             <p>Выберите файл</p>
             <table class="std_table">
@@ -9,7 +9,7 @@
                     <td><input type="file" name="file"></td>
                 </tr>
                 <tr>
-                    <td><button type="button" class="btn" data-event="import_setup">ПРОДОЛЖИТЬ</button></td>
+                    <td><button type="button" class="btn" data-event="import_load_file" id="<?=$data['set']->getId()?>">ПРОДОЛЖИТЬ</button></td>
                 </tr>
             </table>
         <?}else{?>
@@ -19,7 +19,7 @@
                     <td><input type="text" name="url"></td>
                 </tr>
                 <tr>
-                    <td><button type="button" class="btn" data-event="import_setup">ПРОДОЛЖИТЬ</button></td>
+                    <td><button type="button" class="btn" data-event="import_load_url" id="<?=$data['set']->getId()?>">ПРОДОЛЖИТЬ</button></td>
                 </tr>
             </table>
         <?}?>

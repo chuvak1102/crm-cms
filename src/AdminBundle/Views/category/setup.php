@@ -7,10 +7,10 @@
                 <form action="/admin/category/complete/" id="fields" method="post">
                     <div class="inline-input">
                         <div class="form-single">
-                            <select name="fields[]">
+                            <select name="FieldType[]">
                                 <option value="1" selected>По умолчанию</option>
                             </select>
-                            <select name="fieldType[]">
+                            <select name="DataType[]">
                                 <option value="1" selected>По умолчанию</option>
                             </select>
                             <input type="text" name="canonical[]" placeholder="Название" value="Название">
@@ -21,10 +21,10 @@
 
                     <div class="inline-input">
                         <div class="form-single">
-                            <select name="fields[]">
+                            <select name="FieldType[]">
                                 <option value="1" selected>По умолчанию</option>
                             </select>
-                            <select name="fieldType[]">
+                            <select name="DataType[]">
                                 <option value="1" selected>По умолчанию</option>
                             </select>
                             <input type="text" name="canonical[]" placeholder="Название" value="Алиас">
@@ -50,17 +50,15 @@
     </table>
 </div>
 
-<!--            /admin/category/complete/1-->
-
 <div id="set" style="display: none">
     <div class="inline-input">
         <div class="form-single">
-            <select name="fields[]">Тип поля
+            <select name="FieldType[]">Тип поля
                 <?foreach($data['fields'] as $i){?>
                     <option value="<?=$i->getId()?>"><?=$i->getName()?></option>
                 <?}?>
             </select>
-            <select name="fieldType[]">Тип данных
+            <select name="DataType[]">Тип данных
                 <?foreach($data['datatype'] as $i){?>
                     <option value="<?=$i->getType()?>"><?=$i->getName()?></option>
                 <?}?>

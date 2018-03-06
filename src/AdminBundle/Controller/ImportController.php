@@ -10,6 +10,7 @@ use AdminBundle\Entity\Import;
 use Framework\Modules\MySql\MySql;
 use XMLReader;
 use AdminBundle\Services\XMLParser;
+use Framework\Modules\FileUploader\FileUploader;
 
 /**
  * @Route("/admin/import")
@@ -24,7 +25,6 @@ class ImportController extends Controller
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
             $orm = $this->getORM();
-
             $iRepo = $orm->getRepository(Import::class);
             $cRepo = $orm->getRepository(ContentType::class);
 
@@ -71,21 +71,54 @@ class ImportController extends Controller
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            $reader = new XMLReader();
-            $reader->open('/var/www/html/web/files/addr.XML', null, LIBXML_PARSEHUGE);
+            if(empty($import->getLocation()))
+            {
+                return $this->render('AdminBundle:import/setup', array(
+                    'set' => $import,
+                ), false);
 
-            $tags = $this->getTags($reader);
-            $reader->close();
+            } else {
 
-            return $this->render('AdminBundle:import/setup', array(
-                'tags' => $tags,
-                'set' => $import
-            ), false);
+                $tags = XMLParser::getTagsFromXml($_SERVER['DOCUMENT_ROOT'].'/web/files/'.$import->getLocation());
+
+                return $this->render('AdminBundle:import/import', array(
+                    'tags' => $tags,
+                    'set' => $import,
+                    'columns' => $mySql->getColumnList($import->getTable()),
+                    'file' => $import->getLocation()
+                ), false);
+            }
 
         } else {
 
             return $this->redirectToRoute('/admin/login/');
         }
+    }
+
+    /**
+     * @Route("/load/{import}")
+     */
+    public function loadFileAction(Request $request,Import $import)
+    {
+        $location = '';
+
+        if(!empty($request->files['file']['tmp_name']))
+        {
+            $uploader = new FileUploader();
+            $location = $uploader->save($request->files['file']);
+        }
+
+        if(!empty($request->get('url')))
+        {
+            $location = $request->get('url');
+        }
+
+        $em = $this->getORM()->getManager();
+        $import->setLocation($location);
+        $em->persist($import);
+        $em->flush();
+
+        return $this->redirectToRoute('/admin/import/setup/'.$import->getId());
     }
 
     /**
@@ -148,52 +181,14 @@ class ImportController extends Controller
 //            'AOGUID' => $reader->getAttribute('AOGUID'),
 //            'AOID' => $reader->getAttribute('AOID'),
 //        ));
+
+//        return $this->render('AdminBundle:import/setup', array(
+//            'tags' => $tags,
+//            'set' => $import,
+//            'columns' => $mySql->getColumnList($import->getTable()),
+//            'file' => $name
+//        ), false);
     }
-
-    private function getTags(XMLReader $reader)
-    {
-        $depth = 0;
-        while($child = $reader->read())
-        {
-            $break = false;
-            if($reader->nodeType === $reader::ELEMENT)
-            {
-                $level = $reader->depth;
-
-                if($depth > $level)
-                {
-                    $element = $reader->expand();
-                    $break = true;
-                    break;
-                }
-
-                $depth++;
-                $curr[] = $reader->localName;
-
-            }
-
-            if($break) break;
-        }
-
-        if(empty($element)) return null;
-
-        $foundTags = $element->attributes;
-
-        $tags = array();
-
-        for($i = 0; $i < $foundTags->length; $i++)
-        {
-            if(!empty($foundTags->item($i)->name))
-            {
-                $tags[$foundTags->item($i)->name] = $foundTags->item($i)->nodeValue;
-            }
-        }
-
-        if(empty($tags)) return null;
-
-        return $tags;
-    }
-
 
 
 }
