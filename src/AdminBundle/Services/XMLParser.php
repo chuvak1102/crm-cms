@@ -4,22 +4,35 @@ use XMLReader;
 
 class XMLParser {
 
-    public static function getTagsFromXml($filePath)
-    {
-        $reader = new XMLReader();
-        $reader->open($_SERVER['DOCUMENT_ROOT'].'/web/files/'.$filePath, null, LIBXML_PARSEHUGE);
-        $depth = 0;
+    protected $source;
+    protected $reader;
 
-        while($reader->read())
+    function __construct($source)
+    {
+        if(preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i', $source))
+        {
+            $this->source = $source;
+        } else {
+            $this->source = $_SERVER['DOCUMENT_ROOT'].'/web/files/'.$source;
+        }
+
+        $this->reader = new XMLReader();
+        $this->reader->open($this->source, null, LIBXML_PARSEHUGE);
+    }
+
+    private function getSingleRecord()
+    {
+        $depth = 0;
+        while($this->reader->read())
         {
             $break = false;
-            if($reader->nodeType === $reader::ELEMENT)
+            if($this->reader->nodeType === $this->reader::ELEMENT)
             {
-                $level = $reader->depth;
+                $level = $this->reader->depth;
 
                 if($depth > $level)
                 {
-                    $element = $reader->expand();
+                    $element = $this->reader->expand();
                     $break = true;
                     break;
                 }
@@ -30,7 +43,23 @@ class XMLParser {
             if($break) break;
         }
 
-        $reader->close();
+        if(empty($element)) return null;
+
+        return $element;
+    }
+
+    public function getRootElementName()
+    {
+        $element = $this->getSingleRecord();
+
+        if(empty($element)) return null;
+
+        return $element->localName;
+    }
+
+    public function getTagsFromXml()
+    {
+        $element = $this->getSingleRecord();
 
         if(empty($element)) return null;
 
@@ -48,9 +77,10 @@ class XMLParser {
         return $tags;
     }
 
-    public static function importToDatabase($path, $fields)
+    public function getReader()
     {
-
+        return $this->reader;
     }
+
 }
 

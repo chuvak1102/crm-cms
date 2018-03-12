@@ -27,4 +27,27 @@ class System
         $totaltime = ($endtime - $_SESSION['system']['system']['scriptStartTime']);
         $_SESSION['SYSTEM']['scriptExecutionTime'] = "Execution time ".(round($totaltime*1000, 2))." ms";
     }
+
+    public static function getCPUCount()
+    {
+        $cmd = "uname";
+        $OS = strtolower(trim(shell_exec($cmd)));
+
+        switch($OS) {
+            case('linux'):
+                $cmd = "cat /proc/cpuinfo | grep processor | wc -l";
+                break;
+            case('freebsd'):
+                $cmd = "sysctl -a | grep 'hw.ncpu' | cut -d ':' -f2";
+                break;
+            default:
+                unset($cmd);
+        }
+
+        if ($cmd != '') {
+            $cpuCoreNo = intval(trim(shell_exec($cmd)));
+        }
+
+        return empty($cpuCoreNo) ? 1 : $cpuCoreNo;
+    }
 }

@@ -13,6 +13,7 @@ $(document).ready(function()
         spinnerDelay : 1000,
         debug : true,
         map : {},
+        data : {},
 
         page : {
             x : null,

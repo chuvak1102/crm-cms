@@ -246,25 +246,41 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
-                        let data = {
+                        app.prevScreen("/admin/import/new", {
                             "name" : $('form input[name="name"]').val(),
                             "type" : $('form select[name="type"]').val(),
                             "source" : $('form select[name="source"]').val(),
                             "table" : $('form select[name="table"]').val()
-                        };
-
-                        console.log(data);
-
-                        app.prevScreen("/admin/import/new", data);
+                        });
                     }
                 },
 
-                import_start : {
+                import_start_all : {
 
                     mouseup : function(e){
 
                         app.nextScreen("/admin/import/setup/" + $(e.target).attr("id"));
                     }
+                },
+
+                import_start_update : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/start_update/" + $(e.target).attr("id"));
+
+                    }
+
+                },
+
+                import_start_drop_update : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/drop_update" + $(e.target).attr("id"));
+
+                    }
+
                 },
 
                 import_delete : {
@@ -285,13 +301,80 @@ $(document).ready(function()
                         let f = $('#import');
                         let form = new FormData(f[0]);
 
-                        console.log(form);
-
                         app.nextScreen("/admin/import/load/" + id, form, true);
+                    }
+                },
 
+                import_select_tag : {
+
+                    mouseup : function(e){
+
+                        app.data.tag = $(e.target).attr("id");
+                    }
+                },
+
+                import_assign_tag : {
+
+                    mouseup : function(e){
+
+                        let tag = $(e.target).attr("id");
+
+                        if(app.data.tag){
+                            $('input[name=' + tag + ']').val(app.data.tag);
+                            app.data.tag = null;
+                        } else {
+                            $('input[name=' + tag + ']').val("");
+                        }
+                    }
+                },
+
+                import_add_tag : {
+
+                    mouseup : function(e){
+
+                        let input = $(e.target).parent().parent().find('input[type="text"]');
+
+                        if(input.val()){
+
+                            let tag = input.val();
+                            let row = $('<tr></tr>');
+                            let td_1 = $('<td></td>');
+                            let td_2 = $('<td></td>');
+                            let button = $('<button type="button" class="btn" ></button>');
+
+                            button.html(tag);
+                            button.attr("id", tag);
+                            button.data("event", "import_select_tag");
+
+                            td_1.append(button);
+                            row.append(td_1);
+                            row.append(td_2);
+
+                            row.insertBefore(input.parent().parent());
+
+                            input.val("");
+                        }
                     }
 
-                }
+                },
+
+                import_save : {
+
+                    mouseup : function(e){
+
+                        let data = $('form[name="import"]').serialize();
+
+                        app.prevScreen("/admin/import/", data);
+                    }
+                },
+
+                import_execute : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/execute/" + $(e.target).attr("id"));
+                    }
+                },
 
             }
         },

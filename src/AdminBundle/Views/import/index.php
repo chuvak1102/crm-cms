@@ -59,8 +59,10 @@
                             </select>
                         </td>
                         <td>
-                            <button type="button" class="btn" data-event="import_start" id="<?=$i->getId()?>">ИМПОРТ</button>
-                            <button type="button" class="btn" data-event="import_delete" id="<?=$i->getId()?>">УДАЛИТЬ</button>
+                            <button type="button" class="btn" data-event="import_start_all" id="<?=$i->getId()?>">ЗАГРУЗИТЬ ВСЕ</button>
+                            <button type="button" class="btn" data-event="import_start_update" id="<?=$i->getId()?>">ЗАГРУЗИТЬ С ОБНОВЛЕНИЕМ</button>
+                            <button type="button" class="btn" data-event="import_start_drop_update" id="<?=$i->getId()?>">УДАЛИТЬ ВСЕ И ЗАГРУЗИТЬ</button>
+                            <button type="button" class="btn" data-event="import_delete" id="<?=$i->getId()?>">УДАЛИТЬ ВЫГРУЗКУ</button>
                         </td>
                     </tr>
                 <?}?>

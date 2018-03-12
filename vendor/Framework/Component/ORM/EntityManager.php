@@ -79,7 +79,11 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
             $query = "DELETE FROM `$table` WHERE `id` = $id";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
+
         }
+        
+        $this->removeEntities = array();
+        $this->persistEntities = array();
     }
 
     private function createInsertStatement($fields, $entity)

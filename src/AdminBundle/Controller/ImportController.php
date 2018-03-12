@@ -1,7 +1,9 @@
 <?php
 namespace AdminBundle\Controller;
 
+use AdminBundle\Entity\Category;
 use AdminBundle\Entity\ContentType;
+use AdminBundle\Entity\ImportFields;
 use Framework\Component\Controller\Controller;
 use Framework\Component\HttpFoundation\Response;
 use Framework\Modules\Authorization\Authorization;
@@ -11,6 +13,7 @@ use Framework\Modules\MySql\MySql;
 use XMLReader;
 use AdminBundle\Services\XMLParser;
 use Framework\Modules\FileUploader\FileUploader;
+use Framework\Component\System\System;
 
 /**
  * @Route("/admin/import")
@@ -79,13 +82,16 @@ class ImportController extends Controller
 
             } else {
 
-                $tags = XMLParser::getTagsFromXml($import->getLocation());
+                $iRepo = $this->getORM()->getRepository(ImportFields::class);
+                $parser = new XMLParser($import->getLocation());
+                $tags = $parser->getTagsFromXml();
 
                 return $this->render('AdminBundle:import/import', array(
                     'tags' => $tags,
                     'set' => $import,
                     'columns' => $mySql->getColumnList($import->getTable()),
-                    'file' => $import->getLocation()
+                    'file' => $import->getLocation(),
+                    'saved' => $iRepo->findBy(array('import' => $import->getId()))
                 ), false);
             }
 
@@ -93,6 +99,16 @@ class ImportController extends Controller
 
             return $this->redirectToRoute('/admin/login/');
         }
+    }
+
+    /**
+     * @Route("/start_update/{import}")
+     */
+    public function setupUpdateAction(Import $import)
+    {
+        return $this->render('AdminBundle:import/setup_update', array(
+            'import' => $import
+        ), false);
     }
 
     /**
@@ -144,53 +160,121 @@ class ImportController extends Controller
     /**
      * @Route("/save/{import}")
      */
-    public function saveAction(Import $import, Request $request, MySql $mySql)
+    public function saveFieldsetAction(Import $import, Request $request, MySql $mySql)
     {
+        $em = $this->getORM()->getManager();
+        $iRepo = $this->getORM()->getRepository(ImportFields::class);
+        $parser = new XMLParser($import->getLocation());
 
+        foreach($request->post as $k => $v)
+        {
+            if(!empty($v))
+            {
+                $field = new ImportFields();
+                $field->setImport($import->getId());
+                $field->setKey($k);
+                $field->setColumn($v);
+                $em->persist($field);
+            }
+        }
 
-//        $mySql->insert('addrobj', array(
-//            'category' => 84,
-//            'NORMDOC' => $reader->getAttribute('NORMDOC'),
-//            'UPDATEDATE' => $reader->getAttribute('UPDATEDATE'),
-//            'ENDDATE' => $reader->getAttribute('ENDDATE'),
-//            'STARTDATE' => $reader->getAttribute('STARTDATE'),
-//            'OKTMO' => $reader->getAttribute('OKTMO'),
-//            'OKATO' => $reader->getAttribute('OKATO'),
-//            'IFNSUL' => $reader->getAttribute('IFNSUL'),
-//            'IFNSFL' => $reader->getAttribute('IFNSFL'),
-//            'OPERSTATUS' => $reader->getAttribute('OPERSTATUS'),
-//            'CENTSTATUS' => $reader->getAttribute('CENTSTATUS'),
-//            'LIVESTATUS' => $reader->getAttribute('LIVESTATUS'),
-//            'ACTSTATUS' => $reader->getAttribute('ACTSTATUS'),
-//            'CURRSTATUS' => $reader->getAttribute('CURRSTATUS'),
-//            'CODE' => $reader->getAttribute('CODE'),
-//            'PLAINCODE' => $reader->getAttribute('PLAINCODE'),
-//            'SEXTCODE' => $reader->getAttribute('SEXTCODE'),
-//            'EXTRCODE' => $reader->getAttribute('EXTRCODE'),
-//            'STREETCODE' => $reader->getAttribute('STREETCODE'),
-//            'PLANCODE' => $reader->getAttribute('PLANCODE'),
-//            'PLACECODE' => $reader->getAttribute('PLACECODE'),
-//            'CTARCODE' => $reader->getAttribute('CTARCODE'),
-//            'CITYCODE' => $reader->getAttribute('CITYCODE'),
-//            'AUTOCODE' => $reader->getAttribute('AUTOCODE'),
-//            'AREACODE' => $reader->getAttribute('AREACODE'),
-//            'REGIONCODE' => $reader->getAttribute('REGIONCODE'),
-//            'AOLEVEL' => $reader->getAttribute('AOLEVEL'),
-//            'SHORTNAME' => $reader->getAttribute('SHORTNAME'),
-//            'OFFNAME' => $reader->getAttribute('OFFNAME'),
-//            'FORMALNAME' => $reader->getAttribute('FORMALNAME'),
-//            'PARENTGUID' => $reader->getAttribute('PARENTGUID'),
-//            'AOGUID' => $reader->getAttribute('AOGUID'),
-//            'AOID' => $reader->getAttribute('AOID'),
-//        ));
+        $em->flush();
 
-//        return $this->render('AdminBundle:import/setup', array(
-//            'tags' => $tags,
-//            'set' => $import,
-//            'columns' => $mySql->getColumnList($import->getTable()),
-//            'file' => $name
-//        ), false);
+        return $this->render('AdminBundle:import/import', array(
+            'tags' => $parser->getTagsFromXml(),
+            'set' => $import,
+            'columns' => $mySql->getColumnList($import->getTable()),
+            'file' => $import->getLocation(),
+            'saved' => $iRepo->findBy(array('import' => $import->getId()))
+        ), false);
     }
 
+    /**
+     * @Route("/execute/{import}")
+     */
+    public function executeAction(Import $import, MySql $mySql)
+    {
+        $parser = new XMLParser($import->getLocation());
+        $rootTag = $parser->getRootElementName();
+        $reader = $parser->getReader();
+        $iRepo = $this->getORM()->getRepository(ImportFields::class);
+        $cRepo = $this->getORM()->getRepository(Category::class);
+        $fields = $iRepo->findBy(array('import' => $import->getId()));
+        $ctype = $cRepo->findOneBy(array('alias' => $import->getTable()));
+        $insertArray = array();
+
+        foreach($fields as $i)
+        {
+            $insertArray[$i->getKey()] = $i->getColumn();
+        }
+
+        $totalInserts = 0;
+
+        $time1 = new \DateTime();
+
+        while($reader->read())
+        {
+            if($reader->nodeType === $reader::ELEMENT)
+            {
+                if ($reader->localName == $rootTag)
+                {
+                    $statement = array(
+                        'category' => $ctype->getId()
+                    );
+                    foreach($insertArray as $k => $v)
+                    {
+                        $statement[$k] = $reader->getAttribute($v);
+                    }
+
+                    $mySql->insert($import->getTable(), $statement);
+
+                    $totalInserts++;
+                }
+            }
+        }
+
+        $reader->close();
+
+        $time2 = new \DateTime();
+
+        $speed = $time2->diff($time1);
+        $h = $speed->format('%h');
+        $m = $speed->format('%i');
+        $s = $speed->format('%s');
+
+        return $this->render('AdminBundle:import/report', array(
+            'total' => $totalInserts,
+            'start' => $time1->format('H:i:s'),
+            'end' => $time2->format('H:i:s'),
+            'speed' => $h.' ч. '.$m.' мин. '.$s.' сек.'
+        ), false);
+
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

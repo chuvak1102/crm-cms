@@ -3,10 +3,10 @@ namespace AdminBundle\Entity;
 use Framework\Component\ORM\Entity;
 
 /**
- * @ORM\Table(name="E_Import_Fields")
- * @ORM\Entity(repositoryClass="AdminBundle\Repository\Import")
+ * @ORM\Table(name="E_Import_Update")
+ * @ORM\Entity(repositoryClass="AdminBundle\Repository\ImportUpdate")
  */
-class ImportFields extends Entity
+class ImportUpdate extends Entity
 {
     /**
      * @ORM\Column(type="id")
@@ -21,12 +21,8 @@ class ImportFields extends Entity
     /**
      * @ORM\Column(type="text", length=255)
      */
-    public $key;
+    public $field;
 
-    /**
-     * @ORM\Column(type="text", length=255)
-     */
-    public $column;
 
     function getId(){
         return $this->id;
@@ -44,20 +40,14 @@ class ImportFields extends Entity
         $this->import = $import;
     }
 
-    function getKey(){
-        return $this->key;
+    function getField(){
+        return $this->field;
     }
 
-    function setKey($key){
-        $this->key = $key;
+    function setField($field){
+        $this->field = $field;
     }
 
-    function getColumn(){
-        return $this->column;
-    }
 
-    function setColumn($column){
-        $this->column = $column;
-    }
 
 }

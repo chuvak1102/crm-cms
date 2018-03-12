@@ -5,7 +5,7 @@
         <tr>
             <td>Название тега</td>
             <td>Значение</td>
-            <td>Название поля в базе</td>
+            <td>Поля в таблице</td>
             <td>Тег для записи</td>
         </tr>
     </table>
@@ -16,8 +16,15 @@
                     <table>
                         <?foreach($data['tags'] as $k => $v){?>
                             <tr>
-                                <td><button type="button" class="btn" data-event="select_tag" id="<?=$k?>"><?=$k?></button></td>
+                                <td><button type="button" class="btn" data-event="import_select_tag" id="<?=$k?>"><?=$k?></button></td>
                                 <td><?=$v?></td>
+                            </tr>
+                        <?}?>
+
+                        <?if(empty($data['saved'])){?>
+                            <tr>
+                                <td><input type="text" placeholder="NEW TAG NAME"></td>
+                                <td><button type="button" class="btn" data-event="import_add_tag">+</button></td>
                             </tr>
                         <?}?>
                     </table>
@@ -26,9 +33,17 @@
                     <table>
                         <?foreach($data['columns'] as $i){?>
                             <tr>
-                                <td><button type="button" class="btn" data-event="accept_tag" id="<?=$i?>"><?=$i?></button></td>
-                                <td> >>> </td>
-                                <td><input type="text" name="<?=$i?>"></td>
+                                <td><button type="button" class="btn" data-event="import_assign_tag" id="<?=$i?>"><?=$i?></button></td>
+                                <?if($data['saved']){?>
+                                    <?foreach($data['saved'] as $f){?>
+                                        <?if($f->getKey() == $i){?>
+                                            <td><input type="text" name="<?=$i?>" value="<?=$f->getColumn()?>"></td>
+                                            <?break;?>
+                                        <?}?>
+                                    <?}?>
+                                <?}else{?>
+                                    <td><input type="text" name="<?=$i?>"></td>
+                                <?}?>
                             </tr>
                         <?}?>
                     </table>
@@ -39,11 +54,17 @@
 </div>
 
 <div class="cont">
-    <table class="std_table">
-        <tr>
-            <td><button type="button" class="btn">НАЧАТЬ ИМПОРТ</button></td>
-        </tr>
-    </table>
+    <?if(empty($data['saved'])){?>
+        <table class="std_table">
+            <tr>
+                <td><button type="button" class="btn" data-event="import_save" id="<?=$data['set']->getId()?>">СОХРАНИТЬ</button></td>
+            </tr>
+        </table>
+    <?}else{?>
+        <table class="std_table">
+            <tr>
+                <td><button type="button" class="btn" data-event="import_execute" id="<?=$data['set']->getId()?>">НАЧАТЬ ИНМОРТ</button></td>
+            </tr>
+        </table>
+    <?}?>
 </div>
-
-<?dump($data)?>
