@@ -166,7 +166,7 @@ class CategoryController extends Controller
                 $alias = Helpers::stringToAlias($request->get('alias'));
             }
 
-            $mySql->update('E_Site_Tree', array(
+            $mySql->update('E_Content_Tree', array(
                 'name' =>$name,
                 'alias' => $alias,
                 'template' => $template,

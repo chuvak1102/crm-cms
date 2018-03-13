@@ -17,7 +17,7 @@ class NestedSets{
     {
         $query =
             "
-           CREATE TABLE IF NOT EXISTS `E_Site_Tree` (
+           CREATE TABLE IF NOT EXISTS `E_Content_Tree` (
                id INT AUTO_INCREMENT PRIMARY KEY,
                `name` VARCHAR(500) NOT NULL,
                `alias` VARCHAR(500) DEFAULT '',
@@ -39,14 +39,14 @@ class NestedSets{
             throw new \Exception($e->getMessage());
         }
 
-        $query = "SELECT `id` FROM `E_Site_Tree` WHERE `id` = 1";
+        $query = "SELECT `id` FROM `E_Content_Tree` WHERE `id` = 1";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
 
         if(!$stmt->fetch()['id'])
         {
             $query = "
-              INSERT INTO E_Site_Tree(id, name, alias, lft, rgt, lvl, image, description, created, template, setup) 
+              INSERT INTO E_Content_Tree(id, name, alias, lft, rgt, lvl, image, description, created, template, setup) 
               VALUES(1, 'ROOT', '/', 1, 2, 0, '', '', now(), '', 1);";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
@@ -67,7 +67,7 @@ class NestedSets{
                node.created,
                node.template, 
                COUNT(parent.name) - 1 as level
-               FROM E_Site_Tree AS node, E_Site_Tree AS parent
+               FROM E_Content_Tree AS node, E_Content_Tree AS parent
                WHERE node.lft BETWEEN parent.lft AND parent.rgt
                GROUP BY node.name
                ORDER BY node.lft;
@@ -91,7 +91,7 @@ class NestedSets{
 
     function deleteAll()
     {
-        $query = "TRUNCATE TABLE `E_Site_Tree`";
+        $query = "TRUNCATE TABLE `E_Content_Tree`";
         $stmt = $this->pdo->prepare($query);
 
         try{$stmt->execute();}catch(\PDOException $e)
@@ -104,7 +104,7 @@ class NestedSets{
 
     function getNodeById($id)
     {
-        $query = "SELECT * FROM E_Site_Tree WHERE id = $id";
+        $query = "SELECT * FROM E_Content_Tree WHERE id = $id";
 
         $stmt = $this->pdo->prepare($query);
 
@@ -127,7 +127,7 @@ class NestedSets{
 
     function getNodeByAlias($alias)
     {
-        $query = "SELECT * FROM E_Site_Tree WHERE `alias` = '$alias'";
+        $query = "SELECT * FROM E_Content_Tree WHERE `alias` = '$alias'";
         $stmt = $this->pdo->prepare($query);
 
         try{$stmt->execute();}catch(\PDOException $e)
@@ -154,11 +154,11 @@ class NestedSets{
     {
         $query =
             "
-               SELECT @myLeft := lft, @lvl := lvl FROM `E_Site_Tree`
+               SELECT @myLeft := lft, @lvl := lvl FROM `E_Content_Tree`
                WHERE `id` = $targetId;
-               UPDATE `E_Site_Tree` SET rgt = rgt + 2 WHERE rgt > @myLeft;
-               UPDATE `E_Site_Tree` SET lft = lft + 2 WHERE lft > @myLeft;
-               INSERT INTO E_Site_Tree(`name`,`alias`, `lft`, `rgt`, `lvl`, `image`, `description`, `created`, `template`) 
+               UPDATE `E_Content_Tree` SET rgt = rgt + 2 WHERE rgt > @myLeft;
+               UPDATE `E_Content_Tree` SET lft = lft + 2 WHERE lft > @myLeft;
+               INSERT INTO E_Content_Tree(`name`,`alias`, `lft`, `rgt`, `lvl`, `image`, `description`, `created`, `template`) 
                VALUES('$name', '$alias', @myLeft + 1, @myLeft + 2, @lvl + 1, '$image', '$description', now(), '$template');
            ";
 
@@ -174,11 +174,11 @@ class NestedSets{
 
     public function getCategoryPathById($id)
     {
-        if(!is_numeric($id)) return 'getE_Site_TreePathById: (id is not integer)';
+        if(!is_numeric($id)) return 'getE_Content_TreePathById: (id is not integer)';
 
         $query = "
             SELECT parent.id, parent.name, parent.alias
-            FROM E_Site_Tree AS node, E_Site_Tree AS parent
+            FROM E_Content_Tree AS node, E_Content_Tree AS parent
             WHERE node.lft BETWEEN parent.lft AND parent.rgt AND node.id = $id
             ORDER BY parent.lft;
         ";
@@ -205,11 +205,11 @@ class NestedSets{
 
         $query = "
             SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1 
-            FROM `E_Site_Tree` 
+            FROM `E_Content_Tree` 
             WHERE `id` = $id;
-            DELETE FROM `E_Site_Tree` WHERE lft BETWEEN @myLeft AND @myRight;
-            UPDATE `E_Site_Tree` SET rgt = rgt - @myWidth WHERE rgt > @myRight;
-            UPDATE `E_Site_Tree` SET lft = lft - @myWidth WHERE lft > @myRight;
+            DELETE FROM `E_Content_Tree` WHERE lft BETWEEN @myLeft AND @myRight;
+            UPDATE `E_Content_Tree` SET rgt = rgt - @myWidth WHERE rgt > @myRight;
+            UPDATE `E_Content_Tree` SET lft = lft - @myWidth WHERE lft > @myRight;
         ";
 
         $stmt = $this->pdo->prepare($query);
@@ -227,7 +227,7 @@ class NestedSets{
         if(!is_numeric($id)) throw new \Exception('completeSetup: (id is not integer)');
 
         $query = "
-            UPDATE `E_Site_Tree`
+            UPDATE `E_Content_Tree`
             SET `setup` = 1
             WHERE `id` = $id
         ";
@@ -246,8 +246,8 @@ class NestedSets{
     {
         $query = "
             SELECT parent.name, parent.alias
-            FROM E_Site_Tree AS node
-            JOIN E_Site_Tree AS parent
+            FROM E_Content_Tree AS node
+            JOIN E_Content_Tree AS parent
             ON node.lft BETWEEN parent.lft AND parent.rgt
             WHERE node.alias = '$alias'
             ORDER BY parent.lft
@@ -274,7 +274,7 @@ class NestedSets{
         if(!is_numeric($id)) throw new \Exception('setTemplate: (id is not integer)');
 
         $query = "
-            UPDATE `E_Site_Tree`
+            UPDATE `E_Content_Tree`
             SET `template` = '$template'
             WHERE `id` = '$id'
         ";

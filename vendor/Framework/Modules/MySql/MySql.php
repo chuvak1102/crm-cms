@@ -100,7 +100,7 @@ class MySql{
 
         $i = 0;
         $length = count($fields) - 1;
-        $keys = ''; $val = '';
+        $keys = '';
 
         foreach($fields as $k => $v)
         {
@@ -137,7 +137,7 @@ class MySql{
 
         if(!$this->pdo) return null;
 
-        if(!is_array($criteria) || empty($table)) return 'null';
+        if(!is_array($criteria) || empty($table)) return null;
 
         $isTableExist = "SHOW TABLES LIKE '$table'";
         $stmt = $this->pdo->prepare($isTableExist);
@@ -167,7 +167,7 @@ class MySql{
             $data[] = $row;
         }
 
-        if(empty($data)) return 'null';
+        if(empty($data)) return null;
 
         return $data;
     }
@@ -184,7 +184,7 @@ class MySql{
 
         if(!$exist) return "Table '$table' does not exist!";
 
-        $query = "SELECT * FROM `$table` ORDER BY `$orderBy` LIMIT = $limit";
+        $query = "SELECT * FROM `$table` ORDER BY `$orderBy` LIMIT $limit";
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {
@@ -275,7 +275,7 @@ class MySql{
                 $data[] = $row;
             }
 
-            if(empty($data)) return 'null';
+            if(empty($data)) return null;
             return $data;
         }
     }
@@ -367,7 +367,7 @@ class MySql{
             $data[] = $row['Field'];
         }
 
-        if(empty($data)) return 'null';
+        if(empty($data)) return null;
         return $data;
 
     }

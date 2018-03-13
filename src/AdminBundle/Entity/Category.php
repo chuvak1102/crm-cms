@@ -3,7 +3,7 @@ namespace AdminBundle\Entity;
 use Framework\Component\ORM\Entity;
 
 /**
- * @ORM\Table(name="E_Site_Tree")
+ * @ORM\Table(name="E_Content_Tree")
  * @ORM\Entity(repositoryClass="AdminBundle\Repository\Category")
  */
 class Category extends Entity{
