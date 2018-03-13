@@ -249,7 +249,8 @@ class ImportController extends Controller
                         if(isset($found) && $found)
                         {
                             $mySql->update($table, $statement, $ctype->getId());
-                            $totalUpdates++;
+                            $totalUpdates += count($found);
+
                         } else {
 
                             $statement = array(
@@ -300,13 +301,33 @@ class ImportController extends Controller
     /**
      * @Route("/import_execute_add/{import}")
      */
-    public function importAllAction(Import $import, MySql $mySql)
+    public function importAllAction(Import $import)
     {
         $result = $this->parseAll($import, self::MODE_INSERT);
 
         return $this->render('AdminBundle:import/report', array(
             'inserts' => $result['inserts'],
             'removed' => $result['removed'],
+            'updated' => $result['updated'],
+            'execution_time' => $result['execution_time']
+        ), false);
+
+    }
+
+    /**
+     * @Route("/import_execute_drop_add/{import}")
+     */
+    public function dropAndImportAction(Import $import, MySql $mySql)
+    {
+        $deleted = $mySql->getRowsCount($import->getTable());
+
+        $mySql->truncate($import->getTable());
+
+        $result = $this->parseAll($import, self::MODE_INSERT);
+
+        return $this->render('AdminBundle:import/report', array(
+            'inserts' => $result['inserts'],
+            'removed' => $deleted,
             'updated' => $result['updated'],
             'execution_time' => $result['execution_time']
         ), false);
@@ -341,10 +362,9 @@ class ImportController extends Controller
             foreach($filters as $i)
             {
                 $em->remove($i);
+                $em->flush();
             }
         }
-
-        $em->flush();
 
         foreach($request->get('filter') as $f)
         {
@@ -354,10 +374,9 @@ class ImportController extends Controller
                 $filter->setImport($import->getId());
                 $filter->setField($f);
                 $em->persist($filter);
+                $em->flush();
             }
         }
-
-        $em->flush();
 
         $filters = $iRepo->findBy(array('import' => $import->getId()));
 

@@ -384,11 +384,23 @@ class MySql{
 
     function truncate($tableName)
     {
-        $stmt = $this->pdo->prepare(";TRUNCATE `$tableName`;");
+        $stmt = $this->pdo->prepare("TRUNCATE `$tableName`");
         try{$stmt->execute();}catch(\PDOException $e)
         {
             throw new \Exception($e->getMessage());
         }
         return true;
+    }
+
+    function getRowsCount($tableName)
+    {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM `$tableName`;");
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $res['COUNT(*)'];
     }
 }
