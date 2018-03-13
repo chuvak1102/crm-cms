@@ -5,9 +5,11 @@
         <table class="std_table">
             <tr>
                 <td>Название</td>
-                <td>Тип Файла</td>
-                <td>Источник файла</td>
+                <td>Тип данных</td>
+<!--                <td>Источник данных</td>-->
                 <td>Таблица для записи</td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td>
@@ -15,17 +17,17 @@
                 </td>
                 <td>
                     <select name="type">
-                        <option value="CSV">CSV</option>
+<!--                        <option value="CSV">CSV</option>-->
                         <option value="XML">XML</option>
-                        <option value="DBF">DBF</option>
+<!--                        <option value="DBF">DBF</option>-->
                     </select>
                 </td>
-                <td>
-                    <select name="source">
-                        <option value="local">Локальный</option>
-                        <option value="remote">URL</option>
-                    </select>
-                </td>
+<!--                <td>-->
+<!--                    <select name="source">-->
+<!--                        <option value="local">Файл</option>-->
+<!--                        <option value="remote">Ссылка</option>-->
+<!--                    </select>-->
+<!--                </td>-->
                 <td>
                     <select name="table">
                         <?foreach($data['tables'] as $i){?>
@@ -34,7 +36,10 @@
                     </select>
                 </td>
                 <td>
-                    <button type="button" class="btn" data-event="import_new">СОХРАНИТЬ</button>
+
+                </td>
+                <td>
+                    <button type="button" class="btn" data-event="import_new">Сохранить</button>
                 </td>
             </tr>
             <?if(is_array($data['import'])){?>
@@ -48,21 +53,22 @@
                                 <option value="<?=$i->getType()?>"><?=$i->getType()?></option>
                             </select>
                         </td>
-                        <td>
-                            <select>
-                                <option value="<?=$i->getSource()?>"><?=$i->getSource()?></option>
-                            </select>
-                        </td>
+<!--                        <td>-->
+<!--                            <select>-->
+<!--                                <option value="--><?//=$i->getSource()?><!--">--><?//=$i->getSource()?><!--</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
                         <td>
                             <select>
                                 <option value="<?=$i->getTable()?>"><?=$i->getTable()?></option>
                             </select>
                         </td>
                         <td>
-                            <button type="button" class="btn" data-event="import_start_all" id="<?=$i->getId()?>">ЗАГРУЗИТЬ ВСЕ</button>
-                            <button type="button" class="btn" data-event="import_start_update" id="<?=$i->getId()?>">ЗАГРУЗИТЬ С ОБНОВЛЕНИЕМ</button>
-                            <button type="button" class="btn" data-event="import_start_drop_update" id="<?=$i->getId()?>">УДАЛИТЬ ВСЕ И ЗАГРУЗИТЬ</button>
-                            <button type="button" class="btn" data-event="import_delete" id="<?=$i->getId()?>">УДАЛИТЬ ВЫГРУЗКУ</button>
+                            <button type="button" class="btn" data-event="import_begin" id="<?=$i->getId()?>">Импорт</button>
+
+                        </td>
+                        <td>
+                            <button type="button" class="btn" data-event="import_delete" id="<?=$i->getId()?>">Удалить</button>
                         </td>
                     </tr>
                 <?}?>

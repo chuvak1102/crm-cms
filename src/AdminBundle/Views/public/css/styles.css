@@ -113,7 +113,7 @@ textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; pad
 .log table tr td:nth-child(5){width: 15%}
 
 .std_table{width: 100%;}
-.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px; vertical-align: top}
+.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px; vertical-align: top; text-transform: uppercase}
 .std_table input{margin-bottom: 0;}
 .std_table select{margin-bottom: 0;}
 

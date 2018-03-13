@@ -8,24 +8,32 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
     protected $removeEntities = array();
     protected $original = array();
     protected $persistence = array();
-    protected $method;
-    protected static $length = 0;
     protected $pdo;
+
+    const MODE_PERSIST = 1;
+    const MODE_REMOVE = 2;
 
     function __construct(){
         $this->pdo = Connection::mysql();
     }
 
-    public function persist(Entity $entity)
+    private function collect(Entity $entity, $mode = self::MODE_PERSIST)
     {
         if($entity instanceof Entity)
         {
-            switch ($this->method)
+            switch ($mode)
             {
-                case 'remove' : {
+                case self::MODE_PERSIST : {
+
+                    $this->persistEntities[] = $entity;
+                    break;
+                }
+
+                case self::MODE_REMOVE : {
 
                     $this->removeEntities[] = $entity;
                     break;
+
                 }
 
                 default : {
@@ -42,8 +50,12 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
 
     public function remove(Entity $entity)
     {
-        $this->method = 'remove';
-        $this->persist($entity);
+        $this->collect($entity, self::MODE_REMOVE);
+    }
+
+    public function persist(Entity $entity)
+    {
+        $this->collect($entity, self::MODE_PERSIST);
     }
 
     public function flush()
@@ -81,7 +93,7 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
             $stmt->execute();
 
         }
-        
+
         $this->removeEntities = array();
         $this->persistEntities = array();
     }

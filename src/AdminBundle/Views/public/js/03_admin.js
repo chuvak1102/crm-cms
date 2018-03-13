@@ -255,34 +255,6 @@ $(document).ready(function()
                     }
                 },
 
-                import_start_all : {
-
-                    mouseup : function(e){
-
-                        app.nextScreen("/admin/import/setup/" + $(e.target).attr("id"));
-                    }
-                },
-
-                import_start_update : {
-
-                    mouseup : function(e){
-
-                        app.nextScreen("/admin/import/start_update/" + $(e.target).attr("id"));
-
-                    }
-
-                },
-
-                import_start_drop_update : {
-
-                    mouseup : function(e){
-
-                        app.nextScreen("/admin/import/drop_update" + $(e.target).attr("id"));
-
-                    }
-
-                },
-
                 import_delete : {
 
                     mouseup : function(e){
@@ -293,7 +265,15 @@ $(document).ready(function()
                     }
                 },
 
-                import_load_file : {
+                import_begin : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/begin/" + $(e.target).attr("id"));
+                    }
+                },
+
+                import_load_source : {
 
                     mouseup : function(e){
 
@@ -355,7 +335,6 @@ $(document).ready(function()
                             input.val("");
                         }
                     }
-
                 },
 
                 import_save : {
@@ -364,9 +343,41 @@ $(document).ready(function()
 
                         let data = $('form[name="import"]').serialize();
 
-                        app.prevScreen("/admin/import/", data);
+                        app.prevScreen("/admin/import/save/" + $(e.target).attr("id"), data);
                     }
                 },
+
+                import_setup : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/setup/" + $(e.target).attr("id"));
+
+                    }
+
+                },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 import_execute : {
 

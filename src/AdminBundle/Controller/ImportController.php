@@ -10,10 +10,8 @@ use Framework\Modules\Authorization\Authorization;
 use Framework\Component\HttpFoundation\Request;
 use AdminBundle\Entity\Import;
 use Framework\Modules\MySql\MySql;
-use XMLReader;
 use AdminBundle\Services\XMLParser;
 use Framework\Modules\FileUploader\FileUploader;
-use Framework\Component\System\System;
 
 /**
  * @Route("/admin/import")
@@ -27,9 +25,8 @@ class ImportController extends Controller
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            $orm = $this->getORM();
-            $iRepo = $orm->getRepository(Import::class);
-            $cRepo = $orm->getRepository(ContentType::class);
+            $iRepo = $this->getORM()->getRepository(Import::class);
+            $cRepo = $this->getORM()->getRepository(ContentType::class);
 
             return $this->render('AdminBundle:import/index', array(
                 'import' => $iRepo->findAll(),
@@ -49,14 +46,14 @@ class ImportController extends Controller
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            $i = new Import();
-            $i->setName($request->get('name'));
-            $i->setType($request->get('type'));
-            $i->setSource($request->get('source'));
-            $i->setTable($request->get('table'));
+            $import = new Import();
+            $import->setName($request->get('name'));
+            $import->setType($request->get('type'));
+            $import->setSource($request->get('source'));
+            $import->setTable($request->get('table'));
 
             $em = $this->getORM()->getManager();
-            $em->persist($i);
+            $em->persist($import);
             $em->flush();
 
             return $this->redirectToRoute('/admin/import/');
@@ -68,32 +65,17 @@ class ImportController extends Controller
     }
 
     /**
-     * @Route("/setup/{import}")
+     * @Route("/delete/{import}")
      */
-    public function setupAction(Request $request, MySql $mySql, Import $import)
+    public function deleteAction(Request $request, Import $import)
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            if(empty($import->getLocation()))
-            {
-                return $this->render('AdminBundle:import/setup', array(
-                    'set' => $import,
-                ), false);
+            $em = $this->getORM()->getManager();
+            $em->remove($import);
+            $em->flush();
 
-            } else {
-
-                $iRepo = $this->getORM()->getRepository(ImportFields::class);
-                $parser = new XMLParser($import->getLocation());
-                $tags = $parser->getTagsFromXml();
-
-                return $this->render('AdminBundle:import/import', array(
-                    'tags' => $tags,
-                    'set' => $import,
-                    'columns' => $mySql->getColumnList($import->getTable()),
-                    'file' => $import->getLocation(),
-                    'saved' => $iRepo->findBy(array('import' => $import->getId()))
-                ), false);
-            }
+            return $this->redirectToRoute('/admin/import/');
 
         } else {
 
@@ -102,13 +84,20 @@ class ImportController extends Controller
     }
 
     /**
-     * @Route("/start_update/{import}")
+     * @Route("/begin/{import}")
      */
-    public function setupUpdateAction(Import $import)
+    public function beginAction(Request $request, Import $import)
     {
-        return $this->render('AdminBundle:import/setup_update', array(
-            'import' => $import
-        ), false);
+        if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
+        {
+            return $this->render('AdminBundle:import/begin', array(
+                'set' => $import,
+            ), false);
+
+        } else {
+
+            return $this->redirectToRoute('/admin/login/');
+        }
     }
 
     /**
@@ -138,17 +127,23 @@ class ImportController extends Controller
     }
 
     /**
-     * @Route("/delete/{import}")
+     * @Route("/setup/{import}")
      */
-    public function deleteAction(Request $request, Import $import)
+    public function setupAction(Request $request, MySql $mySql, Import $import)
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            $em = $this->getORM()->getManager();
-            $em->remove($import);
-            $em->flush();
+            $iRepo = $this->getORM()->getRepository(ImportFields::class);
+            $parser = new XMLParser($import->getLocation());
+            $tags = $parser->getTagsFromXml();
 
-            return $this->redirectToRoute('/admin/import/');
+            return $this->render('AdminBundle:import/setup', array(
+                'tags' => $tags,
+                'set' => $import,
+                'columns' => $mySql->getColumnList($import->getTable()),
+                'file' => $import->getLocation(),
+                'saved' => $iRepo->findBy(array('import' => $import->getId()))
+            ), false);
 
         } else {
 
@@ -156,15 +151,27 @@ class ImportController extends Controller
         }
     }
 
-
     /**
      * @Route("/save/{import}")
      */
-    public function saveFieldsetAction(Import $import, Request $request, MySql $mySql)
+    public function completeSetupAction(Import $import, Request $request, MySql $mySql)
     {
+        $repo = $this->getORM()->getRepository(ImportFields::class);
         $em = $this->getORM()->getManager();
-        $iRepo = $this->getORM()->getRepository(ImportFields::class);
-        $parser = new XMLParser($import->getLocation());
+
+        $exist = $repo->findBy(array(
+            'import' => $import->getId()
+        ));
+
+        if($exist)
+        {
+            foreach($exist as $i)
+            {
+                $em->remove($i);
+            }
+        }
+
+        $em->flush();
 
         foreach($request->post as $k => $v)
         {
@@ -180,14 +187,53 @@ class ImportController extends Controller
 
         $em->flush();
 
-        return $this->render('AdminBundle:import/import', array(
-            'tags' => $parser->getTagsFromXml(),
-            'set' => $import,
-            'columns' => $mySql->getColumnList($import->getTable()),
-            'file' => $import->getLocation(),
-            'saved' => $iRepo->findBy(array('import' => $import->getId()))
-        ), false);
+        return $this->redirectToRoute('/admin/import/');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @Route("/execute/{import}")
