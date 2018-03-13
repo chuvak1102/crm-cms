@@ -40,12 +40,17 @@ class ConstructorController extends Controller{
     {
         if(Authorization::isConfirmed())
         {
+            $em = $this->getORM()->getManager();
+
             $constructor = new Constructor();
             $constructor->setPage($request->get('page'));
             $constructor->setMethod($request->get('method'));
             $constructor->setVariable($request->get('variable'));
             $constructor->setParameters($request->get('parameters'));
-            $this->getMysql()->save($constructor);
+
+            $em->persist($constructor);
+            $em->flush();
+
             return $this->redirectToRoute('/admin/constructor/');
         } else {
 

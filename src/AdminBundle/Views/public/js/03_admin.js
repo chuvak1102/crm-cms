@@ -357,35 +357,44 @@ $(document).ready(function()
 
                 },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                import_execute : {
+                import_execute_add : {
 
                     mouseup : function(e){
 
-                        app.nextScreen("/admin/import/execute/" + $(e.target).attr("id"));
+                        app.nextScreen("/admin/import/import_execute_add/" + $(e.target).attr("id"));
                     }
                 },
+
+                import_update_setup : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/import_update_setup/" + $(e.target).attr("id"));
+                    }
+                },
+
+                import_execute_update : {
+
+                    mouseup : function(e){
+
+                        let data = {
+                            "filter" : $('select[name="filter[]"]').map(function(){return this.value;}).get(),
+                        };
+
+                        app.nextScreen('/admin/import/import_execute_update/' + parseInt($(e.target).attr('id')), data);
+
+                    }
+
+                },
+
+                import_execute_drop_add : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/import/import_execute_drop_add/" + $(e.target).attr("id"));
+                    }
+                },
+
 
             }
         },

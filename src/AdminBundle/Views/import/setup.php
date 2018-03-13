@@ -20,27 +20,31 @@
                                 <td><?=$v?></td>
                             </tr>
                         <?}?>
-
-                        <?if(empty($data['saved'])){?>
-                            <tr>
-                                <td><input type="text" placeholder="NEW TAG NAME"></td>
-                                <td><button type="button" class="btn" data-event="import_add_tag">+</button></td>
-                            </tr>
-                        <?}?>
+                        <tr>
+                            <td><input type="text" placeholder="NEW TAG NAME"></td>
+                            <td><button type="button" class="btn" data-event="import_add_tag">+</button></td>
+                        </tr>
                     </table>
                 </td>
                 <td>
                     <table>
                         <?foreach($data['columns'] as $i){?>
+                            <?$exist = false?>
                             <tr>
                                 <td><button type="button" class="btn" data-event="import_assign_tag" id="<?=$i?>"><?=$i?></button></td>
                                 <?if($data['saved']){?>
                                     <?foreach($data['saved'] as $f){?>
                                         <?if($f->getKey() == $i){?>
+                                            <?$exist = true?>
                                             <td><input type="text" name="<?=$i?>" value="<?=$f->getColumn()?>"></td>
-                                            <?break;?>
+                                            <?break?>
                                         <?}?>
                                     <?}?>
+
+                                    <?if(!$exist){?>
+                                        <td><input type="text" name="<?=$i?>" value=""></td>
+                                    <?}?>
+
                                 <?}else{?>
                                     <td><input type="text" name="<?=$i?>" value=""></td>
                                 <?}?>
@@ -57,11 +61,9 @@
     <table class="std_table">
         <tr>
             <td><button type="button" class="btn" data-event="import_save" id="<?=$data['set']->getId()?>">СОХРАНИТЬ НАСТРОЙКИ</button></td>
-            <td><button type="button" class="btn" data-event="import_start_all" id="<?=$data['set']->getId()?>">ЗАГРУЗИТЬ ВСЕ</button></td>
-            <td><button type="button" class="btn" data-event="import_start_update" id="<?=$data['set']->getId()?>">ОБНОВИТЬ</button></td>
-            <td><button type="button" class="btn" data-event="import_start_drop_update" id="<?=$data['set']->getId()?>">УДАЛИТЬ ВСЕ И ЗАГРУЗИТЬ</button></td>
+            <td><button type="button" class="btn" data-event="import_execute_add" id="<?=$data['set']->getId()?>">ЗАГРУЗИТЬ ВСЕ</button></td>
+            <td><button type="button" class="btn" data-event="import_update_setup" id="<?=$data['set']->getId()?>">ОБНОВИТЬ</button></td>
+            <td><button type="button" class="btn" data-event="import_execute_drop_add" id="<?=$data['set']->getId()?>">УДАЛИТЬ ВСЕ И ЗАГРУЗИТЬ</button></td>
         </tr>
     </table>
 </div>
-
-<?dump($data)?>

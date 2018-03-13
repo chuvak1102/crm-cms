@@ -4,6 +4,7 @@ namespace AdminBundle\Controller;
 use AdminBundle\Entity\Category;
 use AdminBundle\Entity\ContentType;
 use AdminBundle\Entity\ImportFields;
+use AdminBundle\Entity\ImportUpdate;
 use Framework\Component\Controller\Controller;
 use Framework\Component\HttpFoundation\Response;
 use Framework\Modules\Authorization\Authorization;
@@ -18,6 +19,9 @@ use Framework\Modules\FileUploader\FileUploader;
  */
 class ImportController extends Controller
 {
+    const MODE_INSERT = 1;
+    const MODE_UPDATE = 2;
+
     /**
      * @Route("/")
      */
@@ -190,73 +194,41 @@ class ImportController extends Controller
         return $this->redirectToRoute('/admin/import/');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @Route("/execute/{import}")
-     */
-    public function executeAction(Import $import, MySql $mySql)
+    private function parseAll(Import $import, $mode = self::MODE_INSERT)
     {
+        $mySql = $this->getMysql();
+        $orm = $this->getORM();
         $parser = new XMLParser($import->getLocation());
         $rootTag = $parser->getRootElementName();
         $reader = $parser->getReader();
-        $iRepo = $this->getORM()->getRepository(ImportFields::class);
-        $cRepo = $this->getORM()->getRepository(Category::class);
+        $iRepo = $orm->getRepository(ImportFields::class);
+        $cRepo = $orm->getRepository(Category::class);
+        $uRepo = $orm->getRepository(ImportUpdate::class);
         $fields = $iRepo->findBy(array('import' => $import->getId()));
+        $updates = $uRepo->findBy(array('import' => $import->getId()));
         $ctype = $cRepo->findOneBy(array('alias' => $import->getTable()));
         $insertArray = array();
+        $updateFilters = array();
+        $table = $import->getTable();
 
         foreach($fields as $i)
         {
             $insertArray[$i->getKey()] = $i->getColumn();
         }
 
-        $totalInserts = 0;
+        if($updates)
+        {
+            foreach($updates as $u)
+            {
+                $updateFilters[] = $u->getField();
+            }
+        }
 
-        $time1 = new \DateTime();
+        $totalInserts = 0;
+        $totalUpdates = 0;
+        $totalDeletes = 0;
+
+        $start = new \DateTime();
 
         while($reader->read())
         {
@@ -264,36 +236,149 @@ class ImportController extends Controller
             {
                 if ($reader->localName == $rootTag)
                 {
-                    $statement = array(
-                        'category' => $ctype->getId()
-                    );
-                    foreach($insertArray as $k => $v)
+                    if($mode == self::MODE_UPDATE)
                     {
-                        $statement[$k] = $reader->getAttribute($v);
+                        $statement = array();
+                        foreach($updateFilters as $u)
+                        {
+                            $statement[$u] = $reader->getAttribute($insertArray[$u]);
+                        }
+
+                        $found = $mySql->findBy($table, $statement);
+
+                        if(isset($found) && $found)
+                        {
+                            $mySql->update($table, $statement, $ctype->getId());
+                            $totalUpdates++;
+                        } else {
+
+                            $statement = array(
+                                'category' => $ctype->getId()
+                            );
+                            foreach($insertArray as $k => $v)
+                            {
+                                $statement[$k] = $reader->getAttribute($v);
+                            }
+                            $mySql->insert($table, $statement);
+                            $totalInserts++;
+                        }
                     }
 
-                    $mySql->insert($import->getTable(), $statement);
-
-                    $totalInserts++;
+                    if($mode == self::MODE_INSERT)
+                    {
+                        $statement = array(
+                            'category' => $ctype->getId()
+                        );
+                        foreach($insertArray as $k => $v)
+                        {
+                            $statement[$k] = $reader->getAttribute($v);
+                        }
+                        $mySql->insert($table, $statement);
+                        $totalInserts++;
+                    }
                 }
             }
         }
 
         $reader->close();
 
-        $time2 = new \DateTime();
+        $end = new \DateTime();
 
-        $speed = $time2->diff($time1);
+        $speed = $end->diff($start);
         $h = $speed->format('%h');
         $m = $speed->format('%i');
         $s = $speed->format('%s');
 
+        return array(
+            'inserts' => $totalInserts,
+            'removed' => 0,
+            'updated' => $totalUpdates,
+            'execution_time' => $h.' час. '.$m.' мин. '.$s.' сек.'
+        );
+    }
+
+    /**
+     * @Route("/import_execute_add/{import}")
+     */
+    public function importAllAction(Import $import, MySql $mySql)
+    {
+        $result = $this->parseAll($import, self::MODE_INSERT);
+
         return $this->render('AdminBundle:import/report', array(
-            'total' => $totalInserts,
-            'start' => $time1->format('H:i:s'),
-            'end' => $time2->format('H:i:s'),
-            'speed' => $h.' ч. '.$m.' мин. '.$s.' сек.'
+            'inserts' => $result['inserts'],
+            'removed' => $result['removed'],
+            'updated' => $result['updated'],
+            'execution_time' => $result['execution_time']
         ), false);
+
+    }
+
+    /**
+     * @Route("/import_update_setup/{import}")
+     */
+    public function importUpdateSetupAction(Import $import, MySql $mySql)
+    {
+        $iRepo = $this->getORM()->getRepository(ImportUpdate::class);
+
+        return $this->render('AdminBundle:import/setup_update', array(
+            'import' => $import,
+            'columns' => $mySql->getColumnList($import->getTable()),
+            'filter' => $iRepo->findBy(array('import' => $import->getId()))
+        ), false);
+    }
+
+    /**
+     * @Route("/import_execute_update/{import}")
+     */
+    public function importExecuteUpdateAction(Import $import, Request $request)
+    {
+        $em = $this->getORM()->getManager();
+        $iRepo = $this->getORM()->getRepository(ImportUpdate::class);
+        $filters = $iRepo->findBy(array('import' => $import->getId()));
+
+        if($filters)
+        {
+            foreach($filters as $i)
+            {
+                $em->remove($i);
+            }
+        }
+
+        $em->flush();
+
+        foreach($request->get('filter') as $f)
+        {
+            if($f)
+            {
+                $filter = new ImportUpdate();
+                $filter->setImport($import->getId());
+                $filter->setField($f);
+                $em->persist($filter);
+            }
+        }
+
+        $em->flush();
+
+        $filters = $iRepo->findBy(array('import' => $import->getId()));
+
+        if($filters)
+        {
+            $result = $this->parseAll($import, self::MODE_UPDATE);
+
+            return $this->render('AdminBundle:import/report', array(
+                'inserts' => $result['inserts'],
+                'removed' => $result['removed'],
+                'updated' => $result['updated'],
+                'execution_time' => $result['execution_time']
+            ), false);
+
+        } else {
+
+            return $this->render('AdminBundle:import/error', array(
+                'text' => 'Укажите хотя бы одно уникальное поле',
+            ), false);
+        }
+
 
     }
 

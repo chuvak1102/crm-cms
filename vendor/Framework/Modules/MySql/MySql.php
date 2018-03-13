@@ -1,6 +1,5 @@
 <?php
 namespace Framework\Modules\MySql;
-use Framework\Component\ORM\Mapping;
 use PDO;
 use PDOException;
 use Framework\Modules\DB\Connection;
@@ -20,65 +19,8 @@ class MySql{
         }
     }
 
-    function getNestedSet()
+    private function findByCriteria($tableName, $where = array(), $limit = 100)
     {
-        return new NestedSets($this->pdo);
-    }
-
-    function insert($table, $values = array()){
-
-        $i = 0;
-        $length = count($values) - 1;
-        $keys = ''; $val = '';
-
-        foreach($values as $k => $v){
-            if($i < $length){
-                $keys = $keys.' '.'`'.$k.'`'.', ';
-                $val = $val.' '.'\''.$v.'\',';
-            } else {
-                $keys = $keys.' '.'`'.$k.'`';
-                $val = $val.' '.'\''.$v.'\'';
-            }
-            $i++;
-        }
-
-        $query = "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
-        $stmt = $this->pdo->prepare($query);
-        try{$stmt->execute();}catch(\PDOException $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-
-        $this->lastId = $this->pdo->lastInsertId();
-    }
-
-    function update($table, $fields = array(), $id){
-        if(!$this->pdo) return null;
-
-        $i = 0;
-        $length = count($fields) - 1;
-        $keys = ''; $val = '';
-
-        foreach($fields as $k => $v){
-            if($i < $length){
-                $keys = $keys.' '.'`'.$k.'`'.' = '.'\''.$v.'\''.', ';
-//                $val = $val.' '.'\''.$v.'\',';
-            } else {
-                $keys = $keys.' '.'`'.$k.'`'.' = '.'\''.$v.'\'';
-            }
-            $i++;
-        }
-
-        $query = "UPDATE `$table` SET $keys WHERE `id` = $id ";
-        $stmt = $this->pdo->prepare($query);
-        try{$stmt->execute();}catch(\PDOException $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-    }
-
-    function findBy($tableName, $where = array(), $limit = 100){
-
         if(!$this->pdo) return null;
 
         if(!is_array($where) || empty($tableName)) return 'Invalid input data format.';
@@ -121,51 +63,74 @@ class MySql{
         return $data;
     }
 
-    function findOneBy($tableName, $where = array()){
+    function getNestedSet()
+    {
+        return new NestedSets($this->pdo);
+    }
 
-        if(!$this->pdo) return null;
+    function insert($table, $values = array()){
 
-        if(!is_array($where) || empty($tableName)) return 'Invalid input data format.';
+        $i = 0;
+        $length = count($values) - 1;
+        $keys = ''; $val = '';
 
-        $isTableExist = "SHOW TABLES LIKE '$tableName'";
-        $stmt = $this->pdo->prepare($isTableExist);
-        try{$stmt->execute();}catch(\PDOException $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-        $exist = $stmt->fetchAll();
-
-        if(!$exist) return "Table '$tableName' does not exist!";
-
-        $and = '';
-
-        foreach($where as $field => $value){
-
-            if(substr_count($field, ':') > 0){
-                $expression = explode(':', $field);
-                $field = trim($expression[0]);
-                $expression = trim($expression[1]);
+        foreach($values as $k => $v){
+            if($i < $length){
+                $keys = $keys.' '.'`'.$k.'`'.', ';
+                $val = $val.' '.'\''.$v.'\',';
             } else {
-                $expression = ' = ';
+                $keys = $keys.' '.'`'.$k.'`';
+                $val = $val.' '.'\''.$v.'\'';
             }
-
-            $and = $and.' AND '."`$field`".' '.$expression.' '."'$value'";
+            $i++;
         }
 
-        $query = "SELECT * FROM `$tableName` WHERE 1 = 1 $and";
+        $query = "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {
             throw new \Exception($e->getMessage());
         }
 
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            $data[] = $row;
+        $this->lastId = $this->pdo->lastInsertId();
+    }
+
+    function update($table, $fields = array(), $id){
+        if(!$this->pdo) return null;
+
+        $i = 0;
+        $length = count($fields) - 1;
+        $keys = ''; $val = '';
+
+        foreach($fields as $k => $v)
+        {
+            if($i < $length)
+            {
+                $keys = $keys.' '.'`'.$k.'`'.' = '.'\''.$v.'\''.', ';
+            } else {
+                $keys = $keys.' '.'`'.$k.'`'.' = '.'\''.$v.'\'';
+            }
+            $i++;
         }
 
-        if(empty($data)) return null;
+        $query = "UPDATE `$table` SET $keys WHERE `id` = $id ";
+        $stmt = $this->pdo->prepare($query);
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
-        return $data[0];
+    function findBy($tableName, $where = array(), $limit = 100)
+    {
+        $data = $this->findByCriteria($tableName, $where, $limit);
+        return $data ? $data : null;
+    }
+
+    function findOneBy($tableName, $where = array(), $limit = 100){
+
+        $data = $this->findByCriteria($tableName, $where, $limit);
+        return $data ? $data[0] : null;
     }
 
     function findLike($table, $criteria = array()){
@@ -207,7 +172,7 @@ class MySql{
         return $data;
     }
 
-    function findAll($table, $orderBy = 'id'){
+    function findAll($table, $orderBy = 'id', $limit = 100){
 
         $isTableExist = "SHOW TABLES LIKE '$table'";
         $stmt = $this->pdo->prepare($isTableExist);
@@ -219,7 +184,7 @@ class MySql{
 
         if(!$exist) return "Table '$table' does not exist!";
 
-        $query = "SELECT * FROM `$table` ORDER BY `$orderBy`";
+        $query = "SELECT * FROM `$table` ORDER BY `$orderBy` LIMIT = $limit";
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {
@@ -233,39 +198,6 @@ class MySql{
         if(empty($data)) return null;
 
         return $data;
-    }
-
-    function save($entity){
-
-        if(!$this->pdo) return null;
-
-        $class = new \ReflectionClass($entity);
-        $table = str_replace('Entity', '', Mapping::getTableName($entity));
-        $vars = get_object_vars($entity);
-
-        $i = 0;
-        $length = count($vars) - 1;
-        $keys = ''; $val = '';
-
-        foreach($vars as $k => $v){
-            if($i < $length){
-                $keys = $keys.' '.$k.', ';
-                $val = $val.' '.'\''.$v.'\',';
-            } else {
-                $keys = $keys.' '.$k;
-                $val = $val.' '.'\''.$v.'\'';
-            }
-            $i++;
-        }
-
-        $query = "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
-        $stmt = $this->pdo->prepare($query);
-        try{$stmt->execute();}catch(\PDOException $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-
-        $this->lastId = $this->pdo->lastInsertId();
     }
 
     function remove($table, $criteria = array())
@@ -443,6 +375,16 @@ class MySql{
     function query($query)
     {
         $stmt = $this->pdo->prepare($query);
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+        return true;
+    }
+
+    function truncate($tableName)
+    {
+        $stmt = $this->pdo->prepare(";TRUNCATE `$tableName`;");
         try{$stmt->execute();}catch(\PDOException $e)
         {
             throw new \Exception($e->getMessage());

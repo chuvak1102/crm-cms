@@ -13,11 +13,12 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
     const MODE_PERSIST = 1;
     const MODE_REMOVE = 2;
 
-    function __construct(){
+    function __construct()
+    {
         $this->pdo = Connection::mysql();
     }
 
-    private function collect(Entity $entity, $mode = self::MODE_PERSIST)
+    protected function collect(Entity $entity, $mode = self::MODE_PERSIST)
     {
         if($entity instanceof Entity)
         {
@@ -33,7 +34,6 @@ class EntityManager extends AbstractEntityManager implements EntityManagerInterf
 
                     $this->removeEntities[] = $entity;
                     break;
-
                 }
 
                 default : {
