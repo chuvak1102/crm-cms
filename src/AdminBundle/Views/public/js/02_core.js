@@ -9,7 +9,7 @@ $(document).ready(function()
         menuCellWidth : 20,
         menuCellHeight : 23,
         menuNavHeight : 8,
-        animationSpeed : 400,
+        animationSpeed : 350,
         spinnerDelay : 1000,
         debug : true,
         map : {},

@@ -539,6 +539,8 @@ $(document).ready(function()
 
 });
 
+console.time(5 / 3.34578234659246735);
+
 // "use strict";
 //
 //

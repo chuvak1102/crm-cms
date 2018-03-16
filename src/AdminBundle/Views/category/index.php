@@ -1,4 +1,4 @@
-<h1>#Структура</h1>
+<h1>#Структура контента</h1>
 
 <?if(!empty($data['category'])){?>
     <?foreach($data['category'] as $i){?>

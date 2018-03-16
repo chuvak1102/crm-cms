@@ -6,8 +6,8 @@
             <tr>
                 <td>Название</td>
                 <td>Тип данных</td>
-<!--                <td>Источник данных</td>-->
                 <td>Таблица для записи</td>
+                <td>Изменено</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -22,12 +22,6 @@
 <!--                        <option value="DBF">DBF</option>-->
                     </select>
                 </td>
-<!--                <td>-->
-<!--                    <select name="source">-->
-<!--                        <option value="local">Файл</option>-->
-<!--                        <option value="remote">Ссылка</option>-->
-<!--                    </select>-->
-<!--                </td>-->
                 <td>
                     <select name="table">
                         <?foreach($data['tables'] as $i){?>
@@ -35,12 +29,9 @@
                         <?}?>
                     </select>
                 </td>
-                <td>
-
-                </td>
-                <td>
-                    <button type="button" class="btn" data-event="import_new">Сохранить</button>
-                </td>
+                <td></td>
+                <td></td>
+                <td><button type="button" class="btn" data-event="import_new">Сохранить</button></td>
             </tr>
             <?if(is_array($data['import'])){?>
                 <?foreach($data['import'] as $i){?>
@@ -62,6 +53,9 @@
                             <select>
                                 <option value="<?=$i->getTable()?>"><?=$i->getTable()?></option>
                             </select>
+                        </td>
+                        <td>
+                            15.03.2018 15:15
                         </td>
                         <td>
                             <button type="button" class="btn" data-event="import_begin" id="<?=$i->getId()?>">Импорт</button>

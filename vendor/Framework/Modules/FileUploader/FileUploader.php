@@ -156,13 +156,25 @@ class FileUploader
         {
             $res = move_uploaded_file($file['tmp_name'], $uploadedFile);
 
+            if(!$res)
+            {
+                throw new \Exception('Can not move uploaded file!');
+            }
+
             return $path.$name.'.'.$exe;
 
         } else {
 
             mkdir($this->root.$path, 0755);
-            if(is_dir($this->root.$path)){
-                move_uploaded_file($file['tmp_name'], $uploadedFile);
+
+            if(is_dir($this->root.$path))
+            {
+                $res = move_uploaded_file($file['tmp_name'], $uploadedFile);
+
+                if(!$res)
+                {
+                    throw new \Exception('Can not move uploaded file!');
+                }
 
                 return $name.'.'.$exe;
             } else {

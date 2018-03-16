@@ -19,14 +19,14 @@
 
         <table class="std_table">
             <tr>
-                <td><button type="button" class="btn" data-event="import_load_source" id="<?=$data['set']->getId()?>">Сохранить / Изменить</button></td>
+                <td><button type="button" class="btn blue" data-event="import_load_source" id="<?=$data['set']->getId()?>">Сохранить / Изменить</button></td>
             </tr>
         </table>
 
         <?if(!empty($data['set']->getLocation())){?>
             <table class="std_table">
                 <tr>
-                    <td><button type="button" class="btn" data-event="import_setup" id="<?=$data['set']->getId()?>">Использовать существующий</button></td>
+                    <td><button type="button" class="btn blue" data-event="import_setup" id="<?=$data['set']->getId()?>">Использовать существующий</button></td>
                 </tr>
             </table>
         <?}?>
