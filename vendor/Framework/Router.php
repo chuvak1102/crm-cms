@@ -70,7 +70,7 @@ class Router
 
                         } else {
 
-                            if(preg_match(Config::Firewall, $match))
+                            if(preg_match('/^[a-zA-Z\-\_0-9]{1,500}$/', $match))
                             {
                                 $result = array(
                                     'path' => $cleanRoute,

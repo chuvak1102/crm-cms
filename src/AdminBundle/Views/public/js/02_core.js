@@ -54,6 +54,7 @@ $(document).ready(function()
                 $.ajax({
                     url : source,
                     type : 'POST',
+                    method: 'POST',
                     data : data,
                     beforeSend: function(){
                         spinnerStop();
@@ -131,6 +132,7 @@ $(document).ready(function()
 
                     url : source,
                     type : 'POST',
+                    method: 'POST',
                     data : data,
                     processData: formData,
                     contentType: formData,
@@ -295,6 +297,7 @@ $(document).ready(function()
                 $.ajax({
                     url : window.app.map[window.app.page.current].url,
                     type : 'POST',
+                    method: 'POST',
                     data : {
 
                     },

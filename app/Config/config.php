@@ -8,7 +8,7 @@ class Config
     const CacheEnabled = false;
     const SecretApplicationKey = '0e17ce11162433f25ff96fghjfghjfrtyu45674ac238d3021af757a1a';
     const Admin = '/^[\/]{1}[aAdDmMiInN]{5}[\/]{0,1}[a-zA-Z\/\-\_0-9]{1,500}$/';
-    const Firewall = '/^[a-zA-Z\/\-\_0-9а-яА-ЯёЁ]{1,500}$/';
+    const Firewall = '/^[a-zA-Z\/\-\_0-9]{1,500}$/';
 
     private static $mysql = array
     (

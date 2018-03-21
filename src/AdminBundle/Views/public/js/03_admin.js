@@ -13,6 +13,7 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
+                        console.log("/admin/category/new/" + parseInt($(e.target).attr('id')));
                         app.nextScreen("/admin/category/new/" + parseInt($(e.target).attr('id')));
                     }
                 },

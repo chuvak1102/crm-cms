@@ -86,6 +86,8 @@ class CategoryController extends Controller
      */
     function newAction(Category $category, NestedSets $tree)
     {
+        $x = 0;
+
         if(Authorization::isConfirmed())
         {
             return $this->render('AdminBundle:category/new', array(
@@ -321,7 +323,7 @@ class CategoryController extends Controller
         {
             return $this->render('AdminBundle:category/show', array(
                 'category' => $category
-            ));
+            ), false);
 
         } else {
 
