@@ -79,6 +79,10 @@ class XMLParser {
 
     public function getReader()
     {
+        $this->reader->close();
+        $this->reader = new XMLReader();
+        $this->reader->open($this->source, null, LIBXML_PARSEHUGE);
+
         return $this->reader;
     }
 

@@ -21,6 +21,7 @@ class ImportController extends Controller
 {
     const MODE_INSERT = 1;
     const MODE_UPDATE = 2;
+    const MODE_DROP_INSERT = 3;
 
     /**
      * @Route("/")
@@ -55,6 +56,7 @@ class ImportController extends Controller
             $import->setType($request->get('type'));
             $import->setSource($request->get('source'));
             $import->setTable($request->get('table'));
+            $import->setModified(new \DateTime());
 
             $em = $this->getORM()->getManager();
             $em->persist($import);
@@ -305,13 +307,17 @@ class ImportController extends Controller
     {
         $result = $this->parseAll($import, self::MODE_INSERT);
 
+        $em = $this->getORM()->getManager();
+        $import->setModified(new \DateTime());
+        $em->persist($import);
+        $em->flush();
+
         return $this->render('AdminBundle:import/report', array(
             'inserts' => $result['inserts'],
             'removed' => $result['removed'],
             'updated' => $result['updated'],
             'execution_time' => $result['execution_time']
         ), false);
-
     }
 
     /**
@@ -324,6 +330,11 @@ class ImportController extends Controller
         $mySql->truncate($import->getTable());
 
         $result = $this->parseAll($import, self::MODE_INSERT);
+
+        $em = $this->getORM()->getManager();
+        $import->setModified(new \DateTime());
+        $em->persist($import);
+        $em->flush();
 
         return $this->render('AdminBundle:import/report', array(
             'inserts' => $result['inserts'],
@@ -383,6 +394,11 @@ class ImportController extends Controller
         if($filters)
         {
             $result = $this->parseAll($import, self::MODE_UPDATE);
+
+            $em = $this->getORM()->getManager();
+            $import->setModified(new \DateTime());
+            $em->persist($import);
+            $em->flush();
 
             return $this->render('AdminBundle:import/report', array(
                 'inserts' => $result['inserts'],

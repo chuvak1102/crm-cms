@@ -69,7 +69,7 @@ class AnnotationParser{
     {
         preg_match('/[@Route]{6}[(]{1}["]{1}[\/a-zA-Z\-\_0-9]{1,100}[\{a-zA-Z\-\_0-9\}]{0,100}["]{1}[\)]{1}/', $docComment, $route);
         if(empty($route[0])) return '';
-
+        
         $route[0] = str_replace('@Route("', '', $route[0]);
         $route[0] = str_replace('")', '', $route[0]);
 

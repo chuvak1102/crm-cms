@@ -395,6 +395,14 @@ $(document).ready(function()
                     }
                 },
 
+                import_index : {
+
+                    mouseup : function(e){
+
+                        app.prevScreen("/admin/import/");
+                    }
+
+                },
 
             }
         },
@@ -405,8 +413,22 @@ $(document).ready(function()
         },
         "p_2_5" : {
             icon : "fa fa-camera-retro",
-            url : "/admin/category/",
-            color : "blue"
+            url : "/admin/filter/",
+            color : "blue",
+
+            actions : {
+
+                index : {
+
+                    mouseup : function(){
+
+                        alert();
+
+                    }
+
+                }
+
+            }
         },
         "p_3_1" : {
             icon : "fas fa-book",
@@ -536,10 +558,9 @@ $(document).ready(function()
             color : ""
         }
     };
-
 });
 
-console.time(5 / 3.34578234659246735);
+
 
 // "use strict";
 //
@@ -558,3 +579,4 @@ console.time(5 / 3.34578234659246735);
 // user.name = "Петя";
 //
 // console.log(user.name)
+

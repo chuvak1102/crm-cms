@@ -55,7 +55,9 @@
                             </select>
                         </td>
                         <td>
-                            15.03.2018 15:15
+                            <?if($i->getModified()){?>
+                                <?=$i->getModified()->format('d m Y H:i')?>
+                            <?}?>
                         </td>
                         <td>
                             <button type="button" class="btn" data-event="import_begin" id="<?=$i->getId()?>">Импорт</button>

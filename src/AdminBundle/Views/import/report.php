@@ -15,3 +15,11 @@
         </tr>
     </table>
 </div>
+
+<div class="cont">
+    <table class="std_table">
+        <tr>
+            <td><button type="button" class="btn" data-event="import_index">OK</button></td>
+        </tr>
+    </table>
+</div>

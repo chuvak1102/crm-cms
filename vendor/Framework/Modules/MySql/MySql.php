@@ -77,10 +77,10 @@ class MySql{
         foreach($values as $k => $v){
             if($i < $length){
                 $keys = $keys.' '.'`'.$k.'`'.', ';
-                $val = $val.' '.'\''.$v.'\',';
+                $val = $val.' '.'\''.addslashes($v).'\',';
             } else {
                 $keys = $keys.' '.'`'.$k.'`';
-                $val = $val.' '.'\''.$v.'\'';
+                $val = $val.' '.'\''.addslashes($v).'\'';
             }
             $i++;
         }
@@ -89,10 +89,30 @@ class MySql{
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($query.' --- MESSAGE --- '.$e->getMessage());
+        }
+        $this->lastId = $this->pdo->lastInsertId();
+    }
+
+    function insertQuery($table, $values = array())
+    {
+        $i = 0;
+        $length = count($values) - 1;
+        $keys = ''; $val = '';
+
+        foreach($values as $k => $v){
+            if($i < $length){
+                $keys = $keys.' '.'`'.$k.'`'.', ';
+                $val = $val.' '.'\''.addslashes($v).'\',';
+            } else {
+                $keys = $keys.' '.'`'.$k.'`';
+                $val = $val.' '.'\''.addslashes($v).'\'';
+            }
+            $i++;
         }
 
-        $this->lastId = $this->pdo->lastInsertId();
+        return "INSERT INTO `$table` ( $keys ) VALUES ( $val )";
+
     }
 
     function update($table, $fields = array(), $id){
@@ -235,49 +255,40 @@ class MySql{
         if(empty($params)){
 
             $query = "CALL `$name`()";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute();
-
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $data[] = $row;
-            }
-            if(empty($data)) return null;
-
-            return $data;
 
         } else {
 
-            $query = "CALL `$name`(";
+            $query = "CALL $name";
 
             $i = 1;
             $length = count($params);
-
+            $arguments = '';
             foreach($params as $p){
                 if($i < $length){
-                    $query = $query.'?,';
+                    $arguments = $arguments.'\''.$p.'\',';
                 } else {
-                    $query = $query.'?)';
+                    $arguments = $arguments.'\''.$p.'\'';
                 }
+                $i++;
             }
 
-            $stmt = $this->pdo->prepare($query);
+            $query = $query.'('.$arguments.');';
 
-            foreach($params as $value){
-                $stmt->bindParam($i++, $value, PDO::PARAM_STR, 4000);
-            }
-
-            try{$stmt->execute();}catch(\PDOException $e)
-            {
-                throw new \Exception($e->getMessage());
-            }
-
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $data[] = $row;
-            }
-
-            if(empty($data)) return null;
-            return $data;
         }
+
+        $stmt = $this->pdo->prepare($query);
+
+        try{$stmt->execute();}catch(\PDOException $e)
+        {
+            throw new \Exception($e->getMessage());
+        }
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $data[] = $row;
+        }
+
+        if(empty($data)) return null;
+        return $data;
     }
 
     function createTable($table, $fields)

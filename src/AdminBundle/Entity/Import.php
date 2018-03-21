@@ -38,6 +38,11 @@ class Import extends Entity
      */
     public $location;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    public $modified;
+
     function getId(){
         return $this->id;
     }
@@ -86,6 +91,16 @@ class Import extends Entity
     function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    function setModified($modified)
+    {
+        $this->modified = $modified;
+    }
+
+    function getModified()
+    {
+        return $this->modified;
     }
 
 }
