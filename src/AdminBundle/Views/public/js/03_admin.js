@@ -427,6 +427,16 @@ $(document).ready(function()
 
                     }
 
+                },
+
+                shit : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/filter/shit")
+
+                    }
+
                 }
 
             }

@@ -21,7 +21,7 @@ class FilterController extends Controller
             $lRepo = $this->getORM()->getRepository(Log::class);
 
             return $this->render('AdminBundle:filter/index', array(
-                'filter' => $lRepo->findAll()
+                'log' => $lRepo->findAll()
             ), false);
 
         } else {

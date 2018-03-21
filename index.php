@@ -33,6 +33,18 @@ function dump($scope)
     echo '<div style="clear: both"></div>';
 }
 
+function error($text)
+{
+    echo '<div style="clear: both"></div>';
+    echo '<div style="background-color: rgb(255,72,65); width: 100%; padding: 100px">';
+    echo '<pre style="color: #fff"><h2>';
+    print_r($text);
+    echo '</pre><h2/>';
+    echo '</div>';
+    echo '<div style="clear: both"></div>';
+    die();
+}
+
 //$method = 'id';
 //$var = 'id';
 //$value = 'asdflkjshadfljkasdfljksdafkljasdfasdfasdf';

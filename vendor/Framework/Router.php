@@ -24,6 +24,7 @@ class Router
     {
         $routes = AnnotationParser::parse();
 
+        // чистое совпадение route и request uri
         foreach($routes as $route)
         {
             foreach($route as $path => $controllerAction)
@@ -46,11 +47,14 @@ class Router
             if(isset($break) && $break == true) break;
         }
 
+        // если не совпало
         if(empty($result))
         {
             foreach($routes as $route)
             {
-                foreach($route as $path => $controllerAction){
+                // отделим то что не совпало
+                foreach($route as $path => $controllerAction)
+                {
                     $parameter = AnnotationParser::extractParam($path);
                     $cleanPath = str_replace($parameter, '', $path);
                     $match = str_replace($cleanPath, '', $query);
@@ -58,31 +62,47 @@ class Router
 
                     if($cleanPath == $cleanRoute || $cleanPath.'/' == $cleanRoute || $cleanPath == $cleanRoute.'/')
                     {
-                        if($query == '/')
+                        if(preg_match('/^[a-zA-Z\-\_0-9]{1,500}$/', $match) || empty($match))
                         {
-                            $result = array(
-                                'path' => '/',
-                                'bundle' => $controllerAction['bundle'],
-                                'controller' => $controllerAction['controller'],
-                                'action' => 'indexAction',
-                                'parameter' => null
-                            );
-
-                        } else {
-
-                            if(preg_match('/^[a-zA-Z\-\_0-9]{1,500}$/', $match))
+                            if(empty($parameter))
                             {
-                                $result = array(
-                                    'path' => $cleanRoute,
-                                    'bundle' => $controllerAction['bundle'],
-                                    'controller' => $controllerAction['controller'],
-                                    'action' => $controllerAction['action'],
-                                    'parameter' => $match
-                                );
+                                if($path == $query || $path.'/' == $query || $path == $query.'/')
+                                {
+                                    $result = array(
+                                        'path' => $cleanRoute,
+                                        'bundle' => $controllerAction['bundle'],
+                                        'controller' => $controllerAction['controller'],
+                                        'action' => $controllerAction['action'],
+                                        'parameter' => null
+                                    );
+
+                                    $break = true;
+                                    break;
+                                }
+
+                            } else {
+
+                                if($cleanPath.$match == $query || $cleanPath.$match.'/' == $query || $cleanPath.$match == $query.'/')
+                                {
+                                    $result = array(
+                                        'path' => $cleanRoute,
+                                        'bundle' => $controllerAction['bundle'],
+                                        'controller' => $controllerAction['controller'],
+                                        'action' => $controllerAction['action'],
+                                        'parameter' => $match
+                                    );
+
+                                    $break = true;
+                                    break;
+                                }
                             }
                         }
                     }
+
+                    if(isset($break) && $break == true) break;
                 }
+
+                if(isset($break) && $break == true) break;
             }
         }
 
@@ -91,6 +111,13 @@ class Router
         // такой action должен быть только один на все бандлы
         if(empty($result))
         {
+            // для админки
+            if(preg_match('/^[\/]{1}admin[\/][a-zA-Z0-9\-\_\/]{0,500}$/i', $query))
+            {
+                error($query.': '.' no route found!');
+            }
+
+            // ищем '/'
             foreach($routes as $route)
             {
                 foreach($route as $path => $controllerAction)
@@ -128,7 +155,7 @@ class Router
 
         } else {
 
-            throw new Exception('Router exception: no route found!');
+            error('No Route found!');
         }
     }
 
@@ -164,13 +191,13 @@ class Router
 
         $arguments = array();
 
-        foreach($data as $d)
+        foreach($data as $set)
         {
-            foreach($d as $name => $object)
+            foreach($set as $argument => $className)
             {
-                if($object)
+                if($className)
                 {
-                    $class = new $object;
+                    $class = new $className;
 
                     if($class instanceof Entity)
                     {
