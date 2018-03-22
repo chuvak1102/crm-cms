@@ -433,11 +433,47 @@ $(document).ready(function()
 
                     mouseup : function(e){
 
-                        app.nextScreen("/admin/filter/shit")
+                        app.nextScreen("/admin/filter/shit/")
 
                     }
 
-                }
+                },
+                shit2 : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/filter/shit/13456")
+
+                    }
+
+                },
+                shit3 : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/filter/shit/shit")
+
+                    }
+
+                },
+                shit4 : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/filter/shit/shit/9999999999")
+
+                    }
+
+                },
+                shit5 : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/filter/shit/shit/shit")
+
+                    }
+
+                },
 
             }
         },

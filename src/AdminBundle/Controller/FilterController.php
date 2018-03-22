@@ -30,5 +30,56 @@ class FilterController extends Controller
         }
     }
 
+    /**
+     * @Route("/shit/")
+     */
+    public function shitAction(Request $request)
+    {
+        return $this->render('AdminBundle:filter/filter', array(
+
+        ), false);
+    }
+
+    /**
+     * @Route("/shit/{param}")
+     */
+    public function shit1Action(Request $request, $shit)
+    {
+        return $this->render('AdminBundle:filter/filter', array(
+            $shit
+        ), false);
+    }
+
+    /**
+     * @Route("/shit/shit/shit/shit/{param}")
+     */
+    public function shit4Action(Request $request, $shit)
+    {
+        return $this->render('AdminBundle:filter/filter', array(
+            $shit
+        ), false);
+    }
+
+    /**
+     * @Route("/shit/shit")
+     */
+    public function shit2Action(Request $request, $shit)
+    {
+        return $this->render('AdminBundle:filter/filter', array(
+            $shit
+        ), false);
+    }
+
+    /**
+     * @Route("/shit/shit/{param}")
+     */
+    public function shit3Action(Request $request, $shit)
+    {
+        return $this->render('AdminBundle:filter/filter', array(
+            $shit
+        ), false);
+    }
+
+
 
 }

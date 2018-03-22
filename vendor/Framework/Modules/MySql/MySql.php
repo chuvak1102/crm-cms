@@ -192,7 +192,7 @@ class MySql{
         return $data;
     }
 
-    function findAll($table, $orderBy = 'id', $limit = 100){
+    function findAll($table, $limit = 100){
 
         $isTableExist = "SHOW TABLES LIKE '$table'";
         $stmt = $this->pdo->prepare($isTableExist);
@@ -204,7 +204,7 @@ class MySql{
 
         if(!$exist) return "Table '$table' does not exist!";
 
-        $query = "SELECT * FROM `$table` ORDER BY `$orderBy` LIMIT $limit";
+        $query = "SELECT * FROM `$table` LIMIT $limit";
         $stmt = $this->pdo->prepare($query);
         try{$stmt->execute();}catch(\PDOException $e)
         {

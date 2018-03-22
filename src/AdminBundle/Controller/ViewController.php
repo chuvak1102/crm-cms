@@ -13,6 +13,9 @@ use Framework\Component\HttpFoundation\Response;
 class ViewController extends Controller{
 
     private $paginationPrefix = 1;
+    private $paginationButtons = 10;
+    private $paginationItems = 100;
+
     private $isCategory = false;
     private $query;
 
@@ -30,7 +33,14 @@ class ViewController extends Controller{
         $product = $this->getProducts($queryArray);
         $path = $this->getCategoryPath($queryArray);
         $productAlias = $this->getProductAlias($queryArray);
-        $pagination = new Pagination($product, $path, $this->paginationPrefix);
+
+        $pagination = new Pagination(
+            $product,
+            $path,
+            $this->paginationPrefix,
+            $this->paginationButtons,
+            $this->paginationItems
+        );
 
         return $this->render('default:'.$template, array
         (
@@ -129,12 +139,19 @@ class ViewController extends Controller{
         $mysql = $this->getMysql();
         $tree = new NestedSets();
 
+        $start = ($this->paginationPrefix - 1) * $this->paginationItems;
+        $end = $this->paginationButtons * $this->paginationItems;
+        $limit = $start.','.$end;
+        $x = 0;
+
         switch(count($queryArray))
         {
             case 1 : {
 
                 $this->isCategory = true;
-                return $mysql->findAll($queryArray[0]);
+                $products = $mysql->findAll($queryArray[0], $limit);
+
+                return $products;
             }
 
             default : {
@@ -148,7 +165,7 @@ class ViewController extends Controller{
 
                     $products = $mysql->findBy($queryArray[0], array(
                         'category' => $category['id']
-                    ));
+                    ), $limit);
 
                     if($products)
                     {
@@ -169,7 +186,7 @@ class ViewController extends Controller{
                         $product = $mysql->findBy($queryArray[0], array(
                             'alias' => $queryArray[$count - 1],
                             'category' => $category['id']
-                        ));
+                        ), $limit);
 
                         if($product)
                         {
