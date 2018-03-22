@@ -3,6 +3,7 @@ namespace Framework\Component\Controller;
 use Framework\App;
 use Framework\Modules\MySql\MySql;
 use Framework\Component\ORM\ORM;
+use AdminBundle\Services\Helpers;
 
 class Controller {
 
@@ -60,6 +61,16 @@ class Controller {
     protected function redirectToRoute($route){
         header('Location:' . $route);
         return true;
+    }
+
+    protected function createAlias($original, $modified = null)
+    {
+        if($modified)
+        {
+            return Helpers::stringToAlias($modified);
+        }
+
+        return Helpers::stringToAlias($original);
     }
 
 }

@@ -14,7 +14,7 @@ class ViewController extends Controller{
 
     private $paginationPrefix = 1;
     private $paginationButtons = 10;
-    private $paginationItems = 100;
+    private $paginationItems = 25;
     private $totalItems = 0;
     private $isCategory = false;
     private $query;
@@ -141,9 +141,7 @@ class ViewController extends Controller{
         $tree = new NestedSets();
 
         $start = ($this->paginationPrefix - 1) * $this->paginationItems;
-        $end = $this->paginationButtons * $this->paginationItems;
-        $limit = $start.','.$end;
-        $x = 0;
+        $limit = $start.','.$this->paginationItems;;
 
         switch(count($queryArray))
         {

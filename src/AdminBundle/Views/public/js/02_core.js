@@ -9,7 +9,7 @@ $(document).ready(function()
         menuCellWidth : 20,
         menuCellHeight : 23,
         menuNavHeight : 8,
-        animationSpeed : 350,
+        animationSpeed : 340,
         spinnerDelay : 1000,
         debug : true,
         map : {},
@@ -181,10 +181,48 @@ $(document).ready(function()
             }
         },
 
-        thisScreen : function(){
+        thisScreen : function(source, data, usingFormDataClass = false)
+        {
+            if(!window.app.page.busy)
+            {
+                debug('...RENDER PREV SCREEN...');
+                debug('lock animation');
+                window.app.page.busy = true;
+                debug('beginning ajax...');
 
+                let formData = usingFormDataClass ? false : "application/x-www-form-urlencoded";
 
+                $.ajax({
 
+                    url : source,
+                    type : 'POST',
+                    method: 'POST',
+                    data : data,
+                    processData: formData,
+                    contentType: formData,
+                    beforeSend: function(){
+                        spinnerStop();
+                        spinnerStart();
+                    },
+                    complete : function(){
+                        spinnerStop();
+                    },
+                    success : function(response)
+                    {
+                        debug('ajax success');
+
+                        let screens = $('ul.screen li');
+
+                        debug('append html');
+
+                        $(screens[window.app.page.screen]).html(response);
+
+                        debug('unlock animation');
+
+                        window.app.page.busy = false;
+                    }
+                });
+            }
         }
     };
 
@@ -196,9 +234,7 @@ $(document).ready(function()
         }
     }
 
-    function spinnerStart(){
-
-        $('#spinner').show()}
+    function spinnerStart(){$('#spinner').show()}
     function spinnerStop(){$('#spinner').hide()}
 
     $.fn.close = function(page)

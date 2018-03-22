@@ -483,8 +483,61 @@ $(document).ready(function()
             color : "",
             actions : {
 
-                
+                d_new : {
 
+                    mouseup : function(e){
+
+                        let data = {
+                            'dictionary_name' : $('input[name="dictionary_name"]').val(),
+                            'dictionary_alias' : $('input[name="dictionary_alias"]').val(),
+                            'dictionary_type' : $('select[name="dictionary_type"]').val(),
+                        };
+
+                        app.prevScreen("/admin/dictionary/new", data);
+                    }
+
+                },
+
+                d_show : {
+
+                    mouseup : function(e){
+
+                        app.nextScreen("/admin/dictionary/show/" + $(e.target).attr("id"));
+
+                    }
+
+                },
+
+                d_remove : {
+
+                    mouseup : function(e){
+                        if(confirm('Удалить?')){
+                            app.prevScreen("/admin/dictionary/remove/" + $(e.target).attr("id"));
+                        }
+                    }
+
+                },
+
+                create_entry : {
+
+                    mouseup : function(e){
+
+                        let id = $(e.target).attr("id");
+                        let f = $('form[name="create_record"]');
+                        let form = new FormData(f[0]);
+
+                        app.thisScreen("/admin/dictionary/create_entry/" + id, form, true);
+                    }
+
+                },
+
+                remove_entry : {
+                    
+                    mouseup : function(e){
+                        app.thisScreen("/admin/dictionary/remove_entry/" + $(e.target).attr("id"));
+                    }
+
+                }
             }
         },
         "p_3_2" : {
