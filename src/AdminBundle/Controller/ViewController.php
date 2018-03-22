@@ -15,7 +15,7 @@ class ViewController extends Controller{
     private $paginationPrefix = 1;
     private $paginationButtons = 10;
     private $paginationItems = 100;
-
+    private $totalItems = 0;
     private $isCategory = false;
     private $query;
 
@@ -39,7 +39,8 @@ class ViewController extends Controller{
             $path,
             $this->paginationPrefix,
             $this->paginationButtons,
-            $this->paginationItems
+            $this->paginationItems,
+            $this->totalItems
         );
 
         return $this->render('default:'.$template, array
@@ -149,9 +150,23 @@ class ViewController extends Controller{
             case 1 : {
 
                 $this->isCategory = true;
-                $products = $mysql->findAll($queryArray[0], $limit);
 
-                return $products;
+                $ctypeExists = $mysql->findOneBy('E_Content', array(
+                    'alias' => $queryArray[0]
+                ));
+
+                if($ctypeExists)
+                {
+                    $this->totalItems = $mysql->getRowsCount($queryArray[0]);
+                    $products = $mysql->findAll($queryArray[0], $limit);
+
+                    return $products;
+                } else {
+
+                    return $this->redirectToRoute('/404');
+                }
+
+
             }
 
             default : {
@@ -163,17 +178,29 @@ class ViewController extends Controller{
                 {
                     $this->isCategory = true;
 
-                    $products = $mysql->findBy($queryArray[0], array(
-                        'category' => $category['id']
-                    ), $limit);
+                    $ctypeExists = $mysql->findOneBy('E_Content', array(
+                        'alias' => $queryArray[0]
+                    ));
 
-                    if($products)
+                    if($ctypeExists)
                     {
+                        $this->totalItems = $mysql->getRowsCount($queryArray[0]);
+                        $products = $mysql->findBy($queryArray[0], array(
+                            'category' => $category['id']
+                        ), $limit);
 
-                        return $products;
+                        if($products)
+                        {
+
+                            return $products;
+                        } else {
+
+                            return null;
+                        }
+
                     } else {
 
-                        return null;
+                        return $this->redirectToRoute('/404');
                     }
 
                 } else {
@@ -182,21 +209,33 @@ class ViewController extends Controller{
 
                     if($category)
                     {
+                        $ctypeExists = $mysql->findOneBy('E_Content', array(
+                            'alias' => $queryArray[0]
+                        ));
 
-                        $product = $mysql->findBy($queryArray[0], array(
-                            'alias' => $queryArray[$count - 1],
-                            'category' => $category['id']
-                        ), $limit);
-
-                        if($product)
+                        if($ctypeExists)
                         {
+                            $this->totalItems = $mysql->getRowsCount($queryArray[0]);
+                            $product = $mysql->findBy($queryArray[0], array(
+                                'alias' => $queryArray[$count - 1],
+                                'category' => $category['id']
+                            ), $limit);
 
-                            return $product;
+                            if($product)
+                            {
+
+                                return $product;
+                            } else {
+
+
+                                return null;
+                            }
                         } else {
-
 
                             return $this->redirectToRoute('/404');
                         }
+
+
                     }
                 }
             }

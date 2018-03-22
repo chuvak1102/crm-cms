@@ -1,6 +1,5 @@
 <?php
 namespace Framework\Modules\Pagination;
-use Framework\Modules\DB\Connection;
 
 class Pagination
 {
@@ -15,13 +14,13 @@ class Pagination
     private $path;
     public $product = array();
 
-    function __construct($product, $fullPath, $currentPage, $buttonsCount = 10, $itemsOnPage = 15)
+    function __construct($product, $fullPath, $currentPage, $buttonsCount = 10, $itemsOnPage = 25, $totalItems = 0)
     {
         if(!is_array($product)) return null;
 
         $this->buttonsCount = $buttonsCount;
         $this->itemsOnPage = $itemsOnPage;
-        $this->totalItems = count($product);
+        $this->totalItems = $totalItems;
         $this->totalPages = ceil($this->totalItems / $this->itemsOnPage);
         $this->currentPage = $currentPage;
         $this->currentPageIndex = $this->getCurrentIndex();
@@ -89,7 +88,7 @@ class Pagination
                     <li><a href="/<?=$this->path?>/page-<?=$this->currentPage + 1?>"> > </a></li>
                 <?}?>
 
-                <?if($this->totalPages - $this->currentPage + $this->currentPageIndex < $this->buttonsCount){?>
+                <?if($this->totalPages - $this->currentPage + $this->currentPageIndex <= $this->buttonsCount){?>
                     <li> >> </li>
                 <?}else{?>
                     <li><a href="/<?=$this->path?>/page-<?=$this->totalPages?>"> >> </a></li>

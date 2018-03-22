@@ -479,8 +479,13 @@ $(document).ready(function()
         },
         "p_3_1" : {
             icon : "fas fa-book",
-            url : "/admin/disabled/",
-            color : ""
+            url : "/admin/dictionary/",
+            color : "",
+            actions : {
+
+                
+
+            }
         },
         "p_3_2" : {
             icon : "fas fa-columns",
