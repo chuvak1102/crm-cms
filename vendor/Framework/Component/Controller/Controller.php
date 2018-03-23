@@ -7,8 +7,12 @@ use AdminBundle\Services\Helpers;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use Twig_Extension_Debug;
+use Twig_Function;
+use Twig_Template;
 
 class Controller {
+
+    private $data;
 
     protected function getMysql()
     {
@@ -20,57 +24,35 @@ class Controller {
         return new ORM();
     }
 
-    protected function render($template, $data = array(), $useLayout = true)
+    protected function render($template, $data = array())
     {
-        /*
+//        dump function
+        $this->data = $data;
 
-        $template = explode(':', $template);
-        $source = !empty($template[0]) ? $template[0] : 'default';
-        $path = !empty($template[1]) ? $template[1] : '404';
+        $dumpFunction = new Twig_Function('dump', function ($data = null) {
 
-        if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/src'.'/'.$source.'/'.'Views'.'/'.$path))
-        {
-            if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/app'.'/'.'Views'.'/'.$source.'/'.$path))
+            if($data)
             {
-
-                throw new \Exception('Template '.$path.' not found in app/views/default or src/bundle/views');
+                $vars = $data;
             } else {
-
-                if($useLayout)
-                {
-                    App::$template = $_SERVER['DOCUMENT_ROOT'].'/app/Views/'.$source.'/'.$path;
-
-
-                    include $_SERVER['DOCUMENT_ROOT'].'/app/Views/default/layout'.'.php';
-
-                } else {
-
-                    include $_SERVER['DOCUMENT_ROOT'].'/app/Views/'.$source.'/'.$path;
-                }
+                $vars = $this->data;
             }
 
-        } else {
+            echo '<div style="clear: both"></div>';
+            echo '<div style="background-color: rgba(0,0,0,0.64); width: 100%; padding-bottom: 50px">';
+            echo '<pre style="color: #fff">';
+            print_r($vars);
+            echo '</pre>';
+            echo '</div>';
+            echo '<div style="clear: both"></div>';
 
-            if($useLayout)
-            {
-                App::$template = $_SERVER['DOCUMENT_ROOT'].'/src/'.$source.'/Views/'.$path;
-                include $_SERVER['DOCUMENT_ROOT'].'/src/'.$source.'/Views/layout.php';
-
-            } else {
-
-                include$_SERVER['DOCUMENT_ROOT'].'/src/'.$source.'/Views/'.$path;
-            }
-        }
-
-        return true;
-
-        */
+        });
+//        dump function
 
 
         $template = explode(':', $template);
         $source = !empty($template[0]) ? $template[0] : 'default';
         $path = !empty($template[1]) ? $template[1] : '404';
-
 
         if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/src'.'/'.$source.'/'.'Views'.'/'.$path))
         {
@@ -81,35 +63,24 @@ class Controller {
             } else {
 
                 $appDir = new Twig_Loader_Filesystem($_SERVER['DOCUMENT_ROOT'].'/app/Views/'.$source);
-
-                $twig = new Twig_Environment($appDir, array(
-                    'cache' => $_SERVER['DOCUMENT_ROOT'].'/app/cache/templating',
-                    'debug' => true
-                ));
-
-                $twig->addExtension(new Twig_Extension_Debug());
-
-                $template = $twig->load($path);
-
-                echo $template->render($data);
             }
 
         } else {
 
             $appDir = new Twig_Loader_Filesystem($_SERVER['DOCUMENT_ROOT'].'/src/'.$source.'/Views/');
-
-            $twig = new Twig_Environment($appDir, array(
-                'cache' => $_SERVER['DOCUMENT_ROOT'].'/app/cache/templating',
-                'debug' => true
-            ));
-
-            $twig->addExtension(new Twig_Extension_Debug());
-
-            $template = $twig->load($path);
-
-            echo $template->render($data);
-
         }
+
+        $twig = new Twig_Environment($appDir, array(
+            'cache' => $_SERVER['DOCUMENT_ROOT'].'/app/cache/templating',
+            'debug' => true
+        ));
+
+        $twig->addExtension(new Twig_Extension_Debug());
+        $twig->addFunction($dumpFunction);
+
+        $template = $twig->load($path);
+
+        echo $template->render($data);
 
         return true;
     }
