@@ -10,6 +10,10 @@ use AdminBundle\Entity\ContentType;
 use Framework\Component\ORM\Extension\NestedSets;
 use Framework\Modules\FileUploader\FileUploader;
 use Framework\Modules\Authorization\Authorization;
+use AdminBundle\Entity\Dictionary;
+use AdminBundle\Entity\DictionaryData;
+use AdminBundle\Services\FieldType;
+use MongoDB\BSON\Type;
 
 /**
  * @Route("/admin/product")
@@ -57,13 +61,33 @@ class ProductController extends Controller {
             $path = $tree->getPath($category->getAlias());
             $cRepo = $this->getORM()->getRepository(Category::class);
             $fRepo = $this->getORM()->getRepository(CategoryFields::class);
+            $dRepo = $this->getORM()->getRepository(Dictionary::class);
+            $dfRepo = $this->getORM()->getRepository(DictionaryData::class);
 
             $ctype = $cRepo->findBy(array('alias' => $path[1]['alias']));
             $fields = $fRepo->findBy(array('category' => $ctype[0]->getId()));
 
+            if($fields)
+            {
+                foreach($fields as $field)
+                {
+                    if($field->getFieldType() == FieldType::DICTIONARY)
+                    {
+                        $dictionary = $dRepo->findOneBy(array('alias' => $field->getParams()));
+                        if($dictionary)
+                        {
+                            $data[$dictionary->getAlias()] = $dfRepo->findBy(array('dictionary' => $dictionary->getId()));
+                        }
+                    }
+                }
+            }
+
+            if(empty($data)) $data = null;
+
             return $this->render('AdminBundle:product/new', array(
                 'category' => $category,
                 'fields' => $fields,
+                'dictionary' => $data
             ), false);
 
         } else {
@@ -137,6 +161,9 @@ class ProductController extends Controller {
 
             $fRepo = $this->getORM()->getRepository(CategoryFields::class);
             $cRepo = $this->getORM()->getRepository(Category::class);
+            $dRepo = $this->getORM()->getRepository(Dictionary::class);
+            $dfRepo = $this->getORM()->getRepository(DictionaryData::class);
+
             $ctype = $tree->getCategoryPathById($category);
             $ctypeAlias = $ctype[1]['alias'];
 
@@ -151,10 +178,26 @@ class ProductController extends Controller {
                     'id' => $product
                 ));
 
+            if($fields)
+            {
+                foreach($fields as $field)
+                {
+                    if($field->getFieldType() == FieldType::DICTIONARY)
+                    {
+                        $dictionary = $dRepo->findOneBy(array('alias' => $field->getParams()));
+                        if($dictionary)
+                        {
+                            $dictionaryFields[$dictionary->getAlias()] = $dfRepo->findBy(array('dictionary' => $dictionary->getId()));
+                        }
+                    }
+                }
+            }
+
             return $this->render('AdminBundle:product/edit', array(
                 'fields' => $fields,
                 'category' => $category,
-                'product' => $product
+                'product' => $product,
+                'dictionary' => $dictionaryFields
             ), false);
         } else {
 

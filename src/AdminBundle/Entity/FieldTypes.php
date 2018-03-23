@@ -28,6 +28,11 @@ class FieldTypes extends Entity
      */
     public $type;
 
+//    /**
+//     * @ORM\Column(type="integer", length=10)
+//     */
+//    public $fieldType;
+
     /**
      * @ORM\Column(type="text", length=255)
      */
@@ -40,7 +45,6 @@ class FieldTypes extends Entity
     function setId($id){
         $this->id = $id;
     }
-
 
     function getName(){
         return $this->name;
@@ -65,6 +69,14 @@ class FieldTypes extends Entity
     function setType($type){
         $this->type = $type;
     }
+
+//    function getFieldType(){
+//        return $this->fieldType;
+//    }
+//
+//    function setFieldType($fieldType){
+//        $this->fieldType = $fieldType;
+//    }
 
     function getParams(){
         return $this->params;

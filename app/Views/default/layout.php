@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="/web/css/ddsmoothmenu.css" />
 
-<!--    <script type="text/javascript" src="/web/js/ddsmoothmenu.js"></script>-->
+    <script type="text/javascript" src="/web/js/ddsmoothmenu.js"></script>
 
 <!--    <script type="text/javascript">-->
 <!---->

@@ -24,6 +24,11 @@ class CategoryFields extends Entity{
     public $type;
 
     /**
+     * @ORM\Column(type="integer", length=10)
+     */
+    public $fieldtype;
+
+    /**
      * @ORM\Column(type="text", length=255)
      */
     public $canonical;
@@ -61,6 +66,14 @@ class CategoryFields extends Entity{
 
     function getType(){
         return $this->type;
+    }
+
+    function setFieldType($fieldType){
+        $this->fieldtype = $fieldType;
+    }
+
+    function getFieldType(){
+        return $this->fieldtype;
     }
 
     function getCanonical(){

@@ -25,4 +25,9 @@ class DictionaryData extends Entity
     function getValue(){return $this->value;}
     function setValue($value){$this->value = $value;}
 
+    function __toString()
+    {
+        return (string)$this->name;
+    }
+
 }
