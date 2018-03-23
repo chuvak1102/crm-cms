@@ -8,6 +8,7 @@ use Framework\Modules\Authorization\Authorization;
 use Framework\Modules\MySql\MySql;
 use AdminBundle\Entity\FieldTypes;
 use AdminBundle\Entity\DataType;
+use AdminBundle\Services\FieldType;
 
 /**
  * @Route("/admin/form")
@@ -21,9 +22,9 @@ class FormController extends Controller
     {
         if(Authorization::isConfirmed())
         {
-            return $this->render('AdminBundle:form/index', array(
+            return $this->render('AdminBundle:form/index.twig', array(
                 'forms' => $mySql->findAll('E_Form')
-            ), false);
+            ));
 
         } else {
 
@@ -42,10 +43,10 @@ class FormController extends Controller
             $fRepo = $orm->getRepository(FieldTypes::class);
             $tRepo = $orm->getRepository(DataType::class);
 
-            return $this->render('AdminBundle:form/new', array(
+            return $this->render('AdminBundle:form/new.twig', array(
                 'datatype' => $tRepo->findAll(),
                 'fields' => $fRepo->findAll()
-            ), false);
+            ));
 
         } else {
 
@@ -118,14 +119,15 @@ class FormController extends Controller
     {
         if(Authorization::isConfirmed())
         {
-            return $this->render('AdminBundle:form/show', array(
+            return $this->render('AdminBundle:form/show.twig', array(
                 'form' => $mySql->findOneBy('E_Form', array(
                     'id' => $id
                 )),
                 'fields' => $mySql->findBy('E_Form_Fields', array(
                     'E_Form' => $id
                 )),
-            ), false);
+                'type' => new FieldType()
+            ));
 
         } else {
 

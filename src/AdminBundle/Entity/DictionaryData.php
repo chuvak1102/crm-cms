@@ -11,7 +11,7 @@ class DictionaryData extends Entity
     public $id;
     public $dictionary;
     public $name;
-    public $key;
+//    public $key;
     public $value;
 
     function getId(){return $this->id;}
@@ -20,8 +20,8 @@ class DictionaryData extends Entity
     function setDictionary($dictionary){$this->dictionary = $dictionary;}
     function getName(){return $this->name;}
     function setName($name){$this->name = $name;}
-    function getKey(){return $this->key;}
-    function setKey($key){$this->key = $key;}
+//    function getKey(){return $this->key;}
+//    function setKey($key){$this->key = $key;}
     function getValue(){return $this->value;}
     function setValue($value){$this->value = $value;}
 

@@ -1,4 +1,10 @@
-<?use AdminBundle\Services\FieldType as Type;?>
+<?
+use AdminBundle\Entity\DictionaryData;
+use AdminBundle\Services\FieldType as Type;
+use AdminBundle\Entity\FieldTypes;
+/* @var $i FieldTypes */
+/* @var $j DictionaryData */
+?>
 
 <h1>Словарь: <?=$data['dictionary']->getName()?></h1>
 
@@ -7,13 +13,13 @@
         <table class="std_table">
             <tr>
                 <td>Имя</td>
-                <td>Ключ</td>
+<!--                <td>Ключ</td>-->
                 <td>Значение</td>
                 <td></td>
             </tr>
             <tr>
                 <td><input type="text" name="entry_name"></td>
-                <td><input type="text" name="entry_key"></td>
+<!--                <td><input type="text" name="entry_key"></td>-->
                 <td>
                     <?foreach($data['field_types'] as $i){?>
                         <?if($i->getId() == $data['dictionary']->getType()){?>
@@ -36,12 +42,12 @@
                 <td><button type="button" class="btn" data-event="create_entry" id="<?=$data['dictionary']->getId()?>">Добавить</button></td>
             </tr>
             <?if($data['fields']){?>
-                <?foreach($data['fields'] as $i){?>
+                <?foreach($data['fields'] as $j){?>
                     <tr>
-                        <td><?=$i->getName()?></td>
-                        <td><?=$i->getKey()?></td>
-                        <td><?=$i->getValue()?></td>
-                        <td><button type="button" class="btn" data-event="remove_entry" id="<?=$i->getId()?>">Удалить</button></td>
+                        <td><?=$j->getName()?></td>
+<!--                        <td>--><?//=$j->getKey()?><!--</td>-->
+                        <td><?=$j->getValue()?></td>
+                        <td><button type="button" class="btn" data-event="remove_entry" id="<?=$j->getId()?>">Удалить</button></td>
                     </tr>
                 <?}?>
             <?}?>

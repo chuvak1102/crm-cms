@@ -53,7 +53,7 @@ class CategoryController extends Controller
                 }
             }
 
-            return $this->render('AdminBundle:category/index', array(
+            return $this->render('AdminBundle:category/index.twig', array(
                 'category' => $result
             ), false);
 
@@ -86,15 +86,13 @@ class CategoryController extends Controller
      */
     function newAction(Category $category, NestedSets $tree)
     {
-        $x = 0;
-
         if(Authorization::isConfirmed())
         {
-            return $this->render('AdminBundle:category/new', array(
+            return $this->render('AdminBundle:category/new.twig', array(
                 'category' => $category,
                 'tree' => $tree->getTree(),
                 'templates' => Helpers::getFilesInDir('/app/Views/default')
-            ), false);
+            ));
 
         } else {
 
@@ -143,11 +141,11 @@ class CategoryController extends Controller
     {
         $cRepo = $this->getORM()->getRepository(Category::class);
 
-        return $this->render('AdminBundle:category/edit', array(
+        return $this->render('AdminBundle:category/edit.twig', array(
             'category' => $category,
             'tree' => $cRepo->findAll(),
             'templates' => Helpers::getFilesInDir('/app/Views/default')
-        ), false);
+        ));
     }
 
     /**
@@ -230,11 +228,11 @@ class CategoryController extends Controller
             $fRepo = $orm->getRepository(FieldTypes::class);
             $tRepo = $orm->getRepository(DataType::class);
 
-            return $this->render('AdminBundle:category/setup', array(
+            return $this->render('AdminBundle:category/setup.twig', array(
                 'category' => $category,
                 'datatype' => $tRepo->findAll(),
                 'fields' => $fRepo->findAll()
-            ), false);
+            ));
 
         } else {
 
@@ -251,6 +249,7 @@ class CategoryController extends Controller
         {
             $fields[] = array(
                 'type' => 11,
+                'fieldtype' => 1,
                 'DataType' => 1,
                 'canonical' => 'category',
                 'alias' => 'category',
@@ -275,6 +274,7 @@ class CategoryController extends Controller
                 $fields[] = array(
                     'type' => $fieldType,
                     'DataType' => $dataType,
+                    'fieldtype' => $fieldType,
                     'canonical' => $canonical,
                     'alias' => $alias,
                     'params' => $values
@@ -294,6 +294,7 @@ class CategoryController extends Controller
                     $fieldSet = new FieldSet();
                     $fieldSet->setCategory($category->getId());
                     $fieldSet->setType($singleSet['type']);
+                    $fieldSet->setFieldType($singleSet['fieldtype']);
                     $fieldSet->setAlias($singleSet['alias']);
                     $fieldSet->setCanonical($singleSet['canonical']);
                     $fieldSet->setParams($singleSet['params']);
@@ -321,7 +322,7 @@ class CategoryController extends Controller
 
         if(Authorization::isConfirmed())
         {
-            return $this->render('AdminBundle:category/show', array(
+            return $this->render('AdminBundle:category/show.twig', array(
                 'category' => $category
             ), false);
 
@@ -351,13 +352,4 @@ class CategoryController extends Controller
         }
     }
 
-    /**
-     * @Route("/empty")
-     */
-    public function emptyAction()
-    {
-        return $this->render('AdminBundle:category/empty', array(
-
-        ), false);
-    }
 }

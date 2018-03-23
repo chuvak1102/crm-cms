@@ -19,7 +19,7 @@ class DefaultController extends Controller{
         if(Authorization::isConfirmed())
         {
 
-            return $this->render('AdminBundle:index');
+            return $this->render('AdminBundle:layout.twig');
         } else {
 
             return $this->redirectToRoute('/admin/login/');

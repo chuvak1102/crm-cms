@@ -22,7 +22,7 @@ class ConstructorController extends Controller{
             $categories = Helpers::getFilesInDir('/app/Views/default/');
             $constructors = $mysql->findAll('E_Binder');
 
-            return $this->render('AdminBundle:constructor/index', array(
+            return $this->render('AdminBundle:constructor/index.twig', array(
                 'page' => $categories,
                 'constructor' => $constructors
             ), false);

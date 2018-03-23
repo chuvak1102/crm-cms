@@ -33,10 +33,10 @@ class ImportController extends Controller
             $iRepo = $this->getORM()->getRepository(Import::class);
             $cRepo = $this->getORM()->getRepository(ContentType::class);
 
-            return $this->render('AdminBundle:import/index', array(
+            return $this->render('AdminBundle:import/index.twig', array(
                 'import' => $iRepo->findAll(),
                 'tables' => $cRepo->findAll()
-            ), false);
+            ));
 
         } else {
 
@@ -96,9 +96,9 @@ class ImportController extends Controller
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            return $this->render('AdminBundle:import/begin', array(
+            return $this->render('AdminBundle:import/begin.twig', array(
                 'set' => $import,
-            ), false);
+            ));
 
         } else {
 
@@ -143,13 +143,13 @@ class ImportController extends Controller
             $parser = new XMLParser($import->getLocation());
             $tags = $parser->getTagsFromXml();
 
-            return $this->render('AdminBundle:import/setup', array(
+            return $this->render('AdminBundle:import/setup.twig', array(
                 'tags' => $tags,
                 'set' => $import,
                 'columns' => $mySql->getColumnList($import->getTable()),
                 'file' => $import->getLocation(),
                 'saved' => $iRepo->findBy(array('import' => $import->getId()))
-            ), false);
+            ));
 
         } else {
 
@@ -312,12 +312,12 @@ class ImportController extends Controller
         $em->persist($import);
         $em->flush();
 
-        return $this->render('AdminBundle:import/report', array(
+        return $this->render('AdminBundle:import/report.twig', array(
             'inserts' => $result['inserts'],
             'removed' => $result['removed'],
             'updated' => $result['updated'],
             'execution_time' => $result['execution_time']
-        ), false);
+        ));
     }
 
     /**
@@ -336,12 +336,12 @@ class ImportController extends Controller
         $em->persist($import);
         $em->flush();
 
-        return $this->render('AdminBundle:import/report', array(
+        return $this->render('AdminBundle:import/report.twig', array(
             'inserts' => $result['inserts'],
             'removed' => $deleted,
             'updated' => $result['updated'],
             'execution_time' => $result['execution_time']
-        ), false);
+        ));
 
     }
 
@@ -352,11 +352,11 @@ class ImportController extends Controller
     {
         $iRepo = $this->getORM()->getRepository(ImportUpdate::class);
 
-        return $this->render('AdminBundle:import/setup_update', array(
+        return $this->render('AdminBundle:import/setup_update.twig', array(
             'import' => $import,
             'columns' => $mySql->getColumnList($import->getTable()),
             'filter' => $iRepo->findBy(array('import' => $import->getId()))
-        ), false);
+        ));
     }
 
     /**
@@ -400,18 +400,18 @@ class ImportController extends Controller
             $em->persist($import);
             $em->flush();
 
-            return $this->render('AdminBundle:import/report', array(
+            return $this->render('AdminBundle:import/report.twig', array(
                 'inserts' => $result['inserts'],
                 'removed' => $result['removed'],
                 'updated' => $result['updated'],
                 'execution_time' => $result['execution_time']
-            ), false);
+            ));
 
         } else {
 
-            return $this->render('AdminBundle:import/error', array(
+            return $this->render('AdminBundle:import/error.twig', array(
                 'text' => 'Укажите хотя бы одно уникальное поле',
-            ), false);
+            ));
         }
 
 

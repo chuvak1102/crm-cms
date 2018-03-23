@@ -1,0 +1,50 @@
+<h1>#Редактировать материал: {{ category.name }}</h1>
+
+<div class="cont">
+    <div class="mat">
+        <form action="/admin/product/update/{{ category.id }}_{{ product.id }}" method="post" enctype="multipart/form-data">
+            {% if fields is not empty %}
+                {% for i in fields if i.alias != 'category' %}
+                    {% set alias = i.alias %}
+                    <p>{{ i.canonical }}</p>
+
+                    {% if i.fieldtype == type.text() %}
+                        <input type="text" value="{{ product[alias] }}" name="{{ alias }}">
+                    {% elseif i.fieldtype == type.textarea() %}
+                        <textarea name="{{ alias }}">{{ product[alias] }}</textarea>
+                    {% elseif i.fieldtype == type.file() %}
+                        <input type="file" value="{{ product[alias] }}" name="{{ alias }}">
+                    {% elseif i.fieldtype == type.select() %}
+                        {% set opt = i.params | split(';') %}
+                        <select name="{{ alias }}">
+                            {% for j in opt %}
+                                {% if product[alias] == j %}
+                                    <option selected value="{{ j }}">{{ j }}</option>
+                                {% else %}
+                                    <option value="{{ j }}">{{ j }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    {% elseif i.fieldtype == type.date() %}
+                        <input value="{{ product[alias] | slice(0, 10) }}" type="date" name="{{ alias }}">
+                    {% elseif i.fieldtype == type.datetime() %}
+                        <input value="{{ product[alias] | split(0, 10) }}T{{ product[alias] | split(11, 5) }}" type="datetime-local" name="{{ alias }}">
+                    {% elseif i.fieldtype == type.dictionary() %}
+                        <select name="{{ alias }}">
+                            {% set fields = dictionary[alias] %}
+                            {% for j in fields %}
+                                {% if j.name == product[alias] %}
+                                    <option value="{{ j.name }}" selected>{{ j.name }}</option>
+                                {% else %}
+                                    <option value="{{ j.name }}" >{{ j.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <button data-event="material_edit_save" id="{{ category.id }}_{{ product.id }}" class="btn" type="button">СОХРАНИТЬ</button>
+        </form>
+    </div>
+</div>

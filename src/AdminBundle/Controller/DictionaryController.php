@@ -1,7 +1,6 @@
 <?php
 namespace AdminBundle\Controller;
 
-use AdminBundle\Services\Helpers;
 use Framework\Component\Controller\Controller;
 use Framework\Modules\Authorization\Authorization;
 use Framework\Component\HttpFoundation\Request;
@@ -9,6 +8,7 @@ use AdminBundle\Entity\FieldTypes;
 use AdminBundle\Entity\Dictionary;
 use AdminBundle\Entity\DictionaryData;
 use Framework\Modules\FileUploader\FileUploader;
+use AdminBundle\Services\FieldType;
 
 /**
  * @Route("/admin/dictionary")
@@ -25,10 +25,10 @@ class DictionaryController extends Controller
             $fRepo = $this->getORM()->getRepository(FieldTypes::class);
             $dRepo = $this->getORM()->getRepository(Dictionary::class);
 
-            return $this->render('AdminBundle:dictionary/index', array(
+            return $this->render('AdminBundle:dictionary/index.twig', array(
                 'fields' => $fRepo->findAll(),
                 'dictionary' => $dRepo->findAll()
-            ), false);
+            ));
 
         } else {
 
@@ -119,11 +119,12 @@ class DictionaryController extends Controller
                 'dictionary' => $dictionary->getId()
             ));
 
-            return $this->render('AdminBundle:dictionary/show', array(
+            return $this->render('AdminBundle:dictionary/show.twig', array(
                 'fields' => $fields,
                 'dictionary' => $dictionary,
-                'field_types' => $fRepo->findAll()
-            ), false);
+                'field_types' => $fRepo->findAll(),
+                'type' => new FieldType()
+            ));
 
         } else {
 
@@ -150,7 +151,6 @@ class DictionaryController extends Controller
             $record = new DictionaryData();
             $record->setDictionary($dictionary->getId());
             $record->setName($request->get('entry_name'));
-            $record->setKey($request->get('entry_key'));
             $record->setValue($value);
 
             $em = $this->getORM()->getManager();
@@ -163,11 +163,12 @@ class DictionaryController extends Controller
                 'dictionary' => $dictionary->getId()
             ));
 
-            return $this->render('AdminBundle:dictionary/show', array(
+            return $this->render('AdminBundle:dictionary/show.twig', array(
                 'fields' => $fields,
                 'dictionary' => $dictionary,
-                'field_types' => $fRepo->findAll()
-            ), false);
+                'field_types' => $fRepo->findAll(),
+                'type' => new FieldType()
+            ));
 
         } else {
 
@@ -188,11 +189,12 @@ class DictionaryController extends Controller
                 'dictionary' => $dictionary->getId()
             ));
 
-            return $this->render('AdminBundle:dictionary/show', array(
+            return $this->render('AdminBundle:dictionary/show.twig', array(
                 'fields' => $fields,
                 'dictionary' => $dictionary,
-                'field_types' => $fRepo->findAll()
-            ), false);
+                'field_types' => $fRepo->findAll(),
+                'type' => new FieldType()
+            ));
 
         } else {
 

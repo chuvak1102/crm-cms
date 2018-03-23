@@ -41,9 +41,9 @@ class ProductController extends Controller {
 
             if(empty($data)) $data = null;
 
-            return $this->render('AdminBundle:product/index', array(
+            return $this->render('AdminBundle:product/index.twig', array(
                 'category' => $data
-            ), false);
+            ));
 
         } else {
 
@@ -84,11 +84,12 @@ class ProductController extends Controller {
 
             if(empty($data)) $data = null;
 
-            return $this->render('AdminBundle:product/new', array(
+            return $this->render('AdminBundle:product/new.twig', array(
                 'category' => $category,
                 'fields' => $fields,
-                'dictionary' => $data
-            ), false);
+                'dictionary' => $data,
+                'type' => new FieldType()
+            ));
 
         } else {
 
@@ -193,12 +194,13 @@ class ProductController extends Controller {
                 }
             }
 
-            return $this->render('AdminBundle:product/edit', array(
+            return $this->render('AdminBundle:product/edit.twig', array(
                 'fields' => $fields,
                 'category' => $category,
                 'product' => $product,
-                'dictionary' => $dictionaryFields
-            ), false);
+                'dictionary' => $dictionaryFields,
+                'type' => new FieldType()
+            ));
         } else {
 
             return $this->redirectToRoute('/admin/login/');
@@ -265,11 +267,11 @@ class ProductController extends Controller {
                 'category' => $category->getId()
             ), 100);
 
-            return $this->render('AdminBundle:product/show', array(
+            return $this->render('AdminBundle:product/show.twig', array(
                 'category' => $category,
                 'ctype' => $ctype,
                 'products' => $products
-            ), false);
+            ));
 
         } else {
 

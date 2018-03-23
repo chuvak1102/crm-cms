@@ -14,4 +14,16 @@ class FieldType
     const DATE = 9;
     const DATETIME = 10;
     const DICTIONARY = 11;
+
+    function text(){return self::TEXT;}
+    function textarea(){return self::TEXT_AREA;}
+    function file(){return self::FILE;}
+    function check(){return self::CHECK;}
+    function select(){return self::SELECT;}
+    function hidden(){return self::HIDDEN;}
+    function password(){return self::PASSWORD;}
+    function list(){return self::LIST;}
+    function date(){return self::DATE;}
+    function datetime(){return self::DATETIME;}
+    function dictionary(){return self::DICTIONARY;}
 }

@@ -1,3 +1,6 @@
+<?use AdminBundle\Entity\Log;?>
+<?/* @var $i Log */?>
+
 <h1>#Лог приложения</h1>
 
 <div class="cont">

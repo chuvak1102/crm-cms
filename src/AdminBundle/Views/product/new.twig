@@ -1,0 +1,48 @@
+<h1>#Добавить материал в {{ category.name }}</h1>
+
+<div class="cont">
+    <div class="mat">
+        {% if fields is not empty %}
+            <div class="form">
+                <form action="/admin/product/save/{{ category.id }}" method="post" enctype="multipart/form-data">
+                    {% for i in fields if i.alias != 'category' %}
+                        {% set alias = i.alias %}
+                        <p>{{ i.canonical }}</p>
+
+                        {% if i.fieldtype == type.text() %}
+                            <input type="text" name="{{ alias }}">
+                        {% elseif i.fieldtype == type.textarea() %}
+                            <textarea name="{{ alias }}">{{ product[alias] }}</textarea>
+                        {% elseif i.fieldtype == type.file() %}
+                            <input type="file" name="{{ alias }}">
+                        {% elseif i.fieldtype == type.select() %}
+                            {% set opt = i.params | split(';') %}
+                            <select name="{{ alias }}">
+                                {% for j in opt %}
+                                    <option value="{{ j }}">{{ j }}</option>
+                                {% endfor %}
+                            </select>
+                        {% elseif i.fieldtype == type.date() %}
+                            <input type="date" name="{{ alias }}">
+                        {% elseif i.fieldtype == type.datetime() %}
+                            <input type="datetime-local" name="{{ alias }}">
+                        {% elseif i.fieldtype == type.dictionary() %}
+                            <select name="{{ alias }}">
+                                {% set fields = dictionary[alias] %}
+                                {% for j in fields %}
+                                    <option value="{{ j.name }}" >{{ j.name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                        {% endif %}
+                    {% endfor %}
+                    <button data-event="material_save" class="btn" type="button" id="{{ category.id }}">Сохранить</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="form">
+                <h1>Поля не настроены</h1>
+            </div>
+        {% endif %}
+    </div>
+</div>

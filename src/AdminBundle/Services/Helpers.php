@@ -147,7 +147,7 @@ class Helpers {
     public static function getFilesInDir($directory){
         $files = scandir($_SERVER['DOCUMENT_ROOT'].$directory);
         for($i = 0; $i < count($files); $i++){
-            $file = str_replace('.php', '', $files[$i]);
+            $file = $files[$i];
             if($file == '..' || $file == '.'){
                 unset($file);
             } else {

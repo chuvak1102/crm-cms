@@ -1,3 +1,8 @@
+<?use AdminBundle\Entity\Dictionary;?>
+<?use AdminBundle\Entity\FieldTypes;?>
+<?/* @var $i Dictionary */?>
+<?/* @var $j FieldTypes */?>
+
 <h1>#Словари</h1>
 
 <div class="cont">

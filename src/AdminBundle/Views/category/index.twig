@@ -1,0 +1,44 @@
+<h1>#Структура контента</h1>
+
+<div class="cont">
+    {% if category is not empty %}
+        {% for i in category %}
+            <div class="tree">
+                <div class="tree-single">
+                    <div class="img"><img src="/web/files/{{ i.image }}" alt=""></div>
+                    <div class="info">
+                        <span>ID: {{ i.id }}</span>
+                        <span>Уровень: {{ i.Lvl }}</span>
+                    </div>
+                    <div class="desc">{{ i.name }}</div>
+                </div>
+                <div class="tree-single">
+                    {% if i.id == 1 %}
+                        <button data-event="category_new" type="button" id="{{ i.id }}_new">ДОБАВИТЬ ПОДРАЗДЕЛ</button>
+                    {% else %}
+                        <button data-event="category_new" type="button" id="{{ i.id }}_new">ДОБАВИТЬ ПОДРАЗДЕЛ</button>
+                        {% if i.Lvl == 1 and i.setup != 1 %}
+                            <button data-event="category_setup" type="button" id="{{ i.id }}_setup">НАСТРОЙКА ПОЛЕЙ</button>
+                        {% endif %}
+                        <button data-event="category_edit" type="button" id="{{ i.id }}_edit">ПРАВКА</button>
+                        <button data-event="category_remove" type="button" id="{{ i.id }}_remove">УДАЛИТЬ</button>
+                    {% endif %}
+                </div>
+                <div class="tree-single">
+                    <p>Создано: {{ i.created | date('d-m-Y H:i') }}</p>
+                    <p>Шаблон: {{ i.template }}</p>
+                    <p>Активно: Да</p>
+                    <p>URL: {{ i.url }}</p>
+                    <p>Описание: {{ i.description }}</p>
+                </div>
+
+                {% if i.setup == 0 and i.Lvl == 1 %}
+                    <div class="cat-tri" style="left: {{ i.Lvl }}*30px; border-top: 30px solid #ED413D"></div>
+                {% else %}
+                    <div class="cat-tri" style="left: {{ i.Lvl }}*30px"></div>
+                {% endif %}
+                <div class="clear"></div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

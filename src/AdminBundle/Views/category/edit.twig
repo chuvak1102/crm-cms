@@ -1,0 +1,37 @@
+<h1>#Редактировать раздел "{{ category.name }}"</h1>
+
+<div class="cont">
+    <div class="save_category">
+        <div class="lft">
+            <input type="text" name="name" placeholder="Название" value="{% if category.name is not empty %} {{ category.name }} {% endif %}">
+            <input type="text" name="alias" placeholder="Алиас(авто)" value="{% if category.alias is not empty %} {{ category.alias }} {% endif %}">
+            <select name="template" id="">
+                <option value="">Шаблон</option>
+                {% for i in templates %}
+                    {% if category.template == i %}
+                        <option selected value="{{ i }}">{{ i }}</option>
+                    {% else %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input type="text" name="image" placeholder="Изображение">
+            <textarea name="description" id="" cols="30" rows="10" placeholder="Описание"></textarea>
+            <button data-event="category_edit_save" type="button" class="btn" id="{{ category.id }}_category_edit_save">Сохранить</button>
+        </div>
+        <div class="rgt">
+            <ul>
+                {% if tree is not empty %}
+                    {% for i in tree %}
+                        {% if i.id == category.id %}
+                            <li style="padding-left: {{ i.Lvl * 20 }}px">{{ i.alias }}</li>
+                            <li class="green" style="padding-left: {{ i.Lvl * 20 + 20 }}px">placeholder</li>
+                        {% else %}
+                            <li style="padding-left: {{ i.Lvl * 20 }}px">{{ i.alias }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

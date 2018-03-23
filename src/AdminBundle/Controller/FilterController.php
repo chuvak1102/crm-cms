@@ -20,7 +20,7 @@ class FilterController extends Controller
         {
             $lRepo = $this->getORM()->getRepository(Log::class);
 
-            return $this->render('AdminBundle:filter/index', array(
+            return $this->render('AdminBundle:filter/index.twig', array(
                 'log' => $lRepo->findAll()
             ), false);
 

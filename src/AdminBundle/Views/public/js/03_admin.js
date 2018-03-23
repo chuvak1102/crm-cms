@@ -532,7 +532,7 @@ $(document).ready(function()
                 },
 
                 remove_entry : {
-                    
+
                     mouseup : function(e){
                         app.thisScreen("/admin/dictionary/remove_entry/" + $(e.target).attr("id"));
                     }

@@ -1,7 +1,11 @@
+<?use AdminBundle\Entity\Category;?>
+<?/* @var $i Category */?>
+<?$category = $data['category']?>
+
 <h1>#Структура контента</h1>
 
-<?if(!empty($data['category'])){?>
-    <?foreach($data['category'] as $i){?>
+<?if(!empty($category)){?>
+    <?foreach($category as $i){?>
         <div class="tree">
             <div class="tree-single">
                 <div class="img"><img src="/web/files/<?=$i->getImage()?>" alt=""></div>

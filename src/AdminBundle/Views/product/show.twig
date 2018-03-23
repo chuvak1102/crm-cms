@@ -1,0 +1,24 @@
+<h1>#Материалы в разделе: {{ category.name }}</h1>
+
+<div class="cont">
+    <div class="mat">
+        <table>
+            {% if products is not empty %}
+                {% for i in products %}
+                    <tr>
+                        <td>{{ i.name }}( <span>id {{ i.id }}</span> )</td>
+                        <td>
+                            <button type="button" class="btn" data-event="material_edit" id="{{ i.category }}_{{ i.id }}">РЕДАКТИРОВАТЬ</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn" data-event="material_delete" id="{{ i.category }}_{{ i.id }}">УДАЛИТЬ</button>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</div>
