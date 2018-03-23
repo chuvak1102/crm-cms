@@ -55,7 +55,7 @@ class CategoryController extends Controller
 
             return $this->render('AdminBundle:category/index.twig', array(
                 'category' => $result
-            ), false);
+            ));
 
         } else {
 
@@ -272,7 +272,7 @@ class CategoryController extends Controller
                 $values = $request->get('params')[$k];
 
                 $fields[] = array(
-                    'type' => $fieldType,
+                    'type' => $dataType,
                     'DataType' => $dataType,
                     'fieldtype' => $fieldType,
                     'canonical' => $canonical,
@@ -293,7 +293,7 @@ class CategoryController extends Controller
                 {
                     $fieldSet = new FieldSet();
                     $fieldSet->setCategory($category->getId());
-                    $fieldSet->setType($singleSet['type']);
+                    $fieldSet->setType($singleSet['DataType']);
                     $fieldSet->setFieldType($singleSet['fieldtype']);
                     $fieldSet->setAlias($singleSet['alias']);
                     $fieldSet->setCanonical($singleSet['canonical']);
