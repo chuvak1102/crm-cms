@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/src/AdminBundle/Views/public/css/styles.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script src="/src/AdminBundle/Views/public/js/01_jquery.js"></script>
-    <script src="/src/AdminBundle/Views/public/js/02_jquery-form.js"></script>
+<!--    <script src="/src/AdminBundle/Views/public/js/02_jquery-form.js"></script>-->
 </head>
 <body>
 <div class="container">

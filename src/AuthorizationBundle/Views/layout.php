@@ -1,6 +1,4 @@
-<?php
-use Framework\App;
-?>
+
     <!doctype html>
     <html lang="en">
     <head>
@@ -14,12 +12,5 @@ use Framework\App;
     </head>
     <body>
 
-
-
-<?
-
-include App::$template;
-
-?>
     </body>
 </html>

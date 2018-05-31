@@ -54,7 +54,7 @@ class DefaultController extends Controller{
             }
         }
 
-        return $this->render('AuthorizationBundle:login');
+        return $this->render('AuthorizationBundle:login.php');
     }
 
     /**
@@ -71,6 +71,6 @@ class DefaultController extends Controller{
      */
     function disabledAction()
     {
-        return $this->render('AdminBundle:disabled', null, false);
+        return $this->render('AdminBundle:disabled.php');
     }
 }

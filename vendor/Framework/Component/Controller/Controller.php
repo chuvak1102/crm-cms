@@ -59,7 +59,7 @@ class Controller {
             if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/app'.'/'.'Views'.'/'.$source.'/'.$path))
             {
 
-                throw new \Exception('Template '.$path.' not found in app/views/default or src/bundle/views');
+                error('Template app/Views/default/'.$path.' or '.$source.'/Views/'.$path.' not found!');
             } else {
 
                 $appDir = new Twig_Loader_Filesystem($_SERVER['DOCUMENT_ROOT'].'/app/Views/'.$source);

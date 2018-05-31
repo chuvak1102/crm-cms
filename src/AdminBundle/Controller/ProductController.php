@@ -198,7 +198,7 @@ class ProductController extends Controller {
                 'fields' => $fields,
                 'category' => $category,
                 'product' => $product,
-                'dictionary' => $dictionaryFields,
+                'dictionary' => empty($dictionaryFields) ? null : $dictionaryFields,
                 'type' => new FieldType()
             ));
         } else {

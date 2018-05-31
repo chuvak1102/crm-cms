@@ -11,7 +11,7 @@ $(document).ready(function()
         menuNavHeight : 8,
         animationSpeed : 340,
         spinnerDelay : 1000,
-        debug : true,
+        debug : false,
         map : {},
         data : {},
 
@@ -367,30 +367,30 @@ $(document).ready(function()
     };
 
 // check clicked element for some assigned action
-    $(document).mouseup(function(e)
-    {
-        if($(e.target).data("event") !== undefined)
-        {
-            let controller = window.app.map[window.app.page.current].actions;
-            let action = $(e.target).data("event");
-            let callback = e.type;
-
-            if(typeof controller[action] === "object")
-            {
-                if(typeof controller[action][callback] === "function")
-                {
-                    controller[action][callback](e);
-
-                } else {
-
-                    console.error($(e.target).data('event') + ': no callback function assigned!')
-                }
-            } else {
-
-                console.error('Action ' + action + ' does not exist!')
-            }
-        }
-    });
+//     $(document).mouseup(function(e)
+//     {
+//         if($(e.target).data("event") !== undefined)
+//         {
+//             let controller = window.app.map[window.app.page.current].actions;
+//             let action = $(e.target).data("event");
+//             let callback = e.type;
+//
+//             if(typeof controller[action] === "object")
+//             {
+//                 if(typeof controller[action][callback] === "function")
+//                 {
+//                     controller[action][callback](e);
+//
+//                 } else {
+//
+//                     console.error($(e.target).data('event') + ': no callback function assigned!')
+//                 }
+//             } else {
+//
+//                 console.error('Action ' + action + ' does not exist!')
+//             }
+//         }
+//     });
 
     // opening and closing menu pages
     $('table#menu tr td').mouseup(function()
@@ -439,5 +439,40 @@ $(document).ready(function()
             }, window.app.animationSpeed);
         }
     });
+
+    // event processor
+    function initializeEvent(e){
+        if($(e.target).data("event") !== undefined)
+        {
+            let controller = window.app.map[window.app.page.current].actions;
+            let action = $(e.target).data("event");
+            let callback = e.type;
+
+            if(typeof controller[action] === "object")
+            {
+                if(typeof controller[action][callback] === "function")
+                {
+
+                    controller[action][callback](e);
+                } else {
+
+                    // console.warn("event: " + callback + ", handler: none");
+                }
+            } else {
+
+                // console.warn("event: " + callback + ", handler: none");
+            }
+        }
+    }
+
+    // set allowed event types
+    $(document).mousemove(function(e){initializeEvent(e);});
+    $(document).mousedown(function(e){initializeEvent(e);});
+    $(document).mouseup(function(e){initializeEvent(e);});
+    $(document).mouseout(function(e){initializeEvent(e);});
+
+    $(document).keydown(function(e){initializeEvent(e);});
+    $(document).keypress(function(e){initializeEvent(e);});
+    $(document).keyup(function(e){initializeEvent(e);});
 
 });

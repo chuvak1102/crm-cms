@@ -46,8 +46,8 @@ class FIASController extends Controller
      */
     public function cityAction(MySql $mySql, Request $request)
     {
-        if(Authorization::isConfirmed())
-        {
+//        if(Authorization::isConfirmed())
+//        {
             $query = urldecode($request->get('query'));
             $query = Helpers::sqlSanitize($query);
 
@@ -84,10 +84,10 @@ class FIASController extends Controller
                 return new JsonResponse(array());
             }
 
-        } else {
+//        } else {
 
-            return $this->redirectToRoute('/admin/login/');
-        }
+//            return $this->redirectToRoute('/admin/login/');
+//        }
     }
 
     /**
@@ -99,7 +99,7 @@ class FIASController extends Controller
         $street = urldecode($request->get('query'));
         $city = Helpers::sqlSanitize($city);
         $street = Helpers::sqlSanitize($street);
-        
+
         $streets = $mySql->call('fias_get_street', array(
             $city, $street
         ));

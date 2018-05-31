@@ -11,11 +11,17 @@ $(document).ready(function()
 
                 category_new : {
 
-                    mouseup : function(e){
+                    mouseup : function(e) {
 
-                        console.log("/admin/category/new/" + parseInt($(e.target).attr('id')));
                         app.nextScreen("/admin/category/new/" + parseInt($(e.target).attr('id')));
                     }
+                },
+
+
+                // may be new syntax
+                category_new2(e){
+
+                    app.nextScreen.render("templateName", data);
                 },
 
                 category_save : {
@@ -659,8 +665,136 @@ $(document).ready(function()
         },
         "p_4_5" : {
             icon : "fas fa-battery-half",
-            url : "/admin/disabled/",
-            color : ""
+            url : "/admin/detector/",
+            color : "",
+            actions: {
+
+                draw : {
+
+                    mouseup: function(e){
+                        app.data.lock = false;
+                    },
+
+                    mousemove : function(e){
+
+                        let canvas = document.getElementById('in');
+                        let context = canvas.getContext('2d');
+                        let axis = canvas.getBoundingClientRect();
+
+                        function x(e){return (e.clientX - +axis.x)}
+                        function y(e){return (e.clientY - +axis.y)}
+
+                        if(app.data.lock && app.data.lock === true){
+                            context.fillStyle="#444";
+                            context.fillRect(x(e), y(e), 10, 10);
+                        }
+                    },
+
+                    mousedown : function(e){
+                        app.data.lock = true;
+                    },
+
+                    mouseout : function(e){
+                        app.data.lock = false;
+                    },
+                },
+
+                clear : {
+
+                    mouseup : function(e){
+
+                        const c = document.getElementById('in');
+                        const c1 = c.getContext('2d');
+                        const d = document.getElementById('out');
+                        const d1 = d.getContext('2d');
+
+                        d1.clearRect(0, 0, d.width, d.height);
+                        c1.clearRect(0, 0, c.width, c.height);
+                    }
+                },
+
+                trans : {
+                    mouseup : function(){
+
+                        const canvas = document.getElementById('in');
+                        const context = canvas.getContext('2d');
+                        console.log("begin analyze");
+
+                        function scan(a, b){
+
+                            let s = 0;
+
+                            for(let y = b; y < b + 30; y++){
+                                for(let x = a; x < a + 30; x++){
+                                    p = context.getImageData(x, y, 1, 1).data;
+                                    s = s + p[0] + p[1] + p[2];
+                                }
+                            }
+
+                            return s;
+                        }
+
+                        let out = [];
+                        let row = [];
+                        for(let y = 0; y < 300; y++){
+                            for(let x = 0; x < 300; x++){
+
+                                if(x % 30 === 0 && y % 30 === 0){
+
+                                    let s = scan(x, y);
+
+                                    if(s > 0){
+
+                                        row.push(1);
+                                    } else {
+
+                                        row.push(0);
+                                    }
+
+
+                                }
+
+                            }
+
+                            if(y % 30 === 0){
+
+                                console.log("append new row");
+                                out.push(row);
+                                row = [];
+                            }
+                        }
+
+                        console.log(out);
+
+                        // out
+                        const res = document.getElementById('out');
+                        const resctx = res.getContext('2d');
+                        context.fillStyle="#444";
+
+                        for(let x = 0; x < out.length; x++){
+
+                            for(let y = 0; y < out.length; y++){
+
+                                if(out[x][y] === 1){
+                                    resctx.fillRect(y * 30, x * 30, 30, 30);
+                                } else {
+
+                                }
+
+
+
+                            }
+
+                        }
+
+
+                    }
+
+
+                },
+
+
+            }
         }
     };
 });
