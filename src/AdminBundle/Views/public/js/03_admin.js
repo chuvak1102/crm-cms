@@ -711,6 +711,7 @@ $(document).ready(function()
 
                         d1.clearRect(0, 0, d.width, d.height);
                         c1.clearRect(0, 0, c.width, c.height);
+                        $('#result').val("");
                     }
                 },
 
@@ -877,8 +878,6 @@ $(document).ready(function()
                         let MY = (Y1 - Y0) / 10;
                         accuracy = Math.round(((MX * MY) / 100) * accuracy);
 
-
-
                         // build main output matrix
                         let out = [];
                         let row = [];
@@ -904,6 +903,7 @@ $(document).ready(function()
                         // console.log(MX, MY);
                         // console.log(accuracy);
                         console.log(out);
+                        self.send(out);
 
                         // draw out matrix
                         const res = document.getElementById('out');
@@ -918,10 +918,28 @@ $(document).ready(function()
                         }
 
 
+                    },
+
+
+                    send : function(matrix){
+
+                        $.ajax({
+
+                            url : "/admin/detector/send",
+                            data : {matrix : matrix},
+                            method : "POST",
+                            success : function(r){
+                                console.log(JSON.parse(r).matrix);
+                                $('#result').val(JSON.parse(r).matrix);
+                            },
+                            error : function(r){
+                                console.log(r);
+                            }
+
+                        })
+
                     }
                 },
-
-
 
                 yes : {
                     mouseup : function(){
