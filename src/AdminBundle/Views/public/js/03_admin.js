@@ -716,18 +716,31 @@ $(document).ready(function()
                 trans : {
                     mouseup : function(){
 
-                        // const canvas = document.getElementById('in');
                         const context = document.getElementById('in').getContext('2d');
 
                         // some settings
-                        let xSize = 300; // input matrix resolution X
-                        let ySize = 300; // Y
+                        let IX = 300; // input matrix resolution X
+                        let IY = 300; // input matrix resolution Y
+                        let OX = 10; // out matrix x resolution
+                        let OY = 10; // out matrix y resolution
+                        let pixelSize = 30; // pixel size
                         let resolution = 25; // count of pixels per matrix cell we randomly checking
 
-                        // input resolution 300x300
-                        // first, cut empty rows for resize out matrix
+                        // first, cut empty rows for scaling matrix
+                        // left and right
+                        for(let i = 0; i < OX; i++){
+                            for(let j = 0; j < OY; j++){
 
-                        // left
+                            }
+                        }
+
+
+
+
+
+                        // determine new matrix resolution
+                        // ...
+
 
 
 
@@ -735,7 +748,6 @@ $(document).ready(function()
 
                         // scan single point in 1 matrix pixel
                         function scan(a, b){
-
                             let s = 0; // main sum
                             let sMax = 204; // maximum color sum per pixel
                             let maxSum = sMax * resolution; // max color sum per matrix pixel
@@ -743,29 +755,22 @@ $(document).ready(function()
 
                             // find max sum per matrix pixel
                             for(let i = 0; i < resolution; i++){
-                                let x = rand(a, a + 30);
-                                let y = rand(b, b + 30);
-
+                                let x = rand(a, a + pixelSize);
+                                let y = rand(b, b + pixelSize);
                                 p = context.getImageData(x, y, 1, 1).data;
                                 s = s + p[0] + p[1] + p[2];
                             }
 
-                            // console.log((s / maxSum));
-
-                            if( (s / maxSum) < accuracy){
-                                return 0;
-                            }
-
-                            return 1;
+                            if( (s / maxSum) < accuracy){return 0;} else {return 1;}
                         }
 
                         // build main output matrix
                         let out = [];
                         let row = [];
-                        for(let y = 0; y < ySize; y++){
-                            for(let x = 0; x < xSize; x++){
+                        for(let y = 0; y < IY; y++){
+                            for(let x = 0; x < IX; x++){
 
-                                if(x % 30 === 0 && y % 30 === 0){
+                                if(x % pixelSize === 0 && y % pixelSize === 0){
 
                                     let s = scan(x, y);
 
@@ -779,7 +784,7 @@ $(document).ready(function()
                                 }
                             }
 
-                            if(y % 30 === 0){
+                            if(y % pixelSize === 0){
 
                                 console.log("append new row");
                                 out.push(row);
@@ -799,7 +804,7 @@ $(document).ready(function()
                             for(let y = 0; y < out.length; y++){
 
                                 if(out[x][y] === 1){
-                                    resctx.fillRect(y * 30, x * 30, 30, 30);
+                                    resctx.fillRect(y * pixelSize, x * pixelSize, pixelSize, pixelSize);
                                 }
                             }
                         }
