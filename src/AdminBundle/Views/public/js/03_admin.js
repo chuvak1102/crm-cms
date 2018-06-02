@@ -686,7 +686,7 @@ $(document).ready(function()
 
                         if(app.data.lock && app.data.lock === true){
                             context.fillStyle="#444";
-                            context.fillRect(x(e), y(e), 10, 10);
+                            context.fillRect(x(e), y(e), 25, 25);
                         }
                     },
 
@@ -716,28 +716,54 @@ $(document).ready(function()
                 trans : {
                     mouseup : function(){
 
-                        const canvas = document.getElementById('in');
-                        const context = canvas.getContext('2d');
-                        console.log("begin analyze");
+                        // const canvas = document.getElementById('in');
+                        const context = document.getElementById('in').getContext('2d');
 
+                        // some settings
+                        let xSize = 300; // input matrix resolution X
+                        let ySize = 300; // Y
+                        let resolution = 25; // count of pixels per matrix cell we randomly checking
+
+                        // input resolution 300x300
+                        // first, cut empty rows for resize out matrix
+
+                        // left
+
+
+
+
+
+                        // scan single point in 1 matrix pixel
                         function scan(a, b){
 
-                            let s = 0;
+                            let s = 0; // main sum
+                            let sMax = 204; // maximum color sum per pixel
+                            let maxSum = sMax * resolution; // max color sum per matrix pixel
+                            let accuracy = 0.45; // border value
 
-                            for(let y = b; y < b + 30; y++){
-                                for(let x = a; x < a + 30; x++){
-                                    p = context.getImageData(x, y, 1, 1).data;
-                                    s = s + p[0] + p[1] + p[2];
-                                }
+                            // find max sum per matrix pixel
+                            for(let i = 0; i < resolution; i++){
+                                let x = rand(a, a + 30);
+                                let y = rand(b, b + 30);
+
+                                p = context.getImageData(x, y, 1, 1).data;
+                                s = s + p[0] + p[1] + p[2];
                             }
 
-                            return s;
+                            // console.log((s / maxSum));
+
+                            if( (s / maxSum) < accuracy){
+                                return 0;
+                            }
+
+                            return 1;
                         }
 
+                        // build main output matrix
                         let out = [];
                         let row = [];
-                        for(let y = 0; y < 300; y++){
-                            for(let x = 0; x < 300; x++){
+                        for(let y = 0; y < ySize; y++){
+                            for(let x = 0; x < xSize; x++){
 
                                 if(x % 30 === 0 && y % 30 === 0){
 
@@ -750,10 +776,7 @@ $(document).ready(function()
 
                                         row.push(0);
                                     }
-
-
                                 }
-
                             }
 
                             if(y % 30 === 0){
@@ -766,7 +789,7 @@ $(document).ready(function()
 
                         console.log(out);
 
-                        // out
+                        // draw out matrix
                         const res = document.getElementById('out');
                         const resctx = res.getContext('2d');
                         context.fillStyle="#444";
@@ -777,23 +800,15 @@ $(document).ready(function()
 
                                 if(out[x][y] === 1){
                                     resctx.fillRect(y * 30, x * 30, 30, 30);
-                                } else {
-
                                 }
-
-
-
                             }
-
                         }
 
-
+                        function rand(a, b){
+                            return Math.ceil(Math.random() * (b - a) + a)
+                        }
                     }
-
-
                 },
-
-
             }
         }
     };
