@@ -12,7 +12,7 @@ RewriteEngine On
 
 <Files ~ "^\.htaccess">
   Order allow,deny
-  Deny from all
+#  Deny from all
 </Files>
 
 RewriteCond %{HTTP_REFERER} !^http://(www\.)?localhost [NC]

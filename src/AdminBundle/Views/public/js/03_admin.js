@@ -680,13 +680,14 @@ $(document).ready(function()
                         let canvas = document.getElementById('in');
                         let context = canvas.getContext('2d');
                         let axis = canvas.getBoundingClientRect();
+                        let brush = 26;
 
-                        function x(e){return (e.clientX - +axis.x)}
-                        function y(e){return (e.clientY - +axis.y)}
+                        function x(e){return (e.clientX - +axis.x - brush/2)}
+                        function y(e){return (e.clientY - +axis.y - brush/2)}
 
                         if(app.data.lock && app.data.lock === true){
                             context.fillStyle="#444";
-                            context.fillRect(x(e), y(e), 25, 25);
+                            context.fillRect(x(e), y(e), brush, brush);
                         }
                     },
 
@@ -714,106 +715,227 @@ $(document).ready(function()
                 },
 
                 trans : {
+
+                    scan : function(a, b, pixelA = 30, pixelB = 30, resolution = 25, returnObj = false){
+
+                        let s = 0; // main sum
+
+                        let sMax = 204; // maximum color sum per pixel
+                        let maxSum = sMax * resolution; // max color sum per matrix pixel
+                        let accuracy = 0.45; // border value;
+                        const canvas = document.getElementById('in').getContext('2d');
+
+                        // find max sum per matrix pixel
+                        for(let i = 0; i < resolution; i++){
+                            let x = rand(a, a + pixelA);
+                            let y = rand(b, b + pixelB);
+                            let p = canvas.getImageData(x, y, 1, 1).data;
+                            s = s + p[0] + p[1] + p[2];
+
+                        }
+
+                        function rand(a, b){
+                            return Math.ceil(Math.random() * (b - a) + a)
+                        }
+
+                        return (s / maxSum) < accuracy ? 0 : 1;
+                    },
+
+                    scanPoint : function(x, y){
+                        const canvas = document.getElementById('in').getContext('2d');
+                        let p = canvas.getImageData(x, y, 1, 1).data;
+                        return p[0] + p[1] + p[2] > 0 ? 1 : 0;
+                    },
+
+                    offset : function(direction, IX, IY, pixelSize){
+
+                        const self = this;
+                        let rowSum = 0;
+
+                        switch (direction) {
+                            case "left" : {
+                                for(let x = 0; x < IX; x++){
+                                    for(let y = 0; y < IY; y++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize, true);
+                                            if(s === 0){
+                                                if(y === IY - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+
+                                                // for(let c = x; c < x + pixelSize; c++){
+                                                //     let su = self.scanPoint(c, y + Math.round(pixelSize / 2));
+                                                //     if(su > 0) {
+                                                //
+                                                //         return c;
+                                                //     }
+                                                // }
+
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "right" : {
+                                for(let x = IX - pixelSize; x > 0; x--){
+                                    for(let y = 0; y < IY; y++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(y === IY - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "top" : {
+
+                                for(let y = 0; y < IY; y++){
+                                    for(let x = 0; x < IX; x++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(x === IX - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "bottom" : {
+
+                                for(let y = IY - pixelSize; y > 0; y--){
+                                    for(let x = 0; x < IX; x++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(x === IX - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            default : break;
+                        }
+
+                    },
+
                     mouseup : function(){
 
                         const context = document.getElementById('in').getContext('2d');
+                        const self = this;
 
                         // some settings
                         let IX = 300; // input matrix resolution X
                         let IY = 300; // input matrix resolution Y
                         let OX = 10; // out matrix x resolution
                         let OY = 10; // out matrix y resolution
+                        let OL = 0; // new resolution offset left
+                        let OR = 0; // new resolution offset right
+                        let OB = 0; // new resolution offset bottom
+                        let OT = 0; // new resolution offset top
                         let pixelSize = 30; // pixel size
-                        let resolution = 25; // count of pixels per matrix cell we randomly checking
+                        let accuracy = 2.5; // % of pixels per matrix cell we randomly checking
 
                         // first, cut empty rows for scaling matrix
-                        // left and right
-                        for(let i = 0; i < OX; i++){
-                            for(let j = 0; j < OY; j++){
-
-                            }
-                        }
-
-
-
-
+                        OL = self.offset("left", IX, IY, pixelSize);
+                        OR = self.offset("right", IX, IY, pixelSize);
+                        OT = self.offset("top", IX, IY, pixelSize);
+                        OB = self.offset("bottom", IX, IY, pixelSize);
 
                         // determine new matrix resolution
-                        // ...
+                        let X0 = OL * pixelSize;
+                        let X1 = IX - OR * pixelSize;
+                        let Y0 = OT * pixelSize;
+                        let Y1 = IY - OB * pixelSize;
+                        let MX = (X1 - X0) / 10;
+                        let MY = (Y1 - Y0) / 10;
+                        accuracy = Math.round(((MX * MY) / 100) * accuracy);
 
 
-
-
-
-
-                        // scan single point in 1 matrix pixel
-                        function scan(a, b){
-                            let s = 0; // main sum
-                            let sMax = 204; // maximum color sum per pixel
-                            let maxSum = sMax * resolution; // max color sum per matrix pixel
-                            let accuracy = 0.45; // border value
-
-                            // find max sum per matrix pixel
-                            for(let i = 0; i < resolution; i++){
-                                let x = rand(a, a + pixelSize);
-                                let y = rand(b, b + pixelSize);
-                                p = context.getImageData(x, y, 1, 1).data;
-                                s = s + p[0] + p[1] + p[2];
-                            }
-
-                            if( (s / maxSum) < accuracy){return 0;} else {return 1;}
-                        }
 
                         // build main output matrix
                         let out = [];
                         let row = [];
-                        for(let y = 0; y < IY; y++){
-                            for(let x = 0; x < IX; x++){
-
-                                if(x % pixelSize === 0 && y % pixelSize === 0){
-
-                                    let s = scan(x, y);
-
+                        let cnt = 0;
+                        for(let y = Y0; y < Y1; y++){
+                            for(let x = X0; x < X1; x++){
+                                if(x % MX === 0 && y % MY === 0){
+                                    let s = self.scan(x, y, MX, MY, accuracy);
                                     if(s > 0){
-
                                         row.push(1);
                                     } else {
-
                                         row.push(0);
                                     }
                                 }
                             }
-
-                            if(y % pixelSize === 0){
-
-                                console.log("append new row");
+                            if(y % MY === 0){
                                 out.push(row);
                                 row = [];
                             }
                         }
 
+                        // console.log(OT, OR, OB, OL);
+                        // console.log(MX, MY);
+                        // console.log(accuracy);
                         console.log(out);
 
                         // draw out matrix
                         const res = document.getElementById('out');
                         const resctx = res.getContext('2d');
                         context.fillStyle="#444";
-
                         for(let x = 0; x < out.length; x++){
-
                             for(let y = 0; y < out.length; y++){
-
                                 if(out[x][y] === 1){
                                     resctx.fillRect(y * pixelSize, x * pixelSize, pixelSize, pixelSize);
                                 }
                             }
                         }
 
-                        function rand(a, b){
-                            return Math.ceil(Math.random() * (b - a) + a)
-                        }
+
                     }
                 },
+
+
+
+                yes : {
+                    mouseup : function(){
+                        console.log("yes");
+                    }
+                },
+
+                no : {
+                    mouseup : function(){
+                        console.log("no");
+                    }
+                }
+
+
             }
         }
     };
