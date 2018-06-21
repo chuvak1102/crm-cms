@@ -542,7 +542,6 @@ $(document).ready(function()
                     mouseup : function(e){
                         app.thisScreen("/admin/dictionary/remove_entry/" + $(e.target).attr("id"));
                     }
-
                 }
             }
         },
@@ -659,13 +658,8 @@ $(document).ready(function()
             color : ""
         },
         "p_4_4" : {
-            icon : "fa fa-calendar",
-            url : "/admin/disabled/",
-            color : ""
-        },
-        "p_4_5" : {
-            icon : "fas fa-battery-half",
-            url : "/admin/detector/",
+            icon : "fab fa-amilia",
+            url : "/admin/rus/",
             color : "",
             actions: {
 
@@ -680,7 +674,7 @@ $(document).ready(function()
                         let canvas = document.getElementById('in');
                         let context = canvas.getContext('2d');
                         let axis = canvas.getBoundingClientRect();
-                        let brush = 26;
+                        let brush = 26; // 26
 
                         function x(e){return (e.clientX - +axis.x - brush/2)}
                         function y(e){return (e.clientY - +axis.y - brush/2)}
@@ -711,7 +705,7 @@ $(document).ready(function()
 
                         d1.clearRect(0, 0, d.width, d.height);
                         c1.clearRect(0, 0, c.width, c.height);
-                        $('#result').val("");
+                        // $('#result').val("");
                     }
                 },
 
@@ -723,7 +717,7 @@ $(document).ready(function()
 
                         let sMax = 204; // maximum color sum per pixel
                         let maxSum = sMax * resolution; // max color sum per matrix pixel
-                        let accuracy = 0.45; // border value;
+                        let accuracy = 0.40; // border value;
                         const canvas = document.getElementById('in').getContext('2d');
 
                         // find max sum per matrix pixel
@@ -740,12 +734,6 @@ $(document).ready(function()
                         }
 
                         return (s / maxSum) < accuracy ? 0 : 1;
-                    },
-
-                    scanPoint : function(x, y){
-                        const canvas = document.getElementById('in').getContext('2d');
-                        let p = canvas.getImageData(x, y, 1, 1).data;
-                        return p[0] + p[1] + p[2] > 0 ? 1 : 0;
                     },
 
                     offset : function(direction, IX, IY, pixelSize){
@@ -861,7 +849,7 @@ $(document).ready(function()
                         let OB = 0; // new resolution offset bottom
                         let OT = 0; // new resolution offset top
                         let pixelSize = 30; // pixel size
-                        let accuracy = 2.5; // % of pixels per matrix cell we randomly checking
+                        let accuracy = 10; // % of pixels per matrix cell we randomly checking
 
                         // first, cut empty rows for scaling matrix
                         OL = self.offset("left", IX, IY, pixelSize);
@@ -904,6 +892,7 @@ $(document).ready(function()
                         // console.log(accuracy);
                         console.log(out);
                         self.send(out);
+                        app.data.matrix = out;
 
                         // draw out matrix
                         const res = document.getElementById('out');
@@ -916,8 +905,6 @@ $(document).ready(function()
                                 }
                             }
                         }
-
-
                     },
 
 
@@ -925,12 +912,29 @@ $(document).ready(function()
 
                         $.ajax({
 
-                            url : "/admin/detector/send",
+                            url : "/admin/rus/send",
                             data : {matrix : matrix},
                             method : "POST",
                             success : function(r){
-                                console.log(JSON.parse(r).matrix);
-                                $('#result').val(JSON.parse(r).matrix);
+                                console.log((r));
+                                app.data.number = JSON.parse(r).matrix.val;
+
+                                let char = "...";
+
+                                switch (app.data.number){
+                                    case 11 :
+                                        char = 'Й';
+                                        break;
+                                    case 21 :
+                                        char = 'У';
+                                        break;
+                                    case 23 :
+                                        char = 'Х';
+                                        break;
+                                }
+
+
+                                $('#result').val($('#result').val() + "" + char);
                             },
                             error : function(r){
                                 console.log(r);
@@ -943,17 +947,368 @@ $(document).ready(function()
 
                 yes : {
                     mouseup : function(){
-                        console.log("yes");
+
+                        $.ajax({
+
+                            url : "/admin/rus/yes",
+                            data : {
+                                matrix : app.data.matrix,
+                                number : app.data.number
+                            },
+                            method : "POST",
+                            success : function(r){
+                                console.log((r));
+                                // $('#result').val(r);
+                            },
+                            error : function(r){
+                                // console.log(r);
+                            }
+
+                        })
                     }
                 },
 
                 no : {
                     mouseup : function(){
-                        console.log("no");
+
+                        $.ajax({
+
+                            url : "/admin/rus/no",
+                            data : {
+                                matrix : app.data.matrix,
+                                number : encodeURIComponent(app.data.number)
+                            },
+                            method : "POST",
+                            success : function(r){
+                                console.log((r));
+                                // $('#result').val(r);
+                            },
+                            error : function(r){
+                                // console.log(r);
+                            }
+
+                        })
                     }
                 }
+            }
+        },
+        "p_4_5" : {
+            icon : "fas fa-equals",
+            url : "/admin/number/",
+            color : "",
+            actions: {
+
+                draw : {
+
+                    mouseup: function(e){
+                        app.data.lock = false;
+                    },
+
+                    mousemove : function(e){
+
+                        let canvas = document.getElementById('in');
+                        let context = canvas.getContext('2d');
+                        let axis = canvas.getBoundingClientRect();
+                        let brush = 26; // 26
+
+                        function x(e){return (e.clientX - +axis.x - brush/2)}
+                        function y(e){return (e.clientY - +axis.y - brush/2)}
+
+                        if(app.data.lock && app.data.lock === true){
+                            context.fillStyle="#444";
+                            context.fillRect(x(e), y(e), brush, brush);
+                        }
+                    },
+
+                    mousedown : function(e){
+                        app.data.lock = true;
+                    },
+
+                    mouseout : function(e){
+                        app.data.lock = false;
+                    },
+                },
+
+                clear : {
+
+                    mouseup : function(e){
+
+                        const c = document.getElementById('in');
+                        const c1 = c.getContext('2d');
+                        const d = document.getElementById('out');
+                        const d1 = d.getContext('2d');
+
+                        d1.clearRect(0, 0, d.width, d.height);
+                        c1.clearRect(0, 0, c.width, c.height);
+                        // $('#result').val("");
+                    }
+                },
+
+                trans : {
+
+                    scan : function(a, b, pixelA = 30, pixelB = 30, resolution = 25, returnObj = false){
+
+                        let s = 0; // main sum
+
+                        let sMax = 204; // maximum color sum per pixel
+                        let maxSum = sMax * resolution; // max color sum per matrix pixel
+                        let accuracy = 0.40; // border value;
+                        const canvas = document.getElementById('in').getContext('2d');
+
+                        // find max sum per matrix pixel
+                        for(let i = 0; i < resolution; i++){
+                            let x = rand(a, a + pixelA);
+                            let y = rand(b, b + pixelB);
+                            let p = canvas.getImageData(x, y, 1, 1).data;
+                            s = s + p[0] + p[1] + p[2];
+
+                        }
+
+                        function rand(a, b){
+                            return Math.ceil(Math.random() * (b - a) + a)
+                        }
+
+                        return (s / maxSum) < accuracy ? 0 : 1;
+                    },
+
+                    offset : function(direction, IX, IY, pixelSize){
+
+                        const self = this;
+                        let rowSum = 0;
+
+                        switch (direction) {
+                            case "left" : {
+                                for(let x = 0; x < IX; x++){
+                                    for(let y = 0; y < IY; y++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize, true);
+                                            if(s === 0){
+                                                if(y === IY - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+
+                                                // for(let c = x; c < x + pixelSize; c++){
+                                                //     let su = self.scanPoint(c, y + Math.round(pixelSize / 2));
+                                                //     if(su > 0) {
+                                                //
+                                                //         return c;
+                                                //     }
+                                                // }
+
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "right" : {
+                                for(let x = IX - pixelSize; x > 0; x--){
+                                    for(let y = 0; y < IY; y++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(y === IY - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "top" : {
+
+                                for(let y = 0; y < IY; y++){
+                                    for(let x = 0; x < IX; x++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(x === IX - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            case "bottom" : {
+
+                                for(let y = IY - pixelSize; y > 0; y--){
+                                    for(let x = 0; x < IX; x++){
+                                        if(x % pixelSize === 0 && y % pixelSize === 0){
+                                            let s = self.scan(x, y, pixelSize);
+                                            if(s === 0){
+                                                if(x === IX - pixelSize){
+                                                    rowSum++;
+                                                    break;
+                                                }
+                                            } else {
+                                                return rowSum;
+                                            }
+                                        }
+                                    }
+                                }
+                                return 0;
+                            }
+
+                            default : break;
+                        }
+
+                    },
+
+                    mouseup : function(){
+
+                        const context = document.getElementById('in').getContext('2d');
+                        const self = this;
+
+                        // some settings
+                        let IX = 300; // input matrix resolution X
+                        let IY = 300; // input matrix resolution Y
+                        let OX = 10; // out matrix x resolution
+                        let OY = 10; // out matrix y resolution
+                        let OL = 0; // new resolution offset left
+                        let OR = 0; // new resolution offset right
+                        let OB = 0; // new resolution offset bottom
+                        let OT = 0; // new resolution offset top
+                        let pixelSize = 30; // pixel size
+                        let accuracy = 10; // % of pixels per matrix cell we randomly checking
+
+                        // first, cut empty rows for scaling matrix
+                        OL = self.offset("left", IX, IY, pixelSize);
+                        OR = self.offset("right", IX, IY, pixelSize);
+                        OT = self.offset("top", IX, IY, pixelSize);
+                        OB = self.offset("bottom", IX, IY, pixelSize);
+
+                        // determine new matrix resolution
+                        let X0 = OL * pixelSize;
+                        let X1 = IX - OR * pixelSize;
+                        let Y0 = OT * pixelSize;
+                        let Y1 = IY - OB * pixelSize;
+                        let MX = (X1 - X0) / 10;
+                        let MY = (Y1 - Y0) / 10;
+                        accuracy = Math.round(((MX * MY) / 100) * accuracy);
+
+                        // build main output matrix
+                        let out = [];
+                        let row = [];
+                        let cnt = 0;
+                        for(let y = Y0; y < Y1; y++){
+                            for(let x = X0; x < X1; x++){
+                                if(x % MX === 0 && y % MY === 0){
+                                    let s = self.scan(x, y, MX, MY, accuracy);
+                                    if(s > 0){
+                                        row.push(1);
+                                    } else {
+                                        row.push(0);
+                                    }
+                                }
+                            }
+                            if(y % MY === 0){
+                                out.push(row);
+                                row = [];
+                            }
+                        }
+
+                        // console.log(OT, OR, OB, OL);
+                        // console.log(MX, MY);
+                        // console.log(accuracy);
+                        console.log(out);
+                        self.send(out);
+                        app.data.matrix = out;
+
+                        // draw out matrix
+                        const res = document.getElementById('out');
+                        const resctx = res.getContext('2d');
+                        context.fillStyle="#444";
+                        for(let x = 0; x < out.length; x++){
+                            for(let y = 0; y < out.length; y++){
+                                if(out[x][y] === 1){
+                                    resctx.fillRect(y * pixelSize, x * pixelSize, pixelSize, pixelSize);
+                                }
+                            }
+                        }
+                    },
 
 
+                    send : function(matrix){
+
+                        $.ajax({
+
+                            url : "/admin/number/send",
+                            data : {matrix : matrix},
+                            method : "POST",
+                            success : function(r){
+                                console.log((r));
+                                app.data.number = JSON.parse(r).matrix.val;
+                                $('#result').val($('#result').val() + "" + JSON.parse(r).matrix.val);
+                            },
+                            error : function(r){
+                                console.log(r);
+                            }
+
+                        })
+
+                    }
+                },
+
+                yes : {
+                    mouseup : function(){
+
+                        $.ajax({
+
+                            url : "/admin/number/yes",
+                            data : {
+                                matrix : app.data.matrix,
+                                number : app.data.number
+                            },
+                            method : "POST",
+                            success : function(r){
+                                console.log((r));
+                                // $('#result').val(r);
+                            },
+                            error : function(r){
+                                // console.log(r);
+                            }
+
+                        })
+                    }
+                },
+
+                no : {
+                    mouseup : function(){
+
+                        $.ajax({
+
+                            url : "/admin/number/no",
+                            data : {
+                                matrix : app.data.matrix,
+                                number : app.data.number
+                            },
+                            method : "POST",
+                            success : function(r){
+                                console.log((r));
+                                // $('#result').val(r);
+                            },
+                            error : function(r){
+                                // console.log(r);
+                            }
+
+                        })
+                    }
+                }
             }
         }
     };

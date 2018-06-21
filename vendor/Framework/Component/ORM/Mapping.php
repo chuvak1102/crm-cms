@@ -9,7 +9,7 @@ class Mapping
         $classDoc = $class->getDocComment();
         $classDoc = str_replace(['*', ' ', '\'', '"', '/', ')', '\\', '@ORM', 'Table(', '\n', '\r', 'name='], '', $classDoc);
 
-        preg_match('/[a-zA-Z\-\_]+/', $classDoc, $match);
+        preg_match('/[a-zA-Z\-\_0-9]+/', $classDoc, $match);
 
         if(isset($match[0]) && !empty($match[0]))
         {

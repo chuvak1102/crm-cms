@@ -33,9 +33,9 @@
                 </div>
 
                 {% if i.setup == 0 and i.Lvl == 1 %}
-                    <div class="cat-tri" style="left: {{ i.Lvl }}*30px; border-top: 30px solid #ED413D"></div>
+                    <div class="cat-tri" style="left: {{ i.Lvl * 30 }}px; border-top: 30px solid #ED413D"></div>
                 {% else %}
-                    <div class="cat-tri" style="left: {{ i.Lvl }}*30px"></div>
+                    <div class="cat-tri" style="left: {{ i.Lvl * 30 }}px"></div>
                 {% endif %}
                 <div class="clear"></div>
             </div>

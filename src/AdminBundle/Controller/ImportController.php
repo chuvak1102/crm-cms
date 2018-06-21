@@ -77,9 +77,24 @@ class ImportController extends Controller
     {
         if(Authorization::isConfirmed() && $request->isXmlHttpRequest())
         {
-            $em = $this->getORM()->getManager();
+            $orm = $this->getORM();
+            $em = $orm->getManager();
+            $iRepo = $orm->getRepository(ImportFields::class);
+            $uRepo = $orm->getRepository(ImportUpdate::class);
+            $fields = $iRepo->findBy(array('import' => $import->getId()));
+            $update = $uRepo->findBy(array('import' => $import->getId()));
+
+            foreach($fields as $f){
+                $em->remove($f);
+            }
+
+            foreach($update as $u){
+                $em->remove($u);
+            }
+
             $em->remove($import);
             $em->flush();
+
 
             return $this->redirectToRoute('/admin/import/');
 

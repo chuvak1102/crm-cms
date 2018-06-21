@@ -22,10 +22,10 @@
                 {% if tree is not empty %}
                     {% for i in tree %}
                         {% if i.id == category.id %}
-                            <li style="padding-left: {{ i.Lvl * 20 }}px">{{ i.alias }}</li>
-                            <li class="green" style="padding-left: {{ i.Lvl * 20 + 20 }}px">placeholder</li>
+                            <li style="padding-left: {{ i.level * 20 }}px">{{ i.alias }}</li>
+                            <li class="green" style="padding-left: {{ i.level * 20 + 20 }}px">placeholder</li>
                         {% else %}
-                            <li style="padding-left: {{ i.Lvl * 20 }}px">{{ i.alias }}</li>
+                            <li style="padding-left: {{ i.level * 20 }}px">{{ i.alias }}</li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -33,3 +33,5 @@
         </div>
     </div>
 </div>
+
+{{ dump() }}
