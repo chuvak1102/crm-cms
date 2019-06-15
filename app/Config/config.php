@@ -14,10 +14,10 @@ class Config
     (
         'test' => array
         (
-            'host' => '10.10.0.196',
-            'base' => 'box_product',
-            'user' => 'mysql196',
-            'pass' => '',
+            'host' => 'localhost',
+            'base' => 'db',
+            'user' => 'user',
+            'pass' => 'pass',
         ),
 
         'production' => array

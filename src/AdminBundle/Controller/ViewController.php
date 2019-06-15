@@ -28,7 +28,7 @@ class ViewController extends Controller{
 
         $ctype = $this->getCType($queryArray);
         $ctypeAlias = $ctype ? $ctype['alias'] : null;
-        $template = $ctype ? $ctype['template'] : 'index';
+        $template = $ctype ? $ctype['template'] : 'layout.twig';
         $constructor = $this->getPageVariables($template);
         $product = $this->getProducts($queryArray);
         $path = $this->getCategoryPath($queryArray);
@@ -49,6 +49,7 @@ class ViewController extends Controller{
                 'path' => $path,
                 'productAlias' => $productAlias,
                 'isCategory' => (string)$this->isCategory,
+                'template' => $template
             ),
             'ctype' => $this->getCType($queryArray),
             'ctype_alias' => $ctypeAlias,
@@ -106,7 +107,7 @@ class ViewController extends Controller{
 
         if(!empty($queryArray)) return $queryArray;
 
-        return null;
+        return [];
     }
 
     private function getPageVariables($template)
@@ -193,7 +194,7 @@ class ViewController extends Controller{
                             return $products;
                         } else {
 
-                            return null;
+                            return [];
                         }
 
                     } else {
@@ -219,15 +220,8 @@ class ViewController extends Controller{
                                 'category' => $category['id']
                             ), $limit);
 
-                            if($product)
-                            {
+                            return $product ? $product : [];
 
-                                return $product;
-                            } else {
-
-
-                                return null;
-                            }
                         } else {
 
                             return $this->redirectToRoute('/404');
@@ -236,9 +230,9 @@ class ViewController extends Controller{
 
                     }
                 }
-            }
 
-            return $this->redirectToRoute('/404');
+                return [];
+            }
         }
     }
 
@@ -284,7 +278,7 @@ class ViewController extends Controller{
 
     private function getCategoryPath($queryArray)
     {
-        if(empty($queryArray)) return $queryArray;
+        if(empty($queryArray)) return '/';
         return (implode('/', $queryArray));
     }
 

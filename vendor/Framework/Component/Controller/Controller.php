@@ -30,18 +30,10 @@ class Controller {
         $this->data = $data;
 
         $dumpFunction = new Twig_Function('dump', function ($data = null) {
-
-            if($data)
-            {
-                $vars = $data;
-            } else {
-                $vars = $this->data;
-            }
-
             echo '<div style="clear: both"></div>';
             echo '<div style="background-color: rgba(0,0,0,0.64); width: 100%; padding-bottom: 50px">';
             echo '<pre style="color: #fff">';
-            print_r($vars);
+            print_r($data ?? $this->data);
             echo '</pre>';
             echo '</div>';
             echo '<div style="clear: both"></div>';
@@ -54,6 +46,9 @@ class Controller {
         $source = !empty($template[0]) ? $template[0] : 'default';
         $path = !empty($template[1]) ? $template[1] : '404';
 
+
+//        var_dump($path);
+//        die();
         if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/src'.'/'.$source.'/'.'Views'.'/'.$path))
         {
             if(!file_exists($_SERVER['DOCUMENT_ROOT'].'/app'.'/'.'Views'.'/'.$source.'/'.$path))
