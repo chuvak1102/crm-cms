@@ -1,0 +1,146 @@
+*{  margin: 0;  padding: 0;  box-sizing: border-box;  text-decoration: none;  outline: none;  list-style: none;  }
+@font-face {  font-family: "Open Sans";  src: url("../font/open-sans.ttf") format("woff2")  }
+@font-face {  font-family: "Helvetica Neue";  src: url("../font/HelveticaNeueCyr-Medium.otf")   }
+@font-face {  font-family: "Helvetica Neue Black";  src: url("../font/HelveticaNeueCyr-Black.otf")   }
+
+html{height: 100%;}
+body{height: 100%; overflow: hidden; font-family: "Helvetica Neue", "Open Sans", "Arial", sans-serif}
+.clear{clear: both}
+.cont{min-width: 960px; max-width: 1280px; display: block; margin: auto}
+
+/*boot css*/
+.p-10{padding: 10px}.p-30{padding: 30px} .p-50{padding: 50px}
+h1{color: #fff;  font-size: 40px;  padding: 100px 0 50px 0;  margin: 0 50px 5px 75px; letter-spacing: 4px ;text-shadow: 2px 2px 7px #555;}
+p{padding: 5px; color: #000}
+
+/*spinner*/
+#spinner{z-index: 10000;padding: 25px;width:  150px; height: 150px; position: fixed; top: calc(50% - 100px);left: calc(50% - 100px); background-color: rgb(0, 0, 0); border: 1px solid; border-radius: 10px;}
+#spinner div{  border: 16px solid transparent;  border-radius: 50%;  border-left: 16px solid #fff;  width: 100px;  height: 100px;  -webkit-animation: spin 1s linear infinite;  animation: spin 1s linear infinite;  background-color: transparent;  }
+@-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/*main css*/
+.container{height: 100%;}
+i.fa.badge::after{z-index: 1;  content: "";  position: absolute;  width: 15px;  height: 15px;  border-radius: 50%;  background-color: #ff3700;  margin-right: 25px;  margin-top: 0;  margin-left: -10px;  }
+table.menu{width: 100%; height: 100%; position: absolute; border-collapse: collapse; background-color: #000}
+table.menu tr{height: 22.5%}
+table.menu tr td{ width: 20%; height: 23%;}
+table.menu tr td .page{overflow-x: hidden;overflow-y: auto;height: 100%; background-color: #fff; border-left: 1px solid #ededed;  border-bottom: 1px solid #b6b6b6;  border-right: 1px solid #b6b6b6;  border-top: 1px solid #ededed;}
+table.menu tr:last-child{height: 10%;}
+table.menu tr:last-child td{height: 8%; border: none; }
+table.menu tr:last-child td .page{border: 1px solid #000}
+
+.btn{width: 100%;height: 100%; border: none; outline: none; background-color: #d4d4d4; font-size: 40px; color: #000000  }
+.btn:active{border: 1px solid #000}
+.btn:focus{border: 1px solid #000}
+
+.mbtn{width: 100%;height: 100%; border: 1px solid #000; outline: none; background-color: #000; font-size: 30px; color: #fff}
+.mbtn:active{background-color: #292929}
+
+ul.screen{height: 100%; width: 1000%; font-size: 0; background-color: #fff; margin-left: -0%}
+ul.screen > li{position: relative;display: inline-block; width: 10%;height: 100%; vertical-align: top; font-size: 12px; overflow-x: hidden; overflow-y: auto}
+ul.screen > li{  background: #bfe5e8;  background-image:  url(../images/back10.jpg);  background-position: center center;  background-size: 100% 100%;  background-repeat: no-repeat;  padding-bottom: 100px;  }
+
+/*submenu*/
+.submenu{position: absolute; left: 60%; bottom: 8%; z-index: 100; min-width: 10%; max-width: 40%; width: 40%;}
+.submenu ul li{color: #fff;width:100%; height: 8%; background-color: #000000; line-height: 70px; padding-left: 20px; border-bottom: 1px solid #fff; text-decoration: underline; letter-spacing: 2px}
+.submenu ul li:hover{background-color: #292929}
+
+/*screen nav*/
+.nextScreen{position: fixed; width: 50px; height: 50px; background-color: #fff; border-radius: 50%; right: 5%; bottom: 5%; text-align: center; line-height: 50px; color: #1e73b2; font-weight: bold; font-size: 50px}
+
+/*category*/
+.tree{min-width: 960px;max-width: 1280px;margin: auto;margin-top: 30px; display: block; position: relative}
+.tree .tree-single{width: calc(33.3333% - 20px); background-color: #fff; float: left; position: relative; overflow: hidden}
+.tree .tree-single:nth-child(1){border-bottom: 3px solid #000}
+.tree .tree-single:nth-child(2){margin-right: 30px; margin-left: 30px; background-color: transparent}
+.tree .tree-single button{width: 100%; display: block; background-color: #000; border: none; outline: none; color: #fff; padding: 10px; margin-bottom: 2px}
+.tree .tree-single button:hover{cursor: pointer; background-color: #292929}
+.tree .tree-single .img img{display: block; width: 100%; height: 100px; max-height: 100px; max-width: 100%; background-color: #fff; text-align: center;  background-size: 100% ; background-repeat: no-repeat; background-position: center center}
+.tree .tree-single .name{padding: 10px;  position: absolute;  width: 100%;  top: 0;  left: 0;  color: #fff;  font-size: 16px;}
+.tree .tree-single .info{height: 30px; background-color: #000}
+.tree .tree-single .info span{padding: 10px; background-color: #000;border: 1px solid #fff; color: #fff; margin-left: 5px}
+.tree .tree-single .desc{padding: 15px; font-weight: bold}
+.tree .tree-single:nth-child(3){padding: 15px; font-weight: bold}
+.tree .cat-tri{height: 0px; width: 0px; position: absolute; bottom: -30px; border-right: 20px solid transparent; ; border-left: 20px solid transparent; border-top: 30px solid #000;}
+
+/*save category*/
+.save_category{min-width: 960px; max-width: 1280px; margin: auto; padding-top: 50px;}
+.save_category .lft{background-color: #fff; width: 49%; float: left; padding: 20px;}
+.save_category .rgt{background-color: #fff; width: 49%; float: right; padding: 20px; font-size: 16px; }
+.save_category .rgt ul li{height: 25px; border-bottom: 1px solid #000; line-height: 25px}
+.save_category .lft button{background-color: #000; font-size: 16px; color: #fff; padding: 10px}
+select {width: 100%; background-color: #fff; border: 1px solid; height: 50px; font-size: 16px; padding-left: 17px; margin-bottom: 20px}
+input[type="text"]{width: 100%; border: 1px solid #000; display: block;margin-bottom: 20px; height: 50px; padding-left: 20px; font-size: 16px}
+textarea{width: 100%; border: 1px solid #000; display: block; height: 400px; padding: 20px; font-size: 16px; margin-bottom: 20px; resize: none}
+
+/*setup category*/
+.setup_category {width: 100%; border-spacing: 20px; font-size: 0}
+.setup_category tr td{text-align: start; vertical-align: top}
+.setup_category tr > td:nth-child(1){width: 80%;}
+.setup_category tr > td:nth-child(2){width: 20%;}
+.setup_category button{background-color: #000; font-size: 16px; margin-bottom: 10px; color: #fff; padding: 10px; border: none; outline: none}
+.setup_category .inline-input{clear: both}
+.setup_category .inline-input input{;vertical-align: top;display: inline-block; font-size: 16px; padding: 10px; height: 38px; margin: 0 0 10px 0; width: 19%}
+.setup_category .inline-input select{border: 1px solid #000;vertical-align: top;display: inline-block;font-size: 16px; padding-left: 10px; ;margin: 0 0 10px 0; height: 38px;width: 18%}
+.setup_category tr > td:nth-child(1) button{display: inline; float: right; width: 5%}
+
+/*product index*/
+.mat table{width: 100%}
+.mat table tr td:first-child{background-color: #fff; color: #000; font-size: 16px; padding: 10px; width: 40%}
+.mat .btn{background-color: #000; color: #fff; font-size: 16px; padding: 10px ;margin: 1px}
+.mat .btn:active{border: none; background-color: #292929}
+.mat .btn:focus{border: none}
+.mat input[type="file"]{background-color: #fff; height: 50px; border: 1px solid; margin-bottom: 20px; width: 100%; padding-left: 20px}
+.mat input[type="date"]{background-color: #fff; height: 50px; border: 1px solid; margin-bottom: 20px; width: 100%; padding-left: 20px}
+.mat input[type="datetime-local"]{background-color: #fff; height: 50px; border: 1px solid; margin-bottom: 20px; width: 100%; padding-left: 20px}
+
+.constructor table{width: 100%}
+.constructor table tr:first-child {height: 50px}
+.constructor table tr td{width: 20%; font-size: 16px; vertical-align: middle; text-align: center; padding: 5px; background-color: #fff}
+.constructor table tr td input{margin-bottom: 0; border: none}
+.constructor table tr td select{margin-bottom: 0; border: none}
+.constructor .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px ;}
+.constructor .btn:active{border: none; background-color: #292929}
+.constructor .btn:focus{border: none}
+
+.log ul li{ width: 100%; background-color: #fff; margin-bottom: 1px; height: 40px; line-height: 40px; font-size: 16px; color: #000}
+.log table{width: 100%}
+.log table tr td{background-color: #fff; margin-bottom: 1px; padding: 10px; font-size: 16px; color: #000; text-align: center}
+.log table tr td:nth-child(1){width: 5%}
+.log table tr td:nth-child(2){width: 5%}
+.log table tr td:nth-child(3){width: 60%; text-align: left}
+.log table tr td:nth-child(4){width: 15%}
+.log table tr td:nth-child(5){width: 15%}
+
+.std_table{width: 100%; box-shadow: 0 0 25px 5px #555; margin-bottom: 10px}
+.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px; vertical-align: top; text-transform: uppercase}
+.std_table input{margin-bottom: 0;}
+.std_table select{margin-bottom: 0;}
+.std_table tr:first-child {height: 50px}
+.std_table tr td{ font-size: 16px; vertical-align: middle; text-align: center; padding: 5px; background-color: #fff}
+.std_table tr td input{margin-bottom: 0; border: none}
+.std_table tr td select{margin-bottom: 0; border: none}
+.std_table .btn{background-color: #000; color: #fff; font-size: 16px; padding: 16px ;}
+.std_table .btn:hover{border: none; background-color: #292929; cursor: pointer}
+.std_table .btn:active{border: none; background-color: #292929}
+.std_table .btn:focus{border: none}
+
+.std_table.import tr td{vertical-align: top}
+
+/*colors*/
+.purple{background-color: #5d3097; color: #bbb0d8}
+.green{background-color: #04a863; color: #c3e2d3}
+.orange{background-color: #f9a81b; color: #ffe5ce}
+.blue{background-color: #046ab5; color: #b0c8e4}
+.cyan{background-color: #00aeaf; color: #bfe5e8}
+.pink{background-color: #ed413d; color: #fdd1c4}
+
+/*adaptive*/
+@media screen and (max-device-width: 640px){
+    .submenu{min-width:100%; max-width: 100%; width: 100%; left: 0;}
+    .submenu ul li{min-width:100%; max-width: 100%; width: 100%}
+}
+
+
+

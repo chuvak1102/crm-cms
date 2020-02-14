@@ -1,0 +1,96 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ task.name }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Статус
+                                    </td>
+                                    <td>
+                                        Приоритет
+                                    </td>
+                                    <td>
+                                        Описание
+                                    </td>
+                                    <td>
+                                        Исполнитель
+                                    </td>
+                                    <td>
+                                        Создано
+                                    </td>
+                                    <td>
+                                        Выполнено
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {{ task.status }}
+                                    </td>
+                                    <td>
+                                        {{ task.priority }}
+                                    </td>
+                                    <td class="issue-info">
+                                        {{ task.text }}
+                                    </td>
+                                    <td>
+                                        {{ task.user }}
+                                    </td>
+                                    <td>
+                                        {{ task.start | date('d m Y h:i') }}
+                                    </td>
+                                    <td>
+                                        {% if i.end is not empty %}
+                                            {{ task.end | date('d m Y h:i') }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>qweqwerwerwer</h5>
+                    </div>
+                    <div class="ibox-content">
+                        asdsdfgdsfgsfg
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Комментарий</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal" action="/task/comment/{{ task.id }}">
+                            <div class="col-lьв-12">
+                                <textarea required name="text" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-w-m btn-primary">Комментарий</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
