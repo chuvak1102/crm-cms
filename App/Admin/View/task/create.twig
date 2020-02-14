@@ -23,7 +23,9 @@
                                 <label class="col-lg-2 control-label">Исполнитель</label>
                                 <div class="col-lg-10">
                                     <select class="form-control m-b" name="user">
-                                        <option value="1">sdfgfg</option>
+                                        {% for i in user %}
+                                            <option value="{{ i.id }}">{{ i.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>

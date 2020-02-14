@@ -129,4 +129,22 @@ class DB {
         return true;
     }
 
+    /**
+     * @param $query
+     * @return bool
+     * @throws \Exception
+     */
+    public static function update($query)
+    {
+        $stmt = self::pdo()->prepare($query);
+        try {
+
+            $stmt->execute();
+        } catch (\Exception $e) {
+            error($e->getMessage());
+        }
+
+        return true;
+    }
+
 }
