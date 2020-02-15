@@ -17,6 +17,8 @@ class Routes {
             ],
             'crm.alkogram.ru' => [
                 '' => [Admin\Controller\Index::class => 'index'],
+                '{login}' => [Admin\Controller\Index::class => 'login'],
+                '{logout}' => [Admin\Controller\Index::class => 'logout'],
 
                 '{task}' => [Admin\Controller\Task::class => 'index'],
                 '{task}=>{create}' => [Admin\Controller\Task::class => 'create'],

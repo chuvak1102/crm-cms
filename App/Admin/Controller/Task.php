@@ -2,10 +2,9 @@
 
 namespace App\Admin\Controller;
 
-use Core\Controller;
 use Core\DB;
 
-class Task extends Controller {
+class Task extends Index {
 
     const Complete = 4;
 

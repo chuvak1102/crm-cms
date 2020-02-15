@@ -19,9 +19,15 @@ class Controller {
 
     private $data;
 
-    public function before()
-    {
+    function before() {}
 
+    private function appData()
+    {
+        return [
+            'controller' => Application::get('controller'),
+            'action' => Application::get('action'),
+            'user' => Auth::instance()->current()
+        ];
     }
 
     /**
@@ -32,10 +38,7 @@ class Controller {
     protected function render($template, $data = [])
     {
         $this->data = $data;
-        $data['application'] = [
-            'controller' => Application::get('controller'),
-            'action' => Application::get('action')
-        ];
+        $data['application'] = $this->appData();
 
         $dumpFunction = new Twig_Function('dump', function ($data = null) {
             dump($data ?? $this->data);

@@ -35,8 +35,8 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <a href="login.html">
-                                <i class="fa fa-sign-out"></i> Выйти (Родион)
+                            <a href="/logout">
+                                <i class="fa fa-sign-out"></i> Выйти ({{ application.user.name }})
                             </a>
                         </li>
                     </ul>
@@ -180,3 +180,4 @@
     </script>
 </body>
 </html>
+{{ dump(application) }}

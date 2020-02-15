@@ -1,7 +1,7 @@
 <?php
 
 require_once '../Core/Autoload.php';
-require_once '../App/config.php';
+require_once '../App/Config.php';
 require_once '../Core/Router.php';
 require_once '../vendor/autoload.php'; // composer autoloader
 
@@ -19,6 +19,7 @@ try {
                 \Core\Application::set('controller', str_replace('App\\Admin\\Controller\\','',$controllerName));
                 \Core\Application::set('action', $action);
 
+                $controller->before();
                 $controller->$action(new \Core\Request\Request());
             } else {
                 error("action {$action} not found in {$controllerName}");

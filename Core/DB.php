@@ -13,7 +13,7 @@ class DB {
     private function __construct()
     {
         if (!self::$pdo) {
-            $dsn = \app\Config\Config::DB;
+            $dsn = \App\Config::DB;
 
             try{
                 $pdo = new \PDO('mysql:host='.$dsn['host'].';'.'dbname='.$dsn['base'], $dsn['user'], $dsn['pass'], array(
@@ -43,7 +43,7 @@ class DB {
     private static function pdo()
     {
         if (!self::$pdo) {
-            $dsn = \app\Config\Config::DB;
+            $dsn = \App\Config::DB;
 
             try{
                 $pdo = new \PDO('mysql:host='.$dsn['host'].';'.'dbname='.$dsn['base'], $dsn['user'], $dsn['pass'], array(

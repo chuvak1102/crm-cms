@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controller;
 
-use Core\Controller;
+use Core\Auth;
 use Core\Request\Request;
 use Core\DB;
 
-class User extends Controller {
+class User extends Index {
 
     /**
      * @return bool
@@ -34,16 +34,13 @@ class User extends Controller {
      */
     function create(Request $request)
     {
-        $name = $request->get('name');
-        $department = $request->get('department');
-        $position = $request->get('position');
-        $login = $request->get('login');
-        $password = md5($request->get('password'));
-
-        DB::insert("
-            INSERT INTO user (name, department, position, password, login) 
-            VALUES('{$name}','{$department}','{$position}','{$password}','{$login}');
-        ");
+        Auth::instance()->create([
+            'name' => $request->get('name'),
+            'department' => $request->get('department'),
+            'position' => $request->get('position'),
+            'login' => $request->get('login'),
+            'password' => $request->get('password'),
+        ]);
 
         $this->redirectToRoute("/user");
     }
