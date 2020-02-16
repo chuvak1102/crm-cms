@@ -6,6 +6,7 @@ use Core\DB;
 use Core\Auth;
 use Core\Pagination;
 use Core\Request\Request;
+use Core\Database\DB as DBNew;
 
 class Task extends Index {
 
@@ -18,42 +19,38 @@ class Task extends Index {
     function index(Request $request)
     {
         $limit = 50;
-        $offset = 0;
-        if ($request->get('page')) {
-            $offset = $limit * intval($request->get('page'));
-            if (intval($request->get('page') == 1)) $offset = 0;
-        }
-        $count = current(DB::select("select count(id) as cnt from task"))->cnt;
-        $task = DB::select("
-            select
-                task.id,
-                status.name as status,
-                status.label as status_label,
-                task_priority.name as priority,
-                task_priority.label as priority_label,
-                task.name as name,
-                task.text as text,
-                user.name as user,
-                user.id as user_id,   
-                task.created as start,
-                task.completed as end
-            from task
-            left join task_priority on task_priority.id = task.priority
-            left join status on status.id = task.status
-            left join user on user.id = task.user
-            order by task.created desc
-            limit $limit offset $offset
-        ");
+        $page = $request->get('page', 1);
+        $offset = $limit * $page;
+        if ($page == 1) $offset = 0;
+
+        $task = DBNew::select(
+            ['task.id', 'id'],
+            ['status.name', 'status'],
+            ['status.label', 'status_label'],
+            ['task_priority.name', 'priority'],
+            ['task_priority.label', 'priority_label'],
+            ['task.name', 'name'],
+            ['task.text', 'text'],
+            ['user.name', 'user'],
+            ['user.id', 'user_id'],
+            ['task.created', 'start'],
+            ['task.completed', 'end']
+        )
+            ->from('task')
+            ->join('task_priority', 'left')->on('task_priority.id', '=', 'task.priority')
+            ->join('status', 'left')->on('status.id', '=', 'task.status')
+            ->join('user', 'left')->on('user.id', '=', 'task.user')
+            ->order_by('task.created', 'desc')
+            ->limit($limit)
+            ->offset($offset);
 
         if (!Auth::instance()->hasRole(self::RoleAdmin)) {
-            $t = [];
-            foreach ($task as $i) {
-                if ($i->user_id == Auth::instance()->current()->id) {
-                    $t[] = $i;
-                }
-            }
-            $task = $t;
+            $task->where('user.id', '=', Auth::instance()->current()->id);
         }
+
+        $task = $task->execute();
+        $count = DBNew::select('id')->from('task')->execute()->count();
+        $task = $task->fetch_all();
 
         return $this->render('Admin:task/index', [
             'task' => $task,
@@ -73,9 +70,10 @@ class Task extends Index {
      */
     function create()
     {
-        $users = DB::select("
-            select id, name from user
-        ");
+        $users = DBNew::select('id', 'name')
+            ->from('user')
+            ->execute()
+            ->fetch_all();
 
         return $this->render('Admin:task/create', [
             'user' => $users
@@ -84,7 +82,11 @@ class Task extends Index {
 
     function template()
     {
-        $task = DB::select("select * from task where template = 1");
+        $task = DBNew::select('*')
+            ->from('task')
+            ->where('template', '=', '1')
+            ->execute()
+            ->fetch_all();
 
         return $this->render('Admin:task/template', [
             'task' => $task
@@ -100,43 +102,63 @@ class Task extends Index {
     {
         $id = intval(\Core\Router::seg(2));
 
-        $task = DB::select("
-            select
-                task.id,
-                status.id as status_id,   
-                status.name as status,
-                status.label as status_label,
-                task_priority.id as priority_id,   
-                task_priority.name as priority,
-                task_priority.label as priority_label,
-                task.name as name,
-                task.text as text,
-                user.name as user,
-                user.id as user_id,   
-                task.created as start,
-                task.completed as end,
-                task.template as template
-            from task
-            join task_priority on task_priority.id = task.priority
-            left join status on status.id = task.status
-            join user on user.id = task.user
-            where task.id = $id
-        ");
-        $status = DB::select("select * from status where `group` = 1");
-        $priority = DB::select("select * from task_priority");
-        $users = DB::select("select id, name from user");
-        $comments = DB::select("
-            select u.name, task_comment.comment, task_comment.created from task_comment 
-            join user u on task_comment.user_id = u.id
-            where task_id = $id
-        ");
+        $task = DBNew::select(
+            'task.id',
+            ['status.id', 'status_id'],
+            ['status.name', 'status'],
+            ['status.label', 'status_label'],
+            ['task_priority.id', 'priority_id'],
+            ['task_priority.name', 'priority'],
+            ['task_priority.label', 'priority_label'],
+            ['task.name', 'name'],
+            ['task.text', 'text'],
+            ['user.name', 'user'],
+            ['user.id', 'user_id'],
+            ['task.created', 'start'],
+            ['task.completed', 'end'],
+            ['task.template', 'template']
+        )
+            ->from('task')
+            ->join('task_priority', 'left')
+            ->on('task_priority.id', '=', 'task.priority')
+            ->join('status', 'left')
+            ->on('status.id', '=', 'task.status')
+            ->join('user', 'left')
+            ->on('user.id', '=', 'task.user')
+            ->where('task.id', '=', $id)
+            ->execute()->fetch();
+
+        $status = DBNew::select('*')
+            ->from('status')
+            ->where('group', '=', 1)
+            ->execute()
+            ->fetch_all();
+
+        $priority = DBNew::select('*')
+            ->from('task_priority')
+            ->execute()
+            ->fetch_all();
+
+        $comments = DBNew::select('u.name', 'task_comment.comment', 'task_comment.created')
+            ->from('task_comment')
+            ->join(['user', 'u'])
+            ->on('task_comment.user_id', '=', 'u.id')
+            ->where('task_id', '=', $id)
+            ->order_by('task_comment.created', 'asc')
+            ->execute()->fetch_all();
+
+        $users = DBNew::select('id', 'name')
+            ->from('user')
+            ->execute()
+            ->fetch_all();
 
         return $this->render('Admin:task/edit', [
-            'task' => $task[0],
+            'task' => $task,
             'status' => $status,
             'priority' => $priority,
-            'user' => $users,
-            'comment' => $comments
+            'user' => Auth::instance()->current(),
+            'comment' => $comments,
+            'users' => $users
         ]);
     }
 
@@ -151,10 +173,12 @@ class Task extends Index {
         $text = $request->get('text');
         $user = $request->get('user');
 
-        DB::insert("
-            insert into task_comment (task_id, user_id, comment)
-            values ('$id', '$user', '$text')
-        ");
+        DBNew::insert('task_comment', [
+            'task_id',
+            'user_id',
+            'comment'
+        ])->values([$id, $user, $text])
+            ->execute();
 
         return $this->redirectToRoute('/task/edit/'.$id);
     }
@@ -172,10 +196,9 @@ class Task extends Index {
         $priority = $request->get('priority');
         $template = $request->get('template') == 'on' ? 1 : 0;
 
-        DB::insert("
-            INSERT INTO task (name,text,user,time,priority,template, status)
-            VALUES ('{$name}','{$text}','{$user}','{$time}','{$priority}','{$template}', 1)
-        ");
+        DBNew::insert('task', ['name','text','user','time','priority','template', 'status'])
+            ->values([$name,$text,$user,$time,$priority,$template, 1])
+            ->execute();
 
         $this->redirectToRoute("/task");
     }
@@ -192,10 +215,11 @@ class Task extends Index {
 
             $status = self::Complete;
 
-            DB::update("
-                update task set status = $status, completed = now()
-                where id = $id
-            ");
+            DBNew::update('task')->set([
+                'status' => $status,
+                'completed' => DBNew::expr('now()')
+            ])->where('id', '=', $id)
+                ->execute();
 
             return $this->redirectToRoute("/task");
         }
@@ -206,10 +230,14 @@ class Task extends Index {
         $priority = intval($request->get('priority'));
         $status = intval($request->get('status'));
 
-        DB::update("
-            update task set name = '$name', text = '$text', user = '$user', priority = $priority, status = $status
-            where id = $id
-        ");
+        DBNew::update('task')->set([
+            'name' => $name,
+            'text' => $text,
+            'user' => $user,
+            'priority' => $priority,
+            'status' => $status
+        ])->where('id', '=', $id)
+            ->execute();
 
         return $this->redirectToRoute("/task");
     }
@@ -222,35 +250,43 @@ class Task extends Index {
     {
         $id = intval(\Core\Router::seg(3));
 
-        $task = DB::select("
-            select
-                task.id,
-                status.id as status_id,   
-                status.name as status,
-                status.label as status_label,
-                task_priority.id as priority_id,   
-                task_priority.name as priority,
-                task_priority.label as priority_label,
-                task.name as name,
-                task.text as text,
-                user.name as user,
-                user.id as user_id,   
-                task.created as start,
-                task.completed as end,
-                task.template as template,
-                task.time as time   
-            from task
-            join task_priority on task_priority.id = task.priority
-            left join status on status.id = task.status
-            join user on user.id = task.user
-            where task.id = $id
-        ");
-        $status = DB::select("select * from status where `group` = 1");
-        $priority = DB::select("select * from task_priority");
-        $users = DB::select("select id, name from user");
+        $task = DBNew::select(
+            ['task.id', 'id'],
+            ['task.time', 'time'],
+            ['status.name', 'status'],
+            ['status.label', 'status_label'],
+            ['task_priority.name', 'priority'],
+            ['task_priority.label', 'priority_label'],
+            ['task.name', 'name'],
+            ['task.text', 'text'],
+            ['user.name', 'user'],
+            ['user.id', 'user_id'],
+            ['task.created', 'start'],
+            ['task.completed', 'end']
+        )
+            ->from('task')
+            ->join('task_priority', 'left')->on('task_priority.id', '=', 'task.priority')
+            ->join('status', 'left')->on('status.id', '=', 'task.status')
+            ->join('user', 'left')->on('user.id', '=', 'task.user')
+
+            ->where('task.id', '=', $id)
+            ->execute()->fetch();
+
+        $status = DBNew::select('*')
+            ->from('status')
+            ->where('group', '=', 1)
+            ->execute()->fetch_all();
+
+        $priority = DBNew::select('*')
+            ->from('task_priority')
+            ->execute()->fetch_all();
+
+        $users = DBNew::select('id', 'name')
+            ->from('user')
+            ->execute()->fetch_all();
 
         return $this->render('Admin:task/template_create', [
-            'task' => $task[0],
+            'task' => $task,
             'status' => $status,
             'priority' => $priority,
             'user' => $users
@@ -274,9 +310,10 @@ class Task extends Index {
     function templateDelete(\Core\Request\Request $request)
     {
         $id = \Core\Router::seg(3);
-        DB::update("
-            update task set template = 0 where id = $id
-        ");
+        DBNew::update('task')->set([
+            'template' => 0
+        ])->where('id', '=', $id)
+            ->execute();
 
         return $this->redirectToRoute('/task/template');
     }

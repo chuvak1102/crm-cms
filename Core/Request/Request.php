@@ -16,14 +16,14 @@ class Request{
         $this->files = $_FILES;
     }
 
-    public function get($name){
+    public function get($name, $default = null){
         if(isset($this->get[$name]) && $this->get[$name] != ''){
             return $this->get[$name];
         } else {
             if(isset($this->post[$name]) && $this->post[$name] != '') {
                 return $this->post[$name];
             }
-            return null;
+            return $default;
         }
     }
 

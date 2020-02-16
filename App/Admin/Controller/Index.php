@@ -12,6 +12,7 @@ class Index extends Controller {
 
     const RoleUser = 'user';
     const RoleAdmin = 'admin';
+    const TaskStatusNew = 1;
 
     function before()
     {
@@ -25,7 +26,14 @@ class Index extends Controller {
 
     function index(Request $request)
     {
-        return $this->render('Admin:index');
+        $taskNew = DB::select('id')
+            ->from('task')
+            ->where('status', '=', self::TaskStatusNew)
+            ->execute()->count();
+
+        return $this->render('Admin:index', [
+            'task' => $taskNew
+        ]);
     }
 
     /**

@@ -34,6 +34,7 @@ class MySQL extends \Core\Database\Database {
 			'host'   => '',
 			'user'   => '',
 			'pass'   => '',
+			'type' => 'MySQL',
 			'persistent' => TRUE,
 		));
 
@@ -172,9 +173,7 @@ class MySQL extends \Core\Database\Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new \Exception(':error [ :query ]',
-				array(':error' => mysqli_error($this->_connection), ':query' => $sql),
-				mysqli_errno($this->_connection));
+			throw new \Exception(mysqli_error($this->_connection));
 		}
 
 		if (isset($benchmark))
@@ -194,14 +193,14 @@ class MySQL extends \Core\Database\Database {
 		{
 			// Return a list of insert id and rows created
 			return array(
-				mysql_insert_id($this->_connection),
-				mysql_affected_rows($this->_connection),
+				mysqli_insert_id($this->_connection),
+				mysqli_affected_rows($this->_connection),
 			);
 		}
 		else
 		{
 			// Return the number of rows affected
-			return mysql_affected_rows($this->_connection);
+			return mysqli_affected_rows($this->_connection);
 		}
 	}
 
@@ -411,7 +410,7 @@ class MySQL extends \Core\Database\Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
+		if (($value = mysqli_real_escape_string($this->_connection, (string) $value)) === FALSE)
 		{
 			throw new \Exception(':error',
 				array(':error' => mysql_error($this->_connection)),

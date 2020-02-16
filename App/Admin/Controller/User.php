@@ -4,7 +4,7 @@ namespace App\Admin\Controller;
 
 use Core\Auth;
 use Core\Request\Request;
-use Core\DB;
+use Core\Database\DB;
 
 class User extends Index {
 
@@ -12,15 +12,19 @@ class User extends Index {
      * @return bool
      * @throws \Exception
      */
-    function index()
+    function index(Request $request)
     {
-        $data = DB::select("
-            select * from department join user on department.id = user.department
-        ");
+        $data = DB::select('user.id', 'user.name', 'department.alias', 'user.position', 'user.login', 'user.department')
+            ->from('department')
+            ->join('user')
+            ->on('department.id', '=', 'user.department')
+            ->execute()
+            ->fetch_all();
 
-        $departments = DB::select("
-            select * from department
-        ");
+        $departments = DB::select('*')
+            ->from('department')
+            ->execute()
+            ->fetch_all();
 
         return $this->render('Admin:user/index', [
             'users' => $data,
@@ -52,7 +56,10 @@ class User extends Index {
     function delete(Request $request)
     {
         $id = intval(\Core\Router::seg(2));
-        DB::delete("delete from user where id = {$id}");
+
+        DB::delete('user')
+            ->where('user.id', '=', $id)
+            ->execute();
 
         $this->redirectToRoute("/user");
     }

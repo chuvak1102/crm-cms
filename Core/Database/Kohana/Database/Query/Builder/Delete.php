@@ -22,7 +22,7 @@ class Delete extends \Core\Database\Database\Query\Builder\Where {
 		}
 
 		// Start the query with no SQL
-		return parent::__construct(Database::DELETE, '');
+		return parent::__construct(\Core\Database\Database::DELETE, '');
 	}
 
 	/**

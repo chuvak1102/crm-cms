@@ -100,36 +100,14 @@ class Result extends \Core\Database\Database\Result {
         // FIXME mysql_fetch_object has been deprecated as of php 5.5!
         // Please use mysqli_fetch_object or PDOStatement::fetch(PDO::FETCH_OBJ) instead.
 
-        if ($this->_as_object === TRUE)
-        {
-            // Return an stdClass
-            return mysqli_fetch_object($this->_result);
-        }
-        elseif (is_string($this->_as_object))
-        {
-            if ($this->_object_params !== NULL)
-            {
-                // Return an object of given class name with constructor params
-                return mysqli_fetch_object($this->_result, $this->_as_object, $this->_object_params);
-            }
-            else
-            {
-                // Return an object of given class name without constructor params
-                return mysqli_fetch_object($this->_result, $this->_as_object);
-            }
-        }
-        else
-        {
-            // Return an array of the row
-            return mysqli_fetch_assoc($this->_result);
-        }
+        return mysqli_fetch_object($this->_result);
     }
 
 	function fetch_all()
     {
         $result = [];
         while ($row = mysqli_fetch_assoc($this->_result)) {
-            $result[] = $row;
+            $result[] = (object) $row;
         }
         return $result;
     }

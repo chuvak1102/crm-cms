@@ -29,8 +29,8 @@
                                 <div class="col-md-12 m-b">
                                     <label for="">Назначена</label>
                                     <select class="form-control" name="user">
-                                        {% for i in user %}
-                                            <option {% if i.id == task.user %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                        {% for i in users %}
+                                            <option {% if i.id == task.user_id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -91,12 +91,12 @@
                         <h5>Комментарий</h5>
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal" action="/task/comment/{{ task.id }}">
+                        <form class="form-horizontal" method="post" action="/task/comment/{{ task.id }}">
                             <div class="col-lьв-12">
                                 <textarea required name="text" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                             </div>
                             <br>
-                            <input type="hidden" name="user" value="{{ task.user_id }}">
+                            <input type="hidden" name="user" value="{{ user.id }}">
                             <button type="submit" class="btn btn-w-m btn-primary">Добавить</button>
                         </form>
                     </div>

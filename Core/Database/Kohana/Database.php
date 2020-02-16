@@ -49,6 +49,7 @@ abstract class Database {
 			{
 				// Load the configuration for this database
 				$config = \App\Config::DB;
+				$config['type'] = 'MySQL';
 			}
 
 			if ( ! isset($config['type']))
