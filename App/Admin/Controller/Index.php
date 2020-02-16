@@ -6,8 +6,12 @@ use Core\Controller;
 use Core\Request\Request;
 use Core\Session;
 use Core\Auth;
+use Core\Database\DB;
 
 class Index extends Controller {
+
+    const RoleUser = 'user';
+    const RoleAdmin = 'admin';
 
     function before()
     {
@@ -19,7 +23,7 @@ class Index extends Controller {
         }
     }
 
-    function index()
+    function index(Request $request)
     {
         return $this->render('Admin:index');
     }

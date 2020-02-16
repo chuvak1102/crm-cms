@@ -26,7 +26,8 @@ class Controller {
         return [
             'controller' => Application::get('controller'),
             'action' => Application::get('action'),
-            'user' => Auth::instance()->current()
+            'user' => Auth::instance()->current(),
+            'isAdmin' => Auth::instance()->hasRole('admin')
         ];
     }
 

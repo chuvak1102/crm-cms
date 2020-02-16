@@ -10,6 +10,7 @@ class Config
         'base' => 'u0742521_ecopacking',
         'user' => 'u0742521_default',
         'pass' => 'j3x3HI!Q',
+        'type' => 'MySQL'
     ];
     const ROLES = [
         'anon' => [],
@@ -17,24 +18,6 @@ class Config
         'admin' => [],
         'su' => [],
     ];
-
-    public static function mysql()
-    {
-        return [
-            'test' => [
-                'host' => 'localhost',
-                'base' => 'db',
-                'user' => 'user',
-                'pass' => 'pass',
-            ],
-            'production' => [
-                'host' => 'localhost',
-                'base' => 'u0742521_ecopacking',
-                'user' => 'u0742521_default',
-                'pass' => 'j3x3HI!Q',
-            ],
-        ][self::Mode];
-    }
 }
 
 

@@ -3,6 +3,9 @@
 namespace App\Admin\Controller;
 
 use Core\DB;
+use Core\Auth;
+use Core\Pagination;
+use Core\Request\Request;
 
 class Task extends Index {
 
@@ -12,8 +15,15 @@ class Task extends Index {
      * @return bool
      * @throws \Exception
      */
-    function index()
+    function index(Request $request)
     {
+        $limit = 50;
+        $offset = 0;
+        if ($request->get('page')) {
+            $offset = $limit * intval($request->get('page'));
+            if (intval($request->get('page') == 1)) $offset = 0;
+        }
+        $count = current(DB::select("select count(id) as cnt from task"))->cnt;
         $task = DB::select("
             select
                 task.id,
@@ -24,6 +34,7 @@ class Task extends Index {
                 task.name as name,
                 task.text as text,
                 user.name as user,
+                user.id as user_id,   
                 task.created as start,
                 task.completed as end
             from task
@@ -31,10 +42,28 @@ class Task extends Index {
             left join status on status.id = task.status
             left join user on user.id = task.user
             order by task.created desc
+            limit $limit offset $offset
         ");
 
+        if (!Auth::instance()->hasRole(self::RoleAdmin)) {
+            $t = [];
+            foreach ($task as $i) {
+                if ($i->user_id == Auth::instance()->current()->id) {
+                    $t[] = $i;
+                }
+            }
+            $task = $t;
+        }
+
         return $this->render('Admin:task/index', [
-            'task' => $task
+            'task' => $task,
+            'pagination' => new Pagination(
+                $count,
+                $limit,
+                3,
+                $request->get('page') ? $request->get('page') : 1,
+                '/task?page='
+            )
         ]);
     }
 

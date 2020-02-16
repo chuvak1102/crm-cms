@@ -7,8 +7,10 @@
                     <div class="ibox-title">
                         <h5>Задачи</h5>
                         <div class="ibox-tools">
-                            <a href="/task/create" class="btn btn-primary btn-xs">Новая</a>
-                            <a href="/task/template" class="btn btn-primary btn-xs">Шаблон</a>
+                            {% if application.isAdmin == true %}
+                                <a href="/task/create" class="btn btn-primary btn-xs">Новая</a>
+                                <a href="/task/template" class="btn btn-primary btn-xs">Шаблон</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -82,14 +84,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="btn-group" style="margin-left: 13px">
-                <button type="button" class="btn btn-white"><i class="fa fa-chevron-left"></i></button>
-                <button class="btn btn-white">1</button>
-                <button class="btn btn-white  active">2</button>
-                <button class="btn btn-white">3</button>
-                <button class="btn btn-white">4</button>
-                <button type="button" class="btn btn-white"><i class="fa fa-chevron-right"></i> </button>
-            </div>
+            {{ pagination.render() }}
         </div>
     </div>
 {% endblock %}

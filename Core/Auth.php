@@ -9,6 +9,7 @@ class Auth {
     private static $user = null;
     private static $instance = null;
     private static $token = null;
+    private static $role = null;
 
     private function __construct($token)
     {
@@ -19,6 +20,7 @@ class Auth {
                 if ($user) {
 
                     self::$token = $user->token;
+                    self::$role = $user->role;
                     self::$user = (object) [
                         'id' => $user->id,
                         'name' => $user->name,
@@ -126,4 +128,8 @@ class Auth {
         return false;
     }
 
+    function hasRole(string $role)
+    {
+        return self::$role === $role;
+    }
 }
