@@ -2,11 +2,10 @@
 
 namespace App\Admin\Controller;
 
-use Core\DB;
 use Core\Auth;
 use Core\Pagination;
 use Core\Request\Request;
-use Core\Database\DB as DBNew;
+use Core\Database\DB;
 
 class Task extends Index {
 
@@ -23,7 +22,7 @@ class Task extends Index {
         $offset = $limit * $page;
         if ($page == 1) $offset = 0;
 
-        $task = DBNew::select(
+        $task = DB::select(
             ['task.id', 'id'],
             ['status.name', 'status'],
             ['status.label', 'status_label'],
@@ -49,7 +48,7 @@ class Task extends Index {
         }
 
         $task = $task->execute();
-        $count = DBNew::select('id')->from('task')->execute()->count();
+        $count = DB::select('id')->from('task')->execute()->count();
         $task = $task->fetch_all();
 
         return $this->render('Admin:task/index', [
@@ -70,7 +69,7 @@ class Task extends Index {
      */
     function create()
     {
-        $users = DBNew::select('id', 'name')
+        $users = DB::select('id', 'name')
             ->from('user')
             ->execute()
             ->fetch_all();
@@ -82,7 +81,7 @@ class Task extends Index {
 
     function template()
     {
-        $task = DBNew::select('*')
+        $task = DB::select('*')
             ->from('task')
             ->where('template', '=', '1')
             ->execute()
@@ -102,7 +101,7 @@ class Task extends Index {
     {
         $id = intval(\Core\Router::seg(2));
 
-        $task = DBNew::select(
+        $task = DB::select(
             'task.id',
             ['status.id', 'status_id'],
             ['status.name', 'status'],
@@ -128,18 +127,18 @@ class Task extends Index {
             ->where('task.id', '=', $id)
             ->execute()->fetch();
 
-        $status = DBNew::select('*')
+        $status = DB::select('*')
             ->from('status')
             ->where('group', '=', 1)
             ->execute()
             ->fetch_all();
 
-        $priority = DBNew::select('*')
+        $priority = DB::select('*')
             ->from('task_priority')
             ->execute()
             ->fetch_all();
 
-        $comments = DBNew::select('u.name', 'task_comment.comment', 'task_comment.created')
+        $comments = DB::select('u.name', 'task_comment.comment', 'task_comment.created')
             ->from('task_comment')
             ->join(['user', 'u'])
             ->on('task_comment.user_id', '=', 'u.id')
@@ -147,7 +146,7 @@ class Task extends Index {
             ->order_by('task_comment.created', 'asc')
             ->execute()->fetch_all();
 
-        $users = DBNew::select('id', 'name')
+        $users = DB::select('id', 'name')
             ->from('user')
             ->execute()
             ->fetch_all();
@@ -173,7 +172,7 @@ class Task extends Index {
         $text = $request->get('text');
         $user = $request->get('user');
 
-        DBNew::insert('task_comment', [
+        DB::insert('task_comment', [
             'task_id',
             'user_id',
             'comment'
@@ -196,7 +195,7 @@ class Task extends Index {
         $priority = $request->get('priority');
         $template = $request->get('template') == 'on' ? 1 : 0;
 
-        DBNew::insert('task', ['name','text','user','time','priority','template', 'status'])
+        DB::insert('task', ['name','text','user','time','priority','template', 'status'])
             ->values([$name,$text,$user,$time,$priority,$template, 1])
             ->execute();
 
@@ -215,9 +214,9 @@ class Task extends Index {
 
             $status = self::Complete;
 
-            DBNew::update('task')->set([
+            DB::update('task')->set([
                 'status' => $status,
-                'completed' => DBNew::expr('now()')
+                'completed' => DB::expr('now()')
             ])->where('id', '=', $id)
                 ->execute();
 
@@ -230,7 +229,7 @@ class Task extends Index {
         $priority = intval($request->get('priority'));
         $status = intval($request->get('status'));
 
-        DBNew::update('task')->set([
+        DB::update('task')->set([
             'name' => $name,
             'text' => $text,
             'user' => $user,
@@ -250,7 +249,7 @@ class Task extends Index {
     {
         $id = intval(\Core\Router::seg(3));
 
-        $task = DBNew::select(
+        $task = DB::select(
             ['task.id', 'id'],
             ['task.time', 'time'],
             ['status.name', 'status'],
@@ -272,16 +271,16 @@ class Task extends Index {
             ->where('task.id', '=', $id)
             ->execute()->fetch();
 
-        $status = DBNew::select('*')
+        $status = DB::select('*')
             ->from('status')
             ->where('group', '=', 1)
             ->execute()->fetch_all();
 
-        $priority = DBNew::select('*')
+        $priority = DB::select('*')
             ->from('task_priority')
             ->execute()->fetch_all();
 
-        $users = DBNew::select('id', 'name')
+        $users = DB::select('id', 'name')
             ->from('user')
             ->execute()->fetch_all();
 
@@ -310,7 +309,7 @@ class Task extends Index {
     function templateDelete(\Core\Request\Request $request)
     {
         $id = \Core\Router::seg(3);
-        DBNew::update('task')->set([
+        DB::update('task')->set([
             'template' => 0
         ])->where('id', '=', $id)
             ->execute();
