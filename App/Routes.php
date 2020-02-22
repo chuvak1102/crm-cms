@@ -4,18 +4,19 @@ namespace App;
 
 class Routes {
 
-    // вместо слеша =>
+    // вместо слеша стрелка =>
+    // в фигурных скобках {} тупо чистяком регулярка
     public static function all($domain)
     {
         return [
-            'front.alkogram.ru' => [
+            Config::SiteDomain => [
+                '' => [Site\Controller\Index::class => 'index'],
                 '{katalog-tovarov}' => [Site\Controller\Catalog::class => 'index'],
                 '{katalog-tovarov}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'parent'],
                 '{katalog-tovarov}=>{[^\/]+}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'child'],
                 '{katalog-tovarov}=>{[^\/]+}=>{[^\/]+}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'item'],
-                '' => [Site\Controller\Index::class => 'index'],
             ],
-            'crm.alkogram.ru' => [
+            Config::AdminDomain => [
                 '' => [Admin\Controller\Index::class => 'index'],
                 '{login}' => [Admin\Controller\Index::class => 'login'],
                 '{logout}' => [Admin\Controller\Index::class => 'logout'],

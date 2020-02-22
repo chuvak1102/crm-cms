@@ -3,8 +3,11 @@ namespace App;
 
 class Config
 {
+    // меняет только вывод ошибок - test/production
     const Mode = 'production';
+    // все хеши в проекте \Core\Hash::hash('хуй')
     const SECRET = 'lj*Y&^G%F%#S%$DF%^G&()OKIJNHBVCFDSW#$R^&OLKJUIOL<LOP:"":{}';
+    // ну эт ясно
     const DB = [
         'host' => 'localhost',
         'base' => 'u0742521_ecopacking',
@@ -17,6 +20,9 @@ class Config
         'admin' => [],
         'su' => [],
     ];
+    // домены для маршрутов
+    const SiteDomain = 'front.alkogram.ru';
+    const AdminDomain = 'crm.alkogram.ru';
 }
 
 

@@ -1,0 +1,137 @@
+* {margin: 0; padding: 0; box-sizing: border-box; list-style: none}
+body{background: url("/site/img/bg-body.png");background-repeat: repeat; font: 13px Arial, Helvetica, sans-serif; color: #393939}
+.cont{width: 1135px; margin: auto; }
+.clear{clear: both}
+.green {color: #a0b22b}
+
+@font-face {
+    font-family: 'helveticaneuecyrbold';
+    src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot');
+    src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../css/fonts/helveticaneuecyr-bold-webfont.woff') format('woff'),
+    url('../css/fonts/helveticaneuecyr-bold-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'arialnarrow';
+    src: url('../css/fonts/arialnb-webfont.eot');
+    src: url('../css/fonts/arialnb-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../css/fonts/arialnb-webfont.woff') format('woff'),
+    url('../css/fonts/arialnb-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'arialn';
+    src: url('/site/fonts/arialn-webfont.eot');
+    src: url('/site/fonts/arialn-webfont.eot?#iefix') format('embedded-opentype'),
+    url('/site/fonts/arialn-webfont.woff') format('woff'),
+    url('/site/fonts/arialn-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+a {color: #a0b22b; font-family: "arialn", sans-serif; text-decoration: none}
+ul.header{margin-top: 27px}
+ul.header li{float: left}
+ul.header li .left {float: left; margin-right: 15px}
+ul.header li .right .up {line-height: 15px;}
+ul.header li .right .down {line-height: 17px;}
+ul.header li .right .up a {font-family: "arialn", sans-serif; font-size: 13px}
+ul.header li .right .down {font: 12px "arialn"}
+ul.header li:nth-child(2) {width: 285px; padding: 45px 5px 0px 52px}
+ul.header li:nth-child(2) label {display: block}
+ul.header li:nth-child(2) input {border-radius: 5px; border:1px solid #e1e1e5}
+ul.header li:nth-child(2) input[type=text] {width: 150px; height: 25px; font-size: 13px; padding-left: 7px; outline: none}
+ul.header li:nth-child(2) input[type=submit] {width: 55px; height: 24px; font-weight: bold}
+ul.header li:nth-child(3) {margin-top: 3px;border: 1px solid #e1e1e5; padding: 20px 25px 15px; width: 225px; border-radius: 5px 0 0 5px}
+ul.header li:nth-child(4) {margin-top: 3px;border: 1px solid #e1e1e5; padding: 20px 25px 15px; width: 185px; border-left: none; border-right: none}
+ul.header li:nth-child(5) {margin-top: 3px;border: 1px solid #e1e1e5; padding: 20px 25px 15px; width: 212px; border-radius: 0 5px 5px 0}
+ul.header li:nth-child(5) .left {margin-top: 8px}
+
+
+
+.cart {float: right}
+.cart a {font-size: 15px; text-decoration: underline}
+.cart span {font-weight: bold}
+
+
+
+.menu {background: url("/site/img/menu-bg.png") no-repeat; height: 55px; margin-top: 10px}
+.menu li {float: left; font-size: 15px; text-transform: uppercase; color: #fff; padding: 17px; padding-right: 0}
+.menu li a {color: #fff; font-family: Arial, Helvetica, sans-serif}
+.menu li:last-child {float: right; padding-right: 7px}
+.menu li:last-child a {text-transform: none;background: #4a4a4c url("/site/img/menu-last.png") no-repeat 15px center; color: #a0b22b; font-size: 14px; padding: 10px 25px 10px 45px; font-weight: bold;}
+.menu li a:hover {color: #a0b22b; text-decoration: underline}
+
+
+
+.catalog {width: 235px; background-color: #f4f4f7; border-radius: 5px; border: 1px solid #fff; float: left}
+.catalog h2 {margin-bottom: 5px;color: #798815; font: 18px "arialn"; padding: 12px 0px 12px 25px; background-image: linear-gradient(to bottom, #F2F2F5 0%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%)}
+.catalog ul li {border-bottom: 1px dotted #a0b22b}
+.catalog ul li:hover {background-color: #fff}
+.catalog ul li a{color: #444445; font: 13px Arial, Helvetica, sans-serif}
+.catalog ul li a:hover{color: #a0b22b}
+.catalog ul li {padding: 10px 0px 10px 25px; font: 13px "arialn"; line-height: 24px; text-transform: uppercase}
+.catalog ul li {position: relative}
+.catalog ul li ul {position: absolute; margin-left: 232px; left: 0; top: -1px; width: 250px; visibility: hidden}
+.catalog ul li ul li {border: none;background-color: #fff; border-left: 1px dotted #a0b22b; border-right: 1px dotted #a0b22b}
+.catalog ul li ul li:first-child{border-top: 1px dotted #a0b22b; border-left: none}
+.catalog ul li ul li:last-child{border-bottom: 1px dotted #a0b22b}
+.catalog ul li ul li:hover {background-color: #f4f4f7}
+.catalog ul li ul li a {text-transform: none}
+.catalog ul li:hover ul {visibility: visible}
+
+
+
+.content {float: right; width: calc(100% - 250px); margin: 5px}
+
+
+
+
+footer {background-color: #363638; height: 100%;}
+footer .left{float: left; width: 238px}
+footer .mid{float: left; background-color: #313133; width: 450px; padding-bottom: 35px}
+footer .right{float: left;}
+footer h2 {font: 13px "myriad pro"; color: #a0b22b; padding: 20px 0 0 40px}
+footer ul li {padding: 8px 0 0 42px; position: relative; float: left; min-width: 200px;}
+footer ul li:before {border-radius: 50%;position: absolute; content: ""; top: 15px; left: 30px; width: 3px; height: 3px;background-color: #a0b22b}
+footer ul li a {color: #fff;}
+footer .media {float: left; margin: 15px -30px 5px 40px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,10 +2,9 @@
 
 namespace App\Site\Controller;
 
-use Core\Controller;
 use Core\Request\Request;
 
-class Catalog extends Controller {
+class Catalog extends Site {
 
     function index()
     {

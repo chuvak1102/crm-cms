@@ -40,6 +40,7 @@ class Controller {
     {
         $this->data = $data;
         $data['application'] = $this->appData();
+        $data['global'] = Page::instance()->getAll();
 
         $dumpFunction = new Twig_Function('dump', function ($data = null) {
             dump($data ?? $this->data);
