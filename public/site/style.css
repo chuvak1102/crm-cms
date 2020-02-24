@@ -4,35 +4,11 @@ body{background: url("/site/img/bg-body.png");background-repeat: repeat; font: 1
 .clear{clear: both}
 .green {color: #a0b22b}
 
-@font-face {
-    font-family: 'helveticaneuecyrbold';
-    src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot');
-    src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../css/fonts/helveticaneuecyr-bold-webfont.woff') format('woff'),
-    url('../css/fonts/helveticaneuecyr-bold-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'arialnarrow';
-    src: url('../css/fonts/arialnb-webfont.eot');
-    src: url('../css/fonts/arialnb-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../css/fonts/arialnb-webfont.woff') format('woff'),
-    url('../css/fonts/arialnb-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
 
-}
-@font-face {
-    font-family: 'arialn';
-    src: url('/site/fonts/arialn-webfont.eot');
-    src: url('/site/fonts/arialn-webfont.eot?#iefix') format('embedded-opentype'),
-    url('/site/fonts/arialn-webfont.woff') format('woff'),
-    url('/site/fonts/arialn-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
 
-}
+@font-face {  font-family: 'helveticaneuecyrbold';  src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot');  src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot?#iefix') format('embedded-opentype'), url('../css/fonts/helveticaneuecyr-bold-webfont.woff') format('woff'), url('../css/fonts/helveticaneuecyr-bold-webfont.ttf') format('truetype'); font-weight: normal;  font-style: normal;  }
+@font-face {  font-family: 'arialnarrow';  src: url('../css/fonts/arialnb-webfont.eot');  src: url('../css/fonts/arialnb-webfont.eot?#iefix') format('embedded-opentype'), url('../css/fonts/arialnb-webfont.woff') format('woff'), url('../css/fonts/arialnb-webfont.ttf') format('truetype');  font-weight: normal;  font-style: normal;  }
+@font-face {  font-family: 'arialn';  src: url('/site/fonts/arialn-webfont.eot');  src: url('/site/fonts/arialn-webfont.eot?#iefix') format('embedded-opentype'), url('/site/fonts/arialn-webfont.woff') format('woff'), url('/site/fonts/arialn-webfont.ttf') format('truetype');  font-weight: normal;  font-style: normal;  }
 a {color: #a0b22b; font-family: "arialn", sans-serif; text-decoration: none}
 ul.header{margin-top: 27px}
 ul.header li{float: left}
@@ -68,7 +44,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 
 
-.catalog {width: 235px; background-color: #f4f4f7; border-radius: 5px; border: 1px solid #fff; float: left}
+.catalog {width: 235px; background-color: #f4f4f7; border-radius: 5px; border: 1px solid #fff; float: left; margin-bottom: 35px}
 .catalog h2 {margin-bottom: 5px;color: #798815; font: 18px "arialn"; padding: 12px 0px 12px 25px; background-image: linear-gradient(to bottom, #F2F2F5 0%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%)}
 .catalog ul li {border-bottom: 1px dotted #a0b22b}
 .catalog ul li:hover {background-color: #fff}
@@ -76,7 +52,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .catalog ul li a:hover{color: #a0b22b}
 .catalog ul li {padding: 10px 0px 10px 25px; font: 13px "arialn"; line-height: 24px; text-transform: uppercase}
 .catalog ul li {position: relative}
-.catalog ul li ul {position: absolute; margin-left: 232px; left: 0; top: -1px; width: 250px; visibility: hidden}
+.catalog ul li ul {position: absolute; margin-left: 232px; left: 0; top: -1px; width: 250px; visibility: hidden; z-index: 1}
 .catalog ul li ul li {border: none;background-color: #fff; border-left: 1px dotted #a0b22b; border-right: 1px dotted #a0b22b}
 .catalog ul li ul li:first-child{border-top: 1px dotted #a0b22b; border-left: none}
 .catalog ul li ul li:last-child{border-bottom: 1px dotted #a0b22b}
@@ -88,6 +64,18 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 .content {float: right; width: calc(100% - 250px); margin: 5px}
 
+
+
+.index-slider div {width: 33%; display: inline-block}
+.index-slider div a{width: 100%;}
+.index-slider div a img{width: 100%;}
+.slider-cont {position: relative}
+.slider-cont .index-slider-prev {width: 30px; height: 100px; position: absolute; top: 65px; left: 10px ; text-align: center; line-height: 100px}
+.slider-cont .index-slider-next {width: 30px; height: 100px; position: absolute; top: 65px; right: 10px; text-align: center; line-height: 100px}
+.slider-cont .index-slider-prev img {width: 15px}
+.slider-cont .index-slider-next img {width: 15px}
+.bx-prev{background: url("/site/img/partner_l.png") no-repeat scroll center center;width: 30px; height: 100px; position: absolute; top: 55px; left: 10px ; text-align: center; line-height: 100px}
+.bx-next {background: url("/site/img/partner_r.png") no-repeat scroll center center;width: 30px; height: 100px; position: absolute; top: 55px; right: 10px; text-align: center; line-height: 100px}
 
 
 
