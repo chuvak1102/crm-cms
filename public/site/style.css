@@ -69,13 +69,36 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .index-slider div {width: 33%; display: inline-block}
 .index-slider div a{width: 100%;}
 .index-slider div a img{width: 100%;}
-.slider-cont {position: relative}
+.slider-cont {position: relative; margin-bottom: 30px}
 .slider-cont .index-slider-prev {width: 30px; height: 100px; position: absolute; top: 65px; left: 10px ; text-align: center; line-height: 100px}
 .slider-cont .index-slider-next {width: 30px; height: 100px; position: absolute; top: 65px; right: 10px; text-align: center; line-height: 100px}
 .slider-cont .index-slider-prev img {width: 15px}
 .slider-cont .index-slider-next img {width: 15px}
 .bx-prev{background: url("/site/img/partner_l.png") no-repeat scroll center center;width: 30px; height: 100px; position: absolute; top: 55px; left: 10px ; text-align: center; line-height: 100px}
 .bx-next {background: url("/site/img/partner_r.png") no-repeat scroll center center;width: 30px; height: 100px; position: absolute; top: 55px; right: 10px; text-align: center; line-height: 100px}
+
+
+
+.index-head {color: #a0b22b; font: 22px arialn; text-transform: uppercase}
+.index-catalog {margin-top: 15px}
+.index-catalog li{padding-right: 5px;padding-left: 5px;font: 12px "myriad pro";text-transform: uppercase;padding-top: 18px;padding-bottom: 18px;text-align: center;float: left; display: block; background-color: rgba(255,255,255,0.2); margin-right: 10px; margin-bottom: 15px; width: 168px; border: 1px solid #ececec}
+.index-catalog li:nth-child(5n){margin-right: 0}
+.index-catalog li img:hover{opacity: 0.5}
+.index-catalog {margin-bottom: 35px}
+
+
+.index-news {background: url("/site/img/bg-bottom-news.png") no-repeat scroll center 10px; margin-top: 10px}
+.index-news .index-head {padding-top: 25px; margin-bottom: 10px}
+.index-news ul li {float: left; width: 250px; border-right: 1px solid #ccc; margin-right: 25px; padding-right: 25px}
+.index-news ul li p.date {font: 10px arialn; color: #5b5b5b}
+.index-news ul li p.name {font: 14px arialn; color: #488ca6}
+.index-news ul li p.text {font: 13px arialn; color: #747474; line-height: 15px; margin-top: 10px}
+.index-news ul li p:last-child {margin-top: 15px}
+
+
+
+.slider-partner {background: url("/site/img/bg-bottom-news.png") no-repeat scroll center 10px; margin-top: 10px; padding-top: 25px}
+.slider-partner .index-head {margin-bottom: 10px}
 
 
 
