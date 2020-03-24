@@ -19,7 +19,7 @@ class Page {
 
     public function push($key, $data)
     {
-        array_push(self::$data, $data);
+        self::$data[$key] = $data;
     }
 
     public function getAll()

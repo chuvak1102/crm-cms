@@ -50,7 +50,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .catalog ul li:hover {background-color: #fff}
 .catalog ul li a{color: #444445; font: 13px Arial, Helvetica, sans-serif}
 .catalog ul li a:hover{color: #a0b22b}
-.catalog ul li {padding: 10px 0px 10px 25px; font: 13px "arialn"; line-height: 24px; text-transform: uppercase}
+.catalog ul li {padding: 11px 15px 11px 25px; font: 13px "arialn"; line-height: 17px; text-transform: uppercase}
 .catalog ul li {position: relative}
 .catalog ul li ul {position: absolute; margin-left: 232px; left: 0; top: -1px; width: 250px; visibility: hidden; z-index: 1}
 .catalog ul li ul li {border: none;background-color: #fff; border-left: 1px dotted #a0b22b; border-right: 1px dotted #a0b22b}

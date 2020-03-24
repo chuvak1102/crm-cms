@@ -11,6 +11,7 @@ class Routes {
         return [
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
+                '{insert}' => [Site\Controller\Index::class => 'insert'],
                 '{katalog-tovarov}' => [Site\Controller\Catalog::class => 'index'],
                 '{katalog-tovarov}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'parent'],
                 '{katalog-tovarov}=>{[^\/]+}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'child'],
@@ -35,6 +36,10 @@ class Routes {
                 '{user}' => [Admin\Controller\User::class => 'index'],
                 '{user}=>{create}' => [Admin\Controller\User::class => 'create'],
                 '{user}=>{delete}=>{[\d]+}' => [Admin\Controller\User::class => 'delete'],
+
+                '{category}' => [Admin\Controller\Category::class => 'index'],
+                '{category}=>{save}' => [Admin\Controller\Category::class => 'save'],
+                '{category}=>{delete}=>{[\d]+}' => [Admin\Controller\Category::class => 'delete']
             ],
         ][$domain] ?? [];
     }
