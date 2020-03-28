@@ -1,5 +1,5 @@
 <?php
-namespace Framework\Component\HttpFoundation;
+namespace Core;
 
 class JsonResponse{
 

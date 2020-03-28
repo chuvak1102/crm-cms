@@ -39,7 +39,10 @@ class Routes {
 
                 '{category}' => [Admin\Controller\Category::class => 'index'],
                 '{category}=>{save}' => [Admin\Controller\Category::class => 'save'],
-                '{category}=>{delete}=>{[\d]+}' => [Admin\Controller\Category::class => 'delete']
+                '{category}=>{delete}=>{[\d]+}' => [Admin\Controller\Category::class => 'delete'],
+
+                '{product}' => [Admin\Controller\Product::class => 'index'],
+                '{product}=>{edit}=>{[\d]+}' => [Admin\Controller\Product::class => 'edit'],
             ],
         ][$domain] ?? [];
     }

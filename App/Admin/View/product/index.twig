@@ -1,0 +1,105 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Фильтр</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="/product" role="form" class="form-inline">
+                            <div class="form-group">
+                                <select name="category" class="form-control">
+                                    <option value="">Категория</option>
+                                    {% for i in category %}
+                                        <option {% if filter.category == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select name="supplier" class="form-control">
+                                    <option value="">Поставщик</option>
+                                    {% for i in supplier %}
+                                        <option {% if filter.supplier == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input value="{{ filter.name }}" name="name" style="min-width: 150px" type="еуче" placeholder="Поиск по названию" class="form-control">
+                            </div>
+                            <a style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" href="/product"><strong>Сбросить</strong></a>
+                            <button style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Фильтровать</strong></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Инструменты</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <a class="btn btn-sm btn-primary" href="/product">Печатать ценники</a>
+                        <a class="btn btn-sm btn-primary" href="/product">Добавить товар</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="0">
+                                    </td>
+                                    <td>
+                                        Статус
+                                    </td>
+                                    <td>Изображение</td>
+                                    <td>
+                                        Название
+                                    </td>
+                                </tr>
+                                {% for i in product %}
+                                <tr class="category-row">
+                                    <td>
+                                        <input type="checkbox" data-value="{{ i.id }}">
+                                    </td>
+                                    <td>
+                                        <span style="cursor: pointer" class="category-status label label-primary">Активно</span>
+                                    </td>
+                                    <td>/img</td>
+                                    <td>
+                                        <a style="color: #676a6c" href="/product/edit/{{ i.id }}">{{ i.name }}</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {{ pagination.render() }}
+        </div>
+    </div>
+{% endblock %}

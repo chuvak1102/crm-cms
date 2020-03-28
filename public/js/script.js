@@ -14,7 +14,7 @@ $(document).ready(() => {
                 sort: category.find('[name=sort]').val(),
                 id: category.find('[name=id]').val(),
             },
-            success: e => console.log(e),
+            success: e => window.location.reload(),
             error: e => alert('Ошибка')
         });
 

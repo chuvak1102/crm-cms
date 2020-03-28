@@ -16,7 +16,8 @@ class Category extends Index {
     {
         $catalog = DB::select('*')
             ->from('category')
-            ->order_by('name')
+            ->order_by('active', 'desc')
+            ->order_by('name', 'asc')
             ->execute()
             ->fetch_all();
 
