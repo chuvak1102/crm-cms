@@ -75,10 +75,7 @@ class Pagination {
         ?>
             <div class="btn-group" style="margin-left: 13px">
                 <?foreach($this->result as $i){?>
-                    <a
-                        href="<?=$this->url.$i['page']?>"
-                        class="btn btn-white <?=$this->page == $i['page'] ? 'active' : ''?>"
-                    >
+                    <a href="<?=$this->url.$i['page']?>" class="btn btn-white <?=$this->page == $i['page'] ? 'active' : ''?>">
                         <?=$i['state'] == 'open' ? $i['page'] : '...'?>
                     </a>
                 <?}?>

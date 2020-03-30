@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <a class="btn btn-sm btn-primary" href="/product">Печатать ценники</a>
+                        <a class="btn btn-sm btn-primary print-price" href="#">Печатать ценники</a>
                         <a class="btn btn-sm btn-primary" href="/product">Добавить товар</a>
                     </div>
                 </div>
@@ -63,11 +63,11 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="table-responsive">
-                            <table class="table table-hover issue-tracker">
+                            <table class="table table-hover issue-tracker checkbox-container">
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="0">
+                                        <input class="checkbox-all" type="checkbox" value="0">
                                     </td>
                                     <td>
                                         Статус
@@ -80,12 +80,12 @@
                                 {% for i in product %}
                                 <tr class="category-row">
                                     <td>
-                                        <input type="checkbox" data-value="{{ i.id }}">
+                                        <input class="checkbox-check" type="checkbox" data-value="{{ i.id }}">
                                     </td>
                                     <td>
                                         <span style="cursor: pointer" class="category-status label label-primary">Активно</span>
                                     </td>
-                                    <td>/img</td>
+                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/{{ i.image }}" alt=""></td>
                                     <td>
                                         <a style="color: #676a6c" href="/product/edit/{{ i.id }}">{{ i.name }}</a>
                                     </td>
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="display: flex; justify-content: center">
             {{ pagination.render() }}
         </div>
     </div>

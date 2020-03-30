@@ -17,14 +17,6 @@ $(document).ready(() => {
             success: e => window.location.reload(),
             error: e => alert('Ошибка')
         });
-
-
-        console.log(category.find('.category-status').hasClass('label-primary') === true ? 1 : 0);
-        console.log(category.find('[name=name]').val());
-        console.log(category.find('[name=parent]').val());
-        console.log(category.find('[name=sort]').val());
-        console.log(category.find('[name=id]').val());
-
     });
 
     $('.category-status').click(e => {
@@ -40,10 +32,25 @@ $(document).ready(() => {
         }
     });
 
+    $('.checkbox-all').click(e => {
 
+        $(e.target)
+            .parents('.checkbox-container')
+            .find('.checkbox-check')
+            .map((i, el) => {
+                el.checked = $(e.target)[0].checked
+            });
+    });
 
-    console.log('adm');
+    $('.print-price').click(e => {
 
+        let ids = '';
 
+        $('.checkbox-check').map((i, el) => {
+            ids += (el.checked ? `&id[]=${$(el).data('value')}` : '')
+        });
+
+        window.open(`/product/print?${ids}`);
+    })
 
 });
