@@ -14,13 +14,13 @@ class Product extends Index {
         $offset = $limit * ($page - 1);
 
         $product = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
+            ->distinct(true)
             ->select(
                 ['product.id', 'id'],
                 ['product.name', 'name'],
                 ['product.article', 'article'],
                 ['product.alias', 'alias'],
                 ['product.active', 'active'],
-                ['product.category_id', 'category_id'],
                 ['product.image', 'image'],
                 ['product.price', 'price'],
                 ['product.count_current', 'count_current'],
@@ -41,7 +41,9 @@ class Product extends Index {
 
         if ($category_id = $request->get('category')) {
             $product = $product
-                ->where('product.category_id', '=', DB::expr($category_id));
+                ->join('product_to_category')
+                ->on('product_to_category.product_id', '=', 'product.id')
+                ->where('product_to_category.category_id', '=', DB::expr($category_id));
         }
 
         if ($name = $request->get('name')) {
@@ -75,7 +77,7 @@ class Product extends Index {
 
     function edit()
     {
-        return new \Core\JsonResponse(\Core\Router::seg(2));
+        return $this->render('Admin:product/edit', []);
     }
 
     /**
