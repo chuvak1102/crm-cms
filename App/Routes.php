@@ -44,6 +44,8 @@ class Routes {
                 '{product}' => [Admin\Controller\Product::class => 'index'],
                 '{product}=>{edit}=>{[\d]+}' => [Admin\Controller\Product::class => 'edit'],
                 '{product}=>{print}' => [Admin\Controller\Product::class => 'print'],
+                '{product}=>{sticker}=>{[\d]+}' => [Admin\Controller\Product::class => 'sticker'],
+                '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
             ],
         ][$domain] ?? [];
     }

@@ -359,4 +359,52 @@ class Product extends Model {
 
         }
     }
+
+    public static function getCategoryTree()
+    {
+        $catalog = DB::select('*')
+            ->from('category')
+            ->where('active', '=', '1')
+            ->order_by('sort')
+            ->execute()
+            ->fetch_all();
+
+        $category = [];
+        foreach ($catalog as $i) {
+
+            if ($i->parent_id) {
+                $category[$i->parent_id]['extend'][] = [
+                    'id' => $i->id,
+                    'name' => $i->name,
+                    'alias' => $i->alias,
+                ];
+            } else {
+                $category[$i->id] = [
+                    'id' => $i->id,
+                    'name' => $i->name,
+                    'alias' => $i->alias,
+                    'extend' => []
+                ];
+            }
+        }
+
+        return $category;
+    }
+
+    public function getAdditional()
+    {
+        $additionalExist = DB::select('dictionary_value.*')
+            ->from('dictionary_value')
+            ->join('dictionary_field')
+            ->on('dictionary_field.id', '=', 'dictionary_value.key')
+            ->join('dictionary')
+            ->on('dictionary.id', '=','dictionary_field.dictionary')
+            ->where('dictionary_value.external_table', '=', 'dictionary_field')
+            ->where('dictionary_value.external_column', '=', 'external_column')
+            ->where('dictionary_value.external_id', '=', $this->id)
+            ->where('dictionary.id', '=', 2)
+            ->execute()
+            ->fetch_all();
+        return array_column($additionalExist, 'key');
+    }
 }

@@ -93,7 +93,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="button">Печать этикетки</button>
+                            {% if product.id %}
+                                <a href="/product/sticker/{{ product.id }}" target="_blank" class="btn btn-primary" type="button">Печать этикетки</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-lg-6">

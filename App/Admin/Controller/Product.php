@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controller;
 
+use App\Admin\Model\DictionaryField;
+use App\Admin\Model\Supplier;
 use Core\Page;
 use Core\Request\Request;
 use Core\Database\DB;
@@ -78,34 +80,32 @@ class Product extends Index {
         ]);
     }
 
+    function create(Request $request)
+    {
+        $item = new Model();
+        $category = $item::getCategoryTree();
+        $supplier = DB::select('*')
+            ->from('supplier')
+            ->execute()
+            ->fetch_all();
+        $dictionary = DictionaryField::many(1, 'dictionary');
+        $additional = DictionaryField::many(2, 'dictionary');
+        $additionalExist = $item->getAdditional();
+
+        return $this->render('Admin:product/edit', [
+            'product' => $item,
+            'supplier' => $supplier,
+            'dictionary' => $dictionary,
+            'category' => $category,
+            'additional' => $additional,
+            'additionals' => $additionalExist
+        ]);
+    }
+
     function edit(Request $request)
     {
         $item = Model::one(Router::seg(2));
-        $catalog = DB::select('*')
-            ->from('category')
-            ->where('active', '=', '1')
-            ->order_by('sort')
-            ->execute()
-            ->fetch_all();
-
-        $category = [];
-        foreach ($catalog as $i) {
-
-            if ($i->parent_id) {
-                $category[$i->parent_id]['extend'][] = [
-                    'id' => $i->id,
-                    'name' => $i->name,
-                    'alias' => $i->alias,
-                ];
-            } else {
-                $category[$i->id] = [
-                    'id' => $i->id,
-                    'name' => $i->name,
-                    'alias' => $i->alias,
-                    'extend' => []
-                ];
-            }
-        }
+        $category = Model::getCategoryTree();
 
         if ($request->get('submit')) {
             $item->save($request);
@@ -116,31 +116,9 @@ class Product extends Index {
             ->from('supplier')
             ->execute()
             ->fetch_all();
-
-        $dictionary = DB::select('*')
-            ->from('dictionary_field')
-            ->where('dictionary', '=', 1)
-            ->execute()
-            ->fetch_all();
-
-        $additional = DB::select('*')
-            ->from('dictionary_field')
-            ->where('dictionary', '=', 2)
-            ->execute()
-            ->fetch_all();
-        $additionalExist = DB::select('dictionary_value.*')
-            ->from('dictionary_value')
-            ->join('dictionary_field')
-            ->on('dictionary_field.id', '=', 'dictionary_value.key')
-            ->join('dictionary')
-            ->on('dictionary.id', '=','dictionary_field.dictionary')
-            ->where('dictionary_value.external_table', '=', 'dictionary_field')
-            ->where('dictionary_value.external_column', '=', 'external_column')
-            ->where('dictionary_value.external_id', '=', $item->id)
-            ->where('dictionary.id', '=', 2)
-            ->execute()
-            ->fetch_all();
-        $additionalExist = array_column($additionalExist, 'key');
+        $dictionary = DictionaryField::many(1, 'dictionary');
+        $additional = DictionaryField::many(2, 'dictionary');
+        $additionalExist = $item->getAdditional();
 
         return $this->render('Admin:product/edit', [
             'product' => $item,
@@ -232,6 +210,49 @@ class Product extends Index {
             $mpdf->writeHTML($html);
         }
 
+        $mpdf->Output();
+    }
+
+    public function sticker()
+    {
+        $id = intval(Router::seg(2));
+        $i = DB::select('product.*')
+            ->from('product')
+            ->where('id', '=', $id)
+            ->execute()
+            ->fetch();
+
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->writeHTML("<html>");
+        $mpdf->writeHTML("
+            <head>
+                <style>
+                    *{box-sizing: border-box; margin: 0;padding: 0}
+                    .price {width: 55mm;  border: 0.5mm solid #000; float: left; margin: 1mm; }
+                    .up {width: 55mm; height: 30mm; position: relative;  border-bottom: 0.5mm solid #000}
+                    .down {width: 55mm; padding-bottom: 0.5mm}
+                    .left {width: 23mm; float: left;border-right: 0.5mm solid #000}
+                    .right {width: 29mm; }
+                    .p1 {font-size: 3.5mm; padding-top: 2mm; padding-left: 2mm;}
+                    .p2 {text-align: right; padding-right: 2mm; font-size: 3mm}
+                    .p3 {font-size: 3.5mm; padding: 1mm; padding-bottom: 0}
+                    .p4 {font-size: 4mm; padding-left: 1mm}
+                    .p5 {font-size: 3.5mm; padding: 1mm; padding-bottom: 0}
+                    .p6 {font-size: 4mm; padding-left: 1mm}
+                </style>
+            </head>
+        ");
+        
+        $html = "
+                <div class='price'>
+                    <div class='up'>
+                        <div class='p1'>{$i->name}</div>
+                        <div class=\"p2\">арт. {$i->article}</div>
+                    </div>
+                </div>
+            ";
+
+        $mpdf->writeHTML($html);
         $mpdf->Output();
     }
 }
