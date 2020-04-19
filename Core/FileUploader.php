@@ -1,10 +1,10 @@
 <?php
-namespace Framework\Modules\FileUploader;
+namespace Core;
 
 class FileUploader
 {
     protected $root;
-    protected $maxsize = '50gb'; //(int) kb, gb, mb
+    protected $maxsize = '10mb'; //(int) kb, gb, mb
     protected $allowed = array('rar','zip','doc','docx', 'xls','xlsx', 'csv', 'jpg', 'png', 'gif', 'jpeg', 'txt', 'pdf', 'xml');
     protected $path = array(
         'rar' => 'files/',
@@ -25,7 +25,7 @@ class FileUploader
 
     function __construct()
     {
-        $this->root = $_SERVER['DOCUMENT_ROOT'].'/web/files/';
+        $this->root = $_SERVER['DOCUMENT_ROOT'].'/files/';
     }
 
     public function save($file)

@@ -35,6 +35,11 @@ class Request{
         }
     }
 
+    function files($name)
+    {
+        return $this->files[$name] ?? null;
+    }
+
     function isXmlHttpRequest()
     {
         if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){

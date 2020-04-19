@@ -2,8 +2,11 @@
 
 namespace App\Admin\Controller;
 
+use Core\Page;
 use Core\Request\Request;
 use Core\Database\DB;
+use Core\Router;
+use App\Admin\Model\Product as Model;
 
 class Product extends Index {
 
@@ -22,7 +25,7 @@ class Product extends Index {
                 ['product.alias', 'alias'],
                 ['product.active', 'active'],
                 ['product.image', 'image'],
-                ['product.price', 'price'],
+                ['product.price_site', 'price'],
                 ['product.count_current', 'count_current'],
                 ['product.count_minimal', 'count_minimal'],
                 ['p.id', 'supplier_id']
@@ -64,7 +67,7 @@ class Product extends Index {
                 $count,
                 $limit,
                 3,
-                $request->get('page') ? $request->get('page') : 1,
+                $request->get('page', 1),
                 "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&page="
             ),
             'filter' => [
@@ -75,9 +78,78 @@ class Product extends Index {
         ]);
     }
 
-    function edit()
+    function edit(Request $request)
     {
-        return $this->render('Admin:product/edit', []);
+        $item = Model::one(Router::seg(2));
+        $catalog = DB::select('*')
+            ->from('category')
+            ->where('active', '=', '1')
+            ->order_by('sort')
+            ->execute()
+            ->fetch_all();
+
+        $category = [];
+        foreach ($catalog as $i) {
+
+            if ($i->parent_id) {
+                $category[$i->parent_id]['extend'][] = [
+                    'id' => $i->id,
+                    'name' => $i->name,
+                    'alias' => $i->alias,
+                ];
+            } else {
+                $category[$i->id] = [
+                    'id' => $i->id,
+                    'name' => $i->name,
+                    'alias' => $i->alias,
+                    'extend' => []
+                ];
+            }
+        }
+
+        if ($request->get('submit')) {
+            $item->save($request);
+            $this->redirectToRoute('/product/edit/'.Router::seg(2));
+        }
+
+        $supplier = DB::select('*')
+            ->from('supplier')
+            ->execute()
+            ->fetch_all();
+
+        $dictionary = DB::select('*')
+            ->from('dictionary_field')
+            ->where('dictionary', '=', 1)
+            ->execute()
+            ->fetch_all();
+
+        $additional = DB::select('*')
+            ->from('dictionary_field')
+            ->where('dictionary', '=', 2)
+            ->execute()
+            ->fetch_all();
+        $additionalExist = DB::select('dictionary_value.*')
+            ->from('dictionary_value')
+            ->join('dictionary_field')
+            ->on('dictionary_field.id', '=', 'dictionary_value.key')
+            ->join('dictionary')
+            ->on('dictionary.id', '=','dictionary_field.dictionary')
+            ->where('dictionary_value.external_table', '=', 'dictionary_field')
+            ->where('dictionary_value.external_column', '=', 'external_column')
+            ->where('dictionary_value.external_id', '=', $item->id)
+            ->where('dictionary.id', '=', 2)
+            ->execute()
+            ->fetch_all();
+        $additionalExist = array_column($additionalExist, 'key');
+
+        return $this->render('Admin:product/edit', [
+            'product' => $item,
+            'supplier' => $supplier,
+            'dictionary' => $dictionary,
+            'category' => $category,
+            'additional' => $additional,
+            'additionals' => $additionalExist
+        ]);
     }
 
     /**
@@ -91,7 +163,7 @@ class Product extends Index {
         }, $request->get('id', [0])));
 
         $items = DB::select(
-            'product.name', 'product.article', 'e.value', 'product.price', ['e2.value', 'in_box']
+            'product.name', 'product.article', 'e.value', ['product.price_site', 'price'], ['e2.value', 'in_box']
         )->from('product')
             ->join(['product_option_values', 'e'], 'left')
             ->on('e.element_id', '=', 'product.id')

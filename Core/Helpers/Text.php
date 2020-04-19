@@ -52,4 +52,13 @@ class Text {
         return strtr(strtr($str, $advanced), $replacement);
     }
 
+    static function alias($str, array $advanced = [])
+    {
+        $alias = self::transliterate($str, $advanced);
+        $alias = preg_replace('/[^a-z0-9\s]/', '', $alias);
+        $alias = str_replace(' ', '-', trim($alias));
+
+        return $alias;
+    }
+
 }
