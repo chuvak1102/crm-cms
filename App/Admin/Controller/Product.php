@@ -8,7 +8,7 @@ use Core\Page;
 use Core\Request\Request;
 use Core\Database\DB;
 use Core\Router;
-use App\Admin\Model\Product as Model;
+use App\Admin\Model\Product as ProductModel;
 
 class Product extends Index {
 
@@ -82,7 +82,7 @@ class Product extends Index {
 
     function create(Request $request)
     {
-        $item = new Model();
+        $item = new ProductModel();
         $category = $item::getCategoryTree();
         $supplier = DB::select('*')
             ->from('supplier')
@@ -92,24 +92,30 @@ class Product extends Index {
         $additional = DictionaryField::many(2, 'dictionary');
         $additionalExist = $item->getAdditional();
 
+        if ($request->get('submit')) {
+            $item->save($request);
+            return $this->redirectToRoute('/product');
+        }
+
         return $this->render('Admin:product/edit', [
             'product' => $item,
             'supplier' => $supplier,
             'dictionary' => $dictionary,
             'category' => $category,
             'additional' => $additional,
-            'additionals' => $additionalExist
+            'additionals' => $additionalExist,
+            'formAction' => '/product/create'
         ]);
     }
 
     function edit(Request $request)
     {
-        $item = Model::one(Router::seg(2));
-        $category = Model::getCategoryTree();
+        $item = ProductModel::one(Router::seg(2));
+        $category = ProductModel::getCategoryTree();
 
         if ($request->get('submit')) {
             $item->save($request);
-            $this->redirectToRoute('/product/edit/'.Router::seg(2));
+            return $this->redirectToRoute('/product/edit/'.Router::seg(2));
         }
 
         $supplier = DB::select('*')
@@ -126,7 +132,8 @@ class Product extends Index {
             'dictionary' => $dictionary,
             'category' => $category,
             'additional' => $additional,
-            'additionals' => $additionalExist
+            'additionals' => $additionalExist,
+            'formAction' => '/product/edit/'.Router::seg(2)
         ]);
     }
 
@@ -242,12 +249,12 @@ class Product extends Index {
                 </style>
             </head>
         ");
-        
+
         $html = "
                 <div class='price'>
                     <div class='up'>
                         <div class='p1'>{$i->name}</div>
-                        <div class=\"p2\">арт. {$i->article}</div>
+                        <div class=\"p2\">надо список что выводить</div>
                     </div>
                 </div>
             ";

@@ -101,6 +101,26 @@ class Product extends Model {
 
     public function save(Request $request)
     {
+        // create
+        if (!$this->id) {
+            DB::insert('product', [
+                'name',
+                'alias',
+            ])->values([
+                $request->get('name'),
+                Text::alias($request->get('name'))
+            ])
+                ->execute();
+
+            $id = DB::select(DB::expr('MAX(id) as id'))
+                ->from('product')
+                ->execute()->current()['id'];
+
+//            dump($id);
+
+            $this->id = $id;
+        }
+
         $priceSiteOptCount = $this->getPriceSiteOptCount()->id ? $this->getPriceSiteOptCount() : new DictionaryValue();
         if ($request->get('price_site_opt_count')) {
             $priceSiteOptCount->key = $request->get('price_site_opt_count')['key'];
@@ -305,59 +325,52 @@ class Product extends Model {
             $height->save();
         }
 
-        if ($this->id) {
+        $values = [
+            'name' => $request->get('name'),
+            'alias' => Text::alias($request->get('name')),
+            'article' => $request->get('article'),
+            'active' => $request->get('active') ? 1 : 0,
+            'price_site' => $request->get('price_site'),
+            'count_current' => $countCurrent->id,
+            'count_minimal' => $countMinimal->id,
+            'count_reserve' => $countReserve->id,
+            'hit' => $request->get('hit') ? 1 : 0,
+            'new' => $request->get('new') ? 1 : 0,
+            'share' => $request->get('share') ? 1 : 0,
+            'price_site_opt' => $request->get('price_site_opt'),
+            'price_supplier' => $request->get('price_supplier'),
+            'price_site_opt_count' => $priceSiteOptCount->id,
+            'supplier_product_name' => $request->get('supplier_product_name'),
+            'supplier_article' => $request->get('supplier_article'),
+            'supplier_date_arrive' => $request->get('supplier_date_arrive'),
+            'available' => $request->get('available') ? 1 : 0,
+            'kit' => $request->get('kit') ? 1 : 0,
+            'logo' => $request->get('logo') ? 1 : 0,
+            'pack_count' => $packCount->id,
+            'pack_weight' => $packWeight->id,
+            'pack_volume' => $packVolume->id,
+            'box_count' => $boxCount->id,
+            'box_weight' => $boxWeight->id,
+            'box_volume' => $boxVolume->id,
+            'length' => $length->id,
+            'width' => $width->id,
+            'height' => $height->id,
+            'material' => $request->get('material'),
+            'color' => $request->get('color'),
+            'description' => $request->get('description'),
+            'tags' => $request->get('tags')
+        ];
 
-            $values = [
-                'name' => $request->get('name'),
-                'alias' => Text::alias($request->get('name')),
-                'article' => $request->get('article'),
-                'active' => $request->get('active') ? 1 : 0,
-                'price_site' => $request->get('price_site'),
-                'count_current' => $countCurrent->id,
-                'count_minimal' => $countMinimal->id,
-                'count_reserve' => $countReserve->id,
-                'hit' => $request->get('hit') ? 1 : 0,
-                'new' => $request->get('new') ? 1 : 0,
-                'share' => $request->get('share') ? 1 : 0,
-                'price_site_opt' => $request->get('price_site_opt'),
-                'price_supplier' => $request->get('price_supplier'),
-                'price_site_opt_count' => $priceSiteOptCount->id,
-                'supplier_product_name' => $request->get('supplier_product_name'),
-                'supplier_article' => $request->get('supplier_article'),
-                'supplier_date_arrive' => $request->get('supplier_date_arrive'),
-                'available' => $request->get('available') ? 1 : 0,
-                'kit' => $request->get('kit') ? 1 : 0,
-                'logo' => $request->get('logo') ? 1 : 0,
-                'pack_count' => $packCount->id,
-                'pack_weight' => $packWeight->id,
-                'pack_volume' => $packVolume->id,
-                'box_count' => $boxCount->id,
-                'box_weight' => $boxWeight->id,
-                'box_volume' => $boxVolume->id,
-                'length' => $length->id,
-                'width' => $width->id,
-                'height' => $height->id,
-//            'volume' => $request->get('volume'),
-                'material' => $request->get('material'),
-                'color' => $request->get('color'),
-                'description' => $request->get('description'),
-                'tags' => $request->get('tags')
-            ];
-
-            if ($image = $request->files('image')) {
-                if ($image['name']) {
-                    $values['image'] = (new FileUploader())->save($image);
-                }
+        if ($image = $request->files('image')) {
+            if ($image['name']) {
+                $values['image'] = (new FileUploader())->save($image);
             }
-
-            DB::update('product')
-                ->set($values)
-                ->where('id', '=', $this->id)
-                ->execute();
-
-        } else {
-
         }
+
+        DB::update('product')
+            ->set($values)
+            ->where('id', '=', $this->id)
+            ->execute();
     }
 
     public static function getCategoryTree()
