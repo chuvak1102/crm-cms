@@ -11,11 +11,17 @@ class Routes {
         return [
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
-                '{insert}' => [Site\Controller\Index::class => 'insert'],
-                '{katalog-tovarov}' => [Site\Controller\Catalog::class => 'index'],
-                '{katalog-tovarov}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'parent'],
-                '{katalog-tovarov}=>{[^\/]+}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'child'],
-                '{katalog-tovarov}=>{[^\/]+}=>{[^\/]+}=>{[^\/]+}' => [Site\Controller\Catalog::class => 'item'],
+//                '{insert}' => [Site\Controller\Index::class => 'insert'],
+                '{o-kompanii}' => [Site\Controller\Index::class => 'about'],
+                '{novosti}' => [Site\Controller\Index::class => 'news'],
+                '{oplata-i-dostavka}' => [Site\Controller\Index::class => 'delivery'],
+                '{vakansii}' => [Site\Controller\Index::class => 'job'],
+                '{kontakty}' => [Site\Controller\Index::class => 'contacts'],
+                '{}' => [Site\Controller\Index::class => 'about'],
+                '{katalog-tovarov}' => [Site\Controller\Index::class => 'index'],
+                '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
+                '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
+                '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
             ],
             Config::AdminDomain => [
                 '' => [Admin\Controller\Index::class => 'index'],
