@@ -1,7 +1,6 @@
 {% extends 'layout.twig' %}
 {% block content %}
     <div class="row">
-{#        <h2 class="index-head">Наша продукция</h2>#}
         <div class="bread">
             <h4>НАША ПРОДУКЦИЯ</h4>
             <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
@@ -13,9 +12,9 @@
                         <span class="product">
                             <a href="{{ path }}/{{ i.alias }}">
                                 <div class="img">
-                                    <img class="image" src="/files/{{ i.image }}" alt="">
+                                    <img class="image" src="/files/mini/{{ i.image }}" alt="">
                                 </div>
-                                <span class="name">{{ i.name }}</span>
+                                <span class="name">{{ i.name | raw }}</span>
                             </a>
                         </span>
                     </li>
@@ -29,14 +28,14 @@
                     <span class="product">
                         <a href="{{ path }}/{{ i.alias }}">
                             <div class="img">
-                                <img class="image" src="/files/{{ i.image }}" alt="">
+                                <img class="image" src="/files/mini/{{ i.image }}" alt="">
                             </div>
-                            <span class="name">{{ i.name }}</span>
+                            <span class="name">{{ i.name | raw }}</span>
                         </a>
-                        <span class="price">Цена: <i>123.5 руб.</i></span>
+                        <span class="price">Цена: <i>{{ i.price_site }} руб.</i></span>
                         <span class="count">
                             <span class="price-cont">
-                                <input type="text" value="50">
+                                <input type="text" value="{{ i.getPackCount().value }}">
                                 <span class="plus">+</span>
                                 <span class="minus">-</span>
                             </span>
@@ -48,6 +47,4 @@
         </ul>
         <div class="clear"></div>
     </div>
-    {{ path }}
-    {{ dump() }}
 {% endblock %}

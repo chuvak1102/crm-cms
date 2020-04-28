@@ -6,12 +6,12 @@
                 <img src="/files/{{ product.image }}" alt="">
             </div>
             <div class="right">
-                <h1 class="name">{{ product.name }}</h1>
+                <h1 class="name">{{ product.name | raw }}</h1>
                 <div class="article">Артикул: {{ product.article }}</div>
                 <div class="price">Цена за 1 шт. <i>{{ product.price_site }} руб.</i></div>
                 <span class="count">
                     <span class="price-cont">
-                        <input type="text" value="50">
+                        <input type="text" value="{{ product.getPackCount().value }}">
                         <span class="plus">+</span>
                         <span class="minus">-</span>
                     </span>

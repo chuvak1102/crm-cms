@@ -59,10 +59,15 @@ class Product extends Index {
         $product = $product->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
         $supplier = DB::select('*')->from('supplier')->execute()->fetch_all();
-        $category = DB::select('*')->from('category')->execute()->fetch_all();
+        $category = ProductModel::getCategoryTree();
+
+        $products = [];
+        foreach ($product as $i) {
+            $products[] = ProductModel::one($i->id);
+        }
 
         return $this->render('Admin:product/index', [
-            'product' => $product,
+            'product' => $products,
             'supplier' => $supplier,
             'category' => $category,
             'pagination' => new \Core\Pagination(

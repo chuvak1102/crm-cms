@@ -2,6 +2,7 @@
 
 namespace App\Site\Controller;
 use App\Admin\Model\Category;
+use App\Admin\Model\DictionaryValue;
 use App\Admin\Model\Product;
 use Core\Controller;
 use Core\Database\DB;
@@ -22,18 +23,22 @@ class Index extends Controller {
 
         $category = [];
         foreach ($catalog as $i) {
-
-            if ($i->parent_id) {
-                $category[$i->parent_id]['extend'][] = [
-                    'name' => $i->name,
-                    'alias' => $i->alias,
-                ];
-            } else {
+            if (!$i->parent_id) {
                 $category[$i->id] = [
                     'name' => $i->name,
                     'alias' => $i->alias,
                     'extend' => []
                 ];
+            }
+        }
+        foreach ($catalog as $i) {
+            if ($i->parent_id) {
+                if (isset($category[$i->parent_id])) {
+                    $category[$i->parent_id]['extend'][] = [
+                        'name' => $i->name,
+                        'alias' => $i->alias,
+                    ];
+                }
             }
         }
 
@@ -78,8 +83,16 @@ class Index extends Controller {
                         ->join('product_to_category')
                         ->on('product_to_category.product_id', '=', 'product.id')
                         ->where('product_to_category.category_id', '=', $category->id)
+                        ->where('product.active', '=', 1)
                         ->execute()
                         ->fetch_all();
+
+                    $ids = array_column($products, 'id');
+
+                    $products = [];
+                    foreach ($ids as $id) {
+                        $products[] = Product::one($id);
+                    }
 
                     $subCategory = Category::many($category->id, 'parent_id');
 
@@ -98,8 +111,74 @@ class Index extends Controller {
         ]);
     }
 
-    private function insert()
+    public function insert()
     {
+        // 3,9 pack
+        // 4,8 box
+        $ids = DB::select('id')
+            ->from('product')
+            ->execute()
+            ->fetch_all();
+
+        foreach ($ids as $id) {
+
+            $id = $id->id;
+
+//            $values = DB::select(['value1', 'value'], ['element_id', 'product_id'], ['act1', 'active'])
+//                ->from('diafan_shop_param_element')
+//                ->where('element_id', '=', $id)
+//                ->where('param_id', 'in', [15])
+//                ->execute()
+//                ->fetch();
+//
+//            dump($values);
+
+            $active = DB::select(['act1', 'active'])
+                ->from('diafan_shop')
+                ->where('id', '=', $id)
+                ->execute()
+                ->fetch();
+
+            if ($active) {
+
+                $act = $active->active ? 1 : 0;
+
+                DB::update('product')
+                        ->set([
+                            'active' => $act
+                        ])
+                        ->where('id', '=', $id)
+                        ->execute();
+
+            }
+
+//            if ($values) {
+
+
+//
+//                $dv = new DictionaryValue();
+//                $dv->key = 5;
+//                $dv->value = $values->value;
+//                $dv->external_id = $id;
+//                $dv->external_table = 'product';
+//                $dv->external_column = 'material';
+//                $dv->save();
+//
+//                if ($dv->id) {
+//                    DB::update('product')
+//                        ->set([
+//                            'description' => $values->value
+//                        ])
+//                        ->where('id', '=', $id)
+//                        ->execute();
+//                }
+
+//            }
+        }
+
+
+
+        die('FINISH');
         $c = DB::select('*')
             ->from('diafan_shop_param_select')
             ->where('param_id', '=', 26)

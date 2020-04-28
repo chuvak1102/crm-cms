@@ -364,6 +364,12 @@ class Product extends Model {
         if ($image = $request->files('image')) {
             if ($image['name']) {
                 $values['image'] = (new FileUploader())->save($image);
+
+                $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
+                $img = new \Imagick($root.$values['image']);
+                $img->scaleImage(200,0);
+                $img->writeImage($root.'mini/'.$values['image']);
+                $img->destroy();
             }
         }
 
@@ -377,27 +383,31 @@ class Product extends Model {
     {
         $catalog = DB::select('*')
             ->from('category')
-            ->where('active', '=', '1')
+//            ->where('active', '=', '1')
             ->order_by('sort')
             ->execute()
             ->fetch_all();
 
         $category = [];
         foreach ($catalog as $i) {
-
-            if ($i->parent_id) {
-                $category[$i->parent_id]['extend'][] = [
-                    'id' => $i->id,
-                    'name' => $i->name,
-                    'alias' => $i->alias,
-                ];
-            } else {
+            if (!$i->parent_id) {
                 $category[$i->id] = [
                     'id' => $i->id,
                     'name' => $i->name,
                     'alias' => $i->alias,
                     'extend' => []
                 ];
+            }
+        }
+        foreach ($catalog as $i) {
+            if ($i->parent_id) {
+                if (isset($category[$i->parent_id])) {
+                    $category[$i->parent_id]['extend'][] = [
+                        'id' => $i->id,
+                        'name' => $i->name,
+                        'alias' => $i->alias,
+                    ];
+                }
             }
         }
 
@@ -419,5 +429,11 @@ class Product extends Model {
             ->execute()
             ->fetch_all();
         return array_column($additionalExist, 'key');
+    }
+
+    public function afterLoad()
+    {
+//        dump($this);
+//        die('after');
     }
 }

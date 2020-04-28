@@ -11,7 +11,7 @@ class Routes {
         return [
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
-//                '{insert}' => [Site\Controller\Index::class => 'insert'],
+                '{insert}' => [Site\Controller\Index::class => 'insert'],
                 '{o-kompanii}' => [Site\Controller\Index::class => 'about'],
                 '{novosti}' => [Site\Controller\Index::class => 'news'],
                 '{oplata-i-dostavka}' => [Site\Controller\Index::class => 'delivery'],
@@ -24,6 +24,8 @@ class Routes {
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
             ],
             Config::AdminDomain => [
+                '{sync}' => [Admin\Controller\Test::class => 'sync'],
+
                 '' => [Admin\Controller\Index::class => 'index'],
                 '{login}' => [Admin\Controller\Index::class => 'login'],
                 '{logout}' => [Admin\Controller\Index::class => 'logout'],
@@ -52,6 +54,8 @@ class Routes {
                 '{product}=>{print}' => [Admin\Controller\Product::class => 'print'],
                 '{product}=>{sticker}=>{[\d]+}' => [Admin\Controller\Product::class => 'sticker'],
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
+
+                '{order}' => [Admin\Controller\Order::class => 'index'],
             ],
         ][$domain] ?? [];
     }

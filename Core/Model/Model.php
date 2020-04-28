@@ -49,6 +49,8 @@ class Model {
             return $model;
         }
 
+        $model->afterLoad();
+
         return $model;
     }
 
@@ -73,6 +75,8 @@ class Model {
                 foreach ($single as $k => $v) {
                     $model->$k = $v;
                 }
+
+                $model->afterLoad();
 
                 array_push($many, $model);
             }
@@ -103,4 +107,6 @@ class Model {
 
         return $table;
     }
+
+    public function afterLoad() {}
 }

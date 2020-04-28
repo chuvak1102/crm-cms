@@ -15,10 +15,15 @@
                     <div class="ibox-content">
                         <form action="/product" role="form" class="form-inline">
                             <div class="form-group">
-                                <select name="category" class="form-control">
+                                <select class="form-control" name="category">
                                     <option value="">Категория</option>
-                                    {% for i in category %}
-                                        <option {% if filter.category == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                    {% for root in category %}
+                                        <option {% if root.id == filter.category %} selected {% endif %} value="{{ root.id }}">{{ root.name }}</option>
+                                        {% if root.extend %}
+                                            {% for i in root.extend %}
+                                                <option {% if i.id == filter.category %} selected {% endif %} value="{{ i.id }}">--{{ i.name }}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -56,12 +61,12 @@
                                     <td>
                                         <input class="checkbox-all" type="checkbox" value="0">
                                     </td>
-{#                                    <td>#}
-{#                                        Статус#}
-{#                                    </td>#}
                                     <td>
                                         Название
                                     </td>
+                                    <td>Цена на сайте</td>
+                                    <td>В упаковке</td>
+                                    <td>В коробке</td>
                                     <td>Изображение</td>
                                 </tr>
                                 {% for i in product %}
@@ -69,13 +74,13 @@
                                     <td>
                                         <input class="checkbox-check" type="checkbox" data-value="{{ i.id }}">
                                     </td>
-{#                                    <td>#}
-{#                                        <span style="cursor: pointer" class="category-status label label-primary">Активно</span>#}
-{#                                    </td>#}
                                     <td>
-                                        <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name }}</a>
+                                        <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a>
                                     </td>
-                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/{{ i.image }}" alt=""></td>
+                                    <td>{{ i.price_site }}</td>
+                                    <td>{{ i.getPackCount().value }} {{ i.getPackCount().dictionaryField().name }}</td>
+                                    <td>{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
+                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>

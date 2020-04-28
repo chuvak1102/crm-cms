@@ -23,9 +23,9 @@ class FileUploader
         'xml' => 'files/'
     );
 
-    function __construct()
+    function __construct($directory = 'files')
     {
-        $this->root = $_SERVER['DOCUMENT_ROOT'].'/files/';
+        $this->root = $_SERVER['DOCUMENT_ROOT']."/{$directory}/";
     }
 
     public function save($file)

@@ -83,7 +83,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .index-catalog {margin-bottom: 35px}
 .index-catalog.category li {max-height: 220px;}
 .index-catalog li a {font-family: inherit}
-.index-catalog li a .name {padding: 0 10px 0 10px;font-family: inherit; font-weight: bold; display: table-cell;vertical-align: middle; height: 70px}
+.index-catalog li a .name {display: flex;justify-content: center;flex-flow: column;overflow-y: hidden;padding: 0 10px 0 10px;font-family: inherit; font-weight: bold;vertical-align: middle; height: 70px}
 .index-catalog li .product a .img {height: 100px; }
 .index-catalog li .product .price {text-transform: none; font: 13px "Arial", sans-serif; color: #626262; padding-top: 5px}
 .index-catalog li .product .price i {font-style: normal;font-weight: normal;color: #488ca6;font: 14px "MyriadPro";}
