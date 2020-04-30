@@ -50,26 +50,6 @@ class Request{
         }
     }
 
-    function getParam($name){
-        return $this->params[$name];
-    }
-
-    function setParam($params){
-        if(is_array($params) && !empty($params)){
-            foreach($params as $k => $v){
-                $this->params[$k] = $v;
-            }
-        }
-    }
-
-    function add($params = array()){
-        if(is_array($params) && !empty($params)){
-            foreach($params as $k => $v){
-                $this->get[$k] = $v;
-            }
-        }
-    }
-
     function uri()
     {
         return $_SERVER['REQUEST_URI'];

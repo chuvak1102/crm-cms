@@ -56,7 +56,30 @@ class Routes {
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
+
+                '{content}' => [Admin\Controller\Content::class => 'index'],
+                '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
+                '{content}=>{[\d]+}=>{create}' => [Admin\Controller\Content::class => 'create'],
+                '{content}=>{save}' => [Admin\Controller\Content::class => 'save'],
+                '{content}=>{save}=>{[\d]+}' => [Admin\Controller\Content::class => 'save'],
+                '{content}=>{fields}=>{create}=>{[\d]+}' => [Admin\Controller\Content::class => 'fields'],
+                '{content}=>{fields}=>{save}=>{[\d]+}' => [Admin\Controller\Content::class => 'fields'],
             ],
         ][$domain] ?? [];
+    }
+
+    public static function get()
+    {
+        return [
+
+        ];
+
+
+        return new class {
+
+            static function path($path){}
+            static function destination($controller, $action){}
+
+        };
     }
 }

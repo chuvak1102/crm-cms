@@ -47,7 +47,16 @@ class Index extends Controller {
 
     function index()
     {
-        return $this->render('Site:index');
+        $slider = DB::select('alias', 'image')
+            ->from('product')
+            ->order_by(DB::expr('RAND()'))
+            ->limit(6)
+            ->execute()
+            ->fetch_all();
+
+        return $this->render('Site:index', [
+            'slider' => $slider
+        ]);
     }
 
     function catalog(Request $request)

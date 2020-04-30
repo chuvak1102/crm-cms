@@ -56,9 +56,9 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 .content {float: right; width: calc(100% - 250px); margin: 5px}
 
-.index-slider div {width: 33%; display: inline-block}
-.index-slider div a{width: 100%;}
-.index-slider div a img{width: 100%;}
+.index-slider div.slide {width: 33%; display: inline-block}
+.index-slider div.slide a{width: 295px; height: 220px; object-fit: cover; display: block}
+.index-slider div.slide a img{width: 295px; height: 220px; object-fit: cover}
 .slider-cont {position: relative; margin-bottom: 30px}
 .slider-cont .index-slider-prev {width: 30px; height: 100px; position: absolute; top: 65px; left: 10px ; text-align: center; line-height: 100px}
 .slider-cont .index-slider-next {width: 30px; height: 100px; position: absolute; top: 65px; right: 10px; text-align: center; line-height: 100px}

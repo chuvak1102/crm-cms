@@ -1,0 +1,90 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <form action="/content/fields/save/{{ content.id }}" method="post">
+                        <div class="ibox-content">
+                            <div>
+                                <button type="submit" name="submit" value="1" class="btn btn-sm btn-primary">SAVE</button>
+                                <button type="button" class="btn btn-sm btn-primary add-field">+</button>
+                            </div>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover issue-tracker fields">
+                                    <tbody>
+                                    <tr>
+                                        <th >CANONICAL</th>
+                                        <th >COLUMN NAME</th>
+                                        <th >TYPE</th>
+                                        <th >ADVANCED</th>
+                                        <th >DEL</th>
+                                    </tr>
+                                    {% for i in content_field %}
+                                        <tr class="field-row">
+                                            <td><input name="canonical[]" value="{{ i.name }}" type="text" class="form-control"></td>
+                                            <td><input name="column[]" value="{{ i.column_name }}" type="text" class="form-control"></td>
+                                            <td>
+                                                <select name="type[]" id="" class="form-control">
+                                                    {% for f in fields %}
+                                                        <option {% if f.id == i.field_id %}selected{% endif %} value="{{ f.type }}">{{ f.name }} {{ f.type }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="advanced[]" id="" class="form-control">
+                                                    <option value="">...</option>
+                                                </select>
+                                            </td>
+                                            <td><button type="button" class="btn btn-sm btn-danger delete-field" >-</button></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="new-field">
+        <tr style="visibility: hidden" class="field-row">
+            <td><input name="canonical[]" type="text" class="form-control"></td>
+            <td><input name="column[]" type="text" class="form-control"></td>
+            <td>
+                <select name="type[]" id="" class="form-control">
+                    {% for i in fields %}
+                        <option value="{{ i.type }}">{{ i.name }} {{ i.type }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name="advanced[]" id="" class="form-control">
+                    <option value="">...</option>
+                </select>
+            </td>
+            <td><button type="button" class="btn btn-sm btn-danger delete-field" >-</button></td>
+        </tr>
+    </table>
+
+    <script>
+
+        $('button.add-field').click(e => {
+
+            let row = $('.new-field tr').clone();
+
+            row.css({visibility: "visible"});
+            $('table.fields')
+                .append(row);
+        });
+
+        $('body').on('click', 'button.delete-field', e => {
+
+            $(e.target)
+                .parents('.field-row')
+                .remove();
+        });
+    </script>
+{% endblock %}

@@ -87,6 +87,38 @@ class Model {
         return [];
     }
 
+    public static function all()
+    {
+        $table = self::getTableName(new static());
+
+        $object = DB::select('*')
+            ->from($table)
+            ->execute()
+            ->fetch_all();
+
+        $many = [];
+
+        if ($object) {
+
+            foreach ($object as $single) {
+
+                $model = new static();
+
+                foreach ($single as $k => $v) {
+                    $model->$k = $v;
+                }
+
+                $model->afterLoad();
+
+                array_push($many, $model);
+            }
+
+            return $many;
+        }
+
+        return [];
+    }
+
     /**
      * @param $class
      * @throws \ReflectionException
