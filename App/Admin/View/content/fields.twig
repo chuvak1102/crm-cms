@@ -7,19 +7,21 @@
                     <form action="/content/fields/save/{{ content.id }}" method="post">
                         <div class="ibox-content">
                             <div>
-                                <button type="submit" name="submit" value="1" class="btn btn-sm btn-primary">SAVE</button>
-                                <button type="button" class="btn btn-sm btn-primary add-field">+</button>
+                                <button type="submit" name="submit" value="1" class="btn btn-sm btn-primary">Сохранить</button>
+                                <button type="button" class="btn btn-sm btn-primary add-field">+ Простое поле</button>
+                                <button type="button" class="btn btn-sm btn-primary add-field-link">+ Связанное поле</button>
+                                <button type="button" class="btn btn-sm btn-primary add-field-dictionary">+ Словарь</button>
                             </div>
                             <br>
                             <div class="table-responsive">
                                 <table class="table table-hover issue-tracker fields">
                                     <tbody>
                                     <tr>
-                                        <th >CANONICAL</th>
-                                        <th >COLUMN NAME</th>
-                                        <th >TYPE</th>
-                                        <th >ADVANCED</th>
-                                        <th >DEL</th>
+                                        <th >Название</th>
+                                        <th >Колонка</th>
+                                        <th >Тип</th>
+                                        <th >Ссылается на</th>
+                                        <th ></th>
                                     </tr>
                                     {% for i in content_field %}
                                         <tr class="field-row">
@@ -37,9 +39,32 @@
                                                     <option value="">...</option>
                                                 </select>
                                             </td>
-                                            <td><button type="button" class="btn btn-sm btn-danger delete-field" >-</button></td>
+                                            <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
                                         </tr>
                                     {% endfor %}
+                                    {% if content.getType.slug == 'static' and content_field is empty %}
+                                        <tr class="field-row">
+                                            <td><input name="canonical[]" value="ID" type="text" class="form-control"></td>
+                                            <td><input name="column[]" value="id" type="text" class="form-control"></td>
+                                            <td>
+                                                <select name="type[]" class="form-control">
+                                                    <option value="{{ id_type.id }}">{{ id_type.name }}</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="advanced[]" id="" class="form-control">
+                                                    <option value="static:">...</option>
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if content.getType.slug == 'dictionary' %}
+
+                                    {% endif %}
+                                    {% if content.getType.slug == 'category_tree' %}
+
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -56,16 +81,58 @@
             <td>
                 <select name="type[]" id="" class="form-control">
                     {% for i in fields %}
-                        <option value="{{ i.type }}">{{ i.name }} {{ i.type }}</option>
+                        <option value="{{ i.id }}">{{ i.name }} {{ i.type }}</option>
                     {% endfor %}
                 </select>
             </td>
             <td>
                 <select name="advanced[]" id="" class="form-control">
-                    <option value="">...</option>
+                        <option value="static:">...</option>
                 </select>
             </td>
-            <td><button type="button" class="btn btn-sm btn-danger delete-field" >-</button></td>
+            <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
+        </tr>
+    </table>
+    <table class="new-field-link">
+        <tr style="visibility: hidden" class="field-row">
+            <td><input name="canonical[]" type="text" class="form-control"></td>
+            <td><input name="column[]" type="text" class="form-control"></td>
+            <td>
+                <select name="type[]" id="" class="form-control">
+                    {% for i in fields %}
+                        <option value="{{ i.id }}">{{ i.name }} {{ i.type }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name="advanced[]" id="" class="form-control">
+                    {% for i in constraint %}
+                        <option value="constraint:{{ i.id }}">{{ i.getContent.canonical }} : {{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
+        </tr>
+    </table>
+    <table class="new-field-dictionary">
+        <tr style="visibility: hidden" class="field-row">
+            <td><input name="canonical[]" type="text" class="form-control"></td>
+            <td><input name="column[]" type="text" class="form-control"></td>
+            <td>
+                <select name="type[]" id="" class="form-control">
+                    {% for i in fields %}
+                        <option value="{{ i.id }}">{{ i.name }} {{ i.type }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name="advanced[]" id="" class="form-control">
+                    {% for i in constraint %}
+                        <option value="dictionary:{{ i.id }}">Словарь: {{ i.getContent.canonical }} - {{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
         </tr>
     </table>
 
@@ -74,6 +141,24 @@
         $('button.add-field').click(e => {
 
             let row = $('.new-field tr').clone();
+
+            row.css({visibility: "visible"});
+            $('table.fields')
+                .append(row);
+        });
+
+        $('button.add-field-link').click(e => {
+
+            let row = $('.new-field-link tr').clone();
+
+            row.css({visibility: "visible"});
+            $('table.fields')
+                .append(row);
+        });
+
+        $('button.add-field-dictionary').click(e => {
+
+            let row = $('.new-field-dictionary tr').clone();
 
             row.css({visibility: "visible"});
             $('table.fields')

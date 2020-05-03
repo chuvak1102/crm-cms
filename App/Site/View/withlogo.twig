@@ -1,0 +1,77 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="row">
+        <div class="bread">
+            <h4>БУМАЖНЫЕ СТАКАНЫ С ЛОГОТИПОМ</h4>
+            <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
+        </div>
+        <div class="shop_cat_text"><p><span style="font-size: medium;">Компания "Экопакинг" производит бумажные стаканы с индивидуальным дизайном.</span>
+            </p>
+            <br>
+            <ul>
+                <li><span style="font-size: small;"><strong><span
+                                    style="font-size: small;">СРОК ПРОИЗВОДСТВ</span>А:</strong> 2-3 недели</span></li>
+                <br>
+                <li><span style="font-size: small;"><strong style="font-size: small;"><span size="3">ПЛОТНЫЙ ЕВРОПЕЙСКИЙ КАРТОН</span></strong></span>
+                </li>
+                <br>
+                <li><span style="font-size: x-small;"><span style="font-size: small;"><strong><span size="3">КАЧЕСТВЕННАЯ ПОЛНОЦВЕТНАЯ ПЕЧАТЬ</span></strong></span><span
+                                size="3"></span><span size="3"> (специализированные краски)</span></span></li>
+                <br>
+            </ul>
+            <p><span style="font-size: small;"><strong>КАК СДЕЛАТЬ ЗАКАЗ:</strong></span></p>
+            <br>
+            <p><span style="font-size: small;">Кликните на интересующий Вас тип стакана или добавьте кнопкой "заказать" необходимое количество товара в корзину,перейдите в корзину (в правом верхнем углу экрана),оформите заказ.Менеджер оперативно свяжется с Вами для уточнения деталей заказа и оформления договора,</span><span
+                        style="font-size: medium;"><span
+                            style="font-size: small;">ИЛИ ПРОСТО ПОЗВОНИТЕ НАМ</span> : <span
+                            style="text-decoration: underline;"><strong>8-(495)-923-98-78</strong></span></span></p>
+            <br>
+            <p><span style="font-size: medium;"><span
+                            style="text-decoration: underline;"><strong></strong></span></span><span
+                        style="text-decoration: underline;"><strong>Актуальные цены 2019г.</strong></span><span
+                        style="font-size: medium;">:</span></p></div>
+        {% if sub_category is not empty %}
+            <ul class="index-catalog category">
+                {% for i in sub_category %}
+                    <li>
+                        <span class="product">
+                            <a href="{{ path }}/{{ i.alias }}">
+                                <div class="img">
+                                    <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                                </div>
+                                <span class="name">{{ i.name | raw }}</span>
+                            </a>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="clear"></div>
+        <ul class="index-catalog product">
+            {% for i in products %}
+                <li>
+                    <span class="product">
+                        <a href="{{ path }}/{{ i.alias }}">
+                            <div class="img">
+                                <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                            </div>
+                            <span class="name">{{ i.name | raw }}</span>
+                        </a>
+                        {% for p in i.getPrices %}
+                            <span class="price">{{ p.dictionaryField.name }} - {{ p.value }}</span>
+                        {% endfor %}
+                        <span class="count">
+                            <span class="price-cont">
+                                <input type="text" value="{{ i.getPackCount().value }}">
+                                <span class="plus">+</span>
+                                <span class="minus">-</span>
+                            </span>
+                        </span>
+                        <span class="cart-add">в корзину</span>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+{% endblock %}

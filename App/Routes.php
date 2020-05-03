@@ -11,17 +11,20 @@ class Routes {
         return [
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
-                '{insert}' => [Site\Controller\Index::class => 'insert'],
                 '{o-kompanii}' => [Site\Controller\Index::class => 'about'],
                 '{novosti}' => [Site\Controller\Index::class => 'news'],
                 '{oplata-i-dostavka}' => [Site\Controller\Index::class => 'delivery'],
                 '{vakansii}' => [Site\Controller\Index::class => 'job'],
                 '{kontakty}' => [Site\Controller\Index::class => 'contacts'],
-                '{}' => [Site\Controller\Index::class => 'about'],
+                '{korzina-tovarov}' => [Site\Controller\Index::class => 'cart'],
+                '{katalog-tovarov}=>{nakleykitermoetiketki-s-pechatyu}' => [Site\Controller\Index::class => 'termoprint'],
+                '{katalog-tovarov}=>{bumazhnye-stakany-s-logotipom}' => [Site\Controller\Index::class => 'withlogo'],
+                '{katalog-tovarov}=>{bumazhnye-stakany-s-logotipom}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'withlogoSingle'],
                 '{katalog-tovarov}' => [Site\Controller\Index::class => 'index'],
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
+                '{submit}' => [Site\Controller\Index::class => 'submit'],
             ],
             Config::AdminDomain => [
                 '{sync}' => [Admin\Controller\Test::class => 'sync'],
@@ -60,6 +63,7 @@ class Routes {
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}=>{create}' => [Admin\Controller\Content::class => 'create'],
+                '{content}=>{[\d]+}=>{delete}=>{[\d]+}' => [Admin\Controller\Content::class => 'delete'],
                 '{content}=>{save}' => [Admin\Controller\Content::class => 'save'],
                 '{content}=>{save}=>{[\d]+}' => [Admin\Controller\Content::class => 'save'],
                 '{content}=>{fields}=>{create}=>{[\d]+}' => [Admin\Controller\Content::class => 'fields'],
@@ -73,7 +77,6 @@ class Routes {
         return [
 
         ];
-
 
         return new class {
 

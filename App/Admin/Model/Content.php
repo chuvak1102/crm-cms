@@ -19,28 +19,69 @@ class Content extends Model {
     const INT_11 = 'int(11)';
     const TIMESTAMP = 'timestamp';
 
+    const CONTENT_TYPE_STATIC = 'static';
+    const CONTENT_TYPE_DICTIONARY = 'dictionary';
+    const CONTENT_TYPE_CATEGORY = 'category';
+
     function getFields()
     {
         return ContentField::many($this->id, 'content_id');
     }
 
+    function getType()
+    {
+        return ContentType::one($this->content_type_id);
+    }
+
     function processTable(array $fields)
     {
-        $query = "create table ".$this->table."(";
+        switch ($this->getType()->slug) {
 
-        $query .= "id int auto_increment primary key,";
+            case self::CONTENT_TYPE_STATIC : {
 
-        foreach ($fields as $i => $field) {
+                $query = "create table ".$this->table."(";
 
-            $query .= "`{$field['column']}` {$field['type']}".($i == count($fields) - 1 ? "" : ",");
+                foreach ($fields as $i => $field) {
+
+                    $type = DB::select('type')
+                        ->from('field')
+                        ->where('id', '=', $field['type'])
+                        ->execute()
+                        ->fetch();
+
+                    if ($type->type) {
+                        $query .= "`{$field['column']}` {$type->type}".($i == count($fields) - 1 ? "" : ",");
+                    }
+                }
+                $query .= ")";
+
+                break;
+            }
+
+            default : break;
+
         }
-
-        $query .= ")";
 
         DB::query(null, $query)
             ->execute();
+    }
 
-        dump($fields);
+    static function get($value, $limit = 1000, $column = 'id')
+    {
+        $content = DB::select('table')
+            ->from('content')
+            ->where($column, '=', $value)
+            ->execute()
+            ->fetch();
+        if ($content->table) {
+            return DB::select('*')
+                ->from($content->table)
+                ->limit($limit)
+                ->execute()
+                ->fetch_all();
+        }
+
+        return [];
     }
 
 

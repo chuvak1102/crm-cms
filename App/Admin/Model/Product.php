@@ -431,6 +431,29 @@ class Product extends Model {
         return array_column($additionalExist, 'key');
     }
 
+    public function getPrices()
+    {
+        $ids = DB::select('id')
+            ->from('dictionary_value')
+            ->where('external_id', '=', $this->id)
+            ->where('external_column', 'in', [
+                'price_3000',
+                'price_5000',
+                'price_10000',
+                'price_20000',
+                'price_30000',
+            ])
+            ->execute()
+            ->fetch_all();
+
+        $prices = [];
+        foreach ($ids as $id) {
+            $prices[] = DictionaryValue::one($id->id);
+        }
+
+        return $prices;
+    }
+
     public function afterLoad()
     {
 //        dump($this);

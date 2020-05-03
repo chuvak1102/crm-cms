@@ -2,8 +2,10 @@
 
 namespace App\Site\Controller;
 use App\Admin\Model\Category;
+use App\Admin\Model\Content;
 use App\Admin\Model\DictionaryValue;
 use App\Admin\Model\Product;
+use Core\Application;
 use Core\Controller;
 use Core\Database\DB;
 use Core\Request\Request;
@@ -42,6 +44,8 @@ class Index extends Controller {
             }
         }
 
+        \Core\Page::instance()->push('category', Router::seg(1));
+        \Core\Page::instance()->push('action', Application::get('action'));
         \Core\Page::instance()->push('menu', $category);
     }
 
@@ -120,112 +124,46 @@ class Index extends Controller {
         ]);
     }
 
-    public function insert()
+    function termoprint()
     {
-        // 3,9 pack
-        // 4,8 box
-        $ids = DB::select('id')
+        return $this->render('Site:termoprint', []);
+    }
+
+    function withlogoSingle(Request $request)
+    {
+        return $this->render('Site:withlogo_product', [
+            'product' => Product::one(Router::seg(2), 'alias'),
+            'path' => $request->uri()
+        ]);
+    }
+
+    function withlogo(Request $request)
+    {
+        $category = Category::one(Router::seg(1), 'alias');
+
+        $pid = DB::select(DB::expr('product.id'))
             ->from('product')
+            ->join('product_to_category')
+            ->on('product_to_category.product_id', '=', 'product.id')
+            ->where('product_to_category.category_id', '=', $category->id)
+            ->where('product.active', '=', 1)
             ->execute()
             ->fetch_all();
 
-        foreach ($ids as $id) {
-
-            $id = $id->id;
-
-//            $values = DB::select(['value1', 'value'], ['element_id', 'product_id'], ['act1', 'active'])
-//                ->from('diafan_shop_param_element')
-//                ->where('element_id', '=', $id)
-//                ->where('param_id', 'in', [15])
-//                ->execute()
-//                ->fetch();
-//
-//            dump($values);
-
-            $active = DB::select(['act1', 'active'])
-                ->from('diafan_shop')
-                ->where('id', '=', $id)
-                ->execute()
-                ->fetch();
-
-            if ($active) {
-
-                $act = $active->active ? 1 : 0;
-
-                DB::update('product')
-                        ->set([
-                            'active' => $act
-                        ])
-                        ->where('id', '=', $id)
-                        ->execute();
-
-            }
-
-//            if ($values) {
-
-
-//
-//                $dv = new DictionaryValue();
-//                $dv->key = 5;
-//                $dv->value = $values->value;
-//                $dv->external_id = $id;
-//                $dv->external_table = 'product';
-//                $dv->external_column = 'material';
-//                $dv->save();
-//
-//                if ($dv->id) {
-//                    DB::update('product')
-//                        ->set([
-//                            'description' => $values->value
-//                        ])
-//                        ->where('id', '=', $id)
-//                        ->execute();
-//                }
-
-//            }
+        $products = [];
+        foreach ($pid as $id) {
+            $products[] = Product::one($id->id);
         }
 
-
-
-        die('FINISH');
-        $c = DB::select('*')
-            ->from('diafan_shop_param_select')
-            ->where('param_id', '=', 26)
-//            ->where('site_id', '=', 30)
-            ->execute()->fetch_all();
-
-        foreach ($c as $i) {
-
-//            $alias = mb_strtolower(\Core\Helpers\Text::transliterate($i->name1));
-//            $alias = preg_replace('/[^a-z0-9\s]/', '', $alias);
-//            $alias = str_replace(' ', '-', trim($alias));
-
-                DB::insert('supplier', [
-                'id',
-                'name',
-//                'name',
-//                'alias',
-//                    'sort',
-//                    'active'
-            ])->values([
-                $i->id,
-                $i->name1,
-//                $i->name1,
-//                $alias,
-//                    $i->sort,
-//                    $i->act1
-            ])
-                ->execute();
-
-        }
-
-//        dump($c);
-        die();
-
-
-        return $this->render('Site:index', [
-            's' => \Core\Page::instance()->getAll()
+        return $this->render('Site:withlogo', [
+            'products' => $products,
+            'path' => $request->uri()
         ]);
+    }
+
+    function cart()
+    {
+        return $this->render('Site:cart', []);
     }
 
     function about()
@@ -247,5 +185,56 @@ class Index extends Controller {
     function contacts()
     {
         return $this->render('Site:contacts');
+    }
+
+    function submit(Request $request)
+    {
+        if ($form = $request->get('submit')) {
+            switch ($form) {
+                case 'custom_print' : {
+
+//                    DB::insert('design_product');
+
+                    DB::insert('design_product', [
+                        'count',
+                        'color',
+                        'name',
+                        'phone',
+                        'email',
+                        'comment',
+                    ])->values([
+                        preg_replace('/[^0-9]+/', '', $request->get('count')),
+                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('color')),
+                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
+                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
+                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
+                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('comment')),
+                    ])
+                        ->execute();
+
+//                    dump([
+//                        $request,
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('count')),
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('color')),
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
+//                        preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('comment')),
+//                    ]);
+
+
+
+
+
+
+                    break;
+                }
+                default: break;
+            }
+        }
+
+        return $this->render('Site:success', [
+            'message' => 'Заказ успешно отправлен!'
+        ]);
     }
 }

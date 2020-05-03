@@ -1,0 +1,11 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="content-right-wp">
+        <h2>{{ message }}</h2>
+    </div>
+    <script>
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2000)
+    </script>
+{% endblock %}

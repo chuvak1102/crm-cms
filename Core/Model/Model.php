@@ -128,7 +128,7 @@ class Model {
     {
         $rf = new \ReflectionClass($class);
 
-        preg_match('/table[\s=]+[a-zA-Z\_]+/', $rf->getDocComment(), $tableMatch);
+        preg_match('/table[\s=]+[0-9a-zA-Z\_]+/', $rf->getDocComment(), $tableMatch);
 
         if ($table = current($tableMatch)) {
             $table = str_replace(' ', '', $table);

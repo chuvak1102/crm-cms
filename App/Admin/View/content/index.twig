@@ -5,22 +5,16 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <div>
-                            <a class="btn btn-sm btn-primary print-price" href="#">bla</a>
-                            <a class="btn btn-sm btn-primary" href="/product/create">bla</a>
-                        </div>
-                        <br>
                         <div class="table-responsive">
                             <table class="table table-hover issue-tracker checkbox-container">
                                 <tbody>
                                     <tr>
-                                        <th style="width: 20%">CANONICAL</th>
-                                        <th style="width: 15%">TABLE</th>
-                                        <th style="width: 35%">ROUTE</th>
-                                        <th style="width: 20%">TEMPLATE</th>
-                                        <th style="width: 5%">FIELDS</th>
-                                        <th style="width: 5%">VARS</th>
-                                        <th>SAVE</th>
+                                        <th style="width: 25%">Название</th>
+                                        <th style="width: 25%">Таблица</th>
+                                        <th style="width: 25%">Тип</th>
+                                        <th style="width: 5%">Меню</th>
+                                        <th style="width: 10%"></th>
+                                        <th style="width: 10%"></th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -29,13 +23,13 @@
                                     <table class="table table-hover issue-tracker checkbox-container">
                                         <tbody>
                                         <tr>
-                                            <td style="width: 20%"><a href="/content/{{ i.id }}">{{ i.canonical }}</a></td>
-                                            <td style="width: 15%"><a href="">{{ i.table }}</a></td>
-                                            <td style="width: 35%"><input value="{{ i.route }}" name="route" type="text" class="form-control"></td>
-                                            <td style="width: 20%"><input value="{{ i.template }}" name="template" type="text" class="form-control"></td>
-                                            <td style="width: 5%"><a href="/content/fields/create/{{ i.id }}" class="btn btn-{% if i.getFields() %}primary{% else %}danger{% endif %}">[ ]</a></td>
-                                            <td style="width: 5%"><a href="{% if i.getFields() %}/content/vars/{{ i.id }}{% else %}#{% endif %}" class="btn btn-{% if i.getFields() %}primary{% else %}danger{% endif %}">[ ]</a></td>
-                                            <td><button name="submit" value="submit" type="submit" class="btn btn-primary">[ ]</button></td>
+                                            <td style="width: 25%"><a href="/content/{{ i.id }}">{{ i.canonical }}</a></td>
+                                            <td style="width: 25%">{{ i.table }}</td>
+                                            <td style="width: 25%">{{ i.getType.name }}</td>
+                                            <td style="width: 5%"><input type="checkbox" {% if i.show == 1 %} checked {% endif %} name="show" value="1" class="form-control"></td>
+                                            <td style="">
+                                                {% if i.getFields() %}{% else %}<a href="/content/fields/create/{{ i.id }}" class="btn btn-danger">Поля</a></td>{% endif %}
+                                            <td><button name="submit" value="submit" type="submit" class="btn btn-primary">Сохранить</button></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -45,13 +39,18 @@
                                 <table class="table table-hover issue-tracker checkbox-container">
                                     <tbody>
                                     <tr>
-                                        <td style="width: 20%"><input name="canonical" type="text" class="form-control"></td>
-                                        <td style="width: 15%"><input name="table" type="text" class="form-control"></td>
-                                        <td style="width: 35%"><input name="route" type="text" class="form-control"></td>
-                                        <td style="width: 20%"><input name="template" type="text" class="form-control"></td>
-                                        <td style="width: 5%"></td>
-                                        <td style="width: 5%"></td>
-                                        <td><button name="submit" value="submit" type="submit" class="btn btn-primary">[ ]</button></td>
+                                        <td style="width: 25%"><input name="canonical" type="text" class="form-control"></td>
+                                        <td style="width: 25%"><input name="table" type="text" class="form-control"></td>
+                                        <td style="width: 25%">
+                                            <select name="type" id="" class="form-control" style="width: 100%">
+                                                {% for c in content_type %}
+                                                    <option value="{{ c.id }}">{{ c.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td style="width: 5%"><input type="checkbox" name="show" value="1" class="form-control"></td>
+                                        <td style=""></td>
+                                        <td><button name="submit" value="submit" type="submit" class="btn btn-primary">Сохранить</button></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -33,6 +33,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 .menu {background: url("/site/img/menu-bg.png") no-repeat; height: 55px; margin-top: 10px}
 .menu li {float: left; font-size: 15px; text-transform: uppercase; color: #fff; padding: 17px; padding-right: 0}
+.menu li.active a {color: #b7ca39}
 .menu li a {color: #fff; font-family: Arial, Helvetica, sans-serif}
 .menu li:last-child {float: right; padding-right: 7px}
 .menu li:last-child a {text-transform: none;background: #4a4a4c url("/site/img/menu-last.png") no-repeat 15px center; color: #a0b22b; font-size: 14px; padding: 10px 25px 10px 45px; font-weight: bold;}
@@ -41,6 +42,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .catalog {width: 235px; background-color: #f4f4f7; border-radius: 5px; border: 1px solid #fff; float: left; margin-bottom: 35px}
 .catalog h2 {margin-bottom: 5px;color: #798815; font: 18px "arialn"; padding: 12px 0px 12px 25px; background-image: linear-gradient(to bottom, #F2F2F5 0%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%)}
 .catalog ul li {border-bottom: 1px dotted #a0b22b}
+.catalog ul li.active a {color: #a0b22b}
 .catalog ul li:hover {background-color: #fff}
 .catalog ul li a{color: #444445; font: 13px Arial, Helvetica, sans-serif}
 .catalog ul li a:hover{color: #a0b22b}
@@ -74,7 +76,7 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 .index-head {color: #a0b22b; font: 22px arialn; text-transform: uppercase}
 .index-catalog {margin-top: 15px}
-.index-catalog li{height: 310px;padding-right: 5px;padding-left: 5px;font: 12px "myriad pro";text-transform: uppercase;padding-top: 18px;padding-bottom: 18px;text-align: center;float: left; display: block; background-color: rgba(255,255,255,0.2); margin-right: 10px; margin-bottom: 15px; width: 168px; border: 1px solid #ececec}
+.index-catalog li{height: 310px;padding-right: 5px;padding-left: 5px;font: 12px "myriad pro";text-transform: uppercase;padding-top: 18px;padding-bottom: 18px;text-align: center;float: left; display: block; background-color: rgba(255,255,255,0.2); margin-right: 6px; margin-bottom: 15px; width: 171px; border: 1px solid #ececec}
 .index-catalog li:nth-child(5n){margin-right: 0}
 .index-catalog li img:hover{opacity: 0.5}
 .index-catalog li .product .image{max-height: 100px; width: auto; max-width: 100%}
@@ -96,6 +98,8 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .index-catalog li .product .count .price-cont .plus{top: 0; right: -5px; border-radius: 0 3px 0 0}
 .index-catalog li .product .count .price-cont .minus{top: 12px; right: -5px; border-radius: 0 0 3px 0}
 .index-catalog li .product .cart-add {background: #99ab22;padding: 8px 13px;color: #fff;text-decoration: none;display: inline-block;text-transform: initial;white-space: normal;zoom: 1;border-radius: 5px;width: 101px;margin-bottom: 18px;font-size: 14px;margin-top: 10px;font-family: Tahoma, Geneva, sans-serif}
+.index-catalog.main li {min-height: 210px; max-height: 230px}
+.index-catalog.main li a img {max-height: 100px}
 
 .product-single {}
 .product-single .product {border: 1px solid #ebebec; margin-bottom: 15px; padding: 10px}
@@ -120,6 +124,14 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .product-single .product .shop_param .td_fir {display: inline-block;width: 50%;position: relative;background: #F5F5F5;z-index: 1;}
 .product-single .product .shop_param .shop_param_value {float: right;width: 50%;position: relative;background: #F5F5F5;z-index: 1;display: inline-block;}
 .product-single .product .params-name {color: #aab754;font: 15px "Myriad Pro", sans-serif;}
+
+.form-withlogo {}
+.form-withlogo .withlogo-row{}
+.form-withlogo .withlogo-row input, select, button{width: 300px; height: 25px; padding-left: 5px}
+.form-withlogo .withlogo-row button{background-color: #fff}
+.form-withlogo .withlogo-row textarea{width: 300px; height: 60px; padding: 5px}
+.form-withlogo .withlogo-row label{display: block}
+.form-withlogo .withlogo-row label span{color: red}
 
 .index-news {background: url("/site/img/bg-bottom-news.png") no-repeat scroll center 10px; margin-top: 10px}
 .index-news .index-head {padding-top: 25px; margin-bottom: 10px}

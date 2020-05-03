@@ -33,6 +33,11 @@ class Router
         return false;
     }
 
+    static function uri()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
+
     static function seg($number)
     {
         $url = trim(explode('?', $_SERVER['REQUEST_URI'])[0], '/');

@@ -3,6 +3,8 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\ContentField;
+use App\Admin\Model\ContentType;
+use App\Admin\Model\Dictionary;
 use App\Admin\Model\Field;
 use Core\Controller;
 use Core\Database\Database\Exception;
@@ -17,13 +19,30 @@ class Content extends Controller {
     const TEXT = 'text';
     const FILE_IMAGE = 'file_image';
 
+    const COLUMN_TYPE_STATIC = 'static';
+    const COLUMN_TYPE_REFERENCE = 'constraint';
+    const COLUMN_TYPE_DICTIONARY = 'dictionary';
+
     function index(Request $request)
     {
         if (Router::seg(1)) {
 
             $cols = 6;
             $content = ContentModel::one(Router::seg(1));
-            $data = DB::select('*')
+            $fields_all = DB::select('*')
+                ->from('content_field')
+                ->where('content_id', '=', Router::seg(1))
+                ->limit($cols)
+                ->execute()
+                ->fetch_all();
+            $fields = array_column($fields_all, 'name');
+            $columns = array_column($fields_all, 'column_name');
+
+            if (count($fields) < $cols) {
+                $fields = $fields + array_fill(count($fields),$cols - count($fields) - 1, "");
+            }
+
+            $data = DB::select(DB::expr('id, '.implode(', ', $columns)))
                 ->from($content->table)
                 ->execute()
                 ->fetch_all();
@@ -31,21 +50,8 @@ class Content extends Controller {
             $arrayData = [];
             foreach ($data as $i) {
                 $i = (array) $i;
-                $buff = array_fill(count($i),$cols - count($i), "");
+                $buff = array_fill(count($i),$cols - count($i) + 1, "");
                 $arrayData[] = (array) $i + $buff;
-            }
-
-            $fields = DB::select('*')
-                ->from('content_field')
-                ->where('content_id', '=', Router::seg(1))
-                ->limit($cols)
-                ->execute()
-                ->fetch_all();
-            $fields = array_column($fields, 'name');
-
-
-            if (count($fields) < $cols) {
-                $fields = $fields + array_fill(count($fields),$cols - count($fields) - 1, "");
             }
 
             return $this->render('Admin:content/show', [
@@ -56,7 +62,8 @@ class Content extends Controller {
         }
 
         return $this->render('Admin:content/index', [
-            'content' => ContentModel::all()
+            'content' => ContentModel::all(),
+            'content_type' => ContentType::all()
         ]);
     }
 
@@ -65,9 +72,9 @@ class Content extends Controller {
         if ($id = Router::seg(2)) {
 
             DB::update('content')->set([
-                'canonical' => $request->get('canonical'),
-                'route' => $request->get('route'),
-                'template' => $request->get('template'),
+//                'canonical' => $request->get('canonical'),
+//                'type' => $request->get('type'),
+                'show' => $request->get('show'),
             ])->where('id', '=', $id)
                 ->execute();
 
@@ -76,13 +83,13 @@ class Content extends Controller {
             DB::insert('content', [
                 'canonical',
                 'table',
-                'route',
-                'template',
+                'content_type_id',
+                'show',
             ])->values([
                 $request->get('canonical'),
-                'generated_'.$request->get('table'),
-                $request->get('route'),
-                $request->get('template'),
+                $request->get('table'),
+                $request->get('type'),
+                $request->get('show'),
             ])
                 ->execute();
         }
@@ -94,7 +101,7 @@ class Content extends Controller {
     {
         if ($request->get('submit')) {
 
-            $content = ContentModel::one(Router::seg(3));
+            $content = ContentModel::one($request->seg(3));
 
             if ($content->id) {
 
@@ -110,34 +117,59 @@ class Content extends Controller {
 
                 if ($fields) {
 
-                    try {
-                        $content->processTable($fields);
-                    } catch (Exception $e) {
-                        dump($e->getMessage());
-                    }
+                    $content->processTable($fields);
 
                     foreach ($fields as $i) {
 
-                        $fieldId = DB::select('id')
-                            ->from('field')
-                            ->where('type', '=', $i['type'])
-                            ->execute()
-                            ->fetch()
-                            ->id;
+                        $columnType = current(explode(':',$i['advanced']));
+                        $referenceId = end(explode(':',$i['advanced']));
+                        $field = Field::one($i['type']);
 
-                        DB::insert('content_field', [
-                            'content_id',
-                            'field_id',
-                            'name',
-                            'column_name',
-                        ])->values([
-                            $content->id,
-                            $fieldId,
-                            $i['canonical'],
-                            $i['column'],
-                        ])
-                            ->execute();
+                        try {
 
+                            switch ($columnType) {
+
+
+                                case self::COLUMN_TYPE_STATIC : {
+
+                                    DB::insert('content_field', [
+                                        'content_id', 'field_id', 'name', 'column_name', 'column_type'
+                                    ])->values([
+                                        $content->id, $field->id, $i['canonical'], $i['column'], $columnType
+                                    ])->execute();
+
+                                    break;
+                                }
+
+                                case self::COLUMN_TYPE_REFERENCE : {
+
+                                    DB::insert('content_field', [
+                                        'content_id', 'field_id', 'name', 'column_name', 'column_type', 'reference_table', 'reference_column'
+                                    ])->values([
+                                        $content->id, $field->id, $i['canonical'], $i['column'], $columnType, $content->id, $referenceId
+                                    ])->execute();
+
+                                    break;
+                                }
+
+                                case self::COLUMN_TYPE_DICTIONARY : {
+
+                                    DB::insert('content_field', [
+                                        'content_id', 'field_id', 'name', 'column_name', 'column_type', 'reference_table', 'reference_column'
+                                    ])->values([
+                                        $content->id, $field->id, $i['canonical'], $i['column'], $columnType, $content->id, $referenceId
+                                    ])->execute();
+
+                                    break;
+                                }
+
+                                default: break;
+                            }
+
+                        } catch (Exception $e) {
+
+                            throw $e;
+                        }
                     }
                 }
 
@@ -145,11 +177,13 @@ class Content extends Controller {
             }
         }
 
-
         return $this->render('Admin:content/fields', [
             'fields' => Field::all(),
             'content' => ContentModel::one(Router::seg(3)),
-            'content_field' => ContentField::many(Router::seg(3), 'content_id')
+            'content_field' => ContentField::many(Router::seg(3), 'content_id'),
+            'dictionary' => Dictionary::all(),
+            'constraint' => ContentField::all(),
+            'id_type' => Field::one('id', 'value')
         ]);
     }
 
@@ -202,6 +236,18 @@ class Content extends Controller {
             'content' => $content,
             'fields' => $fields
         ]);
+    }
+
+    function delete(Request $request)
+    {
+        $content = \App\Admin\Model\Content::one(Router::seg(1));
+
+        DB::delete($content->table)
+            ->where('id', '=', Router::seg(3))
+            ->execute();
+
+        return $this->redirectToRoute('/content/'.$content->id);
+
     }
 
 }

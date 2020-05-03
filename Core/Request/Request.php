@@ -54,4 +54,12 @@ class Request{
     {
         return $_SERVER['REQUEST_URI'];
     }
+
+    function seg($number)
+    {
+        $url = trim(explode('?', $_SERVER['REQUEST_URI'])[0], '/');
+        $seg = explode('/', $url)[$number] ?? null;
+
+        return $seg;
+    }
 }
