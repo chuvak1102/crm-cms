@@ -39,7 +39,7 @@ class Content extends Model {
 
             case self::CONTENT_TYPE_STATIC : {
 
-                $query = "create table ".$this->table."(";
+                $query = "create table "."`".$this->table."`"."(";
 
                 foreach ($fields as $i => $field) {
 

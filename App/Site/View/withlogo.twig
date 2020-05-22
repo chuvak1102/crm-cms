@@ -2,7 +2,7 @@
 {% block content %}
     <div class="row">
         <div class="bread">
-            <h4>БУМАЖНЫЕ СТАКАНЫ С ЛОГОТИПОМ</h4>
+            <h1>БУМАЖНЫЕ СТАКАНЫ С ЛОГОТИПОМ</h1>
             <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
         </div>
         <div class="shop_cat_text"><p><span style="font-size: medium;">Компания "Экопакинг" производит бумажные стаканы с индивидуальным дизайном.</span>
@@ -49,7 +49,7 @@
         <div class="clear"></div>
         <ul class="index-catalog product">
             {% for i in products %}
-                <li>
+                <li style="height: 330px">
                     <span class="product">
                         <a href="{{ path }}/{{ i.alias }}">
                             <div class="img">
@@ -60,14 +60,15 @@
                         {% for p in i.getPrices %}
                             <span class="price">{{ p.dictionaryField.name }} - {{ p.value }}</span>
                         {% endfor %}
-                        <span class="count">
-                            <span class="price-cont">
-                                <input type="text" value="{{ i.getPackCount().value }}">
-                                <span class="plus">+</span>
-                                <span class="minus">-</span>
+                        <span class="count" style="display: none">
+                            <span class="price-cont count-container">
+                                <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.getPackCount().value }}" data-multiply-value="1000">
+                                <span class="plus count-plus-btn" data-plus-value="1000">+</span>
+                                <span class="minus count-minus-btn" data-minus-value="1000">-</span>
                             </span>
                         </span>
                         <span class="cart-add">в корзину</span>
+                        <i class="in-cart">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
                     </span>
                 </li>
             {% endfor %}

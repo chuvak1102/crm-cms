@@ -5,10 +5,16 @@ namespace App\Admin\Controller;
 use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\JsonResponse;
+use Core\Request\Request;
 
 class Order extends Controller {
 
-    function index()
+    function index(Request $request)
+    {
+        return $this->render('Admin:order/index', []);
+    }
+
+    function shit()
     {
         $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
         $images = scandir($root);

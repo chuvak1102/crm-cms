@@ -10,13 +10,14 @@
                 <div class="article">Артикул: {{ product.article }}</div>
                 <div class="price">Цена за 1 шт. <i>{{ product.price_site }} руб.</i></div>
                 <span class="count">
-                    <span class="price-cont">
-                        <input type="text" value="{{ product.getPackCount().value }}">
-                        <span class="plus">+</span>
-                        <span class="minus">-</span>
+                    <span class="price-cont count-container">
+                        <input data-product="{{ product.id }}" class="count-value" type="text" value="{{ product.getPackCount().value }}" data-multiply-value="{{ product.getPackCount().value }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ product.getPackCount().value }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ product.getPackCount().value }}">-</span>
                     </span>
                 </span>
                 <div class="cart-add">в корзину</div>
+                <i class="in-cart" style="margin-top: 0">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
                 <div class="params">
                     <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
                                 class="shop_param_value">500 штук</span></div>
@@ -37,28 +38,31 @@
         </div>
     </div>
     <div class="bread">
-        <h4>С ЭТИМ ТОВАРОМ ОБЫЧНО ПОКУПАЮТ</h4>
+        <h1>С ЭТИМ ТОВАРОМ ОБЫЧНО ПОКУПАЮТ</h1>
     </div>
     <ul class="index-catalog product">
-        <li>
+        {% for i in similar %}
+            <li>
             <span class="product">
-                <a href="/">
+                <a href="{{ path }}/{{ i.alias }}">
                     <div class="img">
-                        <img class="image" src="http://ecopacking.ru/userfiles/shop/preview/1839_plastik-stakan-pivnoy-500ml-.png" alt="">
+                        <img class="image" src="/files/mini/{{ i.image }}" alt="">
                     </div>
-                    <span class="name">asdasd</span>
+                    <span class="name">{{ i.name | raw }}</span>
                 </a>
-                <span class="price">Цена: <i>123.5 руб.</i></span>
+                <span class="price">Цена: <i>{{ i.price_site }} руб.</i></span>
                 <span class="count">
-                    <span class="price-cont">
-                        <input type="text" value="50">
-                        <span class="plus">+</span>
-                        <span class="minus">-</span>
+                    <span class="price-cont count-container">
+                        <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.getPackCount().value }}" data-multiply-value="{{ i.getPackCount().value }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ i.getPackCount().value }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ i.getPackCount().value }}">-</span>
                     </span>
                 </span>
                 <span class="cart-add">в корзину</span>
+                <i class="in-cart">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
             </span>
-        </li>
+            </li>
+        {% endfor %}
     </ul>
 
     <div class="clear"></div>

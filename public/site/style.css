@@ -5,11 +5,12 @@ body{background: url("/site/img/bg-body.png");background-repeat: repeat; font: 1
 .green {color: #a0b22b}
 .content-right-wp {padding: 0}
 .content-right-wp .summernote-content {padding-left: 10px; padding-right: 10px}
-
+.btn{color: #fff;background-color: #a0b22b;padding: 8px 12px 8px 12px;border-radius: 6px;text-transform: uppercase; text-align: center}
 @font-face {  font-family: 'helveticaneuecyrbold';  src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot');  src: url('../css/fonts/helveticaneuecyr-bold-webfont.eot?#iefix') format('embedded-opentype'), url('../css/fonts/helveticaneuecyr-bold-webfont.woff') format('woff'), url('../css/fonts/helveticaneuecyr-bold-webfont.ttf') format('truetype'); font-weight: normal;  font-style: normal;  }
 @font-face {  font-family: 'arialnarrow';  src: url('../css/fonts/arialnb-webfont.eot');  src: url('../css/fonts/arialnb-webfont.eot?#iefix') format('embedded-opentype'), url('../css/fonts/arialnb-webfont.woff') format('woff'), url('../css/fonts/arialnb-webfont.ttf') format('truetype');  font-weight: normal;  font-style: normal;  }
 @font-face {  font-family: 'arialn';  src: url('/site/fonts/arialn-webfont.eot');  src: url('/site/fonts/arialn-webfont.eot?#iefix') format('embedded-opentype'), url('/site/fonts/arialn-webfont.woff') format('woff'), url('/site/fonts/arialn-webfont.ttf') format('truetype');  font-weight: normal;  font-style: normal;  }
 a {color: #a0b22b; font-family: "arialn", sans-serif; text-decoration: none}
+#overlay{display: none;position: fixed; background-color: rgba(0, 0, 0, 0.75); width: 5000px; height: 5000px; top: 0; left: 0; z-index: 5}
 ul.header{margin-top: 27px}
 ul.header li{float: left}
 ul.header li .left {float: left; margin-right: 15px}
@@ -27,9 +28,9 @@ ul.header li:nth-child(4) {margin-top: 3px;border: 1px solid #e1e1e5; padding: 2
 ul.header li:nth-child(5) {margin-top: 3px;border: 1px solid #e1e1e5; padding: 20px 25px 15px; width: 212px; border-radius: 0 5px 5px 0}
 ul.header li:nth-child(5) .left {margin-top: 8px}
 
-.cart {float: right}
-.cart a {font-size: 15px; text-decoration: underline}
-.cart span {font-weight: bold}
+.row-cart {float: right}
+.row-cart a {font-size: 15px; text-decoration: underline}
+.row-cart span {font-weight: bold}
 
 .menu {background: url("/site/img/menu-bg.png") no-repeat; height: 55px; margin-top: 10px}
 .menu li {float: left; font-size: 15px; text-transform: uppercase; color: #fff; padding: 17px; padding-right: 0}
@@ -43,6 +44,8 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .catalog h2 {margin-bottom: 5px;color: #798815; font: 18px "arialn"; padding: 12px 0px 12px 25px; background-image: linear-gradient(to bottom, #F2F2F5 0%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%, #F0F0F3 100%)}
 .catalog ul li {border-bottom: 1px dotted #a0b22b}
 .catalog ul li.active a {color: #a0b22b}
+.catalog ul li.active ul li a {color: #444445}
+.catalog ul li.active ul li a:hover {color: #a0b22b}
 .catalog ul li:hover {background-color: #fff}
 .catalog ul li a{color: #444445; font: 13px Arial, Helvetica, sans-serif}
 .catalog ul li a:hover{color: #a0b22b}
@@ -70,9 +73,10 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .bx-next {background: url("/site/img/partner_r.png") no-repeat scroll center center;width: 30px; height: 100px; position: absolute; top: 55px; right: 10px; text-align: center; line-height: 100px}
 
 .bread{background: #363638;border-radius: 5px;margin-bottom: 15px;padding: 12px 17px 9px; position: relative}
-.bread h4 {font-size: 16px; color: #b7ca39; font-weight: normal; text-transform: uppercase}
+.bread h1 {font-size: 16px; color: #b7ca39; font-weight: normal; text-transform: uppercase}
 .bread .phone-book {background: url(/img/phone-book.png) no-repeat scroll center left;position: absolute;right: 15px;top: 10px;font-size: 14px;padding-left: 23px;}
 .bread .phone-book a {color: #fff}
+.bread.order{margin-top: 10px}
 
 .index-head {color: #a0b22b; font: 22px arialn; text-transform: uppercase}
 .index-catalog {margin-top: 15px}
@@ -97,9 +101,11 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .index-catalog li .product .count .price-cont .plus:active, .minus:active {background-color: #e6e6e6}
 .index-catalog li .product .count .price-cont .plus{top: 0; right: -5px; border-radius: 0 3px 0 0}
 .index-catalog li .product .count .price-cont .minus{top: 12px; right: -5px; border-radius: 0 0 3px 0}
-.index-catalog li .product .cart-add {background: #99ab22;padding: 8px 13px;color: #fff;text-decoration: none;display: inline-block;text-transform: initial;white-space: normal;zoom: 1;border-radius: 5px;width: 101px;margin-bottom: 18px;font-size: 14px;margin-top: 10px;font-family: Tahoma, Geneva, sans-serif}
+.index-catalog li .product .cart-add {cursor: pointer;background: #99ab22;padding: 8px 13px;color: #fff;text-decoration: none;display: inline-block;text-transform: initial;white-space: normal;zoom: 1;border-radius: 5px;width: 101px;margin-bottom: 18px;font-size: 14px;margin-top: 10px;font-family: Tahoma, Geneva, sans-serif}
 .index-catalog.main li {min-height: 210px; max-height: 230px}
 .index-catalog.main li a img {max-height: 100px}
+.in-cart {font-family: arialn, sans-serif;margin-top: -20px;text-transform: lowercase; display: none; font-style: normal}
+.cart-add {cursor: pointer}
 
 .product-single {}
 .product-single .product {border: 1px solid #ebebec; margin-bottom: 15px; padding: 10px}
@@ -130,8 +136,16 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 .form-withlogo .withlogo-row input, select, button{width: 300px; height: 25px; padding-left: 5px}
 .form-withlogo .withlogo-row button{background-color: #fff}
 .form-withlogo .withlogo-row textarea{width: 300px; height: 60px; padding: 5px}
-.form-withlogo .withlogo-row label{display: block}
+.form-withlogo .withlogo-row label{display: block; width: 300px}
 .form-withlogo .withlogo-row label span{color: red}
+.form-withlogo .withlogo-row p{color: red}
+.form-withlogo.cart{padding-left: 25px; padding-top: 10px}
+.form-withlogo.cart .withlogo-row button{background-color: #a0b22b; height: 30px}
+.form-withlogo.cart .withlogo-row{margin-bottom: 10px}
+.form-withlogo.callback{}
+.form-withlogo.callback .withlogo-row{margin: 25px}{}
+.form-withlogo.callback .withlogo-row input{border: 1px solid #a0b22b}{}
+/*.form-withlogo.callback input{width: 265px; margin-bottom: 10px}*/
 
 .index-news {background: url("/site/img/bg-bottom-news.png") no-repeat scroll center 10px; margin-top: 10px}
 .index-news .index-head {padding-top: 25px; margin-bottom: 10px}
@@ -143,6 +157,28 @@ ul.header li:nth-child(5) .left {margin-top: 8px}
 
 .slider-partner {background: url("/site/img/bg-bottom-news.png") no-repeat scroll center 10px; margin-top: 10px; padding-top: 25px}
 .slider-partner .index-head {margin-bottom: 10px}
+
+.cart{width: 100%}
+.cart tr td img{max-width: 80px; max-height: 80px; text-align: center}
+.cart tr td:nth-child(1){padding-left: 15px}
+.cart tr td:nth-child(2){padding-left: 25px}
+.cart tr td{border-bottom: 1px dotted #313133}
+.cart .count {padding-top: 10px; font-family: Tahoma, Geneva, sans-serif; display: block}
+.cart .count .price-cont {position: relative; display: block; height: 26px; width: 50px;}
+.cart .count .price-cont input {width: 50px; height: 25px; margin: auto;display: block; border-radius: 5px; border: 1px solid #e6e6e6; text-align: center; font-size: 12px; font-weight: bold}
+.cart .count .price-cont .plus, .minus{position: absolute; width: 14px; height: 13px; display: block; background-color: #fff; border: 1px solid #e6e6e6; text-align: center; cursor: pointer; line-height: 10px; user-select: none}
+.cart .count .price-cont .plus:active, .minus:active {background-color: #e6e6e6}
+.cart .count .price-cont .plus{top: 0; right: -15px; border-radius: 3px 3px 0 0}
+.cart .count .price-cont .minus{top: 12px; right: -15px; border-radius: 0 0 3px 3px}
+
+.close{background-color: #cb0000; color: #fff; width: 15px; height: 15px; border-radius: 50%; display: block; text-align: center; line-height: 14px}
+.close a{color: #fff; font-weight: normal; text-decoration: none}
+
+/*.callback{visibility: hidden}*/
+/*.callback button{width: 50%}*/
+/*.ui-dialog-titlebar{background-color: #363638}*/
+.callback {display: none;z-index: 10; border-radius: 10px; width: 350px; height: 250px; background-color: #F2F2F5; position: fixed; left: calc(50% - 175px);top: calc(50% - 125px)}
+.callback h2 {text-align: center; padding: 25px 25px 0 25px}
 
 footer {background-color: #363638; height: 100%;}
 footer .left{float: left; width: 238px}

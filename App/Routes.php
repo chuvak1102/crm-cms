@@ -17,6 +17,7 @@ class Routes {
                 '{vakansii}' => [Site\Controller\Index::class => 'job'],
                 '{kontakty}' => [Site\Controller\Index::class => 'contacts'],
                 '{korzina-tovarov}' => [Site\Controller\Index::class => 'cart'],
+                '{korzina-tovarov}=>{search}' => [Site\Controller\Index::class => 'cart'],
                 '{katalog-tovarov}=>{nakleykitermoetiketki-s-pechatyu}' => [Site\Controller\Index::class => 'termoprint'],
                 '{katalog-tovarov}=>{bumazhnye-stakany-s-logotipom}' => [Site\Controller\Index::class => 'withlogo'],
                 '{katalog-tovarov}=>{bumazhnye-stakany-s-logotipom}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'withlogoSingle'],
@@ -25,6 +26,8 @@ class Routes {
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
                 '{katalog-tovarov}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'catalog'],
                 '{submit}' => [Site\Controller\Index::class => 'submit'],
+                '{cart}=>{add}=>{[\d]+}=>{[\d]+}' => [Site\Controller\Index::class => 'cartAdd'],
+                '{cart}=>{remove}=>{[\d]+}' => [Site\Controller\Index::class => 'cartRemove'],
             ],
             Config::AdminDomain => [
                 '{sync}' => [Admin\Controller\Test::class => 'sync'],

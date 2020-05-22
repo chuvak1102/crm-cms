@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{ global.title }}</title>
     <script src="/site/jquery-3.1.1.min.js"></script>
+{#    <script src="/site/jquery-ui-1.12.1/jquery-ui.min.js"></script>#}
+
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+{#    <link rel="stylesheet" href="/site/jquery-ui-1.12.1/jquery-ui.css">#}
     <link rel="stylesheet" href="/site/style.css">
 </head>
 <body>
@@ -16,7 +18,7 @@
         <ul class="header">
             <li><a href="/"><img src="/site/img/logo.png" alt=""></a></li>
             <li>
-                <form class="fts_search" action="">
+                <form class="fts_search" action="/katalog-tovarov/search" method="post">
                     <label for="fts_search">Поиск по товарам</label>
                     <input id="fts_search" placeholder="Название/Артикул" name="fts_search" type="text">
                     <input type="submit" value="Найти">
@@ -33,7 +35,7 @@
             <li>
                 <div class="left"><img src="/site/img/icon-102.png" alt=""></div>
                 <div class="right">
-                    <div class="up"><a href="#">+7 (495) 923-98-78</a></div>
+                    <div class="up" id="callback"><a href="#">+7 (495) 923-98-78</a></div>
                     <div class="down">Заказать звонок</div>
                 </div>
                 <div class="clear"></div>
@@ -50,7 +52,7 @@
         <div class="clear"></div>
     </div>
     <div class="cont">
-        <div class="cart"><a href="/korzina-tovarov">Корзина</a> товаров <span>0</span> на <span>0.00</span> руб.</div>
+        <div class="row-cart"><a href="/korzina-tovarov">Корзина</a> товаров <span id="cart-global-cnt">{{ global.cart_items }}</span> на <span id="cart-global-price">{{ global.cart_price }}</span> руб.</div>
         <div class="clear"></div>
     </div>
     <div class="cont">
@@ -128,6 +130,23 @@
         <div class="clear"></div>
     </div>
 </footer>
+<div id="dialog" class="callback" title="Задать вопрос">
+    <form action="/submit" method="post" class="form-withlogo callback">
+        <h2>Задать вопрос</h2>
+        <div class="withlogo-row">
+            <label>Ваше имя:</label>
+            <input name="name" type="text" >
+        </div>
+        <div class="withlogo-row">
+            <label>Контактный телефон:</label>
+            <input name="phone" type="text" >
+        </div>
+        <div class="withlogo-row">
+            <button name="submit" type="submit" value="callback">Отправить</button>
+        </div>
+    </form>
+</div>
+<div id="overlay"></div>
 <script src="/site/script.js"></script>
 </body>
 </html>

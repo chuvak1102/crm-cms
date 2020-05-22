@@ -1,10 +1,148 @@
 {% extends 'layout.twig' %}
 {% block content %}
     <div class="bread">
-        <h4>КОРЗИНА ТОВАРОВ</h4>
+        <h1>КОРЗИНА ТОВАРОВ</h1>
         <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
     </div>
-    <div class="cart">
+    <div class="clear"></div>
+    {% if cart.products is not empty %}
+        <div class="bread" style="background-color: #F0F0F3">
+            <table class="cart">
+                <tr>
+                    <th style="width: 5%"></th>
+                    <th style="width: 55%">Наименование товара</th>
+                    <th style="width: 10%">Количество</th>
+                    <th style="width: 10%">Цена, руб</th>
+                    <th style="width: 10%">Сумма, руб</th>
+                    <th style="width: 2%"></th>
+                </tr>
+            </table>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div class="row">
+            <table class="cart">
+                {% for i in cart.products %}
+                    <tr>
+                        <td style="width: 5%"><img src="/files/mini/{{ i.product.image }}" alt=""></td>
+                        <td style="width: 55%"><a href="/katalog-tovarov/{{ i.product.alias }}">{{ i.product.name | raw}}</a></td>
+                        <td style="width: 10%">
+                    <span class="count">
+                        <span class="price-cont count-container">
+                            <input data-product="{{ i.product.id }}" class="count-value" type="text" value="{{ i.count }}" data-multiply-value="{{ i.product.getPackCount().value }}">
+                            <span class="plus cart-count-plus-btn" data-plus-value="{{ i.product.getPackCount().value }}">+</span>
+                            <span class="minus cart-count-minus-btn" data-minus-value="{{ i.product.getPackCount().value }}">-</span>
+                        </span>
+                    </span>
+                        </td>
+                        <td style="width: 10%">{{ i.product.price_site }}</td>
+                        <td style="width: 10%">{{ i.total | number_format(2, '.', ' ') }}</td>
+                        <td style="width: 2%"><span class="close"><a href="/cart/remove/{{ i.product.id }}">x</a></span></td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td style="padding: 25px"><h3>Итого</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>{{ cart.total_price | number_format(2, '.', ' ') }}</b></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="bread order">
+            <h1>ОФОРМЛЕНИЕ ЗАКАЗА</h1>
+        </div>
+        <div class="row">
+            <form method="POST" action="/submit" class="form-withlogo cart" enctype="multipart/form-data">
+                <div class="withlogo-row">
+                    <label>ФИО или название компании:<span>*</span>:</label>
+                    <input name="company_name" type="text" value="{{ client.name }}">
+                    {% if client.name is empty %}
+                        <p>Поле обязательно для заполнения</p>
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>E-mail:<span>*</span>:</label>
+                    <input name="email" type="text" value="{{ client.email }}">
+                    {% if client.email is empty %}
+                        <p>Поле обязательно для заполнения</p>
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>Контактные телефоны (с кодом города)<span>*</span>:</label>
+                    <input name="phone" type="text" value="{{ client.phone }}">
+                    {% if client.phone is empty %}
+                        <p>Поле обязательно для заполнения</p>
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>Дата доставки (когда Вам нужна поставка):</label>
+                    <input name="delivery_date" type="text"  value="{{ client.delivery_date }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Время работы Вашей компании:</label>
+                    <input name="work_time" type="text" value="{{ client.work_time }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Индекс:</label>
+                    <input name="index" type="text" value="{{ client.address_index }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Город:</label>
+                    <input name="city" type="text" value="{{ client.city }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Улица, проспект и пр.:</label>
+                    <input name="street" type="text" value="{{ client.street }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Номер дома:</label>
+                    <input name="house" type="text" value="{{ client.house }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Корпус:</label>
+                    <input name="block" type="text" value="{{ client.block }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Квартира, офис:</label>
+                    <input name="office" type="text" value="{{ client.office }}">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Способ оплаты:</label>
+                </div>
+                <div class="withlogo-row payment-type">
+                    <label><b>На расчетный счет компании</b></label>
+                    <label>Если Вы работаете с нами первый раз, необходимо отправить реквизиты нам на почту.</label>
+                    <input checked name="payment_type" type="radio" value="online">
+                    <label><b>Наличными курьеру</b></label>
+                    <label>Заказ необходимо оплатить курьеру наличными при получении заказа.</label>
+                    <input name="payment_type" type="radio" value="cash">
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <label>Дополнительно:</label>
+                    <textarea name="comment" id="" cols="10" rows="5" value="{{ client.advanced }}"></textarea>
+                    <p></p>
+                </div>
+                <div class="withlogo-row">
+                    <button class="btn" type="submit" name="submit" value="cart_order">Отправить заказ</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="content-right-wp">
+            <h2>Корзина товаров пуста, вы можете <a href="/katalog-tovarov">перейти к покупкам</a></h2>
+        </div>
+    {% endif %}
 
-    </div>
+{#    {{ dump() }}#}
 {% endblock %}
