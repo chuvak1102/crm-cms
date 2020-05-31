@@ -72,6 +72,10 @@ class Routes {
                 '{content}=>{save}=>{[\d]+}' => [Admin\Controller\Content::class => 'save'],
                 '{content}=>{fields}=>{create}=>{[\d]+}' => [Admin\Controller\Content::class => 'fields'],
                 '{content}=>{fields}=>{save}=>{[\d]+}' => [Admin\Controller\Content::class => 'fields'],
+
+                '{document}=>{order}=>{[\d]+}' => [Admin\Controller\Document::class => 'order'],
+                '{document}=>{account}=>{[\d]+}' => [Admin\Controller\Document::class => 'account'],
+                '{document}=>{sticker}=>{[\d]+}=>{[\d]+}' => [Admin\Controller\Document::class => 'sticker'],
             ],
         ][$domain] ?? [];
     }

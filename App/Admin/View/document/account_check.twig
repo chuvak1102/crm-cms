@@ -1,0 +1,179 @@
+<html>
+<head>
+    <title>Товарный чек</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        p {
+            padding: 5px 0px 0px 5px;
+        }
+
+        .vas ul {
+            padding: 0px 10px 0px 15px;
+        }
+
+        .vas li {
+            list-style-type: circle;
+        }
+
+        h3 {
+            padding: 0px 0px 0px 5px;
+            font-size: 100%;
+        }
+
+        h1 {
+            padding: 0px 0px 0px 5px;
+            font-size: 120%;
+        }
+
+        li {
+            list-style-type: none;
+            padding-bottom: 5px;
+            padding: 6px 0px 0px 5px;
+        }
+
+        .main {
+            font-size: 12px;
+        }
+
+        .list {
+            font-size: 12px;
+            padding: 6px 15px 0px 5px;
+        }
+
+        .main input {
+            font-size: 12px;
+            background-color: #CCFFCC;
+        }
+
+        .text14 {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14px;
+        }
+
+        .text14 strong {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11px;
+        }
+
+        .link {
+            font-size: 12px;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: #006400;
+        }
+
+        .link_u {
+            font-size: 12px;
+        }
+
+        .link_u a {
+            color: #006400;
+        }
+
+        table td {
+            border: #000000 1px solid;
+            padding: 5px;
+        }
+    </style>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=06c58ca5-399e-44e1-b58d-03d62eea6c10&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+<div class="text14">
+    <p>ecopacking.ru<br><font size="5">ЭкоПак</font></p><br>
+    <h1 style="width:720px; text-align: center;">Бухгалтерcкая накладная № {{ order.id }} от {{ date }} г.</h1>
+    <h1>
+        <table width="720" bordercolor="#000000" style="border:#000000 1px solid;" cellpadding="0" cellspacing="0">
+
+            <tbody>
+            <tr>
+                <td><b>Наименование</b></td>
+                <td><b>Ед. изм.</b></td>
+                <td><b><nobr>Кол-во</nobr></b></td>
+                <td><b>Цена, руб.</b></td>
+                <td><b>Сумма, руб.</b></td>
+            </tr>
+            {% set total_count = 0 %}
+            {% set total_price = 0 %}
+            {% for i in items %}
+                {% set total_count = total_count + i.product_count %}
+                {% set total_packs = total_packs + packs %}
+                {% set total_price = total_price + i.price_row_total %}
+                <tr>
+                    <td>{{ i.getProduct.name }}</td>
+                    <td>{{ i.getProduct.countCurrent.dictionaryField.name }}</td>
+                    <td>{{ i.product_count }}</td>
+                    <td>{{ i.price_one }}</td>
+                    <td>{{ i.price_row_total }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>Итого</td>
+                <td>&nbsp;</td>
+                <td><b>{{ total_count }}</b></td>
+                <td>&nbsp;</td>
+                <td style="width: 15%"><b>{{ total_price | number_format(2, '.', ' ') }}</b></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div style="width:720px;text-align:right;">Комплектовщик_____________</div>
+        <br>
+        <div class="itogo" style="width:720px; text-align: left; padding: 30px 0 0 0;">Итого: <u>{{ total_string }}</u> <br>
+            Подпись _____________________<br>
+            МП
+        </div>
+        <div style="width:720px; padding-top:40px;">
+            <hr>
+            Покупатель: {{ order.getDetail.name }}<br>
+            Телефон: {{ order.getDetail.phone }}<br>
+            Адрес доставки: {{ order.getAddress }}<br>
+            Дата доставки: {{ order.getDetail.delivery_date }}<br>
+
+            <hr>
+            <div id="map" style="width: 720px; height: 300px"></div>
+        </div>
+    </h1>
+</div>
+<script>
+    window.onload = () => {
+        console.log('asd');
+        ymaps.ready(function () {
+            var map = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 10
+            });
+
+            if (map) {
+                ymaps.modules.require(['Placemark', 'Circle'], function (Placemark, Circle) {
+                    var placemark = new Placemark([55.37, 35.45]);
+                });
+            }
+
+            ymaps.geocode('Москва', {})
+                .then((res) => {
+
+                    var firstGeoObject = res.geoObjects.get(0),
+                        // Координаты геообъекта.
+                        coords = firstGeoObject.geometry.getCoordinates();
+                    console.log(res, coords);
+                });
+        });
+    };
+
+
+
+    // ymaps.ready(init);
+    //
+    // function init() {
+    //
+    // }
+
+</script>
+</body>
+</html>

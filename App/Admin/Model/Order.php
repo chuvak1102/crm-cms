@@ -42,4 +42,16 @@ class Order extends Model {
         return OrderDetail::one($this->id, 'order_id');
     }
 
+    function getAddress()
+    {
+        $i = OrderDetail::one($this->id, 'order_id');
+
+        return "{$i->city}, {$i->street}, {$i->house}/{$i->block}";
+    }
+
+    function getItems()
+    {
+        return OrderItem::many($this->id, 'order_id');
+    }
+
 }
