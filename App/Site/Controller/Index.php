@@ -378,14 +378,25 @@ class Index extends Controller {
 
                     foreach ($cart['products'] as $id => $product) {
 
+                        $item = Product::one($id);
+
                         DB::insert('order_item', [
                             'order_id',
                             'product_id',
                             'product_count',
+                            'price_one',
+                            'price_discount',
+                            'price_with_discount',
+                            'price_row_total',
                         ])->values([
                             $number,
                             $id,
-                            $product['count']
+                            $product['count'],
+                            $item->price_site,
+                            $item->getDiscount(),
+                            $item->price_site - $item->getDiscount(),
+                            ($item->price_site - $item->getDiscount()) * $product['count']
+
                         ])->execute();
                     }
 
@@ -467,7 +478,7 @@ class Index extends Controller {
         return $this->redirectToRoute('/korzina-tovarov');
     }
 
-    function calculate(Product $product, int $count)
+    static function calculate(Product $product, int $count)
     {
         // цена с учетом любого говна
         $number = $product->price_site ? $product->price_site * $count : 0;

@@ -19,6 +19,9 @@ class Index extends Controller {
         parent::before();
 
         if (!Auth::instance()->logged()) {
+            if (!in_array($_SERVER['REQUEST_URI'], ['/login'])) {
+                Session::instance()->set('return_location', $_SERVER['REQUEST_URI']);
+            }
             $this->login(New Request());
             exit();
         }
@@ -45,7 +48,11 @@ class Index extends Controller {
         if ($request->get('login') && $request->get('password')) {
 
             if (Auth::instance()->login($request->get('login'), $request->get('password'))) {
-                return $this->redirectToRoute('/');
+
+                $url = Session::instance()->get('return_location');
+                Session::instance()->remove('return_location');
+
+                return $this->redirectToRoute($url);
             } else {
                 return $this->redirectToRoute('/login');
             }

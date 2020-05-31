@@ -1,0 +1,156 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <form action="/order/edit/{{ order.id }}" method="post">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>Заказ № {{ order.number }}</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div>
+                                <a class="btn btn-sm btn-primary" href="#">Товарная накладная</a>
+                                <a class="btn btn-sm btn-primary" href="#">Бухгалтерская накладная</a>
+                                <a class="btn btn-sm btn-primary" href="#">Этикетки</a>
+                                <a class="btn btn-sm btn-primary" href="#">Добавить товар</a>
+                            </div>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover issue-tracker checkbox-container">
+                                    <tbody>
+                                    <tr>
+                                        <th></th>
+                                        <th>Название</th>
+                                        <th>На складе</th>
+                                        <th>Резерв</th>
+                                        <th>В заказе</th>
+                                        <th>Цена</th>
+                                        <th>Скидка</th>
+                                        <th>Итоговая цена</th>
+                                        <th>Сумма</th>
+                                        <th></th>
+                                    </tr>
+                                    {% for i in items %}
+                                        <tr>
+                                            <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
+                                            <td>{{ i.getProduct.name }}</td>
+                                            <td>{{ i.getProduct.countCurrent.value }}</td>
+                                            <td>{{ i.getProduct.countReserve.value }}</td>
+                                            <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>
+                                            <td><input name="product[{{ i.getProduct.id }}][price_one]" style="width: 75px" type="text" class="form-control" value="{{ i.price_one }}"></td>
+                                            <td><input name="product[{{ i.getProduct.id }}][discount]" style="width: 75px" type="text" class="form-control" value="{{ i.price_discount }}"></td>
+                                            <td><input name="product[{{ i.getProduct.id }}][price_one_total]" style="width: 75px" type="text" class="form-control" value="{{ i.price_with_discount }}"></td>
+                                            <td><input name="product[{{ i.getProduct.id }}][price_all]" style="width: 75px" type="text" class="form-control" value="{{ i.price_row_total }}"></td>
+                                            <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.id }}">X</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                        <tr>
+                                            <td></td>
+                                            <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }} руб.</h3></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="">Отправить транспортной компанией</label>
+                    <select name="delivery_company" id="" class="form-control">
+                            <option value="0">Выберите из списка</option>
+                        {% for i in delivery_company %}
+                            <option {% if i.id == order.delivery_company %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Самовывоз</label>
+                    <select name="delivery_self" id="" class="form-control">
+                            <option value="0">Выберите из списка</option>
+                        {% for i in delivery_self %}
+                            <option {% if i.id == order.delivery_self %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="">Статус склада</label>
+                    <select name="status_warehouse" id="" class="form-control">
+                        {% for i in status_warehouse %}
+                            <option {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Статус офиса</label>
+                    <select name="status_office" id="" class="form-control">
+                        {% for i in status_office %}
+                            <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="">Менеджер</label>
+                    <select name="manager" id="" class="form-control">
+                        <option value="0">Выберите из списка</option>
+                        {% for i in users %}
+                            <option {% if i.id == order.manager %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Комплектовщик</label>
+                    <select name="packing" id="" class="form-control">
+                        <option value="0">Выберите из списка</option>
+                        {% for i in users %}
+                            <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>ФИО или название компании</label>
+                    <input class="form-control" name="company_name" type="text" value="{{ order.getDetail.name }}">
+                    <label>E-mail</label>
+                    <input class="form-control" name="email" type="text" value="{{ order.getDetail.email }}">
+                    <label>Контактные телефоны (с кодом города)</label>
+                    <input class="form-control" name="phone" type="text" value="{{ order.getDetail.phone }}">
+                    <label>Дата доставки (когда Вам нужна поставка)</label>
+                    <input class="form-control" name="delivery_date" type="text"  value="{{ order.getDetail.delivery_date }}">
+                    <label>Время работы Вашей компании</label>
+                    <input class="form-control" name="work_time" type="text" value="{{ order.getDetail.work_time }}">
+                    <label>Индекс</label>
+                    <input class="form-control" name="index" type="text" value="{{ order.getDetail.address_index }}">
+                    <label>Город</label>
+                    <input class="form-control" name="city" type="text" value="{{ order.getDetail.city }}">
+                    <label>Улица, проспект и пр</label>
+                    <input class="form-control" name="street" type="text" value="{{ order.getDetail.street }}">
+                    <label>Номер дома</label>
+                    <input class="form-control" name="house" type="text" value="{{ order.getDetail.house }}">
+                    <label>Корпус</label>
+                    <input class="form-control" name="block" type="text" value="{{ order.getDetail.block }}">
+                    <label>Квартира, офис</label>
+                    <input class="form-control" name="office" type="text" value="{{ order.getDetail.office }}">
+                </div>
+                <div class="col-sm-6">
+                    <label>Способ оплаты:</label>
+                    <br>
+                    <label><b>На расчетный счет компании</b></label>
+                    <br>
+                    <input {% if order.getDetail.payment_type == 'online' %}checked{% endif %} class="" name="payment_type" type="radio" value="online">
+                    <br>
+                    <label><b>Наличными курьеру</b></label>
+                    <br>
+                    <input {% if order.getDetail.payment_type == 'cash' %}checked{% endif %} class="" name="payment_type" type="radio" value="cash">
+                    <br>
+                    <label>Дополнительно:</label>
+                    <textarea class="form-control" name="comment" id="" cols="10" rows="5" >{{ order.getDetail.advanced }}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <br>
+                    <button name="submit" value="submit" type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

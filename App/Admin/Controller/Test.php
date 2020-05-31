@@ -8,7 +8,7 @@ use Core\Database\Database\Exception;
 use Core\Database\DB;
 use Core\JsonResponse;
 
-class Test extends Controller {
+class Test extends Index {
 
     function sync()
     {

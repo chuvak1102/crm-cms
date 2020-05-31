@@ -454,6 +454,11 @@ class Product extends Model {
         return $prices;
     }
 
+    function getDiscount()
+    {
+        return 0;
+    }
+
     public function afterLoad()
     {
 //        dump($this);

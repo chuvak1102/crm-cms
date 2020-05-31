@@ -14,7 +14,7 @@ use Core\Database\DB;
 use App\Admin\Model\Content as ContentModel;
 use Core\Router;
 
-class Content extends Controller {
+class Content extends Index {
 
     const TEXT = 'text';
     const FILE_IMAGE = 'file_image';

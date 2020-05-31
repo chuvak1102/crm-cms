@@ -62,6 +62,7 @@ class Routes {
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
+                '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],
 
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
