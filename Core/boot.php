@@ -1,9 +1,16 @@
 <?php
 
+use Core\Session;
+
 require_once '../Core/Autoload.php';
 require_once '../App/Config.php';
 require_once '../Core/Router.php';
 require_once '../vendor/autoload.php'; // composer autoloader
+
+ini_set('display_errors', E_ALL);
+ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'],'.'),200));
+
+session_start();
 
 try {
 
@@ -14,6 +21,8 @@ try {
 
         if (class_exists($controllerName)) {
             if (method_exists($controllerName, $action)) {
+
+                /** @var \Core\Controller $controller */
                 $controller = new $controllerName();
 
                 \Core\Application::set('controller', str_replace('App\\Admin\\Controller\\','',$controllerName));

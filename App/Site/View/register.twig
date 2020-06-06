@@ -1,0 +1,64 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="content-right-wp">
+        <div class="bread">
+            <h1 id="title">Регистрация</h1>
+            <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
+        </div>
+        <div class="row">
+            <form method="POST" action="/register" class="form-withlogo cart" enctype="multipart/form-data">
+                <div class="withlogo-row">
+                    <label>Ваше имя:<span>*</span></label>
+                    <input name="name" type="text" value="{{ name }}">
+                    {% if submit %}
+                        {% if name is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>E-mail:<span>*</span></label>
+                    <input name="email" type="text" value="{{ email }}">
+                    {% if submit %}
+                        {% if email is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
+                        {% if email_ok == 0 %}
+                            <p>Не верный email</p>
+                        {% endif %}
+                        {% if exist %}
+                            <p>Пользователь уже существует</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>Пароль (английские буквы и цифры)<span>*</span></label>
+                    <input name="password" type="text" value="{{ password }}">
+                    {% if submit %}
+                        {% if password is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
+                        {% if password_type == 0 %}
+                            <p>Только английские буквы и цифры</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <label>Пароль (подтверждение)<span>*</span></label>
+                    <input name="confirm" type="text" value="{{ confirm }}">
+                    {% if submit %}
+                        {% if confirm is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
+                        {% if password_ok == 0 %}
+                            <p>Пароли не совпадают</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="withlogo-row">
+                    <button class="btn" type="submit" name="submit" value="register">Продолжить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

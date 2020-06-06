@@ -14,15 +14,10 @@ class Config
         'user' => 'u0742521_default',
         'pass' => 'j3x3HI!Q'
     ];
-    const ROLES = [
-        'anon' => [],
-        'user' => [],
-        'admin' => [],
-        'su' => [],
-    ];
     // домены для маршрутов
     const SiteDomain = 'front.alkogram.ru';
     const AdminDomain = 'crm.alkogram.ru';
+    const ClientDomain = 'client.alkogram.ru';
 }
 
 

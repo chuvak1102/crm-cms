@@ -5,9 +5,13 @@ use App\Admin\Model\Category;
 use App\Admin\Model\Content;
 use App\Admin\Model\DictionaryValue;
 use App\Admin\Model\Product;
+use App\Admin\Model\User;
+use App\Config;
 use Core\Application;
+use Core\Auth;
 use Core\Controller;
 use Core\Database\DB;
+use Core\Hash;
 use Core\JsonResponse;
 use Core\Request\Request;
 use Core\Router;
@@ -56,6 +60,8 @@ class Index extends Controller {
         Page::instance()->push('cart_items', $cart['total_count']);
         Page::instance()->push('cart_price', number_format($cart['total_price'], 2, '.', ' '));
         Page::instance()->push('title', 'ЭкоПак');
+        Page::instance()->push('user', Auth::instance()->current()->name);
+        Page::instance()->push('client_domain', 'http://'.Config::ClientDomain);
     }
 
     function index()
@@ -484,5 +490,72 @@ class Index extends Controller {
         $number = $product->price_site ? $product->price_site * $count : 0;
 
         return number_format((float)$number, 2, '.', '');
+    }
+
+    function logout()
+    {
+        Auth::instance()->logout();
+        return $this->redirectToRoute('/');
+    }
+
+    function login(Request $request)
+    {
+        if ($request->get('login') && $request->get('password')) {
+
+            if (Auth::instance()->login($request->get('login'), $request->get('password'))) {
+
+                return $this->redirectToRoute('/');
+            } else {
+                return $this->redirectToRoute('/');
+            }
+        }
+
+        return $this->redirectToRoute('/');
+    }
+
+    function register(Request $request)
+    {
+        Page::instance()->push('title', "Регистрация - ЭкоПак");
+
+        if ($request->get('submit')) {
+
+            $name = $request->get('name');
+            $email = $request->get('email');
+            $pass = $request->get('password');
+            $confirm = $request->get('confirm');
+            $exist = User::one($email, 'login')->id;
+            $passwordOk = ($pass && $confirm) && ($pass == $confirm);
+            $passwordType = preg_match('/^[a-zA-Z0-9]+$/', $pass) == true ? 1 : 0;
+
+            if ($name && $email && $pass && $confirm && !$exist && $passwordOk) {
+
+                Auth::instance()->create([
+                    'name' => $name,
+                    'department' => 8,
+                    'position' => 'Клиенты',
+                    'login' => $email,
+                    'password' => $pass
+                ]);
+
+                return $this->render('Site:success', [
+                    'message' => 'Спасибо! На ваш email отправлено письмо с инструкцией по завершению регистрации.',
+                    'delay' => 5000
+                ]);
+            }
+
+            return $this->render('Site:register', [
+                'submit' => $request->get('submit'),
+                'name' => $request->get('name'),
+                'email' => $email,
+                'email_ok' => filter_var($email, FILTER_VALIDATE_EMAIL) == true ? 1 : 0,
+                'password_ok' => $pass == $confirm,
+                'exist' => $exist,
+                'password' => $pass,
+                'confirm' => $confirm,
+                'password_type' => $passwordType
+            ]);
+        }
+
+        return $this->render('Site:register');
     }
 }

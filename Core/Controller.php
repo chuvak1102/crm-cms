@@ -85,15 +85,4 @@ class Controller {
         header('Location:' . $route);
         return true;
     }
-
-    protected function createAlias($original, $modified = null)
-    {
-        if($modified)
-        {
-            return Helpers::stringToAlias($modified);
-        }
-
-        return Helpers::stringToAlias($original);
-    }
-
 }

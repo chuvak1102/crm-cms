@@ -11,6 +11,9 @@ class Routes {
         return [
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
+                '{login}' => [Site\Controller\Index::class => 'login'],
+                '{logout}' => [Site\Controller\Index::class => 'logout'],
+                '{register}' => [Site\Controller\Index::class => 'register'],
                 '{o-kompanii}' => [Site\Controller\Index::class => 'about'],
                 '{novosti}' => [Site\Controller\Index::class => 'news'],
                 '{oplata-i-dostavka}' => [Site\Controller\Index::class => 'delivery'],
@@ -77,20 +80,10 @@ class Routes {
                 '{document}=>{account}=>{[\d]+}' => [Admin\Controller\Document::class => 'account'],
                 '{document}=>{sticker}=>{[\d]+}=>{[\d]+}' => [Admin\Controller\Document::class => 'sticker'],
             ],
+            Config::ClientDomain => [
+                '' => [Client\Controller\Index::class => 'index'],
+                '{logout}' => [Client\Controller\Index::class => 'logout'],
+            ],
         ][$domain] ?? [];
-    }
-
-    public static function get()
-    {
-        return [
-
-        ];
-
-        return new class {
-
-            static function path($path){}
-            static function destination($controller, $action){}
-
-        };
     }
 }

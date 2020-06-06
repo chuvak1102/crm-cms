@@ -10,4 +10,3 @@ app/Views/default/**
 !app/Views/default/placeholder
 !web/placeholder
 vendor/*
-!vendor/Framework

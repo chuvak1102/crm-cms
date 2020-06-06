@@ -50,4 +50,9 @@ class Session {
         $_SESSION = null;
         session_destroy();
     }
+
+    function dump()
+    {
+        dump(self::$session);
+    }
 }

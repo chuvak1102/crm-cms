@@ -14,21 +14,20 @@ class Auth {
     private function __construct($token)
     {
         if (preg_match('/[a-z0-9]+/', $token)) {
-            if (Session::instance()->get($token) === $token) {
 
-                $user = current(DB::select("select * from user where token = '{$token}'"));
-                if ($user) {
+            $user = current(DB::select("select * from user where token = '{$token}'"));
 
-                    self::$token = $user->token;
-                    self::$role = $user->role;
-                    self::$user = (object) [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'department' => $user->department,
-                        'position' => $user->position,
-                        'login' => $user->login,
-                    ];
-                }
+            if ($user) {
+
+                self::$token = $user->token;
+                self::$role = $user->role;
+                self::$user = (object) [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'department' => $user->department,
+                    'position' => $user->position,
+                    'login' => $user->login,
+                ];
             }
         }
     }
@@ -39,7 +38,7 @@ class Auth {
             return self::$instance;
         }
 
-        return new self($_COOKIE['identifier'] ?? null);
+        return new self(Session::instance()->get('token'));
     }
 
     /**
@@ -49,8 +48,9 @@ class Auth {
      */
     function login($login, $password)
     {
-        if (preg_match('/[a-zA-Z\-\_0-9]{3,24}/', $login)) {
-            if (preg_match('/[a-zA-Z\-\_0-9]{3,24}/', $password)) {
+        if (preg_match('/[a-zA-Z\-\_0-9\-]{3,24}/', $login)) {
+            if (preg_match('/[a-zA-Z\-\_0-9\-]{3,24}/', $password)) {
+
                 $pass = Hash::hash($password);
                 $user = current(DB::select("select * from user where `login` = '$login' and `password` = '$pass'"));
 
@@ -64,14 +64,13 @@ class Auth {
                         'login' => $user->login,
                     ];
 
-                    $token = Hash::hash($user->login.session_id().$user->login);
+                    $token = Hash::hash($user->login.$password.$user->login);
 
                     $id = $user->id;
 
                     DB::update("update user set token = '{$token}' where id = $id");
 
-                    Session::instance()->set($token, $token);
-                    setcookie('identifier', $token);
+                    Session::instance()->set('token', $token);
 
                     return true;
                 }
@@ -97,11 +96,12 @@ class Auth {
         $position = $user['position'];
         $login = $user['login'];
         $password = Hash::hash($user['password']);
-        $token = Hash::hash($login.session_id().$login);
+        $token = Hash::hash($login.$password.$login);
+        $role = $user['role'] ? $user['role'] : 'client';
 
         DB::insert("
-            INSERT INTO user (name, department, position, password, login, token) 
-            VALUES('{$name}','{$department}','{$position}','{$password}','{$login}', '{$token}');
+            INSERT INTO user (name, department, position, password, login, token, role) 
+            VALUES('{$name}','{$department}','{$position}','{$password}','{$login}', '{$token}', '{$role}');
         ");
     }
 
@@ -112,6 +112,10 @@ class Auth {
 
     function logout()
     {
+        \Core\Database\DB::update('user')
+            ->set(['token' => ''])
+            ->where('token', '=', self::$token)
+            ->execute();
         self::$user = null;
         self::$token = null;
         Session::instance()->clear();
@@ -119,13 +123,7 @@ class Auth {
 
     function logged()
     {
-        if (isset($_COOKIE['identifier'])) {
-            if (Session::instance()->get($_COOKIE['identifier']) && self::$token) {
-                return Session::instance()->get($_COOKIE['identifier']) === self::$token;
-            }
-        }
-
-        return false;
+        return !empty(self::$user);
     }
 
     function hasRole(string $role)

@@ -116,8 +116,6 @@ class Product extends Model {
                 ->from('product')
                 ->execute()->current()['id'];
 
-//            dump($id);
-
             $this->id = $id;
         }
 
@@ -461,7 +459,6 @@ class Product extends Model {
 
     public function afterLoad()
     {
-//        dump($this);
-//        die('after');
+
     }
 }

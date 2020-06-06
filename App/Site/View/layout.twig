@@ -6,10 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ global.title }}</title>
     <script src="/site/jquery-3.1.1.min.js"></script>
-{#    <script src="/site/jquery-ui-1.12.1/jquery-ui.min.js"></script>#}
-
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-{#    <link rel="stylesheet" href="/site/jquery-ui-1.12.1/jquery-ui.css">#}
     <link rel="stylesheet" href="/site/style.css">
 </head>
 <body>
@@ -25,10 +22,20 @@
                 </form>
             </li>
             <li>
-                <div class="left"><img src="/site/img/icon-101.png" alt=""></div>
-                <div class="right">
-                    <div class="up"><a href="#">Бесплатная консультация</a></div>
-                    <div class="down">Проконсультируйтесь on-line</div>
+                <div>
+                    {% if global.user %}
+                        <form id="login-form logged" method="post" action="#">
+                            <a class="logged-link" href="#">Здравствуйте, {{ global.user }}</a>
+                            <br>
+                            <a class="login-btn" href="{{ global.client_domain }}" target="_blank">Личный кабинет</a>
+                            <a class="login-btn" href="/logout">Выйти</a>
+                        </form>
+                    {% else %}
+                        <form id="login-form" method="post" action="/login">
+                            <input name="login" class="login-input" type="text" placeholder="логин"><a class="" href="/register">Регистрация</a>
+                            <input name="password" class="login-input" type="password" placeholder="пароль"><button class="login-btn" value="login" type="submit">Войти</button>
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="clear"></div>
             </li>
