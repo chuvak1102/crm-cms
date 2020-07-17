@@ -116,6 +116,9 @@
             <br><br>
             <div class="row">
                 <div class="col-sm-6">
+                    <label>Привязать к клиенту</label>
+                    <input data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.client_search }}" placeholder="поиск...">
+                    <ul class="float-list client"></ul>
                     <label>ФИО или название компании</label>
                     <input class="form-control" name="company_name" type="text" value="{{ order.getDetail.name }}">
                     <label>E-mail</label>

@@ -327,6 +327,7 @@ class Index extends Controller {
                         'office' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('office')),
                         'advanced' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('comment')),
                         'payment_type' => in_array($request->get('payment_type'), ['online', 'cash']) ? $request->get('payment_type') : 'cash',
+                        'user_id' => Auth::instance()->current()->id
                     ];
 
                     Session::instance()->set('client', $client);
@@ -342,8 +343,8 @@ class Index extends Controller {
                         ->fetch()
                         ->id) + 1;
 
-                    DB::insert('order', ['number', 'status', 'status_warehouse',])
-                        ->values([$number, 1, 1])
+                    DB::insert('order', ['number', 'status', 'status_warehouse', 'user_id'])
+                        ->values([$number, 1, 1, $client->user_id])
                         ->execute();
 
                     DB::insert('order_detail', [
@@ -502,12 +503,7 @@ class Index extends Controller {
     {
         if ($request->get('login') && $request->get('password')) {
 
-            if (Auth::instance()->login($request->get('login'), $request->get('password'))) {
-
-                return $this->redirectToRoute('/');
-            } else {
-                return $this->redirectToRoute('/');
-            }
+            Auth::instance()->login($request->get('login'), $request->get('password'));
         }
 
         return $this->redirectToRoute('/');
@@ -534,11 +530,18 @@ class Index extends Controller {
                     'department' => 8,
                     'position' => 'Клиенты',
                     'login' => $email,
-                    'password' => $pass
+                    'password' => $pass,
+                    'role' => 'client'
                 ]);
 
+                $id = User::one($email, 'login')->id;
+
+                DB::insert('user_detail', ['user_id', 'name'])
+                    ->values([$id, $name])
+                    ->execute();
+
                 return $this->render('Site:success', [
-                    'message' => 'Спасибо! На ваш email отправлено письмо с инструкцией по завершению регистрации.',
+                    'message' => 'Спасибо! Теперь вы можете авторизоваться на сайте.',
                     'delay' => 5000
                 ]);
             }

@@ -8,7 +8,7 @@
         <div class="row">
             <form method="POST" action="/register" class="form-withlogo cart" enctype="multipart/form-data">
                 <div class="withlogo-row">
-                    <label>Ваше имя:<span>*</span></label>
+                    <label>Ваше имя (или название компании)<span>*</span></label>
                     <input name="name" type="text" value="{{ name }}">
                     {% if submit %}
                         {% if name is empty %}
@@ -33,7 +33,7 @@
                 </div>
                 <div class="withlogo-row">
                     <label>Пароль (английские буквы и цифры)<span>*</span></label>
-                    <input name="password" type="text" value="{{ password }}">
+                    <input name="password" type="password" value="{{ password }}">
                     {% if submit %}
                         {% if password is empty %}
                             <p>Поле обязательно для заполнения</p>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="withlogo-row">
                     <label>Пароль (подтверждение)<span>*</span></label>
-                    <input name="confirm" type="text" value="{{ confirm }}">
+                    <input name="confirm" type="password" value="{{ confirm }}">
                     {% if submit %}
                         {% if confirm is empty %}
                             <p>Поле обязательно для заполнения</p>

@@ -133,4 +133,31 @@ class Order extends Index {
         ]);
     }
 
+    function setClient(Request $request)
+    {
+        $client = intval($request->get('client'));
+        $order = intval($request->get('order'));
+
+        if ($client && $order) {
+            DB::update('order')
+                ->set(['user_id' => $client])
+                ->where('id', '=', $order)
+                ->execute();
+        }
+
+        return new JsonResponse([$client, $order]);
+    }
+
+    function getClient(Request $request)
+    {
+        $str = $request->get('str');
+        $client = DB::select('*')->from('user_detail')
+            ->where('name', 'like', DB::expr("'%{$str}%'"))
+            ->limit(15)
+            ->execute()
+            ->fetch_all();
+
+        return new JsonResponse($client);
+    }
+
 }

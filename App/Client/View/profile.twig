@@ -1,0 +1,65 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row  border-bottom white-bg dashboard-header">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <form method="POST" action="/profile" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <label>ФИО или название компании:</label>
+                                <input class="form-control" name="name" type="text" value="{{ user.name }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Контактные телефоны (с кодом города):</label>
+                                <input class="form-control" name="phone" type="text" value="{{ client.phone }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Время работы Вашей компании:</label>
+                                <input class="form-control" name="work_time" type="text" value="{{ client.work_time }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Индекс:</label>
+                                <input class="form-control" name="index" type="text" value="{{ client.index }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Город:</label>
+                                <input class="form-control" name="city" type="text" value="{{ client.city }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Улица, проспект и пр.:</label>
+                                <input class="form-control" name="street" type="text" value="{{ client.street }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Номер дома:</label>
+                                <input class="form-control" name="house" type="text" value="{{ client.house }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Корпус:</label>
+                                <input class="form-control" name="block" type="text" value="{{ client.block }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Квартира, офис:</label>
+                                <input class="form-control" name="office" type="text" value="{{ client.office }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

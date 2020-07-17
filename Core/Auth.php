@@ -74,12 +74,7 @@ class Auth {
 
                     return true;
                 }
-
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
 
         return false;
@@ -97,7 +92,7 @@ class Auth {
         $login = $user['login'];
         $password = Hash::hash($user['password']);
         $token = Hash::hash($login.$password.$login);
-        $role = $user['role'] ? $user['role'] : 'client';
+        $role = $user['role'] ? $user['role'] : 'anon';
 
         DB::insert("
             INSERT INTO user (name, department, position, password, login, token, role) 

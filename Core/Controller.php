@@ -27,7 +27,8 @@ class Controller {
             'controller' => Application::get('controller'),
             'action' => Application::get('action'),
             'user' => Auth::instance()->current(),
-            'isAdmin' => Auth::instance()->hasRole('admin')
+            'isAdmin' => Auth::instance()->hasRole('admin'),
+            'breadcrumbs' => BreadCrumbs::instance()->getAll()
         ];
     }
 

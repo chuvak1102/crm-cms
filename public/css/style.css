@@ -8425,6 +8425,13 @@ body.md-skin {
   display: none;
 }
 .row.pagination{display: flex; justify-content: center}
+
+.float-list {display: none;position: absolute;z-index: 5;list-style: none}
+.float-list {padding: 0;width: calc(100% - 30px);border: 1px solid #e4e4e4;box-shadow: 2px 3px 5px #eee;}
+.float-list li {list-style:none;transition: color, background-color 0.2s;cursor: pointer;background-color: #fff;border-bottom: 1px solid #e4e4e4;line-height: 25px;font-size: 12px;padding-left: 10px;color: gray;}
+.float-list li:hover{transition: color, background-color 0.2s;background-color: #44a5ff;color: #fff;}
+.float-list.show {display: block;}
+
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;

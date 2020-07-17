@@ -137,7 +137,7 @@ a.logged-link{height: 15px; display: block}
 
 .form-withlogo {}
 .form-withlogo .withlogo-row{}
-.form-withlogo .withlogo-row input, select, button{width: 300px; height: 25px; padding-left: 5px}
+.form-withlogo .withlogo-row input[type=text], select, button{width: 300px; height: 25px; padding-left: 5px}
 .form-withlogo .withlogo-row button{background-color: #fff}
 .form-withlogo .withlogo-row textarea{width: 300px; height: 60px; padding: 5px}
 .form-withlogo .withlogo-row label{display: block; width: 300px}

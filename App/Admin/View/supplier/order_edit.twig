@@ -1,0 +1,53 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <form action="" method="post">
+                                <table class="table table-hover issue-tracker checkbox-container">
+                                    <tbody>
+                                    <tr>
+                                        <th>Изображение</th>
+                                        <th>Название</th>
+                                        <th>Количество в заявке</th>
+                                        <th>Количество по факту</th>
+                                        <th>Нет в наличии</th>
+                                        <th>Цена</th>
+                                    </tr>
+                                    {% for i in items %}
+                                        <tr>
+                                            <td><img style="max-width: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
+                                            <td>{{ i.getProduct.name }}</td>
+                                            <td>{{ i.cnt }}</td>
+                                            <td><input class="form-control" name="fact[{{ i.id }}]" type="text" value="{{ i.cnt }}"></td>
+                                            <td><input name="avail[{{ i.id }}]" type="checkbox" {% if i.avail == 1 %}checked{% endif %}></td>
+                                            <td>{{ i.price }} р.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td>
+                                            <select class="form-control" name="status" id="">
+                                                {% for i in status %}
+                                                    <option {% if order.status == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="submit" value="submit" class="btn btn-primary">Сохранить</button></td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

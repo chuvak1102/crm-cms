@@ -44,6 +44,7 @@ class User extends Index {
             'position' => $request->get('position'),
             'login' => $request->get('login'),
             'password' => $request->get('password'),
+            'role' => 'manager'
         ]);
 
         $this->redirectToRoute("/user");

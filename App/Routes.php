@@ -66,6 +66,8 @@ class Routes {
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],
+                '{order}=>{getClient}' => [Admin\Controller\Order::class => 'getClient'],
+                '{order}=>{setClient}' => [Admin\Controller\Order::class => 'setClient'],
 
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
@@ -79,9 +81,22 @@ class Routes {
                 '{document}=>{order}=>{[\d]+}' => [Admin\Controller\Document::class => 'order'],
                 '{document}=>{account}=>{[\d]+}' => [Admin\Controller\Document::class => 'account'],
                 '{document}=>{sticker}=>{[\d]+}=>{[\d]+}' => [Admin\Controller\Document::class => 'sticker'],
+
+                '{critical}' => [Admin\Controller\Critical::class => 'index'],
+                '{critical}=>{items}' => [Admin\Controller\Critical::class => 'items'],
+
+                '{client}' => [Admin\Controller\Client::class => 'index'],
+
+                '{callback}' => [Admin\Controller\Callback::class => 'index'],
+                '{design}' => [Admin\Controller\Design::class => 'index'],
+
+                '{supplier}=>{list}' => [Admin\Controller\Supplier::class => 'list'],
+                '{supplier}=>{order}' => [Admin\Controller\Supplier::class => 'order'],
+                '{supplier}=>{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'edit']
             ],
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],
+                '{profile}' => [Client\Controller\Index::class => 'profile'],
                 '{logout}' => [Client\Controller\Index::class => 'logout'],
             ],
         ][$domain] ?? [];

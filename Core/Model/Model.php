@@ -87,12 +87,13 @@ class Model {
         return [];
     }
 
-    public static function all()
+    public static function all($direction = 'asc', $column = 'id')
     {
         $table = self::getTableName(new static());
 
         $object = DB::select('*')
             ->from($table)
+            ->order_by($column, $direction)
             ->execute()
             ->fetch_all();
 

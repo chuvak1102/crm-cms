@@ -5,12 +5,18 @@
             <li>
                 <a href="/">Главная</a>
             </li>
-            <li class="active">
-                <strong>Мои заказы</strong>
-            </li>
+            {% for i in application.breadcrumbs %}
+                {% if loop.last %}
+                    <li class="active">
+                        <strong>{{ i.name }}</strong>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ i.url }}">{{ i.name }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ol>
     </div>
-    <div class="col-lg-2">
-
-    </div>
+    <div class="col-lg-2"></div>
 </div>
