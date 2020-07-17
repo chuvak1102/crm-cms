@@ -6,6 +6,7 @@ use App\Admin\Model\Content;
 use App\Admin\Model\DictionaryValue;
 use App\Admin\Model\Product;
 use App\Admin\Model\User;
+use App\Client\Model\UserDetail;
 use App\Config;
 use Core\Application;
 use Core\Auth;
@@ -238,6 +239,9 @@ class Index extends Controller {
     {
         Page::instance()->push('title', "Корзина - ЭкоПак");
         $cart = Session::instance()->get('cart');
+        $user = Auth::instance()->current();
+        $company = UserDetail::one($user->id, 'user_id');
+        $company->email = $user->login;
 
         $items = [];
         if ($cart['products']) {
@@ -255,7 +259,8 @@ class Index extends Controller {
 
         return $this->render('Site:cart', [
             'cart' => $items,
-            'client' => Session::instance()->get('client')
+            'client' => Session::instance()->get('client'),
+            'company' => $company
         ]);
     }
 

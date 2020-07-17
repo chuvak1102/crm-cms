@@ -57,23 +57,35 @@
             <form method="POST" action="/submit" class="form-withlogo cart" enctype="multipart/form-data">
                 <div class="withlogo-row">
                     <label>ФИО или название компании:<span>*</span>:</label>
-                    <input name="company_name" type="text" value="{{ client.name }}">
-                    {% if client.name is empty %}
-                        <p>Поле обязательно для заполнения</p>
+                    {% if company.name %}
+                        <input name="company_name" type="text" value="{{ company.name }}">
+                    {% else %}
+                        <input name="company_name" type="text" value="{{ client.name }}">
+                        {% if client.name is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>E-mail:<span>*</span>:</label>
-                    <input name="email" type="text" value="{{ client.email }}">
-                    {% if client.email is empty %}
-                        <p>Поле обязательно для заполнения</p>
+                    {% if company.email %}
+                        <input name="email" type="text" value="{{ company.email }}">
+                    {% else %}
+                        <input name="email" type="text" value="{{ client.email }}">
+                        {% if client.email is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Контактные телефоны (с кодом города)<span>*</span>:</label>
-                    <input name="phone" type="text" value="{{ client.phone }}">
-                    {% if client.phone is empty %}
-                        <p>Поле обязательно для заполнения</p>
+                    {% if company.phone %}
+                        <input name="phone" type="text" value="{{ company.phone }}">
+                    {% else %}
+                        <input name="phone" type="text" value="{{ client.phone }}">
+                        {% if client.phone is empty %}
+                            <p>Поле обязательно для заполнения</p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="withlogo-row">
@@ -83,38 +95,66 @@
                 </div>
                 <div class="withlogo-row">
                     <label>Время работы Вашей компании:</label>
-                    <input name="work_time" type="text" value="{{ client.work_time }}">
-                    <p></p>
+                    {% if company.work_time %}
+                        <input name="work_time" type="text" value="{{ company.work_time }}">
+                    {% else %}
+                        <input name="work_time" type="text" value="{{ client.work_time }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Индекс:</label>
-                    <input name="index" type="text" value="{{ client.address_index }}">
-                    <p></p>
+                    {% if company.index %}
+                        <input name="index" type="text" value="{{ company.index }}">
+                    {% else %}
+                        <input name="index" type="text" value="{{ client.address_index }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Город:</label>
-                    <input name="city" type="text" value="{{ client.city }}">
-                    <p></p>
+                    {% if company.city %}
+                        <input name="city" type="text" value="{{ company.city }}">
+                    {% else %}
+                        <input name="city" type="text" value="{{ client.city }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Улица, проспект и пр.:</label>
-                    <input name="street" type="text" value="{{ client.street }}">
-                    <p></p>
+                    {% if company.street %}
+                        <input name="street" type="text" value="{{ company.street }}">
+                    {% else %}
+                        <input name="street" type="text" value="{{ client.street }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Номер дома:</label>
-                    <input name="house" type="text" value="{{ client.house }}">
-                    <p></p>
+                    {% if company.house %}
+                        <input name="house" type="text" value="{{ company.house }}">
+                    {% else %}
+                        <input name="house" type="text" value="{{ client.house }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Корпус:</label>
-                    <input name="block" type="text" value="{{ client.block }}">
-                    <p></p>
+                    {% if company.block %}
+                        <input name="block" type="text" value="{{ company.block }}">
+                    {% else %}
+                        <input name="block" type="text" value="{{ client.block }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Квартира, офис:</label>
-                    <input name="office" type="text" value="{{ client.office }}">
-                    <p></p>
+                    {% if company.office %}
+                        <input name="office" type="text" value="{{ company.office }}">
+                    {% else %}
+                        <input name="office" type="text" value="{{ client.office }}">
+                        <p></p>
+                    {% endif %}
                 </div>
                 <div class="withlogo-row">
                     <label>Способ оплаты:</label>

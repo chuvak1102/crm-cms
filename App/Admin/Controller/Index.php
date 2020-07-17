@@ -52,8 +52,9 @@ class Index extends Controller {
                 $url = Session::instance()->get('return_location');
                 Session::instance()->remove('return_location');
 
-                return $this->redirectToRoute($url);
+                return $this->redirectToRoute($url ? $url : '/');
             } else {
+
                 return $this->redirectToRoute('/login');
             }
         }
