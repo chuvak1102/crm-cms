@@ -10,10 +10,11 @@
                                 <tbody>
                                 <tr>
                                     <th style="width: 10%">Поставщик</th>
-                                    <th style="width: 50%">Название</th>
-                                    <th>Текущий остаток</th>
-                                    <th>Критичный остаток</th>
-                                    <th>Количество для заказа</th>
+                                    <th style="width: 35%">Название</th>
+                                    <th style="width: 10%">Текущий остаток</th>
+                                    <th style="width: 10%">Критичный остаток</th>
+                                    <th style="width: 10%">Количество для заказа</th>
+                                    <th style="width: 15%">Последний заказ от</th>
                                     <th>Исключить</th>
                                 </tr>
                                 </tbody>
@@ -25,10 +26,11 @@
                                             {% for i in supplier %}
                                                 <tr>
                                                     <td style="width: 10%">{{ i.supplier }}</td>
-                                                    <td style="width: 50%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
+                                                    <td style="width: 35%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
                                                     <td style="width: 10%">{{ i.cur }}</td>
                                                     <td style="width: 10%">{{ i.min }}</td>
-                                                    <td style="width: 15%"><input name="count[{{ i.id }}]" style="width: 100px" type="text" class="form-control"></td>
+                                                    <td style="width: 10%"><input value="{{ i.min }}" name="count[{{ i.id }}]" style="width: 100px" type="text" class="form-control"></td>
+                                                    <td style="width: 15%">{% if i.last_order is not empty %}{{ i.last_order | date('H:i d-m-Y') }}{% endif %}</td>
                                                     <td><button class="btn btn-danger" type="button">x</button></td>
                                                 </tr>
                                             {% endfor %}
@@ -46,6 +48,8 @@
                                         </tbody>
                                     </table>
                                     <button name="submit" value="{{ supplier_id }}" class="btn btn-primary" type="submit">Заказать</button>
+                                    <a href="/critical?all={{ supplier_id }}" class="btn btn-default">Все товары поставщика</a>
+                                    <a href="/critical" class="btn btn-default">Все остатки</a>
                                 </form>
                                 <br><br><br>
                             {% endfor %}
@@ -89,11 +93,12 @@
             $(e.target).parents('.order-row').prepend(
                 `<tr>
                     <td style="width: 10%">${i.supplier}</td>
-                    <td style="width: 50%"><a target="_blank" href="/product/edit/${i.id}">${i.name}</a></td>
+                    <td style="width: 35%"><a target="_blank" href="/product/edit/${i.id}">${i.name}</a></td>
                     <td style="width: 10%">${i.cur}</td>
                     <td style="width: 10%">${i.min}</td>
-                    <td style="width: 15%"><input name="count[${i.supplier}]" style="width: 100px" type="text" class="form-control"></td>
-                    <td><button class="btn btn-danger" type="button">x</button></td>
+                    <td style="width: 10%"><input value="${i.min}" name="count[${i.supplier}]" style="width: 100px" type="text" class="form-control"></td>
+                    <td style="width: 15%"></td>
+                    <td ><button class="btn btn-danger" type="button">x</button></td>
                 </tr>`
             );
 
@@ -101,8 +106,8 @@
             list.hide();
         });
 
-        $('button.btn-danger').click(e => {
+        $(document).on('click', 'button.btn-danger', e => {
             $(e.target).parent().parent().remove();
-        })
+        });
     </script>
 {% endblock %}

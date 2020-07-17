@@ -6,7 +6,7 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="table-responsive">
-                            <form action="" method="post">
+                            <form action="/supplier/order/edit/{{ order.id }}" method="post">
                                 <table class="table table-hover issue-tracker checkbox-container">
                                     <tbody>
                                     <tr>
@@ -20,10 +20,10 @@
                                     {% for i in items %}
                                         <tr>
                                             <td><img style="max-width: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
-                                            <td>{{ i.getProduct.name }}</td>
+                                            <td><a href="/product/edit/{{ i.getProduct.id }}">{{ i.getProduct.name | raw}}</a></td>
                                             <td>{{ i.cnt }}</td>
-                                            <td><input class="form-control" name="fact[{{ i.id }}]" type="text" value="{{ i.cnt }}"></td>
-                                            <td><input name="avail[{{ i.id }}]" type="checkbox" {% if i.avail == 1 %}checked{% endif %}></td>
+                                            <td><input class="form-control" name="fact[{{ i.getProduct.id }}]" type="text" value="{{ i.cnt }}"></td>
+                                            <td><input name="avail[{{ i.getProduct.id }}]" type="checkbox" {% if i.avail == 1 %}checked{% endif %}></td>
                                             <td>{{ i.price }} р.</td>
                                         </tr>
                                     {% endfor %}
@@ -38,7 +38,7 @@
                                         <td></td><td></td><td></td><td></td><td></td>
                                     </tr>
                                     <tr>
-                                        <td><button type="submit" value="submit" class="btn btn-primary">Сохранить</button></td>
+                                        <td><button name="submit" type="submit" value="submit" class="btn btn-primary">Сохранить и добавить на склад</button name></td>
                                         <td></td><td></td><td></td><td></td><td></td>
                                     </tr>
                                     </tbody>

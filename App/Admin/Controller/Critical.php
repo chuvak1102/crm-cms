@@ -44,7 +44,14 @@ class Critical extends Index {
             ['current.value', 'cur'],
             ['minimal.value', 'min'],
             ['s.name', 'supplier'],
-            ['s.id', 'supplier_id']
+            ['s.id', 'supplier_id'],
+            [
+                DB::select(DB::expr('max(created) as last_ordered'))
+                    ->from(['supplier_order', 'so'])
+                    ->join(['supplier_order_item', 'soi'])
+                    ->on('soi.order_id', '=', 'so.id')
+                    ->where('soi.product_id', '=', DB::expr('product.id')), 'last_order'
+            ]
         )
             ->from('product')
             ->join(['dictionary_value', 'current'])
@@ -54,13 +61,22 @@ class Critical extends Index {
             ->join(['product_to_supplier', 'pts'])
             ->on('pts.product_id', '=', 'product.id')
             ->join(['supplier', 's'])
-            ->on('s.id', '=', 'pts.supplier_id')
-            ->where('product.active', '=', 1)
-            ->where('current.value', '>', 0)
-            ->where('minimal.value', '>', 0)
-            ->where(DB::expr('current.value + 0'), '<', DB::expr('minimal.value + 0'))
-            ->execute()
-            ->fetch_all();
+            ->on('s.id', '=', 'pts.supplier_id');
+
+        if ($supplier = $request->get('all')) {
+
+            $all = $all->where('s.id', '=', $supplier);
+
+        } else {
+
+            $all = $all
+                ->where('product.active', '=', 1)
+                ->where('current.value', '>', 0)
+                ->where('minimal.value', '>', 0)
+                ->where(DB::expr('current.value + 0'), '<', DB::expr('minimal.value + 0'));
+        }
+
+        $all = $all->execute()->fetch_all();
 
         $suppliers = [];
         foreach ($all as $i) {
@@ -83,7 +99,14 @@ class Critical extends Index {
             ['current.value', 'cur'],
             ['minimal.value', 'min'],
             ['s.name', 'supplier'],
-            ['s.id', 'supplier_id']
+            ['s.id', 'supplier_id'],
+            [
+                DB::select(DB::expr('max(created) as last_ordered'))
+                    ->from(['supplier_order', 'so'])
+                    ->join(['supplier_order_item', 'soi'])
+                    ->on('soi.order_id', '=', 'so.id')
+                    ->where('soi.product_id', '=', DB::expr('product.id')), 'last_order'
+            ]
         )
             ->from('product')
             ->join(['dictionary_value', 'current'])
