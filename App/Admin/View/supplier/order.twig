@@ -18,7 +18,7 @@
                                 {% for i in order %}
                                     <tr>
                                         <td><a href="/supplier/order/edit/{{ i.id }}">{{ i.id }}</a></td>
-                                        <td>{{ i.created | date('d-m-Y h:i') }}</td>
+                                        <td>{{ i.created | date('d-m-Y H:i') }}</td>
                                         <td>{{ i.getStatus.name }}</td>
                                         <td>{{ i.total }}</td>
                                         <td>{{ i.getSupplier.name }}</td>
