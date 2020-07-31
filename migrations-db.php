@@ -1,9 +1,11 @@
 <?php
 
+require_once 'App/Config.php';
+
 return [
-    'dbname' => 'u0742521_ecopacking',
-    'user' => 'u0742521_default',
-    'password' => 'j3x3HI!Q',
-    'host' => 'localhost',
+    'dbname' => App\Config::DB['base'],
+    'user' => App\Config::DB['user'],
+    'password' => App\Config::DB['pass'],
+    'host' => App\Config::DB['host'],
     'driver' => 'pdo_mysql',
 ];
