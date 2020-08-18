@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controller;
 
+use Core\BreadCrumbs;
 use Core\JsonResponse;
 use Core\Request\Request;
 use Core\Database\DB;
@@ -10,6 +11,8 @@ class Critical extends Index {
 
     function index(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Остатки']);
+
         if ($request->get('submit')) {
 
             $supplier = $request->get('submit');

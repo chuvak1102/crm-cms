@@ -3,6 +3,7 @@
 namespace App\Admin\Controller;
 
 use Core\Auth;
+use Core\BreadCrumbs;
 use Core\Request\Request;
 use Core\Database\DB;
 
@@ -14,6 +15,8 @@ class Category extends Index {
      */
     function index(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Категории']);
+
         $catalog = DB::select('*')
             ->from('category')
             ->order_by('active', 'desc')

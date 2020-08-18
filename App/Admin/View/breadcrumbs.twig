@@ -3,17 +3,20 @@
         <h2>CRM</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">CRM</a>
+                <a href="/">Главная</a>
             </li>
-{#            <li>#}
-{#                <a>App views</a>#}
-{#            </li>#}
-            <li class="active">
-                <strong>Раздел</strong>
-            </li>
+            {% for i in application.breadcrumbs %}
+                {% if loop.last %}
+                    <li class="active">
+                        <strong>{{ i.name | raw }}</strong>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ i.url }}">{{ i.name | raw }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ol>
     </div>
-    <div class="col-lg-2">
-
-    </div>
+    <div class="col-lg-2"></div>
 </div>

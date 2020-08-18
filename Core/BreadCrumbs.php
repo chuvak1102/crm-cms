@@ -20,6 +20,8 @@ class BreadCrumbs {
     public function push($data)
     {
         array_push(self::$data, ['url' => key($data), 'name' => current($data)]);
+
+        return $this;
     }
 
     public function getAll()

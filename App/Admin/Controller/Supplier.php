@@ -6,6 +6,7 @@ use App\Admin\Model\DictionaryValue;
 use App\Admin\Model\SupplierOrder;
 use App\Admin\Model\SupplierOrderItem;
 use App\Admin\Model\SupplierOrderStatus;
+use Core\BreadCrumbs;
 use Core\Request\Request;
 use Core\Database\DB;
 use \App\Admin\Model\Product;
@@ -14,6 +15,8 @@ class Supplier extends Index {
 
     function list(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Поставщики']);
+
         return $this->render('Admin:supplier/list', [
             'supplier' => DB::select('*')
                 ->from('supplier')
@@ -24,6 +27,8 @@ class Supplier extends Index {
 
     function order(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Заявки поставщикам']);
+
         return $this->render('Admin:supplier/order', [
             'order' => SupplierOrder::all('desc')
         ]);

@@ -3,6 +3,7 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\OrderItem;
+use Core\BreadCrumbs;
 use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
@@ -14,6 +15,8 @@ class Order extends Index {
 
     function index(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Заказы']);
+
         $page = $request->get('page', 1);
         $limit = 50;
         $offset = $limit * ($page - 1);
@@ -81,6 +84,10 @@ class Order extends Index {
 
     function edit(Request $request)
     {
+        BreadCrumbs::instance()
+            ->push(['/order' => 'Заказы'])
+            ->push(['' => \App\Admin\Model\Order::one($request->seg(2))->created]);
+
         if($request->get('submit')) {
             foreach ($request->get('product') as $id => $item) {
                 DB::update('order_item')

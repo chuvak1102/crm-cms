@@ -4,6 +4,7 @@ namespace App\Admin\Controller;
 
 use App\Admin\Model\DictionaryField;
 use App\Admin\Model\Supplier;
+use Core\BreadCrumbs;
 use Core\Page;
 use Core\Request\Request;
 use Core\Database\DB;
@@ -14,6 +15,8 @@ class Product extends Index {
 
     function index(Request $request)
     {
+        BreadCrumbs::instance()->push(['' => 'Товары']);
+
         $page = $request->get('page', 1);
         $limit = 50;
         $offset = $limit * ($page - 1);
@@ -87,6 +90,10 @@ class Product extends Index {
 
     function create(Request $request)
     {
+        BreadCrumbs::instance()
+            ->push(['/product' => 'Товары'])
+            ->push(['' => 'Добавить товар']);
+
         $item = new ProductModel();
         $category = $item::getCategoryTree();
         $supplier = DB::select('*')
@@ -130,6 +137,10 @@ class Product extends Index {
         $dictionary = DictionaryField::many(1, 'dictionary');
         $additional = DictionaryField::many(2, 'dictionary');
         $additionalExist = $item->getAdditional();
+
+        BreadCrumbs::instance()
+            ->push(['/product' => 'Товары'])
+            ->push(['' => 'Редактировать '.$item->name]);
 
         return $this->render('Admin:product/edit', [
             'product' => $item,
