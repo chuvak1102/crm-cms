@@ -7,6 +7,7 @@ use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
 use Core\JsonResponse;
+use Core\Request\Request;
 
 class Test extends Index {
 
@@ -74,8 +75,9 @@ class Test extends Index {
         return new JsonResponse('SYNC');
     }
 
-    function index()
+    function index(Request $request)
     {
+        return;
         $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
         $images = scandir($root);
         $chunk = [];
@@ -118,6 +120,61 @@ class Test extends Index {
 //        }
 
         return new JsonResponse('chunk ');
+    }
+
+    function api()
+    {
+        // Инициализация HTTP-клиента
+        $ch = curl_init();
+
+// Настройки HTTP-клиента
+        curl_setopt_array($ch, array(
+            CURLOPT_RETURNTRANSFER => TRUE,
+            CURLOPT_POST => TRUE,
+            CURLOPT_SSL_VERIFYPEER => TRUE,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_CAINFO => dirname(__FILE__) . '/cacert-kabinet_pecom_ru.pem',
+            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            CURLOPT_ENCODING => 'gzip',
+            CURLOPT_USERPWD => 'user:FA218354B83DB72D3261FA80BA309D5454ADC',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json; charset=utf-8'
+            )
+        ));
+
+// Данные для запроса
+        $request_data = array(
+            'cargoCodes' => array(
+                'МВПТЗВА-2/2903',
+                'МВПЗЗЮН-3/2903',
+                'ОКМВБУТ-3/0103'
+            ));
+
+// Параметры конкретного запроса к API
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => 'https://kabinet.pecom.ru/api/v1/cargos/status/',
+            CURLOPT_POSTFIELDS => json_encode($request_data),
+        ));
+
+// Выполнение запроса
+        $result = curl_exec($ch);
+
+// Проверка на наличие ошибки
+        if (curl_errno($ch))
+        {
+            dump([
+                'error',
+                curl_error($ch)
+            ]);
+        }
+        else
+        {
+            dump([
+                'ok',
+                $result,
+                json_decode($result)
+            ]);
+        }
     }
 
 }

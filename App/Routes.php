@@ -92,7 +92,9 @@ class Routes {
 
                 '{supplier}=>{list}' => [Admin\Controller\Supplier::class => 'list'],
                 '{supplier}=>{order}' => [Admin\Controller\Supplier::class => 'order'],
-                '{supplier}=>{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'edit']
+                '{supplier}=>{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'edit'],
+
+                '{test}=>{api}' => [Admin\Controller\Test::class => 'api']
             ],
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],

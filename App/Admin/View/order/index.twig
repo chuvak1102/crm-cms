@@ -38,9 +38,24 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
+                        <span class="">Заказов сегодня &nbsp;<label class="label label-success">15 шт.</label></span>
+                        &nbsp;
+                        <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">15000 руб.</label></span>
+                        &nbsp;
+                        <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">15000 руб.</label></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
                         <div>
-                            <a class="btn btn-sm btn-primary" href="#">Добавить заказ</a>
-                            <a class="btn btn-sm btn-primary" href="#">Показать новые</a>
+                            <a class="btn btn-sm btn-primary" href="#">Новые</a>
+                            <a class="btn btn-sm btn-primary" href="#">Просроченные</a>
+                            <a class="btn btn-sm btn-primary" href="#">За сегодня</a>
                         </div>
                         <br>
                         <div class="table-responsive">
@@ -53,16 +68,21 @@
                                     <th>Статус склада</th>
                                     <th>Итого</th>
                                     <th>Клиент</th>
-                                    <th></th>
+                                    <th>Статус</th>
+                                    <th>Отсрочка</th>
+                                    <th>Адрес</th>
                                 </tr>
                                 {% for i in orders %}
                                     <tr>
                                         <td><a href="/order/edit/{{ i.id }}">{{ i.created | date('d-m-Y H:i') }}</a></td>
                                         <td>{{ i.number }}</td>
-                                        <td style="color: {{ i.getStatus.color }}"><b>{{ i.getStatus.name }}</b></td>
-                                        <td style="color: {{ i.getStatusWarehouse.color }}"><b>{{ i.getStatusWarehouse.name }}</b></td>
+                                        <td><b class="label label-success" style="background-color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</b></td>
+                                        <td><b class="label label-success" style="background-color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</b></td>
                                         <td>{{ i.getTotalPrice | number_format(2, '.', ' ') }}</td>
                                         <td style="width: 15%">{{ i.getClient }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
