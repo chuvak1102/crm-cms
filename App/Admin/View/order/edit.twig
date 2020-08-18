@@ -47,7 +47,7 @@
                                             <td>{{ i.getProduct.countCurrent.value }}</td>
                                             <td>{{ i.getProduct.countReserve.value }}</td>
                                             <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>
-                                            <td><input name="product[{{ i.getProduct.id }}][price_one]" style="width: 75px" type="text" class="form-control" value="{{ i.price_one }}"></td>
+                                            <td><input name="product[{{ i.getProduct.id }}][price_one]" style="width: 75px" type="text" class="form-control" value="{{ i.getProduct.getPrice }}"></td>
                                             <td><input name="product[{{ i.getProduct.id }}][discount]" style="width: 75px" type="text" class="form-control" value="{{ i.price_discount }}"></td>
                                             <td><input name="product[{{ i.getProduct.id }}][price_one_total]" style="width: 75px" type="text" class="form-control" value="{{ i.price_with_discount }}"></td>
                                             <td><input name="product[{{ i.getProduct.id }}][price_all]" style="width: 75px" type="text" class="form-control" value="{{ i.price_row_total }}"></td>

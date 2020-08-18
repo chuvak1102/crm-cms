@@ -85,11 +85,11 @@ class Order extends Index {
             foreach ($request->get('product') as $id => $item) {
                 DB::update('order_item')
                     ->set([
-                        'product_count' => $item['count'],
-                        'price_one' => $item['price_one'],
-                        'price_discount' => $item['discount'],
-                        'price_with_discount' => $item['price_one'] - $item['discount'],
-                        'price_row_total' => ($item['price_one'] - $item['discount']) * $item['count'],
+                        'product_count' => intval($item['count']),
+                        'price_one' => floatval($item['price_one']),
+                        'price_discount' => floatval($item['discount']),
+                        'price_with_discount' => floatval(floatval($item['price_one']) - floatval($item['discount'])),
+                        'price_row_total' => floatval((floatval($item['price_one']) - floatval($item['discount'])) * floatval($item['count']))
                     ])
                     ->where('order_id', '=', $request->seg(2))
                     ->where('product_id', '=', $id)

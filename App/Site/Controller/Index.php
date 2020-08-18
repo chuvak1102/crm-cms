@@ -346,10 +346,11 @@ class Index extends Controller {
                         ->from('order')
                         ->execute()
                         ->fetch()
-                        ->id) + 1;
+                        ->id);
+                    $number = $number ? $number + 1 : 10000;
 
-                    DB::insert('order', ['number', 'status', 'status_warehouse', 'user_id'])
-                        ->values([$number, 1, 1, $client->user_id])
+                    DB::insert('order', ['id', 'number', 'status', 'status_warehouse', 'user_id'])
+                        ->values([$number, $number, 1, 1, $client->user_id])
                         ->execute();
 
                     DB::insert('order_detail', [

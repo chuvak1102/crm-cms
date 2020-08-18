@@ -59,8 +59,8 @@
                                     <tr>
                                         <td><a href="/order/edit/{{ i.id }}">{{ i.created | date('d-m-Y H:i') }}</a></td>
                                         <td>{{ i.number }}</td>
-                                        <td>{{ i.getStatus.name }}</td>
-                                        <td>{{ i.getStatusWarehouse.name }}</td>
+                                        <td style="color: {{ i.getStatus.color }}"><b>{{ i.getStatus.name }}</b></td>
+                                        <td style="color: {{ i.getStatusWarehouse.color }}"><b>{{ i.getStatusWarehouse.name }}</b></td>
                                         <td>{{ i.getTotalPrice | number_format(2, '.', ' ') }}</td>
                                         <td style="width: 15%">{{ i.getClient }}</td>
                                     </tr>

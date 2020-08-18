@@ -454,7 +454,17 @@ class Product extends Model {
 
     function getDiscount()
     {
-        return 0;
+        return 0.00;
+    }
+
+    function getPrice()
+    {
+        return $this->price_site ? $this->price_site : 0;
+    }
+
+    function getPriceWithDiscount($count = 1)
+    {
+        return ($this->price_site - $this->getDiscount()) * $count;
     }
 
     public function afterLoad()
