@@ -18,7 +18,7 @@ class Order extends Index {
         BreadCrumbs::instance()->push(['' => 'Заказы']);
 
         $page = $request->get('page', 1);
-        $limit = 50;
+        $limit = 25;
         $offset = $limit * ($page - 1);
 
         $order = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
@@ -84,9 +84,11 @@ class Order extends Index {
 
     function edit(Request $request)
     {
+        $order = \App\Admin\Model\Order::one($request->seg(2));
+
         BreadCrumbs::instance()
             ->push(['/order' => 'Заказы'])
-            ->push(['' => \App\Admin\Model\Order::one($request->seg(2))->created]);
+            ->push(['' => 'Редактировать заказ №'.$order->number]);
 
         if($request->get('submit')) {
             foreach ($request->get('product') as $id => $item) {
@@ -130,7 +132,7 @@ class Order extends Index {
 
         return $this->render('Admin:order/edit', [
             'items' => OrderItem::many($request->seg(2), 'order_id'),
-            'order' => \App\Admin\Model\Order::one($request->seg(2)),
+            'order' => $order,
             'total' => $total,
             'status_office' => DB::select('*')->from('order_status')->execute()->fetch_all(),
             'status_warehouse' => DB::select('*')->from('order_warehouse')->execute()->fetch_all(),
