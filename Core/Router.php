@@ -6,7 +6,7 @@ use App\Routes;
 
 class Router
 {
-    static function getMatchedRoute()
+    static function getMatchedRoute() : array
     {
         $url = trim(explode('?', $_SERVER['REQUEST_URI'])[0], '/');
         $request = explode('/', $url);
@@ -30,7 +30,7 @@ class Router
             }
         }
 
-        return false;
+        return [];
     }
 
     static function uri()

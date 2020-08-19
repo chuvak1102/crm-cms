@@ -9,7 +9,7 @@ function classLoader($class) {
         return;
     }
 
-//    error("class ".$class." not found");
+    error("class ".$class." not found");
 }
 
 spl_autoload_register('classLoader');

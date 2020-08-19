@@ -3,6 +3,7 @@
 namespace App\Admin\Model;
 
 use App\Site\Controller\Index;
+use Core\Database\DB;
 use Core\Model\Model;
 
 /**
@@ -52,6 +53,52 @@ class Order extends Model {
     function getItems()
     {
         return OrderItem::many($this->id, 'order_id');
+    }
+
+    static function ordersTodayCount()
+    {
+        $today = (new \DateTime())->format("Y-m-d");
+
+        $cnt = DB::select(DB::expr('count(id) as cnt'))
+            ->from('order')
+            ->where('created', '>', $today)
+            ->execute()
+            ->fetch()
+            ->cnt;
+
+        return $cnt ? $cnt : 0;
+    }
+
+    static function orderSumToday()
+    {
+        $today = (new \DateTime())->format("Y-m-d");
+
+        $sum = DB::select(DB::expr('SUM(price_row_total) as sum'))
+            ->join('order_item')
+            ->on('order_item.order_id', '=', 'order.id')
+            ->from('order')
+            ->where('created', '>', $today)
+            ->execute()
+            ->fetch()
+            ->sum;
+
+        return floatval($sum ? $sum : 0);
+    }
+
+    static function orderSumMonth()
+    {
+        $today = (new \DateTime())->format("Y-m");
+
+        $sum = DB::select(DB::expr('SUM(price_row_total) as sum'))
+            ->join('order_item')
+            ->on('order_item.order_id', '=', 'order.id')
+            ->from('order')
+            ->where('created', '>', $today)
+            ->execute()
+            ->fetch()
+            ->sum;
+
+        return floatval($sum ? $sum : 0);
     }
 
 }

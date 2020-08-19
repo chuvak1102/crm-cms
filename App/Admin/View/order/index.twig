@@ -38,11 +38,11 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <span class="">Заказов сегодня &nbsp;<label class="label label-success">15 шт.</label></span>
+                        <span class="">Заказов сегодня &nbsp;<label class="label label-success">{{ order_today }} шт.</label></span>
                         &nbsp;
-                        <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">15000 руб.</label></span>
+                        <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">{{ sum_today }} руб.</label></span>
                         &nbsp;
-                        <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">15000 руб.</label></span>
+                        <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">{{ sum_month }} руб.</label></span>
                     </div>
                 </div>
             </div>
@@ -53,9 +53,9 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div>
-                            <a class="btn btn-sm btn-primary" href="#">Новые</a>
-                            <a class="btn btn-sm btn-primary" href="#">Просроченные</a>
-                            <a class="btn btn-sm btn-primary" href="#">За сегодня</a>
+                            <a class="btn btn-sm btn-primary" href="/order?show=new">Новые</a>
+                            <a class="btn btn-sm btn-primary" href="/order?show=out">Просроченные</a>
+                            <a class="btn btn-sm btn-primary" href="/order?show=tod">За сегодня</a>
                         </div>
                         <br>
                         <div class="table-responsive">

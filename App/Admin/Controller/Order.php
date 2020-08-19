@@ -13,6 +13,8 @@ use App\Admin\Model\Order as OrderModel;
 
 class Order extends Index {
 
+    const statusOrderNew = 1;
+
     function index(Request $request)
     {
         BreadCrumbs::instance()->push(['' => 'Заказы']);
@@ -54,6 +56,25 @@ class Order extends Index {
             $order = $order->where('user_id', 'in', array_column($users, 'id'));
         }
 
+        // filter 2
+        if ($showBy = $request->get('show')) {
+            switch ($showBy) {
+                case 'new' : {
+                    $order = $order->where('status', '=', self::statusOrderNew);
+                    break;
+                }
+                case 'out' : {
+
+                    break;
+                }
+                case 'tod' : {
+                    $from = (new \DateTime())->format("Y-m-d");
+                    $order = $order->where('created', '>=', $from);
+                    break;
+                }
+            }
+        }
+
         $order = $order->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
 
@@ -79,6 +100,9 @@ class Order extends Index {
                 'status' => $status,
                 'client' => $client
             ],
+            'order_today' => OrderModel::ordersTodayCount(),
+            'sum_today' => OrderModel::orderSumToday(),
+            'sum_month' => OrderModel::orderSumMonth()
         ]);
     }
 
