@@ -95,6 +95,7 @@ class Supplier extends Index {
             'items' => SupplierOrderItem::many($request->seg(3), 'order_id'),
             'order' => SupplierOrder::one($request->seg(3)),
             'status' => SupplierOrderStatus::all(),
+            'open' => SupplierOrder::STATUS_NEW
         ]);
     }
 }

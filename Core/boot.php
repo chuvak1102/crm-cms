@@ -44,5 +44,7 @@ try {
 
 } catch (Exception $e) {
 
-    error($e->getMessage());
+//    var_dump($e);
+
+    error($e);
 }

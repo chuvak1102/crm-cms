@@ -9,6 +9,10 @@ use Core\Model\Model;
  */
 class SupplierOrder extends Model {
 
+    const STATUS_NEW = 1;
+    const STATUS_CLOSED = 2;
+    const STATUS_MOST_CLOSED = 3;
+
     function getStatus()
     {
         return SupplierOrderStatus::one($this->status);

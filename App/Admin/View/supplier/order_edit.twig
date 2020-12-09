@@ -38,7 +38,11 @@
                                         <td></td><td></td><td></td><td></td><td></td>
                                     </tr>
                                     <tr>
-                                        <td><button name="submit" type="submit" value="submit" class="btn btn-primary">Сохранить и добавить на склад</button name></td>
+                                        <td>
+                                            {% if order.status == open %}
+                                                <button name="submit" type="submit" value="submit" class="btn btn-primary">Сохранить и добавить на склад</button>
+                                            {% endif %}
+                                        </td>
                                         <td></td><td></td><td></td><td></td><td></td>
                                     </tr>
                                     </tbody>

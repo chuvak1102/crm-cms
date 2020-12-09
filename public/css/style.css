@@ -8432,6 +8432,35 @@ body.md-skin {
 .float-list li:hover{transition: color, background-color 0.2s;background-color: #44a5ff;color: #fff;}
 .float-list.show {display: block;}
 
+/*остатки*/
+/*.matrix {margin-right: -20px}*/
+.matrix-single {
+  width: 120px;
+  height: 85px;
+  margin-right: 20px;
+  display: block;
+  float: left;
+  margin-bottom: 20px;
+  background-color: #1ab394;
+  color: #fff;
+}
+.matrix-single.warning {
+  background-color: #ffc107;
+}
+.matrix-single.error {
+  background-color: #ed5565;
+}
+.matrix-single .name {
+  font-size: 14px;
+  text-align: center;
+  height: 25px;
+  overflow: hidden;
+}
+.matrix-single .spec {
+  font-size: 13px;
+  padding-left: 5px;
+}
+
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;

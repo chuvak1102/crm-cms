@@ -82,7 +82,7 @@ class Routes {
                 '{document}=>{account}=>{[\d]+}' => [Admin\Controller\Document::class => 'account'],
                 '{document}=>{sticker}=>{[\d]+}=>{[\d]+}' => [Admin\Controller\Document::class => 'sticker'],
 
-                '{critical}' => [Admin\Controller\Critical::class => 'index'],
+                '{critical}' => [Admin\Controller\Critical::class => 'matrix'],
                 '{critical}=>{items}' => [Admin\Controller\Critical::class => 'items'],
 
                 '{client}' => [Admin\Controller\Client::class => 'index'],
