@@ -91,10 +91,14 @@ class Routes {
                 '{design}' => [Admin\Controller\Design::class => 'index'],
 
                 '{supplier}=>{list}' => [Admin\Controller\Supplier::class => 'list'],
+                '{supplier}=>{list}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'listEdit'],
+                '{supplier}=>{list}=>{delete}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'listDelete'],
                 '{supplier}=>{order}' => [Admin\Controller\Supplier::class => 'order'],
                 '{supplier}=>{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'edit'],
 
-                '{test}=>{api}' => [Admin\Controller\Test::class => 'api']
+                '{errors}' => [Admin\Controller\Error::class => 'index'],
+
+                '{test}=>{email}' => [Admin\Controller\Test::class => 'email']
             ],
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],

@@ -7,9 +7,11 @@ use App\Admin\Model\SupplierOrder;
 use App\Admin\Model\SupplierOrderItem;
 use App\Admin\Model\SupplierOrderStatus;
 use Core\BreadCrumbs;
+use Core\JsonResponse;
 use Core\Request\Request;
 use Core\Database\DB;
 use \App\Admin\Model\Product;
+use App\Admin\Model\Supplier as SupplierModel;
 
 class Supplier extends Index {
 
@@ -23,6 +25,40 @@ class Supplier extends Index {
                 ->execute()
                 ->fetch_all()
         ]);
+    }
+
+    function listEdit(Request $request)
+    {
+        if ($request->get('submit')) {
+
+            DB::update('supplier')
+                ->set([
+                    'name' => $request->get('name'),
+                    'email' => $request->get('email'),
+                    'ooo' => $request->get('ooo'),
+                    'inn' => $request->get('inn'),
+                    'warehouse_address' => $request->get('warehouse_address'),
+                    'work_time' => $request->get('work_time'),
+                    'fio' => $request->get('fio'),
+                    'phone' => $request->get('phone'),
+            ])->where('id', '=', $request->seg(3))
+                ->execute();
+
+            return $this->redirectToRoute('/supplier/list');
+        }
+
+        return $this->render('Admin:supplier/list_edit', [
+            'supplier' => SupplierModel::one($request->seg(3))
+        ]);
+    }
+
+    function listDelete(Request $request)
+    {
+        DB::delete('supplier')
+            ->where('id', '=', $request->seg(3))
+            ->execute();
+
+        $this->redirectToRoute('/supplier/list');
     }
 
     function order(Request $request)

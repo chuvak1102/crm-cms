@@ -3,11 +3,17 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\DictionaryValue;
+use App\Admin\Model\Error;
+use App\Admin\Model\OrderItem;
+use App\Admin\Model\SupplierOrder;
+use App\Admin\Model\SupplierOrderItem;
 use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
 use Core\JsonResponse;
 use Core\Request\Request;
+use Framework\Modules\Mailer\Mailer;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class Test extends Index {
 
@@ -175,6 +181,18 @@ class Test extends Index {
                 json_decode($result)
             ]);
         }
+    }
+
+
+
+
+    function email()
+    {
+//        $order = SupplierOrder::one(20);
+
+//        $order->sendEmailToSupplier();
+//        var_dump($order);
+
     }
 
 }
