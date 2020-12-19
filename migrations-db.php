@@ -1,6 +1,7 @@
 <?php
 
 require_once 'App/Config.php';
+require_once 'Core/AutoloadCLI.php';
 
 return [
     'dbname' => App\Config::DB['base'],

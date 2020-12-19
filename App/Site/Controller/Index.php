@@ -63,6 +63,23 @@ class Index extends Controller {
         Page::instance()->push('title', 'ЭкоПак');
         Page::instance()->push('user', Auth::instance()->current()->name);
         Page::instance()->push('client_domain', 'http://'.Config::ClientDomain);
+
+        // seo
+        $seo = DB::select('*')
+            ->from('seo')
+            ->where('url', '=', $_SERVER['REQUEST_URI'])
+            ->execute()
+            ->fetch();
+
+        Page::instance()->push('seo_h1', 'Одноразовая посуда, упаковка в Москве');
+        Page::instance()->push('seo_description', 'Одноразовая посуда, упаковка в Москве с доставкой!');
+        Page::instance()->push('seo_title', 'Купить одноразовую посуду в москве - интернет магазин упаковки');
+
+        if ($seo->id) {
+            Page::instance()->push('seo_h1', $seo->h1);
+            Page::instance()->push('seo_description', $seo->description);
+            Page::instance()->push('seo_title', $seo->title);
+        }
     }
 
     function index()

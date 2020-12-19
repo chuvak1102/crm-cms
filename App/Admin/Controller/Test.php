@@ -193,6 +193,15 @@ class Test extends Index {
 //        $order->sendEmailToSupplier();
 //        var_dump($order);
 
+
+        $e = DB::select('*')
+            ->from('order')
+            ->execute()
+            ->fetch_all();
+
+        print_r($e);
+
+
     }
 
 }

@@ -1,0 +1,1 @@
+php vendor/bin/doctrine-migrations generate --namespace=Migration
