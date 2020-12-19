@@ -2,6 +2,7 @@
 
 namespace App\Admin\Model;
 
+use App\Config;
 use Core\Database\Database\Exception;
 use Core\DB;
 use Core\Model\Model;
@@ -48,7 +49,7 @@ class SupplierOrder extends Model {
 
             $mail = new PHPMailer(true);
             $mail->CharSet = 'UTF-8';
-            $mail->setFrom('market@alkogram.ru');
+            $mail->setFrom(Config::ShopEmailFrom);
             $mail->addAddress('dan0@mail.ru');
             $mail->isHTML(true);
             $mail->Subject = 'Заявка на поставку товара для ООО "Экопак"(ИНН 7727280804)';

@@ -4,6 +4,7 @@ namespace App\Site\Controller;
 use App\Admin\Model\Category;
 use App\Admin\Model\Content;
 use App\Admin\Model\DictionaryValue;
+use App\Admin\Model\Order;
 use App\Admin\Model\Product;
 use App\Admin\Model\User;
 use App\Client\Model\UserDetail;
@@ -431,6 +432,8 @@ class Index extends Controller {
                     }
 
                     Session::instance()->remove('cart');
+
+                    Order::one($number, 'number')->sendEmailToClient();
 
                     return $this->render('Site:success', [
                         'message' => 'Заказ успешно создан! Мы свяжемся с вами в ближайшее время.'

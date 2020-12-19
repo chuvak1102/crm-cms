@@ -2,9 +2,12 @@
 
 namespace App\Admin\Model;
 
+use App\Config;
 use App\Site\Controller\Index;
+use Core\Database\Database\Exception;
 use Core\Database\DB;
 use Core\Model\Model;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * table = order
@@ -99,6 +102,57 @@ class Order extends Model {
             ->sum;
 
         return floatval($sum ? $sum : 0);
+    }
+
+
+    function sendEmailToClient()
+    {
+        $email = $this->getDetail()->email;
+
+        if (!$email) {
+            Error::add("{$this->id} заказ - отсутствует эмейл - {$email} письмо не ушло");
+            return;
+        }
+
+        $items = OrderItem::many($this->id, 'order_id');
+
+        if (!$items) {
+            Error::add("{$this->id} заказ - нет товаров для отправки почты");
+            return;
+        }
+
+        try {
+
+            $mail = new PHPMailer(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->setFrom(Config::ShopEmailFrom);
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $mail->Subject = 'ЭкоПак - ваш заказ принят';
+
+            $html = 'Здравствуйте! <br> Благодарим за заказ на сайте ecopacking.ru! <br><br>';
+            $html .= '<table border="1"  cellspacing="0" border="1" cellpadding="5"><tr><td><b>Состав заказа</b></td><td><b>Кол-во</b></td></tr>';
+
+            /** @var OrderItem $i */
+            foreach ($items as $i) {
+                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="right">'.$i->product_count.'</td></tr>';
+            }
+
+            $html .='</table><br>';
+            $html .= 'Мы свяжемся с Вами в ближайшее время! Письмо отправлено автоматически, если вы не совершали заказ - проигнорируйте его';
+
+            $mail->Body = $html;
+            $mail->send();
+
+            DB::update('order')
+                ->set(['mailed' => 1])
+                ->where('id', '=', $this->id)
+                ->execute();
+
+        } catch (Exception $e) {
+
+            Error::add('ошибка письма клиенту order => '.$this->id.' - '.$e->getMessage());
+        }
     }
 
 }

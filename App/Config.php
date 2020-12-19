@@ -18,6 +18,7 @@ class Config
     const SiteDomain = 'front.alkogram.ru';
     const AdminDomain = 'crm.alkogram.ru';
     const ClientDomain = 'client.alkogram.ru';
+    const ShopEmailFrom = 'market@alkogram.ru';
 }
 
 
