@@ -102,7 +102,9 @@ class Routes {
             ],
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],
+                '{order}' => [Client\Controller\Index::class => 'order'],
                 '{profile}' => [Client\Controller\Index::class => 'profile'],
+                '{profile}=>{remove}' => [Client\Controller\Index::class => 'remove'],
                 '{logout}' => [Client\Controller\Index::class => 'logout'],
             ],
         ][$domain] ?? [];

@@ -6,7 +6,12 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-4">
-                        <form method="POST" action="/profile" class="form-withlogo cart" enctype="multipart/form-data">
+                        <form method="POST" action="/profile?main=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3 ><b>Основная информация</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
                             <div class="row">
                                 <label>ФИО или название компании:</label>
                                 <input class="form-control" name="name" type="text" value="{{ user.name }}">
@@ -53,9 +58,120 @@
                                 <p></p>
                             </div>
                             <div class="row">
-                                <button class="btn btn-primary" type="submit" name="submit" value="client">Сохранить</button>
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Изменить</button>
                             </div>
                         </form>
+                        <br>
+                        <form method="POST" action="/profile?face=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3><b>Юрлицо</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
+                            <div class="row">
+                                <label>Название</label>
+                                <input class="form-control" name="name" type="text" value="{{ company.account_r }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Расчетный счет</label>
+                                <input class="form-control" name="account_r" type="text" value="{{ company.account_r }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Коррсчет</label>
+                                <input class="form-control" name="account_k" type="text" value="{{ company.account_k }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ИНН</label>
+                                <input class="form-control" name="inn" type="text" value="{{ company.inn }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ОГРН</label>
+                                <input class="form-control" name="ogrn" type="text" value="{{ company.ogrn }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>БИК</label>
+                                <input class="form-control" name="bik" type="text" value="{{ company.bik }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Банк</label>
+                                <input class="form-control" name="bank" type="text" value="{{ company.bank }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Ген. Директор</label>
+                                <input class="form-control" name="director" type="text" value="{{ company.director }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Добавить</button>
+                            </div>
+                        </form>
+                        <br>
+                        <form method="POST" action="/profile?address=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3><b>Адреса</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
+                            <div class="row">
+                                <label>Адрес</label>
+                                <input class="form-control" name="address" type="text" value="{{ address.address }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Почта</label>
+                                <input class="form-control" name="email" type="text" value="{{ address.email }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Телефон</label>
+                                <input class="form-control" name="phone" type="text" value="{{ address.phone }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-2">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <h3 ><b>Юрлицо</b></h3>
+                            <p></p>
+                            {% for i in company %}
+
+                                <div>{{ i.name }}</div>
+                                <div>Расчетный счет - {{ i.account_r }}</div>
+                                <div>Коррсчет - {{ i.account_k }}</div>
+                                <div>ИНН - {{ i.inn }}</div>
+                                <div>ОГРН - {{ i.ogrn }}</div>
+                                <div>БИК - {{ i.bik }}</div>
+                                <div>Банк - {{ i.bank }}</div>
+                                <div>Ген. Директор - {{ i.director }}</div>
+                                <div><a href="/profile/remove?face={{ i.id }}">Удалить</a></div>
+                                <br>
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            <h3 ><b>Адреса</b></h3>
+                            <p></p>
+                            {% for i in address %}
+
+                                <div>Адрес - {{ i.address }}</div>
+                                <div>Почта - {{ i.email }}</div>
+                                <div>Телефон - {{ i.phone }}</div>
+                                <div><a href="/profile/remove?address={{ i.id }}">Удалить</a></div>
+                                <br>
+                            {% endfor %}
+                        </div>
                     </div>
 
                 </div>

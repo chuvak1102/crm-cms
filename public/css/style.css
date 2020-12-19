@@ -8460,6 +8460,20 @@ body.md-skin {
   font-size: 13px;
   padding-left: 5px;
 }
+.contract {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #000;
+  text-decoration: underline;
+}
+.contract.contract-red {
+  background-color: #ff5c6c;
+  color: #000;
+}
+input[type=checkbox].small {
+  width: 15px;
+  cursor: pointer;
+}
 
 @media (min-width: 768px) {
   #page-wrapper {

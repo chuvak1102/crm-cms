@@ -471,4 +471,21 @@ class Product extends Model {
     {
 
     }
+
+    public function ordersPerMonth()
+    {
+        return intval(DB::select(DB::expr('sum(product_count) sum'))
+            ->from('order_item')
+            ->join('order')
+            ->on('order.id', '=', 'order_item.order_id')
+            ->where('order.created', '>=', DB::expr('(now() - INTERVAL 1 month)'))
+            ->where('order_item.product_id', '=', $this->id)
+            ->execute()
+            ->get('sum'));
+    }
+
+    public function reserved()
+    {
+        return 0;
+    }
 }
