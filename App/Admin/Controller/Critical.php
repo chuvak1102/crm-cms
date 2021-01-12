@@ -75,6 +75,8 @@ class Critical extends Index {
      */
     function matrix(Request $request)
     {
+        BreadCrumbs::instance()->push(['/critical' => 'Остатки']);
+
         if ($request->get('submit')) {
 
             $supplier = $request->get('submit');
@@ -105,12 +107,20 @@ class Critical extends Index {
 
         if ($supplier = $request->get('all')) {
 
+            BreadCrumbs::instance()->push(['' => \App\Admin\Model\Supplier::one($supplier)->name]);
+
             $all = $this->suppliers();
             $all = $all->where('s.id', '=', $supplier);
             $all = $all->execute()->fetch_all();
 
             $suppliers = [];
             foreach ($all as $i) {
+
+                $product = \App\Admin\Model\Product::one($i->id);
+
+                $i->monthlySales = $product->monthlySales();
+                $i->image = $product->image;
+
                 $suppliers[$i->supplier_id][] = $i;
             }
 
@@ -170,6 +180,7 @@ class Critical extends Index {
         $all = DB::select(
             'product.id',
             'product.name',
+            'product.image',
             ['current.value', 'cur'],
             ['minimal.value', 'min'],
             ['s.name', 'supplier'],

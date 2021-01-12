@@ -13,16 +13,8 @@
                                 <a class="btn btn-sm btn-primary" href="#">Добавить товар</a>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/order/{{ order.id }}">Товарная накладная</a>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/account/{{ order.id }}">Бухгалтерская накладная</a>
-                                <a class="btn btn-sm btn-primary" href="#">Этикетки =></a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/1">1</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/2">2</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/3">3</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/4">4</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/5">5</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/6">6</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/7">7</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/8">8</a>
-                                <a class="btn btn-sm btn-primary" target="_blank" href="/document/sticker/{{ order.id }}/9">9</a>
+                                <a class="btn btn-sm btn-primary sticker-btn" target="_blank" data-order="{{ order.id }}" href="#">Этикетки</a>
+                                <input type="text" class="form-control sticker-count" style="width: 50px; display: inline-block">
                             </div>
                             <br>
                             <div class="table-responsive">
@@ -165,4 +157,12 @@
             </div>
         </form>
     </div>
+    <script>
+        $('.sticker-count').on('input', e => {
+
+            let a = $('.sticker-btn');
+
+            a.attr('href', `/document/sticker/${a.data('order')}/${parseInt($(e.target).val())}`);
+        })
+    </script>
 {% endblock %}

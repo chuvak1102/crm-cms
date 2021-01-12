@@ -58,6 +58,11 @@ class Order extends Model {
         return OrderItem::many($this->id, 'order_id');
     }
 
+    function getUser()
+    {
+        return User::one($this->user_id);
+    }
+
     static function ordersTodayCount()
     {
         $today = (new \DateTime())->format("Y-m-d");
@@ -153,6 +158,23 @@ class Order extends Model {
 
             Error::add('ошибка письма клиенту order => '.$this->id.' - '.$e->getMessage());
         }
+    }
+
+    function deliveryDate()
+    {
+        // заказ до 16ч или после
+
+        $date = (new \DateTime($this->created));
+        $date->modify('+'.($date->format('H:i') < 16 ? ' 1 day' : ' 2 day'));
+
+        return $date;
+    }
+
+    function deliveryDay()
+    {
+        $date = (new \DateTime($this->created));
+
+        return $date->format('H:i') < 16 ? 'today' : 'tomorrow';
     }
 
 }

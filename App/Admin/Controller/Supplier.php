@@ -66,12 +66,18 @@ class Supplier extends Index {
         BreadCrumbs::instance()->push(['' => 'Заявки поставщикам']);
 
         return $this->render('Admin:supplier/order', [
-            'order' => SupplierOrder::all('desc')
+            'order' => SupplierOrder::all('desc'),
+            'finished' => SupplierOrder::STATUS_CLOSED
         ]);
     }
 
     function edit(Request $request)
     {
+        $order = SupplierOrder::one($request->seg(3));
+
+        BreadCrumbs::instance()->push(['' => 'Заявка поставщику - '.$order->getSupplier()->name]);
+        BreadCrumbs::instance()->push(['' => 'Заявка от '.(new \DateTime($order->created))->format('d.m.Y H:i')]);
+
         if ($request->get('submit')) {
 
             foreach ($request->get('fact') as $id => $value) {
@@ -129,9 +135,38 @@ class Supplier extends Index {
 
         return $this->render('Admin:supplier/order_edit', [
             'items' => SupplierOrderItem::many($request->seg(3), 'order_id'),
-            'order' => SupplierOrder::one($request->seg(3)),
+            'order' => $order,
             'status' => SupplierOrderStatus::all(),
             'open' => SupplierOrder::STATUS_NEW
         ]);
+    }
+
+    function extend(Request $request)
+    {
+        $order = SupplierOrder::one($request->seg(3));
+
+        $products = [];
+        foreach ($request->get('count') as $product => $cnt) {
+
+            $cnt = current($cnt);
+            $products[] = $product;
+
+            DB::insert('supplier_order_item', [
+                'cnt', 'fact', 'avail', 'price', 'product_id', 'order_id'
+            ])
+                ->values([
+                    $cnt,
+                    $cnt,
+                    0,
+                    0,
+                    $product,
+                    $order->id
+                ])->execute();
+
+        }
+
+        $order->sendEmailToSupplierModify($products);
+
+        $this->redirectToRoute('/supplier/order');
     }
 }

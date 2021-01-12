@@ -17,6 +17,17 @@ class Product extends Model {
 //    public $name = self::STRING;
 //    public $count_current = DictionaryValue::class;
 
+    function getCategory()
+    {
+        return DB::select('*')
+            ->from('category')
+            ->join('product_to_category')
+                ->on('product_to_category.category_id', '=', 'category.id')
+            ->where('product_to_category.product_id', '=', $this->id)
+            ->execute()
+            ->fetch();
+    }
+
     public function countCurrent() : DictionaryValue
     {
         return DictionaryValue::one($this->count_current);
@@ -487,5 +498,59 @@ class Product extends Model {
     public function reserved()
     {
         return 0;
+    }
+
+    public function monthlySales()
+    {
+        $cnt = DB::select(DB::expr('sum(product_count) sum'))
+            ->from('order_item')
+            ->join('order')
+            ->on('order.id', '=', 'order_item.order_id')
+            ->where('order.created', '>=', DB::expr('(now() - INTERVAL 1 month)'))
+            ->where('order_item.product_id', '=', $this->id)
+            ->execute()
+            ->get('sum');
+
+        return $cnt ? $cnt : 0;
+    }
+
+    function salesPerCurrentMonth()
+    {
+        $date = new \DateTime();
+        $y = $date->format('Y');
+        $m = $date->format('m');
+        $d = '01';
+
+        return DB::select('product_count')
+            ->from('order_item')
+            ->join('order')
+            ->on('order.id', '=', 'order_item.order_id')
+            ->where('order_item.product_id', '=', $this->id)
+            ->where('order.created', '>=', DB::expr("{$y}-{$m}-{$d}"))
+            ->execute()
+            ->get('product_count');
+    }
+
+    function salesPerPastMonth()
+    {
+        $date = (new \DateTime())->modify('- 1 month');
+        $y = $date->format('Y');
+        $m = $date->format('m');
+        $d = '01';
+
+        $date2 = (new \DateTime())->modify('- 1 month');
+        $y2 = $date2->format('Y');
+        $m2 = $date2->format('m');
+        $d2 = '01';
+
+        return DB::select('product_count')
+            ->from('order_item')
+            ->join('order')
+            ->on('order.id', '=', 'order_item.order_id')
+            ->where('order_item.product_id', '=', $this->id)
+            ->where('order.created', '>=', DB::expr("{$y}-{$m}-{$d}"))
+            ->where('order.created', '<=', DB::expr("{$y2}-{$m2}-{$d2}"))
+            ->execute()
+            ->get('product_count');
     }
 }

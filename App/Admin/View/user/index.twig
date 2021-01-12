@@ -9,7 +9,7 @@
                             {% for i in departments %}
                                 <li class="{% if loop.index == 1 %}active{% endif %}"><a data-toggle="tab" href="#tab-{{ i.id }}">{{ i.name }}</a></li>
                             {% endfor %}
-                            <li class=""><a data-toggle="tab" href="#tab-7">Добавить</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-100">Добавить</a></li>
                         </ul>
                         <div class="tab-content ">
                             {% for i in departments %}
@@ -45,7 +45,7 @@
                                 </div>
                             {% endfor %}
 
-                            <div id="tab-7" class="tab-pane">
+                            <div id="tab-100" class="tab-pane">
                                 <div class="panel-body">
                                     <form action="/user/create">
                                         <div class="form-group"><label class="control-label">ФИО</label>

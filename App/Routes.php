@@ -68,6 +68,10 @@ class Routes {
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],
                 '{order}=>{getClient}' => [Admin\Controller\Order::class => 'getClient'],
                 '{order}=>{setClient}' => [Admin\Controller\Order::class => 'setClient'],
+                '{order}=>{warehouse}' => [Admin\Controller\Order::class => 'warehouse'],
+                '{order}=>{driver}' => [Admin\Controller\Order::class => 'driver'],
+                '{order}=>{today}' => [Admin\Controller\Order::class => 'today'],
+                '{order}=>{tomorrow}' => [Admin\Controller\Order::class => 'tomorrow'],
 
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
@@ -86,6 +90,7 @@ class Routes {
                 '{critical}=>{items}' => [Admin\Controller\Critical::class => 'items'],
 
                 '{client}' => [Admin\Controller\Client::class => 'index'],
+                '{client}=>{create}' => [Admin\Controller\Client::class => 'create'],
 
                 '{callback}' => [Admin\Controller\Callback::class => 'index'],
                 '{design}' => [Admin\Controller\Design::class => 'index'],
@@ -95,6 +100,7 @@ class Routes {
                 '{supplier}=>{list}=>{delete}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'listDelete'],
                 '{supplier}=>{order}' => [Admin\Controller\Supplier::class => 'order'],
                 '{supplier}=>{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'edit'],
+                '{supplier}=>{order}=>{extend}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'extend'],
 
                 '{errors}' => [Admin\Controller\Error::class => 'index'],
 

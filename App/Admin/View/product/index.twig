@@ -58,29 +58,31 @@
                             <table class="table table-hover issue-tracker checkbox-container">
                                 <tbody>
                                 <tr>
-                                    <td>
-                                        <input class="checkbox-all" type="checkbox" value="0">
-                                    </td>
-                                    <td>
-                                        Название
-                                    </td>
+                                    <td><input class="checkbox-all" type="checkbox" value="0"></td>
+                                    <td>Изображение</td>
+                                    <td>Артикул</td>
+                                    <td>Название</td>
                                     <td>Цена на сайте</td>
                                     <td>В упаковке</td>
                                     <td>В коробке</td>
-                                    <td>Изображение</td>
+                                    <td>Продажи за месяц</td>
+                                    <td>За прошлый месяц</td>
                                 </tr>
                                 {% for i in product %}
                                 <tr class="category-row">
                                     <td>
                                         <input class="checkbox-check" type="checkbox" data-value="{{ i.id }}">
                                     </td>
+                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                    <td>{{ i.article }}</td>
                                     <td>
                                         <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a>
                                     </td>
                                     <td>{{ i.price_site }}</td>
                                     <td>{{ i.getPackCount().value }} {{ i.getPackCount().dictionaryField().name }}</td>
                                     <td>{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
-                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                    <td>{{ i.salesPerCurrentMonth }}</td>
+                                    <td>{{ i.salesPerPastMonth }}</td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>

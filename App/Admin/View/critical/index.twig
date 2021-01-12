@@ -9,10 +9,11 @@
                             <table class="table table-hover issue-tracker checkbox-container">
                                 <tbody>
                                 <tr>
-                                    <th style="width: 10%">Поставщик</th>
+                                    <th style="width: 10%">Изображение</th>
                                     <th style="width: 35%">Название</th>
                                     <th style="width: 10%">Текущий остаток</th>
                                     <th style="width: 10%">Критичный остаток</th>
+                                    <th style="">Продажи в месяц</th>
                                     <th style="width: 10%">Количество для заказа</th>
                                     <th style="width: 15%">Последний заказ от</th>
                                     <th>Исключить</th>
@@ -24,11 +25,13 @@
                                     <table class="table table-hover issue-tracker order-row">
                                         <tbody>
                                             {% for i in supplier %}
+{#                                                {{ dump(i) }}#}
                                                 <tr>
-                                                    <td style="width: 10%">{{ i.supplier }}</td>
+                                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
                                                     <td style="width: 35%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
                                                     <td style="width: 10%">{{ i.cur }}</td>
                                                     <td style="width: 10%">{{ i.min }}</td>
+                                                    <td>{{ i.monthlySales }}</td>
                                                     <td style="width: 10%"><input value="{{ i.min }}" name="count[{{ i.id }}]" style="width: 100px" type="text" class="form-control"></td>
                                                     <td style="width: 15%">{% if i.last_order is not empty %}{{ i.last_order | date('H:i d-m-Y') }}{% endif %}</td>
                                                     <td><button class="btn btn-danger" type="button">x</button></td>
@@ -92,7 +95,7 @@
 
             $(e.target).parents('.order-row').prepend(
                 `<tr>
-                    <td style="width: 10%">${i.supplier}</td>
+                    <td style="width: 10%"></td>
                     <td style="width: 35%"><a target="_blank" href="/product/edit/${i.id}">${i.name}</a></td>
                     <td style="width: 10%">${i.cur}</td>
                     <td style="width: 10%">${i.min}</td>

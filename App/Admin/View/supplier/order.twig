@@ -18,10 +18,16 @@
                                 {% for i in order %}
                                     <tr>
                                         <td>{{ i.created | date('d-m-Y H:i') }}</td>
-                                        <td>{{ i.getStatus.name }}</td>
-                                        <td>{{ i.total }}</td>
+{#                                        <td>{{ i.getStatus.name }}</td>#}
+                                        <td><b class="label label-success" style="background-color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</b></td>
+
+                                        <td style="font-weight: bold; font-size: 16px">{{ i.total }}</td>
                                         <td>{{ i.getSupplier.name }}</td>
-                                        <td><a class="btn btn-primary" href="/supplier/order/edit/{{ i.id }}"><i class="fa fa-pencil"></i></a></td>
+                                        {% if i.status == finished %}
+                                            <td></td>
+                                        {% else %}
+                                            <td><a class="btn btn-primary" href="/supplier/order/edit/{{ i.id }}"><i class="fa fa-pencil"></i></a></td>
+                                        {% endif %}
                                     </tr>
                                 {% endfor %}
                                 </tbody>

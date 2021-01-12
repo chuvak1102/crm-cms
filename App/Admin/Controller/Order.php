@@ -83,6 +83,17 @@ class Order extends Index {
             $orders[] = OrderModel::one($i->id);
         }
 
+        $driver = DB::select('*')
+            ->from('user')
+            ->where('department', '=', \App\Admin\Model\User::ROLE_DRIVER)
+            ->execute()
+            ->fetch_all();
+
+        $statuses = DB::select('*')
+            ->from('order_warehouse')
+            ->execute()
+            ->fetch_all();
+
         return $this->render('Admin:order/index', [
             'orders' => $orders,
             'pagination' => new \Core\Pagination(
@@ -102,7 +113,9 @@ class Order extends Index {
             ],
             'order_today' => OrderModel::ordersTodayCount(),
             'sum_today' => OrderModel::orderSumToday(),
-            'sum_month' => OrderModel::orderSumMonth()
+            'sum_month' => OrderModel::orderSumMonth(),
+            'drivers' => $driver,
+            'statuses' => $statuses
         ]);
     }
 
@@ -193,4 +206,113 @@ class Order extends Index {
         return new JsonResponse($client);
     }
 
+    function warehouse(Request $request)
+    {
+        if ($request->get('warehouse')) {
+            if ($request->get('id')) {
+                DB::update('order')
+                    ->set([
+                        'status_warehouse' => $request->get('warehouse'),
+                    ])
+                    ->where('id', 'in', $request->get('id'))
+                    ->execute();
+            }
+        }
+    }
+    function driver(Request $request)
+    {
+        if ($request->get('driver')) {
+            if ($request->get('id')) {
+                DB::update('order_detail')
+                    ->set([
+                        'driver' => $request->get('driver'),
+                    ])
+                    ->where('order_id', 'in', $request->get('id'))
+                    ->execute();
+            }
+        }
+    }
+
+    function today(Request $request)
+    {
+        $from = (new \DateTime())->format('Y-m-d');
+        $to = (new \DateTime())->format('Y-m-d').' 16:00:00';
+
+        $orders = DB::select('id')
+            ->from('order')
+            ->where('created', 'between', DB::expr("'{$from} 00:00:00' and '{$to}'"))
+            ->execute()
+            ->fetch_all();
+
+        return $this->list(array_column($orders, 'id'));
+    }
+
+    function tomorrow(Request $request)
+    {
+        $from = (new \DateTime())->format('Y-m-d').' 15:59:59';
+        $to = (new \DateTime())->format('Y-m-d').' 23:59:59';
+
+        $orders = DB::select('id')
+            ->from('order')
+            ->where('created', 'between', DB::expr("'{$from} 00:00:00' and '{$to}'"))
+            ->execute()
+            ->fetch_all();
+
+        return $this->list(array_column($orders, 'id'));
+    }
+
+    function list($orders = [])
+    {
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->writeHTML("<html>");
+        $mpdf->writeHTML("
+            <head>
+                <style>
+                    *{box-sizing: border-box; margin: 0;padding: 0}
+                    tr,th,td{border: 1px solid; padding: 5px}
+                    table{border-collapse: collapse}
+                </style>
+            </head>
+        ");
+
+        $mpdf->writeHTML("<table>");
+        $mpdf->writeHTML("
+            <tr>
+                <th>Категория</th>
+                <th>Название</th>
+                <th>Количество</th>
+            </tr>
+        ");
+
+        if ($orders) {
+            $items = DB::select('*')
+                ->distinct(1)
+                ->from('order_item')
+                ->where('order_id', 'in', $orders)
+                ->execute()->fetch_all();
+
+            if ($items) {
+
+                foreach ($items as $num => $i) {
+
+                    /** @var \App\Admin\Model\Product $item */
+                    $item = \App\Admin\Model\Product::one($i->product_id);
+                    $category = $item->getCategory();
+
+                    $mpdf->writeHTML("
+                        <tr>
+                            <td>{$category->name}</td>
+                            <td>{$item->name}</td>
+                            <td>{$i->product_count}</td>
+                        </tr>
+                    ");
+                }
+            }
+
+        }
+
+        $mpdf->writeHTML("</table>");
+
+        $mpdf->Output();
+    }
 }
