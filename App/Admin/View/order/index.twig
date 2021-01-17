@@ -34,19 +34,21 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <span class="">Заказов сегодня &nbsp;<label class="label label-success">{{ order_today }} шт.</label></span>
-                        &nbsp;
-                        <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">{{ sum_today }} руб.</label></span>
-                        &nbsp;
-                        <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">{{ sum_month }} руб.</label></span>
+        {% if global.user.isManager %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <span class="">Заказов сегодня &nbsp;<label class="label label-success">{{ order_today }} шт.</label></span>
+                            &nbsp;
+                            <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">{{ sum_today }} руб.</label></span>
+                            &nbsp;
+                            <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">{{ sum_month }} руб.</label></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="row">
             <div class="col-lg-12">
@@ -57,25 +59,27 @@
                                 <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=new">Новые</a>
                                 <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=out">Просроченные</a>
                                 <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tod">За сегодня</a>
-                                <div class="form-group" style="margin-left: 20px">
-                                    <select name="warehouse" class="form-control">
-                                        <option value="0">Статус склада</option>
-                                        {% for i in statuses %}
-                                            <option value="{{ i.id }}">{{ i.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <a id="status" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Изменить</a>
-                                <div class="form-group" style="margin-left: 20px">
-                                    <select name="driver" class="form-control">
-                                        <option value="0">Водитель</option>
-                                        {% for i in drivers %}
-                                            <option value="{{ i.id }}">{{ i.name }}</option>
-                                        {% endfor %}
+                                {% if global.user.isManager %}
+                                    <div class="form-group" style="margin-left: 20px">
+                                        <select name="warehouse" class="form-control">
+                                            <option value="0">Статус склада</option>
+                                            {% for i in statuses %}
+                                                <option value="{{ i.id }}">{{ i.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <a id="status" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Изменить</a>
+                                    <div class="form-group" style="margin-left: 20px">
+                                        <select name="driver" class="form-control">
+                                            <option value="0">Водитель</option>
+                                            {% for i in drivers %}
+                                                <option value="{{ i.id }}">{{ i.name }}</option>
+                                            {% endfor %}
 
-                                    </select>
-                                </div>
-                                <a id="driver" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Назначить</a>
+                                        </select>
+                                    </div>
+                                    <a id="driver" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Назначить</a>
+                                {% endif %}
                                 <a target="_blank" style="display: inline-block" class="btn btn-sm btn-primary" href="/order/today">Товары на сегодня</a>
                                 <a target="_blank" style="display: inline-block" class="btn btn-sm btn-primary" href="/order/tomorrow">Товары на завтра</a>
                             </div>
@@ -92,14 +96,16 @@
                                     <th>Дата заказа</th>
                                     <th>Доставка</th>
                                     <th>Номер</th>
+                                    {% if global.user.isManager %}
                                     <th>Статус заказа</th>
+                                    {% endif %}
                                     <th>Статус склада</th>
                                     <th>Итого</th>
                                     <th>Клиент</th>
                                     <th>Клиент</th>
-                                    <th>Статус</th>
-                                    <th>Отсрочка</th>
-                                    <th>Адрес</th>
+{#                                    <th>Статус</th>#}
+{#                                    <th>Отсрочка</th>#}
+{#                                    <th>Адрес</th>#}
                                 </tr>
                                 {% for i in orders %}
                                     <tr>
@@ -107,7 +113,9 @@
                                         <td><a href="/order/edit/{{ i.id }}">{{ i.created | date('d.m.Y H:i') }}</a></td>
                                         <td><a href="/order/edit/{{ i.id }}">{{ i.deliveryDate | date('d.m.Y') }}</a></td>
                                         <td>{{ i.number }}</td>
+                                        {% if global.user.isManager %}
                                         <td><b class="label label-success" style="background-color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</b></td>
+                                        {% endif %}
                                         <td><b class="label label-success" style="background-color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</b></td>
                                         <td>{{ i.getTotalPrice | number_format(2, '.', ' ') }}</td>
                                         {% if i.user_id %}
@@ -116,9 +124,9 @@
                                             <td><a href="/client/create"><b class="label label-danger" >Создать</b></a></td>
                                         {% endif %}
                                         <td style="width: 15%">{{ i.getClient }}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+{#                                        <td></td>#}
+{#                                        <td></td>#}
+{#                                        <td></td>#}
                                     </tr>
                                 {% endfor %}
                                 </tbody>

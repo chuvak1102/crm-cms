@@ -21,7 +21,7 @@ class Order extends Model {
 
     function getStatusWarehouse()
     {
-        return OrderWarehouse::one($this->status_warehouse);
+        return OrderStatus::one($this->status_warehouse);
     }
 
     function getTotalPrice()

@@ -3,6 +3,7 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\OrderItem;
+use App\Admin\Model\OrderStatus;
 use Core\BreadCrumbs;
 use Core\Controller;
 use Core\Database\Database\Exception;
@@ -90,7 +91,8 @@ class Order extends Index {
             ->fetch_all();
 
         $statuses = DB::select('*')
-            ->from('order_warehouse')
+            ->from('order_status')
+            ->where('category', '=', 'warehouse')
             ->execute()
             ->fetch_all();
 
@@ -103,7 +105,11 @@ class Order extends Index {
                 $request->get('page', 1),
                 "/order?from={$from}&to={$to}&number={$number}&status={$status}&client={$client}&page="
             ),
-            'filter_status' => DB::select('*')->from('order_status')->execute()->fetch_all(),
+            'filter_status' => DB::select('*')
+                ->from('order_status')
+                ->where('category', '=', 'office')
+                ->execute()
+                ->fetch_all(),
             'filter' => [
                 'from' => $from,
                 'to' => $to,
@@ -167,12 +173,29 @@ class Order extends Index {
             ->execute()
             ->fetch_all();
 
+        $statusOffice = DB::select('order_status.*')
+            ->from('order_status')
+            ->where('order_status.category', '=', 'office')
+            ->execute()
+            ->fetch_all();
+        $statusTo = DB::select('status_to')
+            ->from('order_status_to_status')
+            ->where('status_from', '=', $order->status)
+            ->execute()
+            ->fetch_all();
+        $statusTo = array_column($statusTo,'status_to');
+        $statusWarehouse = DB::select('order_status.*')
+            ->from('order_status')
+            ->where('order_status.id', 'in', $statusTo ? $statusTo : [0])
+            ->execute()
+            ->fetch_all();
+
         return $this->render('Admin:order/edit', [
             'items' => OrderItem::many($request->seg(2), 'order_id'),
             'order' => $order,
             'total' => $total,
-            'status_office' => DB::select('*')->from('order_status')->execute()->fetch_all(),
-            'status_warehouse' => DB::select('*')->from('order_warehouse')->execute()->fetch_all(),
+            'status_office' => $statusOffice,
+            'status_warehouse' => $statusWarehouse,
             'delivery_company' => DB::select('*')->from('delivery_company')->execute()->fetch_all(),
             'delivery_self' => DB::select('*')->from('delivery_self')->execute()->fetch_all(),
             'users' => $users

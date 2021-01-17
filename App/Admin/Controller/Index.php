@@ -3,6 +3,7 @@
 namespace App\Admin\Controller;
 
 use Core\Controller;
+use Core\Page;
 use Core\Request\Request;
 use Core\Session;
 use Core\Auth;
@@ -25,6 +26,10 @@ class Index extends Controller {
             $this->login(New Request());
             exit();
         }
+
+        Page::instance()->push('user',
+            \App\Admin\Model\User::one(Auth::instance()->current()->id)
+        );
     }
 
     function index(Request $request)

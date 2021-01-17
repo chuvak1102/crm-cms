@@ -12,6 +12,19 @@ use Core\Model\Model;
 class User extends Model {
 
     const ROLE_DRIVER = 5;
+    private $roleDriver = [5];
+    private $roleWarehouse = [3];
+    private $roleManager = [100, 2, 6];
+
+    function isWarehouse()
+    {
+        return in_array($this->department, $this->roleWarehouse);
+    }
+
+    function isManager()
+    {
+        return in_array($this->department, $this->roleManager);
+    }
 
     function getDetail()
     {

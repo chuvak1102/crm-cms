@@ -23,6 +23,7 @@
                                     <th>Юр.лицо/ИП</th>
                                     <th>Последний заказ</th>
                                     <th>Контакты</th>
+                                    <th>Личный кабинет</th>
                                 </tr>
                                     {% for i in clients %}
                                         <tr>
@@ -31,6 +32,7 @@
                                             <td>{{ i.company }}</td>
                                             <td>{{ i.lastOrder | date('d.m.Y') }}</td>
                                             <td>{{ i.city }}, {{ i.street }}, {{ i.house }}, {{ i.block }}, {{ i.phone }}</td>
+                                            <td><a class="btn btn-primary" href="/client/cabinet/{{ i.id }}">Просмотр</a></td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

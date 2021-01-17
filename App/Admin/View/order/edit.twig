@@ -77,16 +77,22 @@
                 <div class="col-sm-4">
                     <label for="">Статус склада</label>
                     <select name="status_warehouse" id="" class="form-control">
+                        <option value="0">Выберите</option>
                         {% for i in status_warehouse %}
                             <option {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
                         {% endfor %}
                     </select>
+                    {% if global.user.isManager %}
                     <label for="">Статус офиса</label>
                     <select name="status_office" id="" class="form-control">
+                        <option value="0">Выберите</option>
                         {% for i in status_office %}
                             <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
                         {% endfor %}
                     </select>
+                    {% else %}
+                        <input type="hidden" name="status_office" value="{{ order.status }}">
+                    {% endif %}
                 </div>
                 <div class="col-sm-4">
                     <label for="">Менеджер</label>

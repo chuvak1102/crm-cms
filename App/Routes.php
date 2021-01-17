@@ -91,6 +91,7 @@ class Routes {
 
                 '{client}' => [Admin\Controller\Client::class => 'index'],
                 '{client}=>{create}' => [Admin\Controller\Client::class => 'create'],
+                '{client}=>{cabinet}=>{[\d]+}' => [Admin\Controller\Client::class => 'cabinet'],
 
                 '{callback}' => [Admin\Controller\Callback::class => 'index'],
                 '{design}' => [Admin\Controller\Design::class => 'index'],
