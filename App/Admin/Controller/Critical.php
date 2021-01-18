@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controller;
 
+use App\Admin\Model\SupplierOrder;
 use Core\BreadCrumbs;
 use Core\JsonResponse;
 use Core\Request\Request;
@@ -85,22 +86,31 @@ class Critical extends Index {
 
             foreach ($items as $id => $count) {
 
-                $total += \App\Site\Controller\Index::calculate(\App\Admin\Model\Product::one($id), $count);
+                $product = \App\Admin\Model\Product::one($id);
+                $inBox = $product->getBoxCount()->value;
+                $total += \App\Site\Controller\Index::calculate($product, $count * $inBox);
             }
 
             DB::insert('supplier_order', ['created', 'status', 'total', 'supplier'])
                 ->values([DB::expr('now()'), 1, $total, $supplier])
                 ->execute();
+            /** @var SupplierOrder $order */
+            $order = DB::select(DB::expr('max(id) id'))->from('supplier_order')->execute()->fetch();
+            $order = SupplierOrder::one($order->id);
 
             foreach ($items as $id => $count) {
 
-                $price = \App\Site\Controller\Index::calculate(\App\Admin\Model\Product::one($id), $count);
-                $order = DB::select(DB::expr('max(id) id'))->from('supplier_order')->execute()->fetch();
+                $product = \App\Admin\Model\Product::one($id);
+                $inBox = $product->getBoxCount()->value;
+                $price = \App\Site\Controller\Index::calculate(\App\Admin\Model\Product::one($id), $count * $inBox);
 
                 DB::insert('supplier_order_item', ['cnt', 'fact', 'avail', 'price', 'product_id', 'order_id'])
-                    ->values([$count, 0, 0, $price, $id, $order->id])
+                    ->values([$count * $inBox, 0, 0, $price, $id, $order->id])
                     ->execute();
             }
+
+            // mail
+            $order->sendEmailToSupplier();
 
             return $this->redirectToRoute('/critical');
         }
@@ -110,6 +120,14 @@ class Critical extends Index {
             BreadCrumbs::instance()->push(['' => \App\Admin\Model\Supplier::one($supplier)->name]);
 
             $all = $this->suppliers();
+
+            if ($request->get('critical')) {
+                $all = $all
+                    ->where('current.value', '>', 0)
+                    ->where('minimal.value', '>', 0)
+                    ->where(DB::expr('current.value + 0'), '<', DB::expr('minimal.value + 0'));
+            }
+
             $all = $all->where('s.id', '=', $supplier);
             $all = $all->execute()->fetch_all();
 
@@ -120,17 +138,18 @@ class Critical extends Index {
 
                 $i->monthlySales = $product->monthlySales();
                 $i->image = $product->image;
+                $i->inBox = $product->getBoxCount();
 
                 $suppliers[$i->supplier_id][] = $i;
             }
 
             return $this->render('Admin:critical/index', [
-                'suppliers' => $suppliers
+                'suppliers' => $suppliers,
+                'supplier' => $supplier
             ]);
         }
 
         $all = $this->suppliers()
-//            ->where('product.active', '=', 1)
             ->order_by('s.name')
             ->execute()
             ->fetch_all();

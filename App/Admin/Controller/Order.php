@@ -159,6 +159,13 @@ class Order extends Index {
                 ->where('id', '=', $request->seg(2))
                 ->execute();
 
+            DB::update('order_detail')
+                ->set([
+                    'sticker' => $request->get('sticker')
+                ])
+                ->where('order_id', '=', $request->seg(2))
+                ->execute();
+
             return $this->redirectToRoute($request->uri());
         }
 
@@ -258,6 +265,10 @@ class Order extends Index {
 
     function today(Request $request)
     {
+        BreadCrumbs::instance()
+            ->push(['/order' => 'Заказы'])
+            ->push(['' => 'Товары на сегодня']);
+
         $from = (new \DateTime())->format('Y-m-d');
         $to = (new \DateTime())->format('Y-m-d').' 16:00:00';
 
@@ -267,11 +278,24 @@ class Order extends Index {
             ->execute()
             ->fetch_all();
 
-        return $this->list(array_column($orders, 'id'));
+        if ($request->get('pdf')) {
+
+            return $this->PDF(array_column($orders, 'id'));
+        }
+
+        return $this->render('Admin:order/today', [
+            'items' => $this->list(array_column($orders, 'id')),
+            'href' => '/order/today?pdf=1'
+        ]);
+
     }
 
     function tomorrow(Request $request)
     {
+        BreadCrumbs::instance()
+            ->push(['/order' => 'Заказы'])
+            ->push(['' => 'Товары на завтра']);
+
         $from = (new \DateTime())->format('Y-m-d').' 15:59:59';
         $to = (new \DateTime())->format('Y-m-d').' 23:59:59';
 
@@ -281,10 +305,41 @@ class Order extends Index {
             ->execute()
             ->fetch_all();
 
-        return $this->list(array_column($orders, 'id'));
+        if ($request->get('pdf')) {
+
+            return $this->PDF(array_column($orders, 'id'));
+        }
+
+        return $this->render('Admin:order/today', [
+            'items' => $this->list(array_column($orders, 'id')),
+            'href' => '/order/tomorrow?pdf=1'
+        ]);
     }
 
-    function list($orders = [])
+    function list($orders)
+    {
+        if (!$orders) return [];
+
+        $items = DB::select('*')
+            ->distinct(1)
+            ->from('order_item')
+            ->where('order_id', 'in', $orders)
+            ->execute()->fetch_all();
+
+        $product = [];
+        if ($items) {
+
+            foreach ($items as $num => $i) {
+
+                /** @var \App\Admin\Model\Product $item */
+                $product[] = \App\Admin\Model\Product::one($i->product_id);
+            }
+        }
+
+        return $product;
+    }
+
+    function PDF($orders = [])
     {
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->writeHTML("<html>");

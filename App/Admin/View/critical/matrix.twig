@@ -6,7 +6,7 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <a class="btn btn-primary" href="/supplier/list">Поставщики</a>
-                        <a class="btn btn-primary" href="/supplier/order">Заявки поставщику</a>
+                        <a class="btn btn-primary" href="/supplier/order">Заявки поставщикам</a>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                     <div class="ibox-content">
                         <div class="matrix">
                             {% for i in suppliers %}
-                                <a class="matrix-single {% if i.finished %}error{% elseif i.finished is empty and i.critical is not empty %}warning{% else %}{% endif %}" href="/critical?all={{ i.supplier }}">
+                                <a class="matrix-single {% if i.finished %}error{% elseif i.finished is empty and i.critical is not empty %}warning{% else %}{% endif %}" href="/critical?all={{ i.supplier }}&critical=1">
 
                                     <div class="name">{{ i.name }}</div>
                                     <div class="spec">Нет товара: {{ i.finished }}</div>

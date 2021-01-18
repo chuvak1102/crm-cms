@@ -41,7 +41,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <select class="form-control" name="status" id="">
+                                            <select class="form-control" name="status" id="" style="width: 250px">
                                                 {% for i in status %}
                                                     <option {% if order.status == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
                                                 {% endfor %}
@@ -115,7 +115,7 @@
             $('.order-row').prepend(`<tr>
                  <td><img style="max-width: 50px" src="/files/mini/${i.image}" alt=""></td>
                  <td><a href="/product/edit/${i.id}">${i.name}</a></td>
-                 <td><input name="count[${i.id}][]" type="text" class="form-control"></td>
+                 <td><input name="count[${i.id}][]" type="text" class="form-control" placeholder="количество"></td>
                  <td></td>
                  <td></td>
                  <td></td>

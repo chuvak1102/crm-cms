@@ -63,10 +63,29 @@ class Supplier extends Index {
 
     function order(Request $request)
     {
-        BreadCrumbs::instance()->push(['' => 'Заявки поставщикам']);
+        $supplier = $request->get('id');
+        $supplier = \App\Admin\Model\Supplier::one($supplier);
+        BreadCrumbs::instance()
+            ->push(['/supplier/order' => 'Заявки поставщикам'])
+            ->push(['' => $supplier->name]);
+
+        $orders = SupplierOrder::all('desc');
+
+        if ($request->get('id')) {
+            $orders = DB::select('*')
+                ->from('supplier_order')
+                ->where('supplier', '=', $supplier->id)
+                ->execute()
+                ->fetch_all();
+            $all = [];
+            foreach ($orders as $i) {
+                $all[] = SupplierOrder::one($i->id);
+            }
+            $orders = $all;
+        }
 
         return $this->render('Admin:supplier/order', [
-            'order' => SupplierOrder::all('desc'),
+            'order' => $orders,
             'finished' => SupplierOrder::STATUS_CLOSED
         ]);
     }
@@ -141,6 +160,9 @@ class Supplier extends Index {
         ]);
     }
 
+    /**
+     * В заявке поставщика при добавлении товара в заявку
+     */
     function extend(Request $request)
     {
         $order = SupplierOrder::one($request->seg(3));

@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker checkbox-container">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 10%">Изображение</th>
+                                    <th style="width: 30%">Название</th>
+                                    <th style="width: 15%">Текущий остаток</th>
+                                    <th>Критичный остаток</th>
+                                    <th style="">Продажи в месяц</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                            {% for i in items %}
+                                <table class="table table-hover issue-tracker order-row">
+                                    <tbody>
+                                    <tr>
+                                        <td style="width: 10%"><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                        <td style="width: 30%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
+                                        <td style="width: 15%">{{ i.countCurrent.value }}</td>
+                                        <td>{{ i.countMinimal.value }}</td>
+                                        <td>{{ i.monthlySales }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            {% endfor %}
+                            <a href="{{ href }}" target="_blank" class="btn btn-default">Печать</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

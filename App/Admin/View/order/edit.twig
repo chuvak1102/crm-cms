@@ -73,6 +73,8 @@
                             <option {% if i.id == order.delivery_self %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
                         {% endfor %}
                     </select>
+                    <label for="">Число мест</label>
+                    <input type="text" class="form-control" value="{{ order.getDetail.sticker }}" name="sticker">
                 </div>
                 <div class="col-sm-4">
                     <label for="">Статус склада</label>
