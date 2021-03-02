@@ -109,7 +109,8 @@ class Index extends Controller {
             'discount_per_month' => $discountPerMonth,
             'items_per_month' => $itemsPerMonth,
             'money_per_year' => $moneyPerYear,
-            'product' => $products
+            'product' => $products,
+            'site_domain' => Config::SiteDomain
         ]);
     }
 
@@ -121,6 +122,7 @@ class Index extends Controller {
 
             $client = (object) [
                 'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('company_name')),
+                'fio' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fio')),
                 'user_name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
                 'email' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
                 'phone' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
@@ -147,6 +149,7 @@ class Index extends Controller {
                     'house' => $client->house,
                     'block' => $client->block,
                     'office' => $client->office,
+                    'fio' => $client->fio,
                 ])
                 ->where('user_id', '=', Auth::instance()->current()->id)
                 ->execute();
@@ -163,6 +166,8 @@ class Index extends Controller {
 
         if ($request->get('face')) {
 
+            $dover = $request->get('dover') ? 'по доверенности '.$request->get('dover') : 'на основании устава';
+
             $client = (object) [
                 'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
                 'account_r' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('account_r')),
@@ -172,6 +177,9 @@ class Index extends Controller {
                 'bik' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('bik')),
                 'bank' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('bank')),
                 'director' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('director')),
+                'firm_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('firm_address')),
+                'fact_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fact_address')),
+                'dover' => $dover
             ];
 
             DB::insert('user_detail_company', [
@@ -184,6 +192,9 @@ class Index extends Controller {
                 'bik',
                 'bank',
                 'director',
+                'firm_address',
+                'fact_address',
+                'dover'
             ])->values([
                 Auth::instance()->current()->id,
                 $client->name,
@@ -194,6 +205,9 @@ class Index extends Controller {
                 $client->bik,
                 $client->bank,
                 $client->director,
+                $client->firm_address,
+                $client->fact_address,
+                $client->dover
             ])
                 ->execute();
 

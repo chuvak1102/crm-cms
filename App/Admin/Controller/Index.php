@@ -30,6 +30,11 @@ class Index extends Controller {
         Page::instance()->push('user',
             \App\Admin\Model\User::one(Auth::instance()->current()->id)
         );
+
+        Page::instance()->push('menus', \App\Admin\Model\Content::all());
+        if (strpos($_SERVER['REQUEST_URI'], '/content/'.(New Request())->seg(1)) >= 0) {
+            Page::instance()->push('content_id', (New Request())->seg(1));
+        }
     }
 
     function index(Request $request)

@@ -51,7 +51,13 @@ class SupplierOrder extends Model {
             $mail = new PHPMailer(true);
             $mail->CharSet = 'UTF-8';
             $mail->setFrom(Config::ShopEmailFrom);
-            $mail->addAddress('dan0@mail.ru');
+            if (!Config::TestEmails) {
+                foreach ($mails as $e)
+                    $mail->addAddress($e);
+            } else {
+                foreach (Config::TestEmails as $e)
+                    $mail->addAddress($e);
+            }
             $mail->isHTML(true);
             $mail->Subject = 'Заявка на поставку товара для ООО "Экопак"(ИНН 7727280804)';
 
@@ -107,6 +113,13 @@ class SupplierOrder extends Model {
             $mail = new PHPMailer(true);
             $mail->CharSet = 'UTF-8';
             $mail->setFrom(Config::ShopEmailFrom);
+            if (!Config::TestEmails) {
+                foreach ($mails as $e)
+                    $mail->addAddress($e);
+            } else {
+                foreach (Config::TestEmails as $e)
+                    $mail->addAddress($e);
+            }
             $mail->addAddress('dan0@mail.ru');
             $mail->isHTML(true);
             $mail->Subject = 'Заявка на поставку товара для ООО "Экопак"(ИНН 7727280804)';

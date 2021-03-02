@@ -278,4 +278,19 @@ class Product extends Index {
         $mpdf->writeHTML($html);
         $mpdf->Output();
     }
+
+    function delete(Request $request)
+    {
+        DB::delete('product_to_category')
+            ->where('product_id', '=', intval($request->seg(2)))
+            ->execute();
+        DB::delete('product_to_supplier')
+            ->where('product_id', '=', intval($request->seg(2)))
+            ->execute();
+        DB::delete('product')
+            ->where('id', '=', intval($request->seg(2)))
+            ->execute();
+
+        return $this->redirectToRoute('/product');
+    }
 }

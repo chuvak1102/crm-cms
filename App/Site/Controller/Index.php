@@ -85,10 +85,8 @@ class Index extends Controller {
 
     function index()
     {
-        $slider = DB::select('alias', 'image')
-            ->from('product')
-            ->order_by(DB::expr('RAND()'))
-            ->limit(6)
+        $slider = DB::select('*')
+            ->from('slider_index')
             ->execute()
             ->fetch_all();
 
@@ -586,5 +584,44 @@ class Index extends Controller {
         }
 
         return $this->render('Site:register');
+    }
+
+    function reorder(Request $request)
+    {
+        $products = DB::select('*')
+            ->from('order_item')
+            ->where('order_id', '=', intval($request->seg(1)))
+            ->execute()
+            ->fetch_all();
+
+        Session::instance()->remove('cart');
+
+        foreach ($products as $i) {
+
+            $id = $i->product_id;
+            $count = $i->product_count;
+
+            if ($id && $count) {
+
+                if (!$cart = Session::instance()->get('cart')) {
+                    Session::instance()->set('cart', [
+                        'products' => [],
+                        'total_count' => 0,
+                        'total_price' => 0
+                    ]);
+                }
+
+                $cart['products'][$id] = [
+                    'count' => $count,
+                    'total' => \App\Site\Controller\Index::calculate(Product::one($id), $count)
+                ];
+                $cart['total_count'] = array_sum(array_column($cart['products'], 'count'));
+                $cart['total_price'] = array_sum(array_column($cart['products'], 'total'));
+
+                Session::instance()->set('cart', $cart);
+            }
+        }
+
+        return $this->redirectToRoute('/korzina-tovarov');
     }
 }

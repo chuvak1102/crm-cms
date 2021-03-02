@@ -13,8 +13,13 @@
                                 <br>
                             </div>
                             <div class="row">
-                                <label>ФИО или название компании:</label>
+                                <label>Название компании:</label>
                                 <input class="form-control" name="name" type="text" value="{{ user.name }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ФИО руководителя:</label>
+                                <input class="form-control" name="fio" type="text" value="{{ client.fio }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -74,6 +79,16 @@
                                 <p></p>
                             </div>
                             <div class="row">
+                                <label>Юридический адрес</label>
+                                <input class="form-control" name="firm_address" type="text" value="{{ company.firm_address }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Фактический адрес</label>
+                                <input class="form-control" name="fact_address" type="text" value="{{ company.fact_address }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
                                 <label>Расчетный счет</label>
                                 <input class="form-control" name="account_r" type="text" value="{{ company.account_r }}">
                                 <p></p>
@@ -89,7 +104,7 @@
                                 <p></p>
                             </div>
                             <div class="row">
-                                <label>ОГРН</label>
+                                <label>ОГРН / ОГРНИП</label>
                                 <input class="form-control" name="ogrn" type="text" value="{{ company.ogrn }}">
                                 <p></p>
                             </div>
@@ -106,6 +121,11 @@
                             <div class="row">
                                 <label>Ген. Директор</label>
                                 <input class="form-control" name="director" type="text" value="{{ company.director }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>По Доверенности</label>
+                                <input class="form-control" name="dover" type="text" value="{{ company.dover }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -156,6 +176,9 @@
                                 <div>БИК - {{ i.bik }}</div>
                                 <div>Банк - {{ i.bank }}</div>
                                 <div>Ген. Директор - {{ i.director }}</div>
+                                <div>Юридический адрес - {{ i.firm_address }}</div>
+                                <div>Фактический адрес - {{ i.fact_address }}</div>
+                                <div>По доверенности - {{ i.dover }}</div>
                                 <div><a href="/profile/remove?face={{ i.id }}">Удалить</a></div>
                                 <br>
                             {% endfor %}

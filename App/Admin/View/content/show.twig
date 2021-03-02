@@ -17,7 +17,7 @@
                                     {% for i in fields %}
                                         <th style="width: 15%">{{ i }}</th>
                                     {% endfor %}
-                                    <th style="width: 5%"></th>
+{#                                    <th style="width: 5%"></th>#}
                                     <th style="width: 5%"></th>
                                 </tr>
                                 {% for row in data %}
@@ -25,17 +25,18 @@
                                         {% for col in row %}
                                             <td style="width: 15%">{{ col }}</td>
                                         {% endfor %}
-                                        <td style="width: 5%"><a href="/content/{{ content.id }}/edit/{{ row.id }}" class="btn btn-primary">Править</a></td>
+{#                                        <td style="width: 5%"><a href="/content/{{ content.id }}/edit/{{ row.id }}" class="btn btn-primary">Править</a></td>#}
                                         <td style="width: 5%"><a href="/content/{{ content.id }}/delete/{{ row.id }}" class="btn btn-danger">Удалить</a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <a href="/content/{{ content.id }}/create" class="btn btn-primary">Создать</a>
+                            <a href="/content/{{ content.id }}/create" class="btn btn-primary">Добавить</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{#    {{ dump() }}#}
 {% endblock %}

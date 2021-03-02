@@ -17,23 +17,23 @@
                                     <table class="table">
                                         <tbody>
                                         <tr>
-{#                                            <th style="border-top: none">Номер</th>#}
                                             <th style="border-top: none">Дата Заказа</th>
                                             <th style="border-top: none">Дата Доставки</th>
                                             <th style="border-top: none">Статус офис</th>
                                             <th style="border-top : none">Статус склад</th>
                                             <th style="border-top: none">Адрес доставки</th>
                                             <th style="border-top: none">Сумма заказа</th>
+                                            <th></th>
                                         </tr>
                                         {% for i in orders %}
                                             <tr>
-{#                                                <td>{{ i.number }}</td>#}
                                                 <td>{{ i.created | date('d.m.Y') }}</td>
                                                 <td>{% if i.shipped %}{{ i.shipped | date('d.m.Y') }}{% else %} - {% endif %}</td>
                                                 <td style="color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</td>
                                                 <td style="color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</td>
                                                 <td>{{ i.getAddress }}</td>
                                                 <td style="color: #0f4bac">{{ i.getTotalPrice }} руб.</td>
+                                                <td><a class="btn btn-primary" target="_blank" href="http://{{ site_domain }}/reorder/{{ i.id }}">Повторить заказ</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -103,7 +103,7 @@
                                                     <td>{{ i.getPrice }}</td>
                                                     <td>{{ i.getDiscount }}</td>
                                                     <td>{{ i.reserved }}</td>
-                                                    <td><input style="width: 75px" name="order[{{ i.id }}][count]" type="text" class="form-control"></td>
+                                                    <td><input style="width: 75px" name="order[{{ i.id }}][count]" value="{{ i.getPackCount.value }}" type="text" class="form-control"></td>
                                                 </tr>
                                             {% endfor %}
                                                 <tr>

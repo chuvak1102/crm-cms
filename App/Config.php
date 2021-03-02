@@ -14,6 +14,11 @@ class Config
         'user' => 'u0742521_default',
         'pass' => 'j3x3HI!Q'
     ];
+    // если массив не пустой, то все что отправляет сайт отправляется только сюда:
+    // для тестов
+    const TestEmails = [
+//        'dan0@mail.ru',
+    ];
     // домены для маршрутов
     const SiteDomain = 'front.alkogram.ru';
     const AdminDomain = 'crm.alkogram.ru';

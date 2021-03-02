@@ -31,9 +31,11 @@ class Routes {
                 '{submit}' => [Site\Controller\Index::class => 'submit'],
                 '{cart}=>{add}=>{[\d]+}=>{[\d]+}' => [Site\Controller\Index::class => 'cartAdd'],
                 '{cart}=>{remove}=>{[\d]+}' => [Site\Controller\Index::class => 'cartRemove'],
+                '{reorder}=>{[\d]+}' => [Site\Controller\Index::class => 'reorder'],
             ],
             Config::AdminDomain => [
-                '{sync}' => [Admin\Controller\Test::class => 'sync'],
+                '{test}=>{sync}' => [Admin\Controller\Test::class => 'sync'],
+                '{test}=>{img}' => [Admin\Controller\Test::class => 'img'],
 
                 '' => [Admin\Controller\Index::class => 'index'],
                 '{login}' => [Admin\Controller\Index::class => 'login'],
@@ -63,6 +65,7 @@ class Routes {
                 '{product}=>{print}' => [Admin\Controller\Product::class => 'print'],
                 '{product}=>{sticker}=>{[\d]+}' => [Admin\Controller\Product::class => 'sticker'],
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
+                '{product}=>{delete}=>{[\d]+}' => [Admin\Controller\Product::class => 'delete'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],

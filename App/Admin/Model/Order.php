@@ -131,7 +131,12 @@ class Order extends Model {
             $mail = new PHPMailer(true);
             $mail->CharSet = 'UTF-8';
             $mail->setFrom(Config::ShopEmailFrom);
-            $mail->addAddress($email);
+            if (!Config::TestEmails) {
+                $mail->addAddress($email);
+            } else {
+                foreach (Config::TestEmails as $e)
+                    $mail->addAddress($e);
+            }
             $mail->isHTML(true);
             $mail->Subject = 'ЭкоПак - ваш заказ принят';
 

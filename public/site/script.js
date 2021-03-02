@@ -60,7 +60,9 @@ $(document).ready(e => {
 
                 $('#cart-global-cnt').html(price.total_count);
                 $('#cart-global-price').html(price.total_price);
-                $(e.target).next('.in-cart').css({display: "block"})
+                $(e.target).next('.in-cart')
+                    .css({display: "block"})
+                    .html(`Добавлено ${count}шт. в <a href="/korzina-tovarov">корзину</a>`)
             },
             error: error => console.log(error),
         })

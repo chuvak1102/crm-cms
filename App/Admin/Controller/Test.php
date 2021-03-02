@@ -10,6 +10,7 @@ use App\Admin\Model\SupplierOrderItem;
 use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
+use Core\Helpers\Text;
 use Core\JsonResponse;
 use Core\Request\Request;
 use Framework\Modules\Mailer\Mailer;
@@ -19,69 +20,175 @@ class Test extends Index {
 
     function sync()
     {
-        $ids = DB::select('id')
-            ->from('product')
+        return;
+        $shit = DB::select('*')
+            ->from('diafan_shop')
+            ->where('act1', '=', 1)
             ->execute()->fetch_all();
 
-        foreach ($ids as $id) {
+        foreach ($shit as $i) {
+            $exist = DB::select('*')
+                ->from('product')
+                ->where('id', '=', $i->id)
+                ->execute()->fetch_all();
 
-            $id = $id->id;
+            if (!$exist) {
 
-            $values = DB::select('*')
-                ->from('diafan_shop_price')
-                ->where('good_id', '=', $id)
-                ->execute()
-                ->fetch();
+                // opts
+                $values = DB::select('*')
+                    ->from('diafan_shop_price')
+                    ->where('good_id', '=', $i->id)
+                    ->execute()
+                    ->fetch();
+                $alias = Text::alias($i->name1);
+                $image = DB::select('name')
+                    ->from('diafan_images')
+                    ->where('element_id', '=', $i->id)
+                    ->execute()
+                    ->fetch();
+                $img = "";
+                if ($image) {
+                    $img = $image->name;
+                }
+                $site_price = 0;
+                if ($values) {
+                    $site_price = $values->price;
+                }
 
-            // cricical
-            if ($values) {
+                DB::insert('product', [
+                    'id',
+                    'name',
+                    'alias',
+                    'article',
+                    'image',
+                    'price_site'
+                ])
+                    ->values([
+                        $i->id,
+                        $i->name1,
+                        $alias,
+                        $i->article,
+                        $img,
+                        $site_price
+                    ])
+                    ->execute();
 
-//                $dv = new DictionaryValue();
-//                $dv->key = 5;
-//                $dv->value = $values->count_limit;
-//                $dv->external_id = $id;
-//                $dv->external_table = 'product';
-//                $dv->external_column = 'count_minimal';
-//                $dv->save();
-//
-//                if ($dv->id) {
-//                    DB::update('product')
-//                        ->set([
-//                            'count_minimal' => $dv->id
-//                        ])
-//                        ->where('id', '=', $id)
-//                        ->execute();
-//                }
-            }
+//                dump([
+//                    $i->id,
+//                    $i->name1,
+//                    $alias,
+//                    $i->article,
+//                    $img,
+//                    $site_price
+//                ]);
 
-            // current
-            if ($values) {
+                // cricical
+                if ($values) {
 
-//                $dv = new DictionaryValue();
-//                $dv->key = 5;
-//                $dv->value = $values->count_goods;
-//                $dv->external_id = $id;
-//                $dv->external_table = 'product';
-//                $dv->external_column = 'count_current';
-//                $dv->save();
-//
-//                if ($dv->id) {
-//                    DB::update('product')
-//                        ->set([
-//                            'count_current' => $dv->id
-//                        ])
-//                        ->where('id', '=', $id)
-//                        ->execute();
-//                }
+                    $dv = new DictionaryValue();
+                    $dv->key = 5;
+                    $dv->value = $values->count_limit;
+                    $dv->external_id = $i->id;
+                    $dv->external_table = 'product';
+                    $dv->external_column = 'count_minimal';
+                    $dv->save();
+
+                    if ($dv->id) {
+                        DB::update('product')
+                            ->set([
+                                'count_minimal' => $dv->id
+                            ])
+                            ->where('id', '=', $i->id)
+                            ->execute();
+//                        dump($dv);
+                    }
+                }
+
+                // current
+                if ($values) {
+
+                    $dv = new DictionaryValue();
+                    $dv->key = 5;
+                    $dv->value = $values->count_goods;
+                    $dv->external_id = $i->id;
+                    $dv->external_table = 'product';
+                    $dv->external_column = 'count_current';
+                    $dv->save();
+
+                    if ($dv->id) {
+                        DB::update('product')
+                            ->set([
+                                'count_current' => $dv->id
+                            ])
+                            ->where('id', '=', $i->id)
+                            ->execute();
+//                        dump($dv);
+                    }
+                }
             }
         }
 
+        $values = DB::select('*')
+            ->from('diafan_shop_price')
+            ->execute()
+            ->fetch();
 
+        // count
+        foreach ($values as $i) {
+            $dv = DB::select('*')
+                ->from('dictionary_value')
+                ->where('external_id', '=', $i->id)
+                ->where('external_table', '=', 'product')
+                ->where('external_column', '=', 'count_current')
+                ->execute()
+                ->fetch();
+            if (!$dv) {
+                $dv = new DictionaryValue();
+                $dv->key = 5;
+                $dv->value = $values->count_goods;
+                $dv->external_id = $i->id;
+                $dv->external_table = 'product';
+                $dv->external_column = 'count_current';
+                $dv->save();
+            } else {
+                DB::update('dictionary_value')
+                    ->set(['count_current', $dv->count_goods])
+                    ->where('external_id', '=', $i->id)
+                    ->where('external_table', '=', 'product')
+                    ->where('external_column', '=', 'count_current')
+                    ->execute();
+            }
 
-        return new JsonResponse('SYNC');
+            //critical
+            $dv = DB::select('*')
+                ->from('dictionary_value')
+                ->where('external_id', '=', $i->id)
+                ->where('external_table', '=', 'product')
+                ->where('external_column', '=', 'count_minimal')
+                ->execute()
+                ->fetch();
+            if (!$dv) {
+                $dv = new DictionaryValue();
+                $dv->key = 5;
+                $dv->value = $values->count_limit;
+                $dv->external_id = $i->id;
+                $dv->external_table = 'product';
+                $dv->external_column = 'count_minimal';
+                $dv->save();
+            } else {
+                DB::update('dictionary_value')
+                    ->set(['count_minimal', $dv->count_limit])
+                    ->where('external_id', '=', $i->id)
+                    ->where('external_table', '=', 'product')
+                    ->where('external_column', '=', 'count_minimal')
+                    ->execute();
+            }
+        }
+
+        dump('done');
     }
 
-    function index(Request $request)
+    function img(Request $request)
     {
         return;
         $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
@@ -95,10 +202,15 @@ class Test extends Index {
 
                 try {
 
-//                    $img = new \Imagick($root.$i);
-//                    $img->scaleImage(200,0);
-//                    $img->writeImage($root.'mini/'.$i);
-//                    $img->destroy();
+                    if (!file_exists($root.'mini/'.$i)) {
+                        $img = new \Imagick($root.$i);
+                        $img->scaleImage(200,0);
+                        $img->writeImage($root.'mini/'.$i);
+                        $img->destroy();
+                    } else {
+//                        dump('exist');
+                    }
+
 
                 } catch (\ImagickException $e) {
                 }
@@ -126,82 +238,6 @@ class Test extends Index {
 //        }
 
         return new JsonResponse('chunk ');
-    }
-
-    function api()
-    {
-        // Инициализация HTTP-клиента
-        $ch = curl_init();
-
-// Настройки HTTP-клиента
-        curl_setopt_array($ch, array(
-            CURLOPT_RETURNTRANSFER => TRUE,
-            CURLOPT_POST => TRUE,
-            CURLOPT_SSL_VERIFYPEER => TRUE,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_CAINFO => dirname(__FILE__) . '/cacert-kabinet_pecom_ru.pem',
-            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_ENCODING => 'gzip',
-            CURLOPT_USERPWD => 'user:FA218354B83DB72D3261FA80BA309D5454ADC',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json; charset=utf-8'
-            )
-        ));
-
-// Данные для запроса
-        $request_data = array(
-            'cargoCodes' => array(
-                'МВПТЗВА-2/2903',
-                'МВПЗЗЮН-3/2903',
-                'ОКМВБУТ-3/0103'
-            ));
-
-// Параметры конкретного запроса к API
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => 'https://kabinet.pecom.ru/api/v1/cargos/status/',
-            CURLOPT_POSTFIELDS => json_encode($request_data),
-        ));
-
-// Выполнение запроса
-        $result = curl_exec($ch);
-
-// Проверка на наличие ошибки
-        if (curl_errno($ch))
-        {
-            dump([
-                'error',
-                curl_error($ch)
-            ]);
-        }
-        else
-        {
-            dump([
-                'ok',
-                $result,
-                json_decode($result)
-            ]);
-        }
-    }
-
-
-
-
-    function email()
-    {
-//        $order = SupplierOrder::one(20);
-
-//        $order->sendEmailToSupplier();
-//        var_dump($order);
-
-
-        $e = DB::select('*')
-            ->from('order')
-            ->execute()
-            ->fetch_all();
-
-        print_r($e);
-
-
     }
 
 }
