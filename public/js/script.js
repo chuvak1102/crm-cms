@@ -2,8 +2,20 @@ $(document).ready(() => {
 
     $('.save-category').click(e => {
 
+        e.preventDefault();
+
         let category = $(e.target)
             .parents('.category-row');
+
+        console.log(
+            {
+                status: category.find('.category-status').hasClass('label-primary') === true ? 1 : 0,
+                name: category.find('[name=name]').val(),
+                parent: category.find('[name=parent]').val(),
+                sort: category.find('[name=sort]').val(),
+                id: category.find('[name=id]').val(),
+            }
+        );
 
         $.ajax({
             url: "/category/save",

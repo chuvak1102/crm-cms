@@ -145,7 +145,11 @@ class Supplier extends Index {
             }
 
             DB::update('supplier_order')
-                ->set(['status' => $request->get('status')])
+                ->set([
+                    'status' => $request->get('status'),
+                    'comment' => $request->get('comment'),
+                    'mail_to' => $request->get('mail_to')
+                ])
                 ->where('id', '=', $request->seg(3))
                 ->execute();
 

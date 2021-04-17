@@ -67,6 +67,7 @@
                                     <td>В коробке</td>
                                     <td>Продажи за месяц</td>
                                     <td>За прошлый месяц</td>
+                                    <td>Сортировать</td>
                                 </tr>
                                 {% for i in product %}
                                 <tr class="category-row">
@@ -83,6 +84,7 @@
                                     <td>{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
                                     <td>{{ i.salesPerCurrentMonth }}</td>
                                     <td>{{ i.salesPerPastMonth }}</td>
+                                    <td><input name="sorting" data-id="{{ i.id }}" style="width: 60px" class="form-control" type="text" value="{{ i.sort }}"></td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
@@ -96,4 +98,16 @@
             {{ pagination.render() }}
         </div>
     </div>
+    <script>
+        $('[name=sorting]').on('input', e => {
+
+            $.ajax({
+                url: "/product/sort",
+                data: {
+                    'id': parseInt($(e.target).data('id')),
+                    'sort': parseInt($(e.target).val())
+                }
+            });
+        })
+    </script>
 {% endblock %}

@@ -293,4 +293,12 @@ class Product extends Index {
 
         return $this->redirectToRoute('/product');
     }
+
+    function sort(Request $request)
+    {
+        DB::update('product')->set([
+            'sort' => intval($request->get('sort'))
+        ])->where('id', '=', intval($request->get('id')))
+            ->execute();
+    }
 }

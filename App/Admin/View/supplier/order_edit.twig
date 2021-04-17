@@ -41,6 +41,16 @@
                                     <tbody>
                                     <tr>
                                         <td>
+                                            <input class="form-control" type="text" name="comment" value="{{ order.comment }}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input class="form-control" type="text" name="mail_to" value="{{ order.mail_to }}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <select class="form-control" name="status" id="" style="width: 250px">
                                                 {% for i in status %}
                                                     <option {% if order.status == i.id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>

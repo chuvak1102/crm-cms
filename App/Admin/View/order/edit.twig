@@ -35,7 +35,7 @@
                                     {% for i in items %}
                                         <tr>
                                             <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
-                                            <td>{{ i.getProduct.name }}</td>
+                                            <td>{{ i.getProduct.name | raw }}</td>
                                             <td>{{ i.getProduct.countCurrent.value }}</td>
                                             <td>{{ i.getProduct.countReserve.value }}</td>
                                             <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>

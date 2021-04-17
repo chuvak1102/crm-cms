@@ -3,6 +3,7 @@
 namespace App\Client\Controller;
 
 use App\Admin\Model\Order;
+use App\Admin\Model\OrderItem;
 use App\Admin\Model\Product;
 use App\Client\Model\UserDetail;
 use App\Config;
@@ -380,5 +381,22 @@ class Index extends Controller {
         }
 
         return $this->redirectToRoute('/');
+    }
+
+    function orderShow(Request $request)
+    {
+        BreadCrumbs::instance()
+            ->push(['' => 'Заказ №'.$request->seg(2)]);
+
+        return $this->render('Client:ordershow', [
+            'order' => Order::one($request->seg(2)),
+            'items' => OrderItem::many($request->seg(2), 'order_id'),
+            'total' => DB::select(DB::expr('SUM(price_row_total) price'))
+                ->from('order_item')
+                ->where('order_id', '=', $request->seg(2))
+                ->execute()
+                ->fetch()
+                ->price
+        ]);
     }
 }

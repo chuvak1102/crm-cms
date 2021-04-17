@@ -38,19 +38,19 @@
                                         <span style="cursor: pointer" class="category-status label label-primary">Активно</span>
                                     </td>
                                     <td style="width: 50%">
-                                        <input name="name" style="width: 100%" type="text">
-                                        <input name="id" type="hidden">
+                                        <input class="form-control" name="name" style="width: 100%" type="text">
+                                        <input class="form-control" name="id" type="hidden">
                                     </td>
                                     <td style="width: 10%" class="issue-info">
-                                        <select name="parent" id="">
+                                        <select class="form-control" name="parent" id="">
                                             <option value="0">Без категории</option>
                                             {% for j in category %}
-                                                <option value="{{ j.id }}">{{ j.name }}</option>
+                                                <option value="{{ j.id }}">{{ j.name | raw }}</option>
                                             {% endfor %}
                                         </select>
                                     </td>
                                     <td>
-                                        <input name="sort" type="text" value="{{ i.sort }}">
+                                        <input class="form-control" name="sort" type="text" value="{{ i.sort }}">
                                     </td>
                                     <td>
                                         <a href="#" class="btn btn-primary btn-xs save-category">Создать</a>
@@ -59,38 +59,100 @@
                                     </td>
                                 </tr>
 
-                                {% for i in category %}
+                                {% for i in tree %}
                                     <tr class="category-row">
                                         <td>
-                                            <span style="cursor: pointer" class="category-status label {% if i.active %}label-primary{% else %}label-default{% endif %}">Активно</span>
+                                            <span style="cursor: pointer" class="category-status label {% if i.category.active %}label-primary{% else %}label-default{% endif %}">Активно</span>
                                         </td>
                                         <td style="width: 50%">
-                                            <input name="name" style="width: 100%" type="text" value="{{ i.name }}">
-                                            <input name="id" type="hidden" value="{{ i.id }}">
+                                            <input class="form-control" name="name" style="width: 100%" type="text" value="{{ i.category.name | raw }}">
+                                            <input class="form-control" name="id" type="hidden" value="{{ i.category.id }}">
                                         </td>
-                                        <td style="width: 10%" class="issue-info">
-                                            <select name="parent" id="">
-                                                <option value="0">Без категории</option>
-                                                {% for j in category %}
-                                                    {% if i.parent_id == j.id %}
-                                                        <option selected value="{{ j.id }}">{{ j.name }}</option>
-                                                    {% else %}
-                                                        <option value="{{ j.id }}">{{ j.name }}</option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                        </td>
+                                        <td></td>
                                         <td>
-                                            <input name="sort" type="text" value="{{ i.sort }}">
+                                            <input class="form-control" name="sort" type="text" value="{{ i.category.sort }}">
                                         </td>
                                         <td>
                                             <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>
                                         </td>
                                         <td>
-                                            <a href="/category/delete/{{ i.id }}" class="btn btn-danger btn-xs">Удалить</a>
+                                            <a href="/category/delete/{{ i.category.id }}" class="btn btn-danger btn-xs">Удалить</a>
                                         </td>
                                     </tr>
+                                    {% if i.extend is not empty %}
+                                        {% for j in i.extend %}
+                                            <tr class="category-row">
+                                                <td>
+                                                    <span style="cursor: pointer" class="category-status label {% if j.active %}label-primary{% else %}label-default{% endif %}">Активно</span>
+                                                </td>
+                                                <td style="width: 50%; padding-left: 50px">
+                                                    <input class="form-control" name="name" style="width: 100%" type="text" value="{{ j.name | raw }}">
+                                                    <input class="form-control" name="id" type="hidden" value="{{ j.id }}">
+                                                </td>
+                                                <td style="" class="issue-info">
+                                                    <select class="form-control" name="parent" id="">
+                                                        <option value="0">Без категории</option>
+
+                                                        {% for k in category %}
+                                                            {% if j.parent_id == k.id %}
+                                                                <option selected value="{{ k.id }}">{{ k.name }}</option>
+                                                            {% else %}
+                                                                <option value="{{ k.id }}">{{ k.name }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" name="sort" type="text" value="{{ j.sort }}">
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>
+                                                </td>
+                                                <td>
+                                                    <a href="/category/delete/{{ i.category.id }}" class="btn btn-danger btn-xs">Удалить</a>
+                                                </td>
+                                            </tr>
+
+
+
+
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
+
+
+{#                                {% for i in category %}#}
+{#                                    <tr class="category-row">#}
+{#                                        <td>#}
+{#                                            <span style="cursor: pointer" class="category-status label {% if i.active %}label-primary{% else %}label-default{% endif %}">Активно</span>#}
+{#                                        </td>#}
+{#                                        <td style="width: 50%">#}
+{#                                            <input name="name" style="width: 100%" type="text" value="{{ i.name }}">#}
+{#                                            <input name="id" type="hidden" value="{{ i.id }}">#}
+{#                                        </td>#}
+{#                                        <td style="width: 10%" class="issue-info">#}
+{#                                            <select name="parent" id="">#}
+{#                                                <option value="0">Без категории</option>#}
+{#                                                {% for j in category %}#}
+{#                                                    {% if i.parent_id == j.id %}#}
+{#                                                        <option selected value="{{ j.id }}">{{ j.name }}</option>#}
+{#                                                    {% else %}#}
+{#                                                        <option value="{{ j.id }}">{{ j.name }}</option>#}
+{#                                                    {% endif %}#}
+{#                                                {% endfor %}#}
+{#                                            </select>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <input name="sort" type="text" value="{{ i.sort }}">#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <a href="/category/delete/{{ i.id }}" class="btn btn-danger btn-xs">Удалить</a>#}
+{#                                        </td>#}
+{#                                    </tr>#}
+{#                                {% endfor %}#}
                                 </tbody>
                             </table>
                         </div>
@@ -99,4 +161,5 @@
             </div>
         </div>
     </div>
+{#    {{ dump(category) }}#}
 {% endblock %}

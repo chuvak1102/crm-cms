@@ -66,6 +66,7 @@ class Routes {
                 '{product}=>{sticker}=>{[\d]+}' => [Admin\Controller\Product::class => 'sticker'],
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
                 '{product}=>{delete}=>{[\d]+}' => [Admin\Controller\Product::class => 'delete'],
+                '{product}=>{sort}' => [Admin\Controller\Product::class => 'sort'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],
@@ -113,6 +114,7 @@ class Routes {
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],
                 '{order}' => [Client\Controller\Index::class => 'order'],
+                '{order}=>{show}=>{[\d]+}' => [Client\Controller\Index::class => 'orderShow'],
                 '{profile}' => [Client\Controller\Index::class => 'profile'],
                 '{profile}=>{remove}' => [Client\Controller\Index::class => 'remove'],
                 '{logout}' => [Client\Controller\Index::class => 'logout'],

@@ -134,6 +134,7 @@ class Index extends Controller {
                         ->on('product_to_category.product_id', '=', 'product.id')
                         ->where('product_to_category.category_id', '=', $category->id)
                         ->where('product.active', '=', 1)
+                        ->order_by('sort')
                         ->execute()
                         ->fetch_all();
 
@@ -144,7 +145,12 @@ class Index extends Controller {
                         $products[] = Product::one($id);
                     }
 
-                    $subCategory = Category::many($category->id, 'parent_id');
+                    $subCategory = DB::select('*')
+                        ->from('category')
+                        ->where('parent_id', '=', $category->id)
+                        ->order_by('sort')
+                        ->execute()
+                        ->fetch_all();
 
                     $template = 'category';
                     break;

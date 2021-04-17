@@ -24,6 +24,7 @@
                                             <th style="border-top: none">Адрес доставки</th>
                                             <th style="border-top: none">Сумма заказа</th>
                                             <th></th>
+                                            <th></th>
                                         </tr>
                                         {% for i in orders %}
                                             <tr>
@@ -34,6 +35,7 @@
                                                 <td>{{ i.getAddress }}</td>
                                                 <td style="color: #0f4bac">{{ i.getTotalPrice }} руб.</td>
                                                 <td><a class="btn btn-primary" target="_blank" href="http://{{ site_domain }}/reorder/{{ i.id }}">Повторить заказ</a></td>
+                                                <td><a class="btn btn-primary" href="/order/show/{{ i.id }}">Просмотреть заказ</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

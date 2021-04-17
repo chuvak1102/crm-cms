@@ -17,7 +17,7 @@
                     <li class="{% if application.controller == 'Order' %}active{% endif %}"><a href="/order">Заказы</a></li>
                     <li class="{% if application.controller == 'Category' %}active{% endif %}"><a href="/category">Категории</a></li>
                     <li class="{% if application.controller == 'Product' %}active{% endif %}"><a href="/product">Товары</a></li>
-                    {% if application.controller in ['Critical', 'Supplier'] %}
+                    {% if application.controller in ['Critical'] %}
                         <li class="active"><a href="/critical">Остатки</a></li>
                     {% else %}
                         <li><a href="/critical">Остатки</a></li>
@@ -26,6 +26,7 @@
                     <li class="{% if application.controller == 'Client' %}active{% endif %}"><a href="/client">Клиенты</a></li>
                     <li class="{% if application.controller == 'Callback' %}active{% endif %}"><a href="/callback">Обратный звонок</a></li>
                     <li class="{% if application.controller == 'Design' %}active{% endif %}"><a href="/design">Заказы с индивидуальным дизайном</a></li>
+                    <li class="{% if application.controller == 'Supplier' %}active{% endif %}"><a href="/supplier/list">Поставщики</a></li>
                     {% endif %}
                 </ul>
             </li>

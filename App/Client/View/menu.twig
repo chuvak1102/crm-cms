@@ -8,7 +8,7 @@
                     </span>
                 </div>
             </li>
-            <li class="{% if application.action == 'index' %}active{% endif %}">
+            <li class="{% if application.action in ['index', 'orderShow'] %}active{% endif %}">
                 <a href="/"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Главная</span></a>
             </li>
             <li class="{% if application.action == 'profile' %}active{% endif %}">

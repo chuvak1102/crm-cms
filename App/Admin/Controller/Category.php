@@ -6,6 +6,7 @@ use Core\Auth;
 use Core\BreadCrumbs;
 use Core\Request\Request;
 use Core\Database\DB;
+use mysql_xdevapi\Exception;
 
 class Category extends Index {
 
@@ -19,13 +20,36 @@ class Category extends Index {
 
         $catalog = DB::select('*')
             ->from('category')
-            ->order_by('active', 'desc')
+            ->where('parent_id', '=', 0)
             ->order_by('name', 'asc')
             ->execute()
             ->fetch_all();
 
+        $cats = DB::select('*')
+            ->from('category')
+            ->order_by('sort')
+            ->execute()
+            ->fetch_all();
+
+        $parents = array_filter($cats, function($i){
+            return $i->parent_id == 0;
+        });
+
+        $tree = [];
+        foreach ($parents as $parent) {
+            $tree[$parent->id] = [
+                'category' => $parent,
+                'extend' => []
+            ];
+        }
+
+        foreach ($cats as $i) {
+            $tree[$i->parent_id]['extend'][] = $i;
+        }
+
         return $this->render('Admin:category/index', [
-            'category' => $catalog
+            'category' => $catalog,
+            'tree' => $tree
         ]);
     }
 
@@ -35,9 +59,9 @@ class Category extends Index {
             DB::update('category')
                 ->set([
                     'name' => $request->get('name'),
-                    'parent_id' => DB::expr($request->get('parent')),
-                    'sort' => DB::expr($request->get('sort')),
-                    'active' => DB::expr($request->get('status'))
+                    'parent_id' => intval($request->get('parent')),
+                    'sort' => intval($request->get('sort')),
+                    'active' => intval($request->get('status'))
                 ])
                 ->where('id', '=', DB::expr($request->get('id')))
                 ->execute();

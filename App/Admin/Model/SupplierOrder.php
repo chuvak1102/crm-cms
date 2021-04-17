@@ -34,6 +34,10 @@ class SupplierOrder extends Model {
 
         $mails = explode(',', $supplier->email);
 
+        if (empty($this->mail_to)) {
+            Error::add("{$supplier->name} - нет почты");
+        }
+
         if (empty($mails) || empty($mails[0])) {
             Error::add("{$supplier->name} - нет почты");
             return;
@@ -52,8 +56,13 @@ class SupplierOrder extends Model {
             $mail->CharSet = 'UTF-8';
             $mail->setFrom(Config::ShopEmailFrom);
             if (!Config::TestEmails) {
-                foreach ($mails as $e)
-                    $mail->addAddress($e);
+                if ($this->mail_to) {
+
+                    $mail->addAddress($this->mail_to);
+                } else {
+                    foreach ($mails as $e)
+                        $mail->addAddress($e);
+                }
             } else {
                 foreach (Config::TestEmails as $e)
                     $mail->addAddress($e);
