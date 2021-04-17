@@ -44,7 +44,9 @@ class Category extends Index {
         }
 
         foreach ($cats as $i) {
-            $tree[$i->parent_id]['extend'][] = $i;
+            if ($i->parent_id) {
+                $tree[$i->parent_id]['extend'][] = $i;
+            }
         }
 
         return $this->render('Admin:category/index', [

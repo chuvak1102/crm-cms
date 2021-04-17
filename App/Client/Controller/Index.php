@@ -386,6 +386,7 @@ class Index extends Controller {
     function orderShow(Request $request)
     {
         BreadCrumbs::instance()
+            ->push(['/' => 'История заказов'])
             ->push(['' => 'Заказ №'.$request->seg(2)]);
 
         return $this->render('Client:ordershow', [
