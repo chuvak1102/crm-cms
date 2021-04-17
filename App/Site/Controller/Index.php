@@ -28,7 +28,7 @@ class Index extends Controller {
         $catalog = DB::select('*')
             ->from('category')
             ->where('active', '=', '1')
-            ->order_by('sort')
+            ->order_by(DB::expr('sort = 0, sort'))
             ->execute()
             ->fetch_all();
 

@@ -38,7 +38,7 @@ class Product extends Index {
             ->from('product')
             ->join(['product_to_supplier', 'p'], 'left')
             ->on('p.product_id', '=', 'product.id')
-            ->order_by('name')
+            ->order_by(DB::expr('sort = 0, sort'))
             ->limit($limit)
             ->offset($offset);
 

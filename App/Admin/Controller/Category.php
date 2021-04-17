@@ -27,7 +27,7 @@ class Category extends Index {
 
         $cats = DB::select('*')
             ->from('category')
-            ->order_by('sort')
+            ->order_by(DB::expr('sort = 0, sort'))
             ->execute()
             ->fetch_all();
 
