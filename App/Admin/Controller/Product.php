@@ -59,6 +59,11 @@ class Product extends Index {
                 ->where('product.name', 'like', DB::expr("'%{$name}%'"));
         }
 
+        if ($active = $request->get('active')) {
+            $product = $product
+                ->where('product.active', '=', 1);
+        }
+
         $product = $product->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
         $supplier = DB::select('*')->from('supplier')->execute()->fetch_all();
