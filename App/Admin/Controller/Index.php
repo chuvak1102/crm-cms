@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controller;
 
+use App\Config;
 use Core\Controller;
 use Core\Page;
 use Core\Request\Request;
@@ -19,12 +20,18 @@ class Index extends Controller {
     {
         parent::before();
 
+        // не залогинен - нахуй
         if (!Auth::instance()->logged()) {
             if (!in_array($_SERVER['REQUEST_URI'], ['/login'])) {
                 Session::instance()->set('return_location', $_SERVER['REQUEST_URI']);
             }
             $this->login(New Request());
             exit();
+        }
+
+        // роли нет - нахуй
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isManager()) {
+            $this->redirectToRoute('http://'.Config::SiteDomain);
         }
 
         Page::instance()->push('user',

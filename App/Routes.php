@@ -101,6 +101,7 @@ class Routes {
                 '{design}' => [Admin\Controller\Design::class => 'index'],
 
                 '{supplier}=>{list}' => [Admin\Controller\Supplier::class => 'list'],
+                '{supplier}=>{list}=>{create}' => [Admin\Controller\Supplier::class => 'listCreate'],
                 '{supplier}=>{list}=>{edit}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'listEdit'],
                 '{supplier}=>{list}=>{delete}=>{[\d]+}' => [Admin\Controller\Supplier::class => 'listDelete'],
                 '{supplier}=>{order}' => [Admin\Controller\Supplier::class => 'order'],

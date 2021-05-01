@@ -382,6 +382,25 @@ class Product extends Model {
             }
         }
 
+        if ($supplier = $request->get('supplier')) {
+            $exist = DB::select('*')
+                ->from('product_to_supplier')
+                ->where('product_to_supplier.product_id', '=', $this->id)
+                ->execute()
+                ->fetch();
+            if ($exist) {
+                DB::update('product_to_supplier');
+                DB::update('product_to_supplier')->set([
+                    'supplier_id' => intval($supplier)
+                ])->where('product_id', '=', $this->id)
+                    ->execute();
+            } else {
+                DB::insert('product_to_supplier', ['supplier_id', 'product_id'])
+                    ->values([$supplier, $this->id])
+                    ->execute();
+            }
+        }
+
         DB::update('product')
             ->set($values)
             ->where('id', '=', $this->id)

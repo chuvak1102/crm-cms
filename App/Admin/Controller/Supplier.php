@@ -164,6 +164,38 @@ class Supplier extends Index {
         ]);
     }
 
+    function listCreate(Request $request)
+    {
+        if ($request->get('submit')) {
+
+            DB::insert('supplier', [
+                'name',
+                'email',
+                'ooo',
+                'inn',
+                'warehouse_address',
+                'work_time',
+                'fio',
+                'phone',
+            ])
+                ->values([
+                    $request->get('name'),
+                    $request->get('email'),
+                    $request->get('ooo'),
+                    $request->get('inn'),
+                    $request->get('warehouse_address'),
+                    $request->get('work_time'),
+                    $request->get('fio'),
+                    $request->get('phone')
+                ])
+                ->execute();
+
+            return $this->redirectToRoute('/supplier/list');
+        }
+
+        return $this->render('Admin:supplier/list_create');
+    }
+
     /**
      * В заявке поставщика при добавлении товара в заявку
      */

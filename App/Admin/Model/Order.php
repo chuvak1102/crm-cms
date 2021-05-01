@@ -120,6 +120,7 @@ class Order extends Model {
         }
 
         $items = OrderItem::many($this->id, 'order_id');
+        $totalPrice = number_format($this->getTotalPrice(), 2, '.', ' ');
 
         if (!$items) {
             Error::add("{$this->id} заказ - нет товаров для отправки почты");
@@ -145,10 +146,11 @@ class Order extends Model {
 
             /** @var OrderItem $i */
             foreach ($items as $i) {
-                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="right">'.$i->product_count.'</td></tr>';
+                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="right">'.$i->price_row_total.'</td></tr>';
             }
 
-            $html .='</table><br>';
+            $html .= '<tr><td>Итого</td><td width="100" align="right">'.$totalPrice.'</td></tr>';
+            $html .= '</table><br>';
             $html .= 'Мы свяжемся с Вами в ближайшее время! Письмо отправлено автоматически, если вы не совершали заказ - проигнорируйте его';
 
             $mail->Body = $html;

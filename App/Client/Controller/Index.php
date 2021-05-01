@@ -57,6 +57,7 @@ class Index extends Controller {
             ->from('order_item')
             ->join('order')
             ->on('order.id', '=', 'order_item.order_id')
+            ->where('order.user_id', '=', Auth::instance()->current()->id)
             ->where('order.created', '>=', DB::expr('(now() - INTERVAL 1 month)'))
             ->execute()
             ->get('sum'));
@@ -66,6 +67,7 @@ class Index extends Controller {
             ->join('order')
             ->on('order.id', '=', 'order_item.order_id')
             ->where('order.created', '>=', DB::expr('(now() - INTERVAL 1 month)'))
+            ->where('order.user_id', '=', Auth::instance()->current()->id)
             ->execute()
             ->get('sum'));
 
@@ -74,6 +76,7 @@ class Index extends Controller {
             ->join('order')
             ->on('order.id', '=', 'order_item.order_id')
             ->where('order.created', '>=', DB::expr('(now() - INTERVAL 1 month)'))
+            ->where('order.user_id', '=', Auth::instance()->current()->id)
             ->execute()
             ->get('sum'));
 
@@ -82,6 +85,7 @@ class Index extends Controller {
             ->join('order')
             ->on('order.id', '=', 'order_item.order_id')
             ->where('order.created', '>=', DB::expr('(now() - INTERVAL 12 month)'))
+            ->where('order.user_id', '=', Auth::instance()->current()->id)
             ->execute()
             ->get('sum'));
 
