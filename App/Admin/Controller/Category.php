@@ -58,9 +58,15 @@ class Category extends Index {
     function save(Request $request)
     {
         if ($request->get('id')) {
+
+            $alias = mb_strtolower(\Core\Helpers\Text::transliterate($request->get('name')));
+            $alias = preg_replace('/[^a-z0-9\s]/', '', $alias);
+            $alias = str_replace(' ', '-', trim($alias));
+
             DB::update('category')
                 ->set([
                     'name' => $request->get('name'),
+                    'alias' => $alias,
                     'parent_id' => intval($request->get('parent')),
                     'sort' => intval($request->get('sort')),
                     'active' => intval($request->get('status'))

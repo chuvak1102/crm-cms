@@ -134,7 +134,7 @@ class Index extends Controller {
                         ->on('product_to_category.product_id', '=', 'product.id')
                         ->where('product_to_category.category_id', '=', $category->id)
                         ->where('product.active', '=', 1)
-                        ->order_by('sort')
+                        ->order_by('product_to_category.sort')
                         ->execute()
                         ->fetch_all();
 

@@ -57,41 +57,50 @@
                             <a class="btn btn-sm btn-primary" href="/product/create">Добавить товар</a>
                         </div>
                         <br>
-                        <div class="table-responsive">
-                            <table class="table table-hover issue-tracker checkbox-container">
-                                <tbody>
-                                <tr>
-                                    <td><input class="checkbox-all" type="checkbox" value="0"></td>
-                                    <td>Изображение</td>
-                                    <td>Артикул</td>
-                                    <td>Название</td>
-                                    <td>Цена на сайте</td>
-                                    <td>В упаковке</td>
-                                    <td>В коробке</td>
-                                    <td>Продажи за месяц</td>
-                                    <td>За прошлый месяц</td>
-                                    <td>Сортировать</td>
-                                </tr>
-                                {% for i in product %}
-                                <tr class="category-row">
-                                    <td>
-                                        <input class="checkbox-check" type="checkbox" data-value="{{ i.id }}">
-                                    </td>
-                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
-                                    <td>{{ i.article }}</td>
-                                    <td>
-                                        <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a>
-                                    </td>
-                                    <td>{{ i.price_site }}</td>
-                                    <td>{{ i.getPackCount().value }} {{ i.getPackCount().dictionaryField().name }}</td>
-                                    <td>{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
-                                    <td>{{ i.salesPerCurrentMonth }}</td>
-                                    <td>{{ i.salesPerPastMonth }}</td>
-                                    <td><input name="sorting" data-id="{{ i.id }}" style="width: 60px" class="form-control" type="text" value="{{ i.sort }}"></td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="checkbox-container">
+                            <div class="table-responsive">
+                                <table class="table table-hover issue-tracker">
+                                    <tbody>
+                                    <tr>
+                                        <td width="5%"></td>
+                                        <td width="1%"><input class="checkbox-all" type="checkbox" value="0"></td>
+                                        <td width="10%">Изображение</td>
+                                        <td width="10%">Артикул</td>
+                                        <td width="20%">Название</td>
+                                        <td width="10%">Цена на сайте</td>
+                                        <td width="10%">В упаковке</td>
+                                        <td width="10%">В коробке</td>
+                                        <td width="10%">Продажи за месяц</td>
+                                        <td width="10%">За прошлый месяц</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover issue-tracker">
+                                    <tbody id="sortable">
+                                    {% for i in product %}
+                                        <tr class="category-row">
+                                            <td width="5%" class="resort sorting-handle" data-category="{{ filter.category }}" data-id="{{ i.id }}" data-sort="{{ i.sort }}" align="center"><i style="cursor: move; opacity: 0.7" class="fa fa-arrows fa-2x"></i></td>
+                                            <td width="1%">
+                                                <input class="checkbox-check" type="checkbox" data-value="{{ i.id }}">
+                                            </td>
+                                            <td width="10%"><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                            <td width="10%">{{ i.article }}</td>
+                                            <td width="20%">
+                                                <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a>
+                                            </td>
+                                            <td width="10%">{{ i.price_site }}</td>
+                                            <td width="10%">{{ i.getPackCount().value }} {{ i.getPackCount().dictionaryField().name }}</td>
+                                            <td width="10%">{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
+                                            <td width="10%">{{ i.salesPerCurrentMonth }}</td>
+                                            <td width="10%">{{ i.salesPerPastMonth }}</td>
+{#                                            <td><input name="sorting" data-id="{{ i.id }}" style="width: 60px" class="form-control" type="text" value="{{ i.sort }}"></td>#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,6 +120,36 @@
                     'sort': parseInt($(e.target).val())
                 }
             });
-        })
+        });
+        $('#sortable').sortable(
+            {
+                handle: '.sorting-handle',
+                tolerance: 'pointer',
+                forcePlaceholderSize: true,
+                opacity: 0.8,
+                update: () => {
+
+                    let d = [];
+
+                    $('.sorting-handle').map((i, e) => {
+                        d.push({
+                            category: $(e).data('category'),
+                            id: $(e).data('id'),
+                            sort: i + 1
+                        })
+                    });
+
+                    $.ajax({
+                        url: '/product/sort',
+                        data: {
+                            values: d
+                        },
+                        success: e => {
+                            // console.log(JSON.parse(e));
+                        }
+                    })
+                },
+            })
+            .disableSelection();
     </script>
 {% endblock %}

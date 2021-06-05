@@ -19,7 +19,7 @@ class Product extends Model {
 
     function getCategory()
     {
-        return DB::select('*')
+        return DB::select('category.*')
             ->from('category')
             ->join('product_to_category')
                 ->on('product_to_category.category_id', '=', 'category.id')

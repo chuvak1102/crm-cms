@@ -5,6 +5,7 @@ namespace App\Admin\Controller;
 use App\Admin\Model\DictionaryField;
 use App\Admin\Model\Supplier;
 use Core\BreadCrumbs;
+use Core\JsonResponse;
 use Core\Page;
 use Core\Request\Request;
 use Core\Database\DB;
@@ -18,7 +19,7 @@ class Product extends Index {
         BreadCrumbs::instance()->push(['' => 'Товары']);
 
         $page = $request->get('page', 1);
-        $limit = 50;
+        $limit = 25;
         $offset = $limit * ($page - 1);
 
         $product = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
@@ -33,12 +34,16 @@ class Product extends Index {
                 ['product.price_site', 'price'],
                 ['product.count_current', 'count_current'],
                 ['product.count_minimal', 'count_minimal'],
-                ['p.id', 'supplier_id']
+                ['p.id', 'supplier_id'],
+                [$request->get('category') ? 'product_to_category.sort' : 'product.sort']
             )
             ->from('product')
             ->join(['product_to_supplier', 'p'], 'left')
             ->on('p.product_id', '=', 'product.id')
-            ->order_by(DB::expr('sort = 0, sort'))
+            ->order_by($request->get('category')
+                ? DB::expr('product_to_category.sort = 0, product_to_category.sort')
+                : DB::expr('product.sort = 0, product.sort')
+            )
             ->limit($limit)
             ->offset($offset);
 
@@ -71,8 +76,12 @@ class Product extends Index {
 
         $products = [];
         foreach ($product as $i) {
-            $products[] = ProductModel::one($i->id);
+            $p = ProductModel::one($i->id);
+            $p->sort = $i->sort;
+            $products[] = $p;
         }
+
+//        dump($products);
 
         return $this->render('Admin:product/index', [
             'product' => $products,
@@ -301,9 +310,55 @@ class Product extends Index {
 
     function sort(Request $request)
     {
-        DB::update('product')->set([
-            'sort' => intval($request->get('sort'))
-        ])->where('id', '=', intval($request->get('id')))
-            ->execute();
+        $log = [];
+
+        foreach ($request->get('values') as $i) {
+
+            $i = (object) $i;
+
+            if ($i->category) {
+                $log['category'][] = $i->category;
+
+                $exist = DB::select('id')
+                    ->from('product_to_category')
+                    ->where('product_id', '=', $i->id)
+                    ->where('category_id', '=', $i->category)
+                    ->execute()
+                    ->fetch();
+
+                $log['ex'][] = $exist;
+
+                if ($exist->id) {
+                    $log['exist'][] = [
+                        'product_id' => $i->id,
+                        'category_id' => $i->category,
+                        'sort' => $i->sort,
+                        'exist' => $exist->id
+                    ];
+                    DB::update('product_to_category')->set([
+                        'product_id' => $i->id,
+                        'category_id' => $i->category,
+                        'sort' => $i->sort
+                    ])->where('id', '=', $exist->id)
+                        ->execute();
+                } else {
+                    $log['not-exist'][] = $exist->id;
+                    DB::insert('product_to_category', ['product_id', 'category_id', 'sort'])
+                        ->values([$i->id, $i->category, $i->sort])
+                        ->execute();
+                }
+
+            } else {
+                $log['no-category'][] = [
+                    $i->id
+                ];
+                DB::update('product')->set([
+                    'sort' => $i->sort
+                ])->where('id', '=', $i->id)
+                    ->execute();
+            }
+        }
+
+        return new JsonResponse($log);
     }
 }
