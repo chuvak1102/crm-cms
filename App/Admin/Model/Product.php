@@ -169,11 +169,9 @@ class Product extends Model {
             $countReserve->save();
         }
 
-        if ($request->get('category') || $request->get('category_extra')) {
+        if ($request->get('category_extra')) {
 
-            $category = $request->get('category');
-            $extra = $request->get('category_extra', []);
-            $categoryNew = in_array($category, $extra) ? $extra : array_merge([$category], $extra);
+            $categoryNew = $request->get('category_extra', []);
             $categoryExist = (array) DB::select('category_id')
                 ->from('product_to_category')
                 ->where('product_id', '=', $this->id)

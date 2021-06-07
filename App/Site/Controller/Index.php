@@ -59,10 +59,10 @@ class Index extends Controller {
         Page::instance()->push('category', Router::seg(1));
         Page::instance()->push('action', Application::get('action'));
         Page::instance()->push('menu', $category);
-        Page::instance()->push('cart_items', $cart['total_count']);
-        Page::instance()->push('cart_price', number_format($cart['total_price'], 2, '.', ' '));
+        Page::instance()->push('cart_items', $cart['total_count'] ?? 0);
+        Page::instance()->push('cart_price', number_format($cart['total_price'] ?? 0, 2, '.', ' '));
         Page::instance()->push('title', 'ЭкоПак');
-        Page::instance()->push('user', Auth::instance()->current()->name);
+        Page::instance()->push('user', Auth::instance()->current()->name ?? null);
         Page::instance()->push('client_domain', 'http://'.Config::ClientDomain);
 
         // seo
@@ -76,7 +76,7 @@ class Index extends Controller {
         Page::instance()->push('seo_description', 'Одноразовая посуда, упаковка в Москве с доставкой!');
         Page::instance()->push('seo_title', 'Купить одноразовую посуду в москве - интернет магазин упаковки');
 
-        if ($seo->id) {
+        if (isset($seo->id) && $seo->id) {
             Page::instance()->push('seo_h1', $seo->h1);
             Page::instance()->push('seo_description', $seo->description);
             Page::instance()->push('seo_title', $seo->title);
@@ -115,7 +115,7 @@ class Index extends Controller {
             if ($i) {
 
                 $product = Product::one($i, 'alias');
-                if ($product->id) {
+                if (isset($product->id) && $product->id) {
 
                     Page::instance()->push('title', "{$product->name} - ЭкоПак");
 
@@ -124,7 +124,7 @@ class Index extends Controller {
                 }
 
                 $category = Category::one($i, 'alias');
-                if ($category->id) {
+                if (isset($category->id) && $category->id) {
 
                     Page::instance()->push('title', "{$category->name} - ЭкоПак");
 

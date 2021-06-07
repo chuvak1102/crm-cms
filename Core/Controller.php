@@ -67,9 +67,15 @@ class Controller {
 
                     echo $template->render($data);
                 }
-                catch (\Twig_Error_Loader $e) {}
-                catch (\Twig_Error_Runtime $e) {}
-                catch (\Twig_Error_Syntax $e) {}
+                catch (\Twig_Error_Loader $e) {
+                    dump($e->getMessage());
+                }
+                catch (\Twig_Error_Runtime $e) {
+                    dump($e->getMessage());
+                }
+                catch (\Twig_Error_Syntax $e) {
+                    dump($e->getMessage());
+                }
 
             } else {
                 error("view not found: {$template[0]}/View/{$template[1]}.twig");
