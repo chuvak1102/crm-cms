@@ -103,7 +103,7 @@ class Order extends Index {
                 $limit,
                 3,
                 $request->get('page', 1),
-                "/order?from={$from}&to={$to}&number={$number}&status={$status}&client={$client}&page="
+                "/order?from={$from}&to={$to}&number={$number}&status={$status}&client={$client}&page={$page}"
             ),
             'filter_status' => DB::select('*')
                 ->from('order_status')

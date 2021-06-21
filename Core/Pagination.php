@@ -7,12 +7,16 @@ class Pagination {
     private $result = [];
     private $page = 1;
     private $url = "#";
+    private $onPage = 25;
+    private $onPageArray = [25];
 
-    function __construct(int $all, int $limit, int $length, int $page, string $urlPrefix)
+    function __construct(int $all, $onPage, int $length, int $page, string $urlPrefix, $onPageArray = [])
     {
-        $pagesCount = ceil($all / $limit);
+        $pagesCount = ceil($all / $onPage);
         $this->page = $page;
         $this->url = $urlPrefix;
+        $this->onPage = $onPage;
+        $this->onPageArray = $onPageArray;
 
         if ($pagesCount < ($length + 1) * 3) {
             for ($i = 1; $i <= $pagesCount; $i++){
@@ -75,11 +79,24 @@ class Pagination {
         ?>
             <div class="btn-group" style="margin-left: 13px">
                 <?foreach($this->result as $i){?>
-                    <a href="<?=$this->url.$i['page']?>" class="btn btn-white <?=$this->page == $i['page'] ? 'active' : ''?>">
+                    <a href="<?=preg_replace('/(\?|\&)page=\d+/', "&page={$i['page']}", $this->url)?>" class="btn btn-primary <?=$this->page == $i['page'] ? 'active' : ''?>">
                         <?=$i['state'] == 'open' ? $i['page'] : '...'?>
                     </a>
                 <?}?>
             </div>
+        <?
+        ?>
+            <?if($this->onPageArray){?>
+                <div class="btn-group" style="margin-left: 13px">
+                    <?if(($this->onPageArray)){?>
+                        <?foreach($this->onPageArray as $i){?>
+                            <a href="<?=preg_replace('/(\?|\&)onpage=\d+/', "&onpage={$i}", $this->url)?>" class="btn btn-warning <?=$this->onPage == $i ? 'active' : ''?>">
+                                <?=$i?>
+                            </a>
+                        <?}?>
+                    <?}?>
+                </div>
+            <?}?>
         <?
     }
 

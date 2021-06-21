@@ -19,7 +19,7 @@ class Product extends Index {
         BreadCrumbs::instance()->push(['' => 'Товары']);
 
         $page = $request->get('page', 1);
-        $limit = 25;
+        $limit = $request->get('onpage', 25);
         $offset = $limit * ($page - 1);
 
         $product = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
@@ -81,19 +81,18 @@ class Product extends Index {
             $products[] = $p;
         }
 
-//        dump($products);
-
         return $this->render('Admin:product/index', [
             'product' => $products,
             'supplier' => $supplier,
             'category' => $category,
-            'pagination' => new \Core\Pagination(
+            'pagination' => (new \Core\Pagination(
                 $count,
-                $limit,
+                $request->get('onpage', 25),
                 3,
                 $request->get('page', 1),
-                "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&page="
-            ),
+                "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&page={$page}&onpage={$limit}",
+                [25, 50, 75, 100]
+            )),
             'filter' => [
                 'supplier' => $supplier_id,
                 'category' => $category_id,
