@@ -8,16 +8,18 @@
         {% if sub_category is not empty %}
             <ul class="index-catalog category">
                 {% for i in sub_category %}
-                    <li>
-                        <span class="product">
-                            <a href="{{ path }}/{{ i.alias }}">
-                                <div class="img">
-                                    <img class="image" src="/files/mini/{{ i.image }}" alt="">
-                                </div>
-                                <span class="name">{{ i.name | raw }}</span>
-                            </a>
-                        </span>
-                    </li>
+                    {% if i.active %}
+                        <li>
+                            <span class="product">
+                                <a href="{{ path }}/{{ i.alias }}">
+                                    <div class="img">
+                                        <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                                    </div>
+                                    <span class="name">{{ i.name | raw }}</span>
+                                </a>
+                            </span>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% endif %}

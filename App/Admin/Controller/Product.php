@@ -90,13 +90,14 @@ class Product extends Index {
                 $request->get('onpage', 25),
                 3,
                 $request->get('page', 1),
-                "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&page={$page}&onpage={$limit}",
+                "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&active={$active}&page={$page}&onpage={$limit}",
                 [25, 50, 75, 100]
             )),
             'filter' => [
                 'supplier' => $supplier_id,
                 'category' => $category_id,
-                'name' => $name
+                'name' => $name,
+                'active' => $active
             ]
         ]);
     }
