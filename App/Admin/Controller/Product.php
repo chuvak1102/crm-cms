@@ -14,6 +14,26 @@ use App\Admin\Model\Product as ProductModel;
 
 class Product extends Index {
 
+//    function u()
+//    {
+//        $col = 'price_20000';
+//
+//        $p = DB::select('*')->from('dictionary_value')
+//            ->where('external_table', '=', 'product')
+//            ->where('external_column', '=', $col)
+//            ->execute()
+//            ->fetch_all();
+//
+//        foreach ($p as $i) {
+//
+//            DB::update('product')->set([
+//                $col => $i->value,
+//            ])
+//                ->where('product.id', '=', $i->external_id)
+//                ->execute();
+//        }
+//    }
+
     function index(Request $request)
     {
         BreadCrumbs::instance()->push(['' => 'Товары']);

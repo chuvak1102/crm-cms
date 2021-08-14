@@ -130,44 +130,10 @@ class Product extends Model {
             $this->id = $id;
         }
 
-        $priceSiteOptCount = $this->getPriceSiteOptCount()->id ? $this->getPriceSiteOptCount() : new DictionaryValue();
-        if ($request->get('price_site_opt_count')) {
-            $priceSiteOptCount->key = $request->get('price_site_opt_count')['key'];
-            $priceSiteOptCount->value = $request->get('price_site_opt_count')['value'];
-            $priceSiteOptCount->external_id = $this->id;
-            $priceSiteOptCount->external_table = 'product';
-            $priceSiteOptCount->external_column = 'price_site_opt_count';
-            $priceSiteOptCount->save();
-        }
-
-        $countCurrent = $this->countCurrent()->id ? $this->countCurrent() : new DictionaryValue();
-        if ($request->get('count_current')) {
-            $countCurrent->key = $request->get('count_current')['key'];
-            $countCurrent->value = $request->get('count_current')['value'];
-            $countCurrent->external_id = $this->id;
-            $countCurrent->external_table = 'product';
-            $countCurrent->external_column = 'count_current';
-            $countCurrent->save();
-        }
-
-        $countMinimal = $this->countMinimal()->id ? $this->countMinimal() : new DictionaryValue();
-        if ($request->get('count_minimal')) {
-            $countMinimal->key = $request->get('count_minimal')['key'];
-            $countMinimal->value = $request->get('count_minimal')['value'];
-            $countMinimal->external_id = $this->id;
-            $countMinimal->external_table = 'product';
-            $countMinimal->external_column = 'count_minimal';
-            $countMinimal->save();
-        }
-        $countReserve = $this->countReserve()->id ? $this->countReserve() : new DictionaryValue();
-        if ($request->get('count_reserve')) {
-            $countReserve->key = $request->get('count_reserve')['key'];
-            $countReserve->value = $request->get('count_reserve')['value'];
-            $countReserve->external_id = $this->id;
-            $countReserve->external_table = 'product';
-            $countReserve->external_column = 'count_reserve';
-            $countReserve->save();
-        }
+        $priceSiteOptCount = $request->get('price_site_opt_count');
+        $countCurrent = $request->get('count_current');
+        $countMinimal = $request->get('count_minimal');
+        $countReserve = $request->get('count_reserve');
 
         if ($request->get('category_extra')) {
 
@@ -242,95 +208,15 @@ class Product extends Model {
             }
         }
 
-        $packCount = $this->getPackCount()->id ? $this->getPackCount() : new DictionaryValue();
-        if ($request->get('pack_count')) {
-            $packCount->key = $request->get('pack_count')['key'];
-            $packCount->value = $request->get('pack_count')['value'];
-            $packCount->external_id = $this->id;
-            $packCount->external_table = 'product';
-            $packCount->external_column = 'pack_count';
-            $packCount->save();
-        }
-
-        $packWeight = $this->getPackWeight()->id ? $this->getPackWeight() : new DictionaryValue();
-        if ($request->get('pack_weight')) {
-            $packWeight->key = $request->get('pack_weight')['key'];
-            $packWeight->value = $request->get('pack_weight')['value'];
-            $packWeight->external_id = $this->id;
-            $packWeight->external_table = 'product';
-            $packWeight->external_column = 'pack_weight';
-            $packWeight->save();
-        }
-
-        $packVolume = $this->getPackVolume()->id ? $this->getPackVolume() : new DictionaryValue();
-        if ($request->get('pack_volume')) {
-            $packVolume->key = $request->get('pack_volume')['key'];
-            $packVolume->value = $request->get('pack_volume')['value'];
-            $packVolume->external_id = $this->id;
-            $packVolume->external_table = 'product';
-            $packVolume->external_column = 'pack_volume';
-            $packVolume->save();
-        }
-
-        $boxCount = $this->getBoxCount()->id ? $this->getBoxCount() : new DictionaryValue();
-        if ($request->get('box_count')) {
-            $boxCount->key = $request->get('box_count')['key'];
-            $boxCount->value = $request->get('box_count')['value'];
-            $boxCount->external_id = $this->id;
-            $boxCount->external_table = 'product';
-            $boxCount->external_column = 'box_count';
-            $boxCount->save();
-        }
-
-        $boxWeight = $this->getBoxWeight()->id ? $this->getBoxWeight() : new DictionaryValue();
-        if ($request->get('box_weight')) {
-            $boxWeight->key = $request->get('box_weight')['key'];
-            $boxWeight->value = $request->get('box_weight')['value'];
-            $boxWeight->external_id = $this->id;
-            $boxWeight->external_table = 'product';
-            $boxWeight->external_column = 'box_weight';
-            $boxWeight->save();
-        }
-
-        $boxVolume = $this->getBoxVolume()->id ? $this->getBoxVolume() : new DictionaryValue();
-        if ($request->get('box_volume')) {
-            $boxVolume->key = $request->get('box_volume')['key'];
-            $boxVolume->value = $request->get('box_volume')['value'];
-            $boxVolume->external_id = $this->id;
-            $boxVolume->external_table = 'product';
-            $boxVolume->external_column = 'box_volume';
-            $boxVolume->save();
-        }
-
-        $length = $this->getLength()->id ? $this->getLength() : new DictionaryValue();
-        if ($request->get('length')) {
-            $length->key = $request->get('length')['key'];
-            $length->value = $request->get('length')['value'];
-            $length->external_id = $this->id;
-            $length->external_table = 'product';
-            $length->external_column = 'length';
-            $length->save();
-        }
-
-        $width = $this->getWidth()->id ? $this->getWidth() : new DictionaryValue();
-        if ($request->get('width')) {
-            $width->key = $request->get('width')['key'];
-            $width->value = $request->get('width')['value'];
-            $width->external_id = $this->id;
-            $width->external_table = 'product';
-            $width->external_column = 'width';
-            $width->save();
-        }
-
-        $height = $this->getHeight()->id ? $this->getHeight() : new DictionaryValue();
-        if ($request->get('height')) {
-            $height->key = $request->get('height')['key'];
-            $height->value = $request->get('height')['value'];
-            $height->external_id = $this->id;
-            $height->external_table = 'product';
-            $height->external_column = 'height';
-            $height->save();
-        }
+        $packCount = $request->get('pack_count');
+        $packWeight = $request->get('pack_weight');
+        $packVolume = $request->get('pack_volume');
+        $boxCount = $request->get('box_count');
+        $boxWeight = $request->get('box_weight');
+        $boxVolume = $request->get('box_volume');
+        $length = $request->get('length');
+        $width = $request->get('width');
+        $height = $request->get('height');
 
         $values = [
             'name' => $request->get('name'),
@@ -338,30 +224,30 @@ class Product extends Model {
             'article' => $request->get('article'),
             'active' => $request->get('active') ? 1 : 0,
             'price_site' => $request->get('price_site'),
-            'count_current' => $countCurrent->id,
-            'count_minimal' => $countMinimal->id,
-            'count_reserve' => $countReserve->id,
+            'count_current' => $countCurrent,
+            'count_minimal' => $countMinimal,
+            'count_reserve' => $countReserve,
             'hit' => $request->get('hit') ? 1 : 0,
             'new' => $request->get('new') ? 1 : 0,
             'share' => $request->get('share') ? 1 : 0,
             'price_site_opt' => $request->get('price_site_opt'),
             'price_supplier' => $request->get('price_supplier'),
-            'price_site_opt_count' => $priceSiteOptCount->id,
+            'price_site_opt_count' => $priceSiteOptCount,
             'supplier_product_name' => $request->get('supplier_product_name'),
             'supplier_article' => $request->get('supplier_article'),
             'supplier_date_arrive' => $request->get('supplier_date_arrive'),
             'available' => $request->get('available') ? 1 : 0,
             'kit' => $request->get('kit') ? 1 : 0,
             'logo' => $request->get('logo') ? 1 : 0,
-            'pack_count' => $packCount->id,
-            'pack_weight' => $packWeight->id,
-            'pack_volume' => $packVolume->id,
-            'box_count' => $boxCount->id,
-            'box_weight' => $boxWeight->id,
-            'box_volume' => $boxVolume->id,
-            'length' => $length->id,
-            'width' => $width->id,
-            'height' => $height->id,
+            'pack_count' => $packCount,
+            'pack_weight' => $packWeight,
+            'pack_volume' => $packVolume,
+            'box_count' => $boxCount,
+            'box_weight' => $boxWeight,
+            'box_volume' => $boxVolume,
+            'length' => $length,
+            'width' => $width,
+            'height' => $height,
             'material' => $request->get('material'),
             'color' => $request->get('color'),
             'description' => $request->get('description'),
