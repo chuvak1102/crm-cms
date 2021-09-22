@@ -31,7 +31,7 @@
                                             <td>{{ i.name }}</td>
                                             <td>{{ i.company }}</td>
                                             <td>{{ i.lastOrder | date('d.m.Y') }}</td>
-                                            <td>{{ i.city }}, {{ i.street }}, {{ i.house }}, {{ i.block }}, {{ i.phone }}</td>
+                                            <td>{{ i.phone }}, {{ i.email }}</td>
                                             <td><a class="btn btn-primary" href="/client/cabinet/{{ i.id }}">Просмотр</a></td>
                                         </tr>
                                     {% endfor %}

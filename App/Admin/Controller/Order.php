@@ -193,7 +193,8 @@ class Order extends Index {
         $statusTo = array_column($statusTo,'status_to');
         $statusWarehouse = DB::select('order_status.*')
             ->from('order_status')
-            ->where('order_status.id', 'in', $statusTo ? $statusTo : [0])
+//            ->where('order_status.id', 'in', $statusTo ? $statusTo : [0])
+            ->where('category', '=', 'warehouse')
             ->execute()
             ->fetch_all();
 

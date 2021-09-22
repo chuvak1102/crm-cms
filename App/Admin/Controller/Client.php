@@ -16,7 +16,7 @@ class Client extends Index {
     {
         BreadCrumbs::instance()->push(['' => 'Клиенты']);
 
-        $clients = DB::select('user.id','u.name', 'user.login', 'u.phone', 'u.city', 'u.street', 'u.house', 'u.block')
+        $clients = DB::select('user.id','u.name', 'user.login', 'u.phone', 'u.email')
             ->from('user')
             ->where('role', '=', 'client')
             ->join(['user_detail', 'u'], 'left')

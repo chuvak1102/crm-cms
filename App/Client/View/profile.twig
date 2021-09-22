@@ -28,38 +28,8 @@
                                 <p></p>
                             </div>
                             <div class="row">
-                                <label>Время работы Вашей компании:</label>
-                                <input class="form-control" name="work_time" type="text" value="{{ client.work_time }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Индекс:</label>
-                                <input class="form-control" name="index" type="text" value="{{ client.index }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Город:</label>
-                                <input class="form-control" name="city" type="text" value="{{ client.city }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Улица, проспект и пр.:</label>
-                                <input class="form-control" name="street" type="text" value="{{ client.street }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Номер дома:</label>
-                                <input class="form-control" name="house" type="text" value="{{ client.house }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Корпус:</label>
-                                <input class="form-control" name="block" type="text" value="{{ client.block }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>Квартира, офис:</label>
-                                <input class="form-control" name="office" type="text" value="{{ client.office }}">
+                                <label>Почта:</label>
+                                <input class="form-control" name="email" type="text" value="{{ client.email }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -74,8 +44,26 @@
                                 <br>
                             </div>
                             <div class="row">
+                                <label>Тип</label>
+                                <select class="form-control company-type" name="company_type" >
+                                    <option value="ooo" {% if company.company_type == 'ooo' %}selected{% endif %} >ООО</option>
+                                    <option value="ip" {% if company.company_type == 'ip' %}selected{% endif %}>ИП</option>
+                                </select>
+                                <p></p>
+                            </div>
+                            <div class="row">
                                 <label>Название</label>
                                 <input class="form-control" name="name" type="text" value="{{ company.account_r }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ИНН</label>
+                                <input class="form-control" name="inn" type="text" value="{{ company.inn }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label class="change-for-ip">ОГРН</label>
+                                <input class="form-control" name="ogrn" type="text" value="{{ company.ogrn }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -99,16 +87,6 @@
                                 <p></p>
                             </div>
                             <div class="row">
-                                <label>ИНН</label>
-                                <input class="form-control" name="inn" type="text" value="{{ company.inn }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
-                                <label>ОГРН / ОГРНИП</label>
-                                <input class="form-control" name="ogrn" type="text" value="{{ company.ogrn }}">
-                                <p></p>
-                            </div>
-                            <div class="row">
                                 <label>БИК</label>
                                 <input class="form-control" name="bik" type="text" value="{{ company.bik }}">
                                 <p></p>
@@ -118,7 +96,7 @@
                                 <input class="form-control" name="bank" type="text" value="{{ company.bank }}">
                                 <p></p>
                             </div>
-                            <div class="row">
+                            <div class="row hide-for-ip">
                                 <label>Ген. Директор</label>
                                 <input class="form-control" name="director" type="text" value="{{ company.director }}">
                                 <p></p>
@@ -140,18 +118,61 @@
                                 <br>
                             </div>
                             <div class="row">
-                                <label>Адрес</label>
-                                <input class="form-control" name="address" type="text" value="{{ address.address }}">
+                                <label>Юрлицо</label>
+                                <select class="form-control" name="company">
+                                    {% for i in company %}
+                                        <option value="{{ i.id }}">{{ i.name }}</option>
+                                    {% endfor %}
+                                </select>
                                 <p></p>
                             </div>
                             <div class="row">
-                                <label>Почта</label>
-                                <input class="form-control" name="email" type="text" value="{{ address.email }}">
+                                <label>Название</label>
+                                <input class="form-control" name="name" type="text" value="{{ client.name }}">
                                 <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Город:</label>
+                                <input class="form-control" name="city" type="text" value="{{ client.city }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Улица, проспект и пр.:</label>
+                                <input class="form-control" name="street" type="text" value="{{ client.street }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Номер дома:</label>
+                                    <input class="form-control" name="house" type="text" value="{{ client.house }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Строение:</label>
+                                    <input class="form-control" name="block" type="text" value="{{ client.block }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>офис:</label>
+                                    <input class="form-control" name="house" type="text" value="{{ client.office }}">
+                                </div>
                             </div>
                             <div class="row">
                                 <label>Телефон</label>
                                 <input class="form-control" name="phone" type="text" value="{{ address.phone }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Время работы Вашей компании:</label>
+                                <input class="form-control" name="work_time" type="text" value="{{ client.work_time }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Пропуск:</label>
+                                <input class="form-control" name="pass" type="text" value="{{ client.pass }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Комментарий:</label>
+                                <input class="form-control" name="comment" type="text" value="{{ client.comment }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -168,6 +189,7 @@
                             <p></p>
                             {% for i in company %}
 
+                                <div>Тип - {% if i.company_type == 'ip' %}ИП{% else %}ООО{% endif %}</div>
                                 <div>{{ i.name }}</div>
                                 <div>Расчетный счет - {{ i.account_r }}</div>
                                 <div>Коррсчет - {{ i.account_k }}</div>
@@ -187,18 +209,29 @@
                             <h3 ><b>Адреса</b></h3>
                             <p></p>
                             {% for i in address %}
-
-                                <div>Адрес - {{ i.address }}</div>
-                                <div>Почта - {{ i.email }}</div>
-                                <div>Телефон - {{ i.phone }}</div>
+                                <div>{{ i.getCompany.name }}</div>
+                                <div>{{ i.name }}</div>
+                                <div>Адрес - {{ i.city }} {{ i.street }} {{ i.house }} {{ i.block }}</div>
                                 <div><a href="/profile/remove?address={{ i.id }}">Удалить</a></div>
                                 <br>
                             {% endfor %}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $('.company-type').change(e => {
+
+            if ($(e.target).val() === 'ooo') {
+                $('.change-for-ip').text('ОГРН');
+                $('.hide-for-ip').show();
+            }
+            if ($(e.target).val() === 'ip') {
+                $('.change-for-ip').text('ОГРНИП');
+                $('.hide-for-ip').hide();
+            }
+        })
+    </script>
 {% endblock %}

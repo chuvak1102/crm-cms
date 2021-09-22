@@ -6,6 +6,7 @@ use App\Admin\Model\Order;
 use App\Admin\Model\OrderItem;
 use App\Admin\Model\Product;
 use App\Client\Model\UserDetail;
+use App\Client\Model\UserDetailAddress;
 use App\Config;
 use Core\BreadCrumbs;
 use Core\Controller;
@@ -123,45 +124,31 @@ class Index extends Controller {
     {
         BreadCrumbs::instance()->push(['/profile' => 'Профиль']);
 
+//        dump($request);
+
         if ($request->get('main')) {
 
             $client = (object) [
-                'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('company_name')),
+                'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
                 'fio' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fio')),
-                'user_name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
-                'email' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
                 'phone' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
-                'delivery_date' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('delivery_date')),
-                'work_time' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('work_time')),
-                'address_index' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('index')),
-                'city' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('city')),
-                'street' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('street')),
-                'house' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('house')),
-                'block' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('block')),
-                'office' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('office')),
-                'advanced' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('comment')),
-                'payment_type' => in_array($request->get('payment_type'), ['online', 'cash']) ? $request->get('payment_type') : 'cash',
+                'email' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
                 'user_id' => Auth::instance()->current()->id
             ];
 
             DB::update('user_detail')
                 ->set([
-                    'phone' => $client->phone,
-                    'work_time' => $client->work_time,
-                    'index' => $client->address_index,
-                    'city' => $client->city,
-                    'street' => $client->street,
-                    'house' => $client->house,
-                    'block' => $client->block,
-                    'office' => $client->office,
+                    'name' => $client->name,
                     'fio' => $client->fio,
+                    'phone' => $client->phone,
+                    'email' => $client->email,
                 ])
                 ->where('user_id', '=', Auth::instance()->current()->id)
                 ->execute();
 
             DB::update('user')
                 ->set([
-                    'name' => $client->user_name
+                    'name' => $client->name
                 ])
                 ->where('id', '=', Auth::instance()->current()->id)
                 ->execute();
@@ -174,45 +161,48 @@ class Index extends Controller {
             $dover = $request->get('dover') ? 'по доверенности '.$request->get('dover') : 'на основании устава';
 
             $client = (object) [
+                'company_type' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('company_type')),
                 'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
-                'account_r' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('account_r')),
-                'account_k' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('account_k')),
                 'inn' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('inn')),
                 'ogrn' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('ogrn')),
+                'firm_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('firm_address')),
+                'fact_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fact_address')),
+                'account_r' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('account_r')),
+                'account_k' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('account_k')),
                 'bik' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('bik')),
                 'bank' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('bank')),
                 'director' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('director')),
-                'firm_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('firm_address')),
-                'fact_address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fact_address')),
                 'dover' => $dover
             ];
 
             DB::insert('user_detail_company', [
                 'user_id',
+                'company_type',
                 'name',
-                'account_r',
-                'account_k',
                 'inn',
                 'ogrn',
+                'firm_address',
+                'fact_address',
+                'account_r',
+                'account_k',
                 'bik',
                 'bank',
                 'director',
-                'firm_address',
-                'fact_address',
                 'dover'
             ])->values([
                 Auth::instance()->current()->id,
+                $client->company_type,
                 $client->name,
-                $client->account_r,
-                $client->account_k,
                 $client->inn,
                 $client->ogrn,
+                $client->firm_address,
+                $client->fact_address,
+                $client->account_r,
+                $client->account_k,
                 $client->bik,
                 $client->bank,
                 $client->director,
-                $client->firm_address,
-                $client->fact_address,
-                $client->dover
+                $client->dover,
             ])
                 ->execute();
 
@@ -222,21 +212,44 @@ class Index extends Controller {
         if ($request->get('address')) {
 
             $client = (object) [
-                'address' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('address')),
-                'email' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
+                'company' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('company')),
+                'name' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('name')),
+                'city' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('city')),
+                'street' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('street')),
+                'house' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('house')),
+                'block' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('block')),
                 'phone' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
+                'work_time' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('work_time')),
+                'pass' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('pass')),
+                'comment' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('comment')),
             ];
 
             DB::insert('user_detail_address', [
                 'user_id',
-                'address',
-                'email',
+                'user_detail_company_id',
+                'company',
+                'name',
+                'city',
+                'street',
+                'house',
+                'block',
                 'phone',
+                'work_time',
+                'pass',
+                'comment',
             ])->values([
                 Auth::instance()->current()->id,
-                $client->address,
-                $client->email,
+                $request->get('company'),
+                $client->company,
+                $client->name,
+                $client->city,
+                $client->street,
+                $client->house,
+                $client->block,
                 $client->phone,
+                $client->work_time,
+                $client->pass,
+                $client->comment,
             ])
                 ->execute();
 
@@ -254,12 +267,16 @@ class Index extends Controller {
             ->where('user_id', '=', Auth::instance()->current()->id)
             ->execute()
             ->fetch_all();
+        $addresses = [];
+        foreach ($address as $i) {
+            $addresses[] = UserDetailAddress::one($i->id);
+        }
 
         return $this->render('Client:profile', [
             'client' => UserDetail::one(Auth::instance()->current()->id, 'user_id'),
             'user' => Auth::instance()->current(),
             'company' => $company,
-            'address' => $address,
+            'address' => $addresses,
         ]);
     }
 
