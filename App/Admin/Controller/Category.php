@@ -6,7 +6,6 @@ use Core\Auth;
 use Core\BreadCrumbs;
 use Core\Request\Request;
 use Core\Database\DB;
-use mysql_xdevapi\Exception;
 
 class Category extends Index {
 
@@ -94,6 +93,10 @@ class Category extends Index {
 
     function delete()
     {
+        DB::delete('product_to_category')
+            ->where('category_id', '=', DB::expr(\Core\Router::seg(2)))
+            ->execute();
+
         DB::delete('category')
             ->where('id', '=', DB::expr(\Core\Router::seg(2)))
             ->execute();
