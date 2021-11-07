@@ -25,14 +25,10 @@
                                     <td>
                                         Сортировка
                                     </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-
-                                    </td>
+                                    <td>Изображение</td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
-
                                 <tr class="category-row">
                                     <td>
                                         <span style="cursor: pointer" class="category-status label label-primary">Активно</span>
@@ -53,6 +49,9 @@
                                         <input class="form-control" name="sort" type="text" value="{{ i.sort }}">
                                     </td>
                                     <td>
+
+                                    </td>
+                                    <td>
                                         <a href="#" class="btn btn-primary btn-xs save-category">Создать</a>
                                     </td>
                                     <td>
@@ -71,6 +70,12 @@
                                         <td></td>
                                         <td>
                                             <input class="form-control" name="sort" type="text" value="{{ i.category.sort }}">
+                                        </td>
+                                        <td>
+                                            <form method="post" action="/category/save/image" name="image" enctype="multipart/form-data">
+                                                <input type="file" name="image">
+                                                <input type="hidden" name="category" value="{{ i.category.id }}">
+                                            </form>
                                         </td>
                                         <td>
                                             <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>
@@ -106,53 +111,21 @@
                                                     <input class="form-control" name="sort" type="text" value="{{ j.sort }}">
                                                 </td>
                                                 <td>
+                                                    <form method="post" action="/category/save/image" name="image" enctype="multipart/form-data">
+                                                        <input type="file" name="image">
+                                                        <input type="hidden" name="category" value="{{ j.id }}">
+                                                    </form>
+                                                </td>
+                                                <td>
                                                     <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>
                                                 </td>
                                                 <td>
                                                     <a href="/category/delete/{{ j.id }}" class="btn btn-danger btn-xs">Удалить</a>
                                                 </td>
                                             </tr>
-
-
-
-
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
-
-
-{#                                {% for i in category %}#}
-{#                                    <tr class="category-row">#}
-{#                                        <td>#}
-{#                                            <span style="cursor: pointer" class="category-status label {% if i.active %}label-primary{% else %}label-default{% endif %}">Активно</span>#}
-{#                                        </td>#}
-{#                                        <td style="width: 50%">#}
-{#                                            <input name="name" style="width: 100%" type="text" value="{{ i.name }}">#}
-{#                                            <input name="id" type="hidden" value="{{ i.id }}">#}
-{#                                        </td>#}
-{#                                        <td style="width: 10%" class="issue-info">#}
-{#                                            <select name="parent" id="">#}
-{#                                                <option value="0">Без категории</option>#}
-{#                                                {% for j in category %}#}
-{#                                                    {% if i.parent_id == j.id %}#}
-{#                                                        <option selected value="{{ j.id }}">{{ j.name }}</option>#}
-{#                                                    {% else %}#}
-{#                                                        <option value="{{ j.id }}">{{ j.name }}</option>#}
-{#                                                    {% endif %}#}
-{#                                                {% endfor %}#}
-{#                                            </select>#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            <input name="sort" type="text" value="{{ i.sort }}">#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            <a href="#" class="btn btn-primary btn-xs save-category">Сохранить</a>#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            <a href="/category/delete/{{ i.id }}" class="btn btn-danger btn-xs">Удалить</a>#}
-{#                                        </td>#}
-{#                                    </tr>#}
-{#                                {% endfor %}#}
                                 </tbody>
                             </table>
                         </div>
@@ -161,5 +134,11 @@
             </div>
         </div>
     </div>
-{#    {{ dump(category) }}#}
+    <script>
+        $('input[type=file]').change(e => {
+            $(e.target)
+                .parents('form')
+                .submit();
+        })
+    </script>
 {% endblock %}

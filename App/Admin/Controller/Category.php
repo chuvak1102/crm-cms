@@ -4,6 +4,7 @@ namespace App\Admin\Controller;
 
 use Core\Auth;
 use Core\BreadCrumbs;
+use Core\FileUploader;
 use Core\Request\Request;
 use Core\Database\DB;
 
@@ -89,6 +90,31 @@ class Category extends Index {
                     DB::expr($request->get('status'))
                 ])->execute();
         }
+    }
+
+    function saveImage(Request $request)
+    {
+        if ($image = $request->files('image')) {
+
+            if ($image['name']) {
+
+                $name = (new FileUploader())->save($image);
+                $id = $request->get('category');
+
+                $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
+                $img = new \Imagick($root.$name);
+                $img->scaleImage(200,0);
+                $img->writeImage($root.'mini/'.$name);
+                $img->destroy();
+
+                DB::update('category')->set([
+                    'image' => $name,
+                ])->where('id', '=', $id)
+                    ->execute();
+            }
+        }
+
+        return $this->redirectToRoute('/category');
     }
 
     function delete()

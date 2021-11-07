@@ -59,6 +59,7 @@ class Routes {
 
                 '{category}' => [Admin\Controller\Category::class => 'index'],
                 '{category}=>{save}' => [Admin\Controller\Category::class => 'save'],
+                '{category}=>{save}=>{image}' => [Admin\Controller\Category::class => 'saveImage'],
                 '{category}=>{delete}=>{[\d]+}' => [Admin\Controller\Category::class => 'delete'],
 
                 '{product}' => [Admin\Controller\Product::class => 'index'],
