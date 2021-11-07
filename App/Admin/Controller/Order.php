@@ -21,12 +21,12 @@ class Order extends Index {
         BreadCrumbs::instance()->push(['' => 'Заказы']);
 
         $page = $request->get('page', 1);
-        $limit = 25;
+        $limit = 100;
         $offset = $limit * ($page - 1);
 
         $order = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
             ->from('order')
-            ->order_by('id', 'desc')
+            ->order_by('order.id', 'desc')
             ->limit($limit)
             ->offset($offset);
 
@@ -49,12 +49,18 @@ class Order extends Index {
         }
 
         if ($client = $request->get('client')) {
-            $users = DB::select( 'id')
-                ->from('user')
-                ->where('name', 'like', "%$client%")
-                ->where('role', '=', 'client')
-                ->execute()->fetch_all();
-            $order = $order->where('user_id', 'in', array_column($users, 'id'));
+            $order = $order
+                ->join(['order_detail', 'od'], 'left')
+                ->on('od.order_id', '=', 'order.id')
+                ->where_open()
+                ->or_where_open()
+                ->or_where('od.name', 'like', "%$client%")
+                ->or_where('od.email', 'like', "%$client%")
+                ->or_where('od.city', 'like', "%$client%")
+                ->or_where('od.street', 'like', "%$client%")
+                ->or_where('od.advanced', 'like', "%$client%")
+                ->or_where_close()
+                ->where_close();
         }
 
         // filter 2

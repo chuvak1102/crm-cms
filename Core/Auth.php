@@ -48,8 +48,8 @@ class Auth {
      */
     function login($login, $password)
     {
-        if (preg_match('/[a-zA-Z\-\_0-9\-]{3,24}/', $login)) {
-            if (preg_match('/[a-zA-Z\-\_0-9\-]{3,24}/', $password)) {
+        if (preg_match('/[a-zA-Z\-\_0-9\-]{2,24}/', $login)) {
+            if (preg_match('/[a-zA-Z\-\_0-9\-]{2,24}/', $password)) {
 
                 $pass = Hash::hash($password);
                 $user = current(DB::select("select * from user where `login` = '$login' and `password` = '$pass'"));
@@ -98,6 +98,22 @@ class Auth {
             INSERT INTO user (name, department, position, password, login, token, role) 
             VALUES('{$name}','{$department}','{$position}','{$password}','{$login}', '{$token}', '{$role}');
         ");
+    }
+
+    function updatePassword(array $user)
+    {
+        $login = $user['login'];
+        $password = Hash::hash($user['password']);
+
+        DB::update(" UPDATE user set password = '$password', token = '' where login = '$login') ");
+    }
+
+    function requestUpdatePassword(array $user)
+    {
+        $login = $user['login'];
+        $password = Hash::hash($user['password']);
+
+        DB::update(" UPDATE user set restore = '$password', token = null where login = '$login' ");
     }
 
     function current()

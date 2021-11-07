@@ -147,13 +147,13 @@
                                 <label for="inputValue" class="col-sm-3 control-label">Количество в коробке</label>
                                 <div class="col-sm-3"><input value="{{ product.box_count }}" name="box_count" type="text" class="form-control"></div>
                             </div>
-                            <div class="clearfix"></div>
+                            <br>
                             <div class="form-group"><label class="col-sm-3 control-label">Вес упаковки, кг</label>
                                 <div class="col-sm-3"><input value="{{ product.pack_weight }}" name="pack_weight" type="text" class="form-control"></div>
                                 <label for="inputValue" class="col-sm-3 control-label">Вес коробки, кг</label>
                                 <div class="col-sm-3"><input value="{{ product.box_weight }}" name="box_weight" type="text" class="form-control"></div>
                             </div>
-                            <div class="clearfix"></div>
+                            <br>
                             <div class="form-group"><label class="col-sm-3 control-label">Объем упаковки, м3</label>
                                 <div class="col-sm-3"><input value="{{ product.pack_volume }}" name="pack_volume" type="text" class="form-control"></div>
                                 <label for="inputValue" class="col-sm-3 control-label">Объем коробки, м3</label>
@@ -168,26 +168,21 @@
                                 <label for="inputValue" class="col-sm-2 control-label">Высота, см</label>
                                 <div class="col-sm-2"><input value="{{ product.height }}" name="height" type="text" class="form-control"></div>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
                         <div class="col-sm-6" style="">
                             <div class="form-group">
                                 <label class="control-label">Описание товара</label>
                                 <textarea name="description" id="" cols="30" rows="7" class="form-control">{{ product.description }}</textarea>
                             </div>
-
                             <div class="form-group"><label class="col-sm-2 control-label">Материал</label>
                                 <div class="col-sm-4"><input name="material" value="{{ product.material }}" type="text" class="form-control"></div>
                                 <label for="inputValue" class="col-sm-2 control-label">Цвет</label>
                                 <div class="col-sm-4"><input name="color" value="{{ product.color }}" type="text" class="form-control"></div>
                             </div>
-
                         </div>
-                        <div class="clearfix"></div>
                     </div>
 
                     <hr>
-
                     <div class="clearfix"></div>
                     <br>
                     <input class="btn btn-primary" type="submit" name="submit" value="Сохранить изменения">

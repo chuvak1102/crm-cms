@@ -21,6 +21,7 @@ class Test extends Index {
     function sync()
     {
         return;
+        // products
         $shit = DB::select('*')
             ->from('diafan_shop')
             ->where('act1', '=', 1)
@@ -61,7 +62,8 @@ class Test extends Index {
                     'alias',
                     'article',
                     'image',
-                    'price_site'
+                    'price_site',
+                    'sort'
                 ])
                     ->values([
                         $i->id,
@@ -69,123 +71,111 @@ class Test extends Index {
                         $alias,
                         $i->article,
                         $img,
-                        $site_price
+                        $site_price,
+                        $i->sort
                     ])
                     ->execute();
 
-//                dump([
-//                    $i->id,
-//                    $i->name1,
-//                    $alias,
-//                    $i->article,
-//                    $img,
-//                    $site_price
-//                ]);
-
-                // cricical
+                // count, count critical
                 if ($values) {
 
-                    $dv = new DictionaryValue();
-                    $dv->key = 5;
-                    $dv->value = $values->count_limit;
-                    $dv->external_id = $i->id;
-                    $dv->external_table = 'product';
-                    $dv->external_column = 'count_minimal';
-                    $dv->save();
+                    DB::update('product')
+                        ->set([
+                            'count_current' => $values->count_goods
+                        ])
+                        ->where('id', '=', $i->id)
+                        ->execute();
 
-                    if ($dv->id) {
-                        DB::update('product')
-                            ->set([
-                                'count_minimal' => $dv->id
-                            ])
-                            ->where('id', '=', $i->id)
-                            ->execute();
-//                        dump($dv);
-                    }
-                }
-
-                // current
-                if ($values) {
-
-                    $dv = new DictionaryValue();
-                    $dv->key = 5;
-                    $dv->value = $values->count_goods;
-                    $dv->external_id = $i->id;
-                    $dv->external_table = 'product';
-                    $dv->external_column = 'count_current';
-                    $dv->save();
-
-                    if ($dv->id) {
-                        DB::update('product')
-                            ->set([
-                                'count_current' => $dv->id
-                            ])
-                            ->where('id', '=', $i->id)
-                            ->execute();
-//                        dump($dv);
-                    }
+                    DB::update('product')
+                        ->set([
+                            'count_minimal' => $values->count_limit
+                        ])
+                        ->where('id', '=', $i->id)
+                        ->execute();
                 }
             }
         }
 
-        $values = DB::select('*')
-            ->from('diafan_shop_price')
+        echo 'PRODUCTS OK'.PHP_EOL;
+
+        // orders
+        $items = DB::select('*')
+            ->from('diafan_shop_order')
             ->execute()
-            ->fetch();
+            ->fetch_all();
 
-        // count
-        foreach ($values as $i) {
-            $dv = DB::select('*')
-                ->from('dictionary_value')
-                ->where('external_id', '=', $i->id)
-                ->where('external_table', '=', 'product')
-                ->where('external_column', '=', 'count_current')
+        foreach ($items as $i) {
+
+            $exist = DB::select('*')
+                ->from('order')
+                ->where('id', '=', $i->id)
                 ->execute()
                 ->fetch();
-            if (!$dv) {
-                $dv = new DictionaryValue();
-                $dv->key = 5;
-                $dv->value = $values->count_goods;
-                $dv->external_id = $i->id;
-                $dv->external_table = 'product';
-                $dv->external_column = 'count_current';
-                $dv->save();
-            } else {
-                DB::update('dictionary_value')
-                    ->set(['count_current', $dv->count_goods])
-                    ->where('external_id', '=', $i->id)
-                    ->where('external_table', '=', 'product')
-                    ->where('external_column', '=', 'count_current')
+
+                $d = \DateTime::createFromFormat('U', $i->created)
+                    ->format('Y-m-d H:i:s');
+
+            if (!$exist) {
+
+                DB::insert('order', [
+                    'id',
+                    'created',
+                    'number',
+                    'status',
+                    'status_warehouse',
+                    'user_id',
+                    'mailed',
+                    'shipped'
+                ])
+                    ->values([
+                        $i->id,
+                        $d,
+                        $i->id,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1
+                    ])
                     ->execute();
+
+                // order mainpage contact
+                $cont = DB::select('dsope.value')
+                    ->from(['diafan_shop_order', 'o'])
+                    ->join(['diafan_shop_order_param_element', 'dsope'])
+                    ->on('o.id', '=', 'dsope.element_id')
+                    ->where('o.id', '=', $i->id)
+                    ->execute()
+                    ->fetch_all();
+
+                if ($cont) {
+
+                    $shits = "";
+
+                    foreach ($cont as $item) {
+
+                        $shits .= ', '.$item->value;
+                    }
+
+                    DB::insert('order_detail', [
+
+                        'order_id',
+                        'name',
+                    ])
+                        ->values([
+                            $i->id,
+                            $shits,
+                        ])
+                        ->execute();
+
+                }
+
             }
 
-            //critical
-            $dv = DB::select('*')
-                ->from('dictionary_value')
-                ->where('external_id', '=', $i->id)
-                ->where('external_table', '=', 'product')
-                ->where('external_column', '=', 'count_minimal')
-                ->execute()
-                ->fetch();
-            if (!$dv) {
-                $dv = new DictionaryValue();
-                $dv->key = 5;
-                $dv->value = $values->count_limit;
-                $dv->external_id = $i->id;
-                $dv->external_table = 'product';
-                $dv->external_column = 'count_minimal';
-                $dv->save();
-            } else {
-                DB::update('dictionary_value')
-                    ->set(['count_minimal', $dv->count_limit])
-                    ->where('external_id', '=', $i->id)
-                    ->where('external_table', '=', 'product')
-                    ->where('external_column', '=', 'count_minimal')
-                    ->execute();
-            }
         }
 
-        dump('done');
+        echo 'ORDER OK'.PHP_EOL;
+
     }
 
     function img(Request $request)

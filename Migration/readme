@@ -1,1 +1,3 @@
 php vendor/bin/doctrine-migrations generate --namespace=Migration
+php vendor/bin/doctrine-migrations execute --up 'Migration\Version20211101111943'
+php vendor/bin/doctrine-migrations execute --down 'Migration\Version20211101111943'

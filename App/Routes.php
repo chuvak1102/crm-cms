@@ -12,6 +12,7 @@ class Routes {
             Config::SiteDomain => [
                 '' => [Site\Controller\Index::class => 'index'],
                 '{login}' => [Site\Controller\Index::class => 'login'],
+                '{restore}' => [Site\Controller\Index::class => 'restore'],
                 '{logout}' => [Site\Controller\Index::class => 'logout'],
                 '{register}' => [Site\Controller\Index::class => 'register'],
                 '{o-kompanii}' => [Site\Controller\Index::class => 'about'],
@@ -96,6 +97,8 @@ class Routes {
                 '{client}' => [Admin\Controller\Client::class => 'index'],
                 '{client}=>{create}' => [Admin\Controller\Client::class => 'create'],
                 '{client}=>{cabinet}=>{[\d]+}' => [Admin\Controller\Client::class => 'cabinet'],
+                '{client}=>{profile}=>{[\d]+}' => [Admin\Controller\Client::class => 'profile'],
+                '{client}=>{profile}=>{[\d]+}=>{remove}' => [Admin\Controller\Client::class => 'remove'],
 
                 '{callback}' => [Admin\Controller\Callback::class => 'index'],
                 '{design}' => [Admin\Controller\Design::class => 'index'],
@@ -116,8 +119,8 @@ class Routes {
                 '' => [Client\Controller\Index::class => 'index'],
                 '{order}' => [Client\Controller\Index::class => 'order'],
                 '{order}=>{show}=>{[\d]+}' => [Client\Controller\Index::class => 'orderShow'],
-                '{profile}' => [Client\Controller\Index::class => 'profile'],
-                '{profile}=>{remove}' => [Client\Controller\Index::class => 'remove'],
+//                '{profile}' => [Client\Controller\Index::class => 'profile'],
+//                '{profile}=>{remove}' => [Client\Controller\Index::class => 'remove'],
                 '{logout}' => [Client\Controller\Index::class => 'logout'],
             ],
         ][$domain] ?? [];

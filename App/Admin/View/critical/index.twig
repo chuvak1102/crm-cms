@@ -35,12 +35,12 @@
                                         <tbody>
                                             {% for i in s %}
                                                 <tr>
-                                                    <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                                    <td style="width: 10%"><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
                                                     <td style="width: 25%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
                                                     <td style="width: 10%">{{ i.cur }}</td>
                                                     <td style="width: 10%">{{ i.min }}</td>
                                                     <td>{{ i.monthlySales }}</td>
-                                                    <td>{{ i.inBox.value }}</td>
+                                                    <td>{{ i.inBox }}</td>
                                                     <td style="width: 10%"><input name="count[{{ i.id }}]" style="width: 100px" type="text" class="form-control"></td>
                                                     <td style="width: 15%">{% if i.last_order is not empty %}{{ i.last_order | date('H:i d-m-Y') }}{% endif %}</td>
                                                 </tr>
@@ -51,6 +51,7 @@
                                                     <input data-id="{{ supplier_id }}" class="form-control item-search" type="text" placeholder="Добавить...">
                                                     <ul class="float-list"></ul>
                                                 </td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

@@ -52,9 +52,9 @@ class Critical extends Index {
 
             $all = $all
                 ->where('product.active', '=', 1)
-                ->where('current.value', '>', 0)
-                ->where('minimal.value', '>', 0)
-                ->where(DB::expr('current.value + 0'), '<', DB::expr('minimal.value + 0'));
+                ->where('product.count_current', '>', 0)
+                ->where('product.count_minimal', '>', 0)
+                ->where(DB::expr('product.count_current + 0'), '<', DB::expr('product.count_minimal + 0'));
         }
 
         $all = $all->execute()->fetch_all();
@@ -90,7 +90,7 @@ class Critical extends Index {
 
                 if ($count) {
                     $product = \App\Admin\Model\Product::one($id);
-                    $inBox = $product->getBoxCount()->value;
+                    $inBox = $product->box_count;
                     $total += \App\Site\Controller\Index::calculate($product, $count * $inBox);
                 }
             }
@@ -106,7 +106,7 @@ class Critical extends Index {
 
                 if ($count) {
                     $product = \App\Admin\Model\Product::one($id);
-                    $inBox = $product->getBoxCount()->value;
+                    $inBox = $product->box_count;
                     $price = \App\Site\Controller\Index::calculate(\App\Admin\Model\Product::one($id), $count * $inBox);
 
                     DB::insert('supplier_order_item', ['cnt', 'fact', 'avail', 'price', 'product_id', 'order_id'])
@@ -130,9 +130,9 @@ class Critical extends Index {
 
             if ($request->get('critical')) {
                 $all = $all
-                    ->where('current.value', '>', 0)
-                    ->where('minimal.value', '>', 0)
-                    ->where(DB::expr('current.value + 0'), '<', DB::expr('minimal.value + 0'));
+                    ->where('product.count_current', '>', 0)
+                    ->where('product.count_minimal', '>', 0)
+                    ->where(DB::expr('product.count_current + 0'), '<', DB::expr('product.count_minimal + 0'));
             }
 
             $all = $all->where('s.id', '=', $supplier);
@@ -145,7 +145,7 @@ class Critical extends Index {
 
                 $i->monthlySales = $product->monthlySales();
                 $i->image = $product->image;
-                $i->inBox = $product->getBoxCount();
+                $i->inBox = $product->box_count;
 
                 $suppliers[$i->supplier_id][] = $i;
             }
@@ -243,8 +243,8 @@ class Critical extends Index {
         return DB::select(
             'product.id',
             'product.name',
-            ['current.value', 'cur'],
-            ['minimal.value', 'min'],
+            ['product.count_current', 'cur'],
+            ['product.count_minimal', 'min'],
             ['s.name', 'supplier'],
             ['s.id', 'supplier_id'],
             [
@@ -256,10 +256,6 @@ class Critical extends Index {
             ]
         )
             ->from('product')
-            ->join(['dictionary_value', 'current'])
-            ->on('current.id', '=', 'product.count_current')
-            ->join(['dictionary_value', 'minimal'])
-            ->on('minimal.id', '=', 'product.count_minimal')
             ->join(['product_to_supplier', 'pts'])
             ->on('pts.product_id', '=', 'product.id')
             ->join(['supplier', 's'])

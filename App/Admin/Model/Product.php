@@ -78,20 +78,20 @@ class Product extends Model {
         return DictionaryValue::one($this->box_volume);
     }
 
-    public function getLength(): DictionaryValue
-    {
-        return DictionaryValue::one($this->length);
-    }
-
-    public function getWidth(): DictionaryValue
-    {
-        return DictionaryValue::one($this->width);
-    }
-
-    public function getHeight(): DictionaryValue
-    {
-        return DictionaryValue::one($this->height);
-    }
+//    public function getLength(): DictionaryValue
+//    {
+//        return DictionaryValue::one($this->length);
+//    }
+//
+//    public function getWidth(): DictionaryValue
+//    {
+//        return DictionaryValue::one($this->width);
+//    }
+//
+//    public function getHeight(): DictionaryValue
+//    {
+//        return DictionaryValue::one($this->height);
+//    }
 
     public function categoryIds()
     {

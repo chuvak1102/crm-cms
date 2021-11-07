@@ -109,26 +109,10 @@ class Supplier extends Index {
 
                 $product = Product::one($id);
 
-                if (!$product->count_current) {
-
-                    $dv = new DictionaryValue();
-                    $dv->key = 5;
-                    $dv->value = $value;
-                    $dv->external_id = $id;
-                    $dv->external_table = 'product';
-                    $dv->external_column = 'count_current';
-                    $dv->save();
-
-                    DB::update('product')
-                        ->set(['count_current' => $dv->id])
-                        ->where('id', '=', $id)
-                        ->execute();
-                }
-
                 if ($product->count_current) {
-                    DB::update('dictionary_value')
-                        ->set(['value' => DB::expr("value + {$value}")])
-                        ->where('id', '=', $product->count_current)
+                    DB::update('product')
+                        ->set(['count_current' => DB::expr("count_current + {$value}")])
+                        ->where('id', '=', $product->id)
                         ->execute();
                 }
             }

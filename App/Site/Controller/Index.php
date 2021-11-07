@@ -19,6 +19,7 @@ use Core\Request\Request;
 use Core\Router;
 use Core\Session;
 use Core\Page;
+use Framework\Modules\Mailer\Mailer;
 
 class Index extends Controller {
 
@@ -90,8 +91,14 @@ class Index extends Controller {
             ->execute()
             ->fetch_all();
 
+        $our_product = DB::select('*')
+            ->from('product_index')
+            ->execute()
+            ->fetch_all();
+
         return $this->render('Site:index', [
-            'slider' => $slider
+            'slider' => $slider,
+            'our_product' => $our_product
         ]);
     }
 
@@ -534,9 +541,67 @@ class Index extends Controller {
         if ($request->get('login') && $request->get('password')) {
 
             Auth::instance()->login($request->get('login'), $request->get('password'));
+
+            if (Auth::instance()->logged()) {
+
+                return $this->redirectToRoute('/');
+            }
         }
 
-        return $this->redirectToRoute('/');
+        return $this->redirectToRoute('/restore');
+    }
+
+    function restore(Request $request) {
+
+        if ($request->get('token')) {
+
+            User::changePassword($request->get('token'));
+
+            return $this->render('Site:success', [
+                'message' => 'Пароль успешно изменен!',
+                'delay' => 5000
+            ]);
+        }
+
+        if ($request->get('submit')) {
+
+            $email = $request->get('email');
+            $pass = $request->get('password');
+            $confirm = $request->get('confirm');
+            $passwordType = preg_match('/^[a-zA-Z0-9]+$/', $pass) == true ? 1 : 0;
+            $passwordOk = ($pass && $confirm) && ($pass == $confirm);
+            $exist = User::one($email, 'login')->id;
+
+            if ($email && $pass && $confirm && $passwordOk && $exist) {
+
+                Auth::instance()->requestUpdatePassword([
+                    'login' => $email,
+                    'password' => $pass
+                ]);
+
+                /** @var User $user */
+                $user = User::one($email, 'login');
+                $user->emailChangePassword();
+
+                return $this->render('Site:success', [
+                    'message' => 'Письмо с инструкцией по восстановлению пароля отправлено, проверьте Вашу почту',
+                    'delay' => 5000
+                ]);
+            }
+
+            return $this->render('Site:restore', [
+                'submit' => $request->get('submit'),
+                'email' => $email,
+                'email_ok' => filter_var($email, FILTER_VALIDATE_EMAIL) == true ? 1 : 0,
+                'password' => $pass,
+                'password_ok' => $pass == $confirm,
+                'exist' => $exist,
+                'confirm' => $confirm,
+                'password_type' => $passwordType
+            ]);
+        }
+
+        return $this->render('Site:restore');
     }
 
     function register(Request $request)

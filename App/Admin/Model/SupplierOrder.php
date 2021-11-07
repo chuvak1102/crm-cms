@@ -129,7 +129,7 @@ class SupplierOrder extends Model {
                 foreach (Config::TestEmails as $e)
                     $mail->addAddress($e);
             }
-            $mail->addAddress('dan0@mail.ru');
+
             $mail->isHTML(true);
             $mail->Subject = 'Заявка на поставку товара для ООО "Экопак"(ИНН 7727280804)';
 

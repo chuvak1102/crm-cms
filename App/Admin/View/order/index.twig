@@ -25,7 +25,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group" style="width: 20%"><input value="{{ filter.client }}" name="client" type="text" class="form-control" placeholder="Покупатель"></div>
+                            <div class="form-group" style="width: 20%"><input value="{{ filter.client }}" name="client" type="text" class="form-control" placeholder="Клиент"></div>
                             <div class="form-group" style="width: 8%"><button style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Фильтровать</strong></button></div>
                             <div class="form-group" style="width: 8%"><a style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" href="/order"><strong>Сбросить</strong></a></div>
                         </form>
@@ -90,18 +90,18 @@
                             <table class="table table-hover issue-tracker checkbox-container">
                                 <tbody>
                                 <tr>
-                                    <th>
+                                    <th style="width: 5%">
                                         <input class="checkbox-all" type="checkbox" value="0">
                                     </th>
-                                    <th>Дата заказа</th>
-                                    <th>Доставка</th>
-                                    <th>Номер</th>
+                                    <th style="width: 10%">Дата заказа</th>
+                                    <th style="width: 5%">Доставка</th>
+                                    <th style="width: 5%">Номер</th>
                                     {% if global.user.isManager %}
-                                    <th>Статус заказа</th>
+                                    <th style="width: 10%">Статус заказа</th>
                                     {% endif %}
-                                    <th>Статус склада</th>
-                                    <th>Итого</th>
-                                    <th>Клиент</th>
+                                    <th style="width: 10%">Статус склада</th>
+                                    <th style="width: 10%">Итого</th>
+                                    <th style="width: 10%">Клиент</th>
                                     <th>Контакт</th>
                                 </tr>
                                 {% for i in orders %}

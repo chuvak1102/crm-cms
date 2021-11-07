@@ -4,6 +4,7 @@ namespace App\Admin\Model;
 
 use App\Config;
 use App\Site\Controller\Index;
+use Core\Database\Database;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
 use Core\Model\Model;
@@ -26,10 +27,13 @@ class Order extends Model {
 
     function getTotalPrice()
     {
-        $total = 0;
+        $id = $this->id;
+        $total = DB::query(Database::SELECT, "select sum(price_one * product_count) as total from order_item where order_id = $id")
+            ->execute()
+            ->current();
 
-        foreach (OrderItem::many($this->id, 'order_id') as $i) {
-            $total += Index::calculate(Product::one($i->product_id), $i->product_count);
+        if ($total) {
+            $total = $total['total'];
         }
 
         return $total;
@@ -38,7 +42,7 @@ class Order extends Model {
     function getClient()
     {
         $i = OrderDetail::one($this->id, 'order_id');
-        return "{$i->name}, {$i->email}, {$i->phone}";
+        return "{$i->city}, {$i->street}, {$i->house}, {$i->block}, {$i->office}";
     }
 
     function getDetail()

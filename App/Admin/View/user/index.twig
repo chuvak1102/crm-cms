@@ -7,7 +7,9 @@
                     <div class="tabs-left">
                         <ul class="nav nav-tabs">
                             {% for i in departments %}
-                                <li class="{% if loop.index == 1 %}active{% endif %}"><a data-toggle="tab" href="#tab-{{ i.id }}">{{ i.name }}</a></li>
+                                {% if i.id != 8 %}
+                                    <li class="{% if loop.index == 1 %}active{% endif %}"><a data-toggle="tab" href="#tab-{{ i.id }}">{{ i.name }}</a></li>
+                                {% endif %}
                             {% endfor %}
                             <li class=""><a data-toggle="tab" href="#tab-100">Добавить</a></li>
                         </ul>
