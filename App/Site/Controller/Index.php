@@ -131,17 +131,30 @@ class Index extends Controller {
                 }
 
                 $category = Category::one($i, 'alias');
+                $hasParent = !!$category->parent();
+
                 if (isset($category->id) && $category->id) {
 
                     Page::instance()->push('title', "{$category->name} - ЭкоПак");
 
-                    $products = DB::select(DB::expr('product.*'))
+                    $products = DB::select(
+                        ['product.id', 'id'],
+                        ['product.name', 'name'],
+                        ['product.article', 'article'],
+                        ['product.alias', 'alias'],
+                        ['product.active', 'active'],
+                        ['product.image', 'image'],
+                        ['product.price_site', 'price'],
+                        ['product.count_current', 'count_current'],
+                        ['product.count_minimal', 'count_minimal'],
+                        [$hasParent ? 'product_to_category.sort' : 'product.sort', 'sort']
+                    )
+                        ->where('product_to_category.category_id', '=', $category->id)
                         ->from('product')
                         ->join('product_to_category')
                         ->on('product_to_category.product_id', '=', 'product.id')
-                        ->where('product_to_category.category_id', '=', $category->id)
                         ->where('product.active', '=', 1)
-                        ->order_by('product_to_category.sort')
+                        ->order_by(DB::expr('product_to_category.sort = 0, product_to_category.sort'))
                         ->execute()
                         ->fetch_all();
 
