@@ -69,6 +69,7 @@ class Routes {
                 '{product}=>{create}' => [Admin\Controller\Product::class => 'create'],
                 '{product}=>{delete}=>{[\d]+}' => [Admin\Controller\Product::class => 'delete'],
                 '{product}=>{sort}' => [Admin\Controller\Product::class => 'sort'],
+                '{product}=>{edit}=>{[\d]+}=>{deleteimage}=>{[\d]+}' => [Admin\Controller\Product::class => 'deleteImage'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],

@@ -4,6 +4,17 @@
         <div class="product">
             <div class="left">
                 <img src="/files/{{ product.image }}" alt="">
+                {% if product.advancedImages is not empty %}
+                <br>
+                <div class="galley" style="margin-top: 10px">
+                    {% for i in product.advancedImages %}
+                        <a style="max-width: 50px; max-height: 50px" class="demo" href="/files/{{ i.href }}" data-lightbox="example-1">
+                            <img style="max-width: 50px; max-height: 50px" class="example-image" src="/files/mini/{{ i.href }}" alt="image-1">
+                        </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
             </div>
             <div class="right">
                 <h1 class="name">{{ product.name | raw }}</h1>
@@ -20,9 +31,9 @@
                 <i class="in-cart" style="margin-top: 0">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
                 <div class="params">
                     <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
-                                class="shop_param_value">500 штук</span></div>
+                                class="shop_param_value">{{ product.box_count }} штук</span></div>
                     <div class="shop_param"><span class="td_fir"><span>Количество товара в упаковке</span></span><span
-                                class="shop_param_value">25 шт.</span></div>
+                                class="shop_param_value">{{ product.pack_count }} шт.</span></div>
                 </div>
             </div>
             <div class="clear"></div>
@@ -31,9 +42,9 @@
             <div class="params-name">Характеристики:</div>
             <div class="params">
                 <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
-                            class="shop_param_value">500 штук</span></div>
+                            class="shop_param_value">{{ product.box_count }} штук</span></div>
                 <div class="shop_param"><span class="td_fir"><span>Количество товара в упаковке</span></span><span
-                            class="shop_param_value">25 шт.</span></div>
+                            class="shop_param_value">{{ product.pack_count }} шт.</span></div>
             </div>
         </div>
     </div>

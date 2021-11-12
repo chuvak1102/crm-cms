@@ -112,7 +112,7 @@ a.logged-link{height: 15px; display: block}
 .cart-add {cursor: pointer}
 
 .product-single {}
-.product-single .product {border: 1px solid #ebebec; margin-bottom: 15px; padding: 10px}
+.product-single .product {border: 1px solid #ebebec; margin-bottom: 15px; padding: 10px; padding-bottom: 50px}
 .product-single .product .left {float: left; width: 40%;height: 338px;background: #fff;border: 1px solid #ddd;margin-bottom: 15px;text-align: center;}
 .product-single .product .left img {display: inline;vertical-align: middle;max-height: 330px;max-width: 335px;text-align: center}
 .product-single .product .right {float: right; width: 60%; padding-left: 15px}

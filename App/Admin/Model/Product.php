@@ -266,6 +266,29 @@ class Product extends Model {
             }
         }
 
+        if ($images = $request->files('image_advanced')) {
+
+            if ($images) {
+
+                $images = $this->reArrayImages($images);
+
+                foreach ($images as $i) {
+
+                    $name = (new FileUploader())->save($i);
+
+                    $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
+                    $img = new \Imagick($root.$name);
+                    $img->scaleImage(200,0);
+                    $img->writeImage($root.'mini/'.$name);
+                    $img->destroy();
+
+                    DB::insert('product_images', ['product_id', 'href'])
+                        ->values([$this->id, $name])
+                        ->execute();
+                }
+            }
+        }
+
         if ($supplier = $request->get('supplier')) {
             $exist = DB::select('*')
                 ->from('product_to_supplier')
@@ -295,7 +318,6 @@ class Product extends Model {
     {
         $catalog = DB::select('*')
             ->from('category')
-//            ->where('active', '=', '1')
             ->order_by('sort')
             ->execute()
             ->fetch_all();
@@ -324,6 +346,26 @@ class Product extends Model {
         }
 
         return $category;
+    }
+
+    private function reArrayImages($file_post) {
+        $file_ary = [];
+        $file_keys = array_keys($file_post);
+        foreach ($file_post as $key => $value) {
+            foreach ($value as $key2 => $value2) {
+                $file_ary[$key2][$key] = $value2;
+            }
+        }
+        return $file_ary;
+    }
+
+    public function advancedImages()
+    {
+        return DB::select('*')
+            ->from('product_images')
+            ->where('product_id', '=', $this->id)
+            ->execute()
+            ->fetch_all();
     }
 
     public function getAdditional()

@@ -361,4 +361,13 @@ class Product extends Index {
 
         return new JsonResponse($log);
     }
+
+    function deleteImage(Request $request)
+    {
+        DB::delete('product_images')
+            ->where('id', '=', $request->seg(4))
+            ->execute();
+
+        return $this->redirectToRoute('/product/edit/'.$request->seg(2));
+    }
 }
