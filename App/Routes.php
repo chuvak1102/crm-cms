@@ -70,6 +70,7 @@ class Routes {
                 '{product}=>{delete}=>{[\d]+}' => [Admin\Controller\Product::class => 'delete'],
                 '{product}=>{sort}' => [Admin\Controller\Product::class => 'sort'],
                 '{product}=>{edit}=>{[\d]+}=>{deleteimage}=>{[\d]+}' => [Admin\Controller\Product::class => 'deleteImage'],
+                '{product}=>{edit}=>{[\d]+}=>{deletemainimage}' => [Admin\Controller\Product::class => 'deleteMainImage'],
 
                 '{order}' => [Admin\Controller\Order::class => 'index'],
                 '{order}=>{edit}=>{[\d]+}' => [Admin\Controller\Order::class => 'edit'],

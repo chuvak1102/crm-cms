@@ -3,18 +3,18 @@
     <div class="product-single">
         <div class="product">
             <div class="left">
-                <img src="/files/{{ product.image }}" alt="">
+                <div class="im" style="height: 330px">
+                    <img class="product-image" src="/files/{{ product.image }}" alt="">
+                </div>
                 {% if product.advancedImages is not empty %}
                 <br>
-                <div class="galley" style="margin-top: 10px">
+                <div class="galley" style="margin-top: 10px; cursor: pointer">
+                    <img class="gallery-image" data-name="{{ product.image }}" style="max-width: 50px; max-height: 50px" src="/files/{{ product.image }}" alt="">
                     {% for i in product.advancedImages %}
-                        <a style="max-width: 50px; max-height: 50px" class="demo" href="/files/{{ i.href }}" data-lightbox="example-1">
-                            <img style="max-width: 50px; max-height: 50px" class="example-image" src="/files/mini/{{ i.href }}" alt="image-1">
-                        </a>
+                        <img class="gallery-image" data-name="{{ i.href }}" style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.href }}" alt="image-1">
                     {% endfor %}
                 </div>
                 {% endif %}
-
             </div>
             <div class="right">
                 <h1 class="name">{{ product.name | raw }}</h1>
@@ -75,6 +75,11 @@
             </li>
         {% endfor %}
     </ul>
-
     <div class="clear"></div>
+
+    <script>
+        $('.gallery-image').mouseenter(e => {
+            $('.product-image').attr('src', `/files/${$(e.target).data('name')}`)
+        })
+    </script>
 {% endblock %}

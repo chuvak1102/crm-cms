@@ -370,4 +370,16 @@ class Product extends Index {
 
         return $this->redirectToRoute('/product/edit/'.$request->seg(2));
     }
+
+    function deleteMainImage(Request $request)
+    {
+        $id = intval($request->seg(2));
+
+        DB::update('product')
+            ->set(['image' => ''])
+            ->where('id', '=', $id)
+            ->execute();
+
+        return $this->redirectToRoute('/product/edit/'.$request->seg(2));
+    }
 }

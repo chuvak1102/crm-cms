@@ -122,7 +122,10 @@
                             <div class="form-group"><label class="col-sm-4 control-label">Основное изображение</label>
                                 <div class="col-md-6">
                                     <div class="img-preview img-preview-sm" style="width: 200px; height: 200px">
+                                        {% if product.image %}
                                         <img style="max-width: 200px; max-height: 200px" src="/files/{{ product.image }}" alt="">
+                                        <a href="/product/edit/{{ product.id }}/deletemainimage" class="btn btn-danger" type="button">X</a>
+                                        {% endif %}
                                     </div>
                                     <div class="btn-group">
                                         <label title="Upload image file" for="inputImage" class="btn btn-primary">

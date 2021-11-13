@@ -274,17 +274,23 @@ class Product extends Model {
 
                 foreach ($images as $i) {
 
-                    $name = (new FileUploader())->save($i);
+                    if ($i['name']) {
+                        $name = (new FileUploader())->save($i);
 
-                    $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
-                    $img = new \Imagick($root.$name);
-                    $img->scaleImage(200,0);
-                    $img->writeImage($root.'mini/'.$name);
-                    $img->destroy();
+                        if (is_array($name)) {
+                            throw new \Exception(var_export($name, true));
+                        }
 
-                    DB::insert('product_images', ['product_id', 'href'])
-                        ->values([$this->id, $name])
-                        ->execute();
+                        $root = $_SERVER['DOCUMENT_ROOT'].'/files/';
+                        $img = new \Imagick($root.$name);
+                        $img->scaleImage(200,0);
+                        $img->writeImage($root.'mini/'.$name);
+                        $img->destroy();
+
+                        DB::insert('product_images', ['product_id', 'href'])
+                            ->values([$this->id, $name])
+                            ->execute();
+                    }
                 }
             }
         }

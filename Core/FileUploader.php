@@ -4,7 +4,7 @@ namespace Core;
 class FileUploader
 {
     protected $root;
-    protected $maxsize = '10mb'; //(int) kb, gb, mb
+    protected $maxsize = '20mb'; //(int) kb, gb, mb
     protected $allowed = array('rar','zip','doc','docx', 'xls','xlsx', 'csv', 'jpg', 'png', 'gif', 'jpeg', 'txt', 'pdf', 'xml');
     protected $path = array(
         'rar' => 'files/',
@@ -73,6 +73,7 @@ class FileUploader
 
     private function checkName($file)
     {
+        return true;
         $p = "[]{}<>~@#$%^`&*=|\"\'?\/\\№";
         $catch = substr_count($file['name'], $p);
         if($catch === 0)

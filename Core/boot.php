@@ -1,5 +1,6 @@
 <?php
 
+use Core\Database\DB;
 use Core\Session;
 
 require_once '../Core/Autoload.php';
@@ -31,20 +32,34 @@ try {
                 $controller->before();
                 $controller->$action(new \Core\Request\Request());
             } else {
-                error("action {$action} not found in {$controllerName}");
+                \App\Admin\Model\Error::add("action {$action} not found in {$controllerName}");
+                if (\App\Config::Mode == 'test') {
+                    error("action {$action} not found in {$controllerName}");
+                }
             }
         } else {
-            error("controller not found: {$controllerName}");
+            \App\Admin\Model\Error::add("controller not found: {$controllerName}");
+            if (\App\Config::Mode == 'test') {
+                error("controller not found: {$controllerName}");
+            }
         }
     } else {
-        error("404");
+        \App\Admin\Model\Error::add("404 - ".$_SERVER['REQUEST_URI']);
+        if (\App\Config::Mode == 'test') {
+            error("404 - ".$_SERVER['REQUEST_URI']);
+        }
     }
 
+} catch (\Exception $e) {
 
+    $er = (var_export($e, true));
 
-} catch (Exception $e) {
+    DB::insert('error', ['text'])
+        ->values([$er])
+        ->execute();
 
-//    var_dump($e);
+    if (\App\Config::Mode == 'test') {
 
-    error($e);
+        error($e);
+    }
 }
