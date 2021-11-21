@@ -11,6 +11,7 @@ use Core\Request\Request;
 use Core\Database\DB;
 use Core\Router;
 use App\Admin\Model\Product as ProductModel;
+use Core\Session;
 
 class Product extends Index {
 
@@ -19,8 +20,12 @@ class Product extends Index {
         BreadCrumbs::instance()->push(['' => 'Товары']);
 
         $page = $request->get('page', 1);
-        $limit = $request->get('onpage', 25);
+        $limit = $request->get('onpage', 100);
         $offset = $limit * ($page - 1);
+        $prevLimit = Session::instance()->get('product_prev_onpage');
+        Session::instance()->set('product_prev_onpage', $limit);
+        $limit = Session::instance()->get('product_prev_onpage');
+        $page = $prevLimit == $limit ? $page : 1;
 
         $product = DB::select(DB::expr('SQL_CALC_FOUND_ROWS *'))
             ->distinct(true)
@@ -69,6 +74,13 @@ class Product extends Index {
                 ->where('product.active', '=', 1);
         }
 
+        $url = "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&active={$active}&page={$page}&onpage={$limit}";
+
+        if ($prevLimit != $limit) {
+
+            $this->redirectToRoute($url);
+        }
+
         $product = $product->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
         $supplier = DB::select('*')->from('supplier')->execute()->fetch_all();
@@ -87,11 +99,11 @@ class Product extends Index {
             'category' => $category,
             'pagination' => (new \Core\Pagination(
                 $count,
-                $request->get('onpage', 25),
+                $limit,
                 3,
-                $request->get('page', 1),
-                "/product?category={$category_id}&supplier={$supplier_id}&name={$name}&active={$active}&page={$page}&onpage={$limit}",
-                [25, 50, 75, 100]
+                $page,
+                $url,
+                [25, 50, 100, 250]
             )),
             'filter' => [
                 'supplier' => $supplier_id,
