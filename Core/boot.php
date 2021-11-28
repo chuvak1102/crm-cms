@@ -2,6 +2,7 @@
 
 use Core\Database\DB;
 use Core\Session;
+use App\Admin\Model\Log;
 
 require_once '../Core/Autoload.php';
 require_once '../App/Config.php';
@@ -14,6 +15,8 @@ ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strpos($_SERVER
 session_start();
 
 try {
+
+    Log::add(json_encode([$_REQUEST, $_SERVER]));
 
     if ($route = \Core\Router::getMatchedRoute()) {
 
@@ -44,7 +47,7 @@ try {
             }
         }
     } else {
-        \App\Admin\Model\Error::add("404 - ".$_SERVER['REQUEST_URI']);
+        \App\Admin\Model\Error::add(json_encode([$_REQUEST, $_SERVER]));
         if (\App\Config::Mode == 'test') {
             error("404 - ".$_SERVER['REQUEST_URI']);
         }
