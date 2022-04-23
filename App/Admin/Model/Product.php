@@ -217,21 +217,22 @@ class Product extends Model {
         $length = $request->get('length');
         $width = $request->get('width');
         $height = $request->get('height');
+        $diameter = $request->get('diameter');
 
         $values = [
             'name' => $request->get('name'),
             'alias' => Text::alias($request->get('name')),
             'article' => $request->get('article'),
             'active' => $request->get('active') ? 1 : 0,
-            'price_site' => $request->get('price_site'),
+            'price_site' => str_replace(',', '.', $request->get('price_site')),
             'count_current' => $countCurrent,
             'count_minimal' => $countMinimal,
             'count_reserve' => $countReserve,
             'hit' => $request->get('hit') ? 1 : 0,
             'new' => $request->get('new') ? 1 : 0,
             'share' => $request->get('share') ? 1 : 0,
-            'price_site_opt' => $request->get('price_site_opt'),
-            'price_supplier' => $request->get('price_supplier'),
+            'price_site_opt' => str_replace(',', '.', $request->get('price_site_opt')),
+            'price_supplier' => str_replace(',', '.', $request->get('price_supplier')),
             'price_site_opt_count' => $priceSiteOptCount,
             'supplier_product_name' => $request->get('supplier_product_name'),
             'supplier_article' => $request->get('supplier_article'),
@@ -248,6 +249,7 @@ class Product extends Model {
             'length' => $length,
             'width' => $width,
             'height' => $height,
+            'diameter' => $diameter,
             'material' => $request->get('material'),
             'color' => $request->get('color'),
             'description' => $request->get('description'),

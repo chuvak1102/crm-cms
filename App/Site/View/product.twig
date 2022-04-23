@@ -22,9 +22,9 @@
                 <div class="price">Цена за 1 шт. <i>{{ product.price_site }} руб.</i></div>
                 <span class="count">
                     <span class="price-cont count-container">
-                        <input data-product="{{ product.id }}" class="count-value" type="text" value="{{ product.getPackCount().value }}" data-multiply-value="{{ product.getPackCount().value }}">
-                        <span class="plus count-plus-btn" data-plus-value="{{ product.getPackCount().value }}">+</span>
-                        <span class="minus count-minus-btn" data-minus-value="{{ product.getPackCount().value }}">-</span>
+                        <input data-product="{{ product.id }}" class="count-value" type="text" value="{{ product.pack_count }}" data-multiply-value="{{ product.pack_count }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ product.pack_count }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ product.pack_count }}">-</span>
                     </span>
                 </span>
                 <div class="cart-add">в корзину</div>
@@ -64,9 +64,9 @@
                 <span class="price">Цена: <i>{{ i.price_site }} руб.</i></span>
                 <span class="count">
                     <span class="price-cont count-container">
-                        <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.getPackCount().value }}" data-multiply-value="{{ i.getPackCount().value }}">
-                        <span class="plus count-plus-btn" data-plus-value="{{ i.getPackCount().value }}">+</span>
-                        <span class="minus count-minus-btn" data-minus-value="{{ i.getPackCount().value }}">-</span>
+                        <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.pack_count }}" data-multiply-value="{{ i.pack_count }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ i.pack_count }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ i.pack_count }}">-</span>
                     </span>
                 </span>
                 <span class="cart-add">в корзину</span>

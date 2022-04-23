@@ -66,7 +66,12 @@ class Product extends Index {
 
         if ($name = $request->get('name')) {
             $product = $product
-                ->where('product.name', 'like', DB::expr("'%{$name}%'"));
+                ->where_open()
+                ->or_where_open()
+                ->or_where('product.name', 'like', "%$name%")
+                ->or_where('product.article', 'like', "%$name%")
+                ->or_where_close()
+                ->where_close();
         }
 
         if ($active = $request->get('active')) {

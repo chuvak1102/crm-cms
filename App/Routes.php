@@ -33,6 +33,7 @@ class Routes {
                 '{cart}=>{add}=>{[\d]+}=>{[\d]+}' => [Site\Controller\Index::class => 'cartAdd'],
                 '{cart}=>{remove}=>{[\d]+}' => [Site\Controller\Index::class => 'cartRemove'],
                 '{reorder}=>{[\d]+}' => [Site\Controller\Index::class => 'reorder'],
+                '{galery}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'galery'],
             ],
             Config::AdminDomain => [
                 '{test}=>{sync}' => [Admin\Controller\Test::class => 'sync'],

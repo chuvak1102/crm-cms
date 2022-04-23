@@ -7,8 +7,10 @@ use App\Admin\Model\ContentType;
 use App\Admin\Model\Dictionary;
 use App\Admin\Model\Field;
 use Core\Controller;
+use Core\Database\Database;
 use Core\Database\Database\Exception;
 use Core\FileUploader;
+use Core\Helpers\Text;
 use Core\Request\Request;
 use Core\Database\DB;
 use App\Admin\Model\Content as ContentModel;
@@ -18,10 +20,12 @@ class Content extends Index {
 
     const TEXT = 'text';
     const FILE_IMAGE = 'file_image';
+    const TEXT_ALIAS = 'text_alias';
 
     const COLUMN_TYPE_STATIC = 'static';
     const COLUMN_TYPE_REFERENCE = 'constraint';
     const COLUMN_TYPE_DICTIONARY = 'dictionary';
+    const COLUMN_TYPE_ALIAS = 'alias';
 
     function index(Request $request)
     {
@@ -29,6 +33,7 @@ class Content extends Index {
 
             $cols = 6;
             $content = ContentModel::one(Router::seg(1));
+            $contentFields = ContentField::many($content->id, 'content_id');
             $fields_all = DB::select('*')
                 ->from('content_field')
                 ->where('content_id', '=', Router::seg(1))
@@ -46,18 +51,50 @@ class Content extends Index {
                 ->from($content->table)
                 ->execute()
                 ->fetch_all();
+            $columnNames = DB::query(Database::SELECT,"show columns from $content->table")->execute()->fetch_all();
 
-            $arrayData = [];
+            $result = [];
             foreach ($data as $i) {
+
                 $i = (array) $i;
                 $buff = array_fill(count($i),$cols - count($i) + 1, "");
-                $arrayData[] = (array) $i + $buff;
+
+                $columns = (array) $i + $buff;
+
+                $arrayData = [];
+                foreach ($columns as $column => $value) {
+
+                    $field = null;
+                    $fieldType = null;
+
+                    if ($value) {
+
+                        $field = DB::select('*')
+                            ->from('content_field')
+                            ->where('content_id', '=', $content->id)
+                            ->where('column_name', '=', $column)
+                            ->execute()->fetch();
+                        $fieldType = Field::one($field->field_id);
+                    }
+
+                    $row = [
+                        'field' => $field,
+                        'type' => $fieldType,
+                        'data' => $i
+                    ];
+
+                    $arrayData[] = $row;
+                }
+
+                $result[] = $arrayData;
             }
 
             return $this->render('Admin:content/show', [
                 'fields' => $fields,
-                'data' => $arrayData,
-                'content' => $content
+                'data' => $result,
+                'content' => $content,
+                'content_fields' => $contentFields,
+                'columns' => $columnNames
             ]);
         }
 
@@ -163,6 +200,21 @@ class Content extends Index {
                                     break;
                                 }
 
+                                case self::COLUMN_TYPE_ALIAS : {
+
+                                    $param = json_encode([
+                                        'alias_to' => end(explode(':',$i['advanced']))
+                                    ]);
+
+                                    DB::insert('content_field', [
+                                        'content_id', 'field_id', 'name', 'column_name', 'column_type', 'reference_table', 'reference_column', 'column_param'
+                                    ])->values([
+                                        $content->id, $field->id, $i['canonical'], $i['column'], $columnType, $content->id, null, $param
+                                    ])->execute();
+
+                                    break;
+                                }
+
                                 default: break;
                             }
 
@@ -191,11 +243,12 @@ class Content extends Index {
     {
         $content = ContentModel::one(Router::seg(1));
         $fields = $content->getFields();
-        $columns = DB::select('column_name')
+        $columns = DB::select('*')
             ->from('content_field')
             ->where('content_id', '=', $content->id)
             ->execute()
             ->fetch_all();
+        $cols = array_column($columns, 'column_name');
         $cols = array_column($columns, 'column_name');
 
         if ($request->get('submit')) {
@@ -208,19 +261,47 @@ class Content extends Index {
 
                 if (in_array($i->column_name, $cols)) {
 
-                    if ($i->getField()->value == self::FILE_IMAGE) {
-                        if ($image = $request->files($i->column_name)) {
-                            if ($image['name']) {
+                    switch ($i->column_type) {
 
-                                $columns[] = $i->column_name;
-                                $values[] = (new FileUploader())->save($image);
+                        case self::COLUMN_TYPE_STATIC : {
+
+                            if ($i->getField()->value == self::FILE_IMAGE) {
+                                if ($image = $request->files($i->column_name)) {
+                                    if ($image['name']) {
+
+                                        $columns[] = $i->column_name;
+                                        $values[] = (new FileUploader())->save($image);
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    if ($i->getField()->value == self::TEXT) {
-                        $columns[] = $i->column_name;
-                        $values[] = $request->get($i->column_name);
+                            if ($i->getField()->value == self::TEXT) {
+                                $columns[] = $i->column_name;
+                                $values[] = $request->get($i->column_name);
+                            }
+                            break;
+                        }
+
+                        case self::COLUMN_TYPE_ALIAS : {
+
+                            $params = json_decode($i->column_param);
+                            
+                            $aliasTo = $params->alias_to;
+
+                            $value = $request->get($i->column_name);
+
+                            if ($value) {
+                                $alias = Text::alias($value);
+                            } else {
+                                $alias = Text::alias($request->get($aliasTo));
+                            }
+
+                            if ($i->getField()->value == self::TEXT) {
+                                $columns[] = $i->column_name;
+                                $values[] = $alias;
+                            }
+                            break;
+                        }
                     }
                 }
             }

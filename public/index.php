@@ -4,7 +4,7 @@ ini_set('display_errors', E_ALL);
 
 require_once '../Core/boot.php';
 
-function dump($scope)
+function dump($scope, $die = false)
 {
     echo '<div style="clear: both"></div>';
     echo '<div style="background-color: rgba(0,0,0,0.64); width: 100%; padding-bottom: 50px">';
@@ -13,6 +13,9 @@ function dump($scope)
     echo '</pre>';
     echo '</div>';
     echo '<div style="clear: both"></div>';
+    if ($die) {
+        die();
+    }
 }
 
 function error($text)

@@ -11,6 +11,7 @@
                                 <button type="button" class="btn btn-sm btn-primary add-field">+ Простое поле</button>
                                 <button type="button" class="btn btn-sm btn-primary add-field-link">+ Связанное поле</button>
                                 <button type="button" class="btn btn-sm btn-primary add-field-dictionary">+ Словарь</button>
+                                <button type="button" class="btn btn-sm btn-primary add-field-alias">+ Алиас</button>
                             </div>
                             <br>
                             <div class="table-responsive">
@@ -58,6 +59,9 @@
                                             </td>
                                             <td></td>
                                         </tr>
+                                    {% endif %}
+                                    {% if content.getType.slug == 'alias' %}
+
                                     {% endif %}
                                     {% if content.getType.slug == 'dictionary' %}
 
@@ -135,6 +139,28 @@
             <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
         </tr>
     </table>
+    <table class="new-field-alias">
+        <tr style="visibility: hidden" class="field-row field-row-alias">
+            <td><input name="canonical[]" type="text" class="form-control"></td>
+            <td><input name="column[]" type="text" class="form-control"></td>
+            <td>
+                <select name="type[]" id="" class="form-control">
+                    {% for i in fields %}
+                        <option value="{{ i.id }}">{{ i.name }} {{ i.type }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="alias-select">
+                <select name="advanced[]" id="" class="form-control">
+                        <option value="alias:">Выбрать поле</option>
+                    {% for i in constraint %}
+
+                    {% endfor %}
+                </select>
+            </td>
+            <td><button type="button" class="btn btn-sm btn-danger delete-field" >Удалить</button></td>
+        </tr>
+    </table>
 
     <script>
 
@@ -164,6 +190,35 @@
             $('table.fields')
                 .append(row);
         });
+
+        $('button.add-field-alias').click(e => {
+
+            let row = $('.new-field-alias tr').clone();
+
+            row.css({visibility: "visible"});
+            $('table.fields')
+                .append(row);
+        });
+
+        $('body').on('click', '.alias-select', e => {
+
+            let select = $(e.target);
+
+            select.empty();
+            select.append(`<option value="alias:">Выбрать поле</option>`);
+
+            $('[name=column\\[\\]]').map((i, el) => {
+
+                if ($(el).css('visibility') !== 'hidden') {
+
+                    select.append(`<option value="alias:${$(el).val()}">${$(el).val()}</option>`);
+
+                }
+
+                console.log(el);
+            })
+        });
+
 
         $('body').on('click', 'button.delete-field', e => {
 

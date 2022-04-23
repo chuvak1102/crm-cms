@@ -105,7 +105,7 @@
                                                     <td>{{ i.getPrice }}</td>
                                                     <td>{{ i.getDiscount }}</td>
                                                     <td>{{ i.reserved }}</td>
-                                                    <td><input style="width: 75px" name="order[{{ i.id }}][count]" value="{{ i.getPackCount.value }}" type="text" class="form-control"></td>
+                                                    <td><input style="width: 75px" name="order[{{ i.id }}][count]" value="{{ i.pack_count }}" type="text" class="form-control"></td>
                                                 </tr>
                                             {% endfor %}
                                                 <tr>

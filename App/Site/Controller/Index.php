@@ -92,13 +92,36 @@ class Index extends Controller {
             ->fetch_all();
 
         $our_product = DB::select('*')
-            ->from('product_index')
+            ->from('galery')
             ->execute()
             ->fetch_all();
 
         return $this->render('Site:index', [
             'slider' => $slider,
             'our_product' => $our_product
+        ]);
+    }
+
+    function galery(Request $request)
+    {
+        $items = DB::select('items')
+            ->from('galery')
+            ->where('href', '=', $request->seg(1))
+            ->execute()
+            ->fetch();
+        $items = explode(',', $items->items);
+
+        $product = [];
+        if ($items) {
+            $product = DB::select('*')
+                ->from('product')
+                ->where('article', 'in', $items)
+                ->execute()
+                ->fetch_all();
+        }
+
+        return $this->render('Site:galery', [
+            'products' => $product
         ]);
     }
 

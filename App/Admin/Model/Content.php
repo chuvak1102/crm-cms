@@ -22,6 +22,10 @@ class Content extends Model {
     const CONTENT_TYPE_STATIC = 'static';
     const CONTENT_TYPE_DICTIONARY = 'dictionary';
     const CONTENT_TYPE_CATEGORY = 'category';
+    const CONTENT_TYPE_ALIAS = 'alias';
+
+    const COLUMN_TYPE_STATIC = 'static';
+    const COLUMN_TYPE_ALIAS = 'alias';
 
     function getFields()
     {
@@ -43,14 +47,42 @@ class Content extends Model {
 
                 foreach ($fields as $i => $field) {
 
-                    $type = DB::select('type')
-                        ->from('field')
-                        ->where('id', '=', $field['type'])
-                        ->execute()
-                        ->fetch();
+                    $type = current(explode(':', $field['advanced']));
+                    $reference = end(explode(':', $field['advanced']));
 
-                    if ($type->type) {
-                        $query .= "`{$field['column']}` {$type->type}".($i == count($fields) - 1 ? "" : ",");
+                    switch ($type) {
+
+                        case self::COLUMN_TYPE_STATIC : {
+
+                            $type = DB::select('type')
+                                ->from('field')
+                                ->where('id', '=', $field['type'])
+                                ->execute()
+                                ->fetch();
+
+                            if ($type->type) {
+                                $query .= "`{$field['column']}` {$type->type}".($i == count($fields) - 1 ? "" : ",");
+                            }
+
+                            break;
+                        }
+
+                        case self::COLUMN_TYPE_ALIAS : {
+
+                            $type = DB::select('type')
+                                ->from('field')
+                                ->where('id', '=', $field['type'])
+                                ->execute()
+                                ->fetch();
+
+                            if ($type->type) {
+                                $query .= "`{$field['column']}` {$type->type}".($i == count($fields) - 1 ? "" : ",");
+                            }
+
+                            break;
+                        }
+
+                        default: break;
                     }
                 }
                 $query .= ")";

@@ -36,7 +36,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input value="{{ filter.name }}" name="name" style="min-width: 150px" type="text" placeholder="Поиск по названию" class="form-control">
+                                <input value="{{ filter.name }}" name="name" style="min-width: 150px" type="text" placeholder="Поиск" class="form-control">
                             </div>
                             <div class="form-group">
                                 <input style="margin-left: 5px" type="checkbox" name="active" {% if filter.active %}checked{% endif %} value="1"> Активные
@@ -91,8 +91,8 @@
                                                 <a style="color: #4e5153; " href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a>
                                             </td>
                                             <td width="10%">{{ i.price_site }}</td>
-                                            <td width="10%">{{ i.getPackCount().value }} {{ i.getPackCount().dictionaryField().name }}</td>
-                                            <td width="10%">{{ i.getBoxCount().value }} {{ i.getBoxCount().dictionaryField().name }}</td>
+                                            <td width="10%">{{ i.pack_count }}</td>
+                                            <td width="10%">{{ i.box_count }}</td>
                                             <td width="10%">{{ i.salesPerCurrentMonth }}</td>
                                             <td width="10%">{{ i.salesPerPastMonth }}</td>
 {#                                            <td><input name="sorting" data-id="{{ i.id }}" style="width: 60px" class="form-control" type="text" value="{{ i.sort }}"></td>#}
