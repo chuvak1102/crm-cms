@@ -92,7 +92,7 @@ class Index extends Controller {
             ->fetch_all();
 
         $our_product = DB::select('*')
-            ->from('galery')
+            ->from('gallery')
             ->execute()
             ->fetch_all();
 
@@ -102,25 +102,21 @@ class Index extends Controller {
         ]);
     }
 
-    function galery(Request $request)
+    function gallery(Request $request)
     {
-        $items = DB::select('items')
-            ->from('galery')
-            ->where('href', '=', $request->seg(1))
+        $product = DB::select('*')
+            ->from('product')
+            ->where('id', 'in', DB::select('product_id')
+                ->from('gallery_item')
+                ->join('gallery')
+                ->on('gallery.id', '=', 'gallery_item.gallery_id')
+                ->where('alias', '=', $request->seg(1))
+            )
+//            ->order_by('gallery_item.sort')
             ->execute()
-            ->fetch();
-        $items = explode(',', $items->items);
+            ->fetch_all();
 
-        $product = [];
-        if ($items) {
-            $product = DB::select('*')
-                ->from('product')
-                ->where('article', 'in', $items)
-                ->execute()
-                ->fetch_all();
-        }
-
-        return $this->render('Site:galery', [
+        return $this->render('Site:gallery', [
             'products' => $product
         ]);
     }

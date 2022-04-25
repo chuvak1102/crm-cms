@@ -33,7 +33,7 @@ class Routes {
                 '{cart}=>{add}=>{[\d]+}=>{[\d]+}' => [Site\Controller\Index::class => 'cartAdd'],
                 '{cart}=>{remove}=>{[\d]+}' => [Site\Controller\Index::class => 'cartRemove'],
                 '{reorder}=>{[\d]+}' => [Site\Controller\Index::class => 'reorder'],
-                '{galery}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'galery'],
+                '{gallery}=>{[a-zA-Z0-9\_\-]+}' => [Site\Controller\Index::class => 'gallery'],
             ],
             Config::AdminDomain => [
                 '{test}=>{sync}' => [Admin\Controller\Test::class => 'sync'],
@@ -117,7 +117,16 @@ class Routes {
 
                 '{errors}' => [Admin\Controller\Error::class => 'index'],
 
-                '{test}=>{email}' => [Admin\Controller\Test::class => 'email']
+                '{test}=>{email}' => [Admin\Controller\Test::class => 'email'],
+
+                '{gallery}' => [Admin\Controller\Gallery::class => 'index'],
+                '{gallery}=>{search}' => [Admin\Controller\Gallery::class => 'search'],
+                '{gallery}=>{save}' => [Admin\Controller\Gallery::class => 'save'],
+                '{gallery}=>{create}' => [Admin\Controller\Gallery::class => 'create'],
+                '{gallery}=>{create}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'create'],
+                '{gallery}=>{sort}' => [Admin\Controller\Gallery::class => 'sort'],
+                '{gallery}=>{items}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'items'],
+                '{gallery}=>{delete}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'delete'],
             ],
             Config::ClientDomain => [
                 '' => [Client\Controller\Index::class => 'index'],
