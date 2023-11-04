@@ -1,0 +1,237 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row  border-bottom white-bg dashboard-header">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <form method="POST" action="/client/profile/{{ user.id }}?main=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3 ><b>Основная информация</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
+                            <div class="row">
+                                <label>Название компании:</label>
+                                <input class="form-control" name="name" type="text" value="{{ user.name }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ФИО руководителя:</label>
+                                <input class="form-control" name="fio" type="text" value="{{ client.fio }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Контактные телефоны (с кодом города):</label>
+                                <input class="form-control" name="phone" type="text" value="{{ client.phone }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Почта:</label>
+                                <input class="form-control" name="email" type="text" value="{{ client.email }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Изменить</button>
+                            </div>
+                        </form>
+                        <br>
+                        <form method="POST" action="/client/profile/{{ user.id }}?face=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3><b>Юрлицо</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
+                            <div class="row">
+                                <label>Тип</label>
+                                <select class="form-control company-type" name="company_type" >
+                                    <option value="ooo" {% if company.company_type == 'ooo' %}selected{% endif %} >ООО</option>
+                                    <option value="ip" {% if company.company_type == 'ip' %}selected{% endif %}>ИП</option>
+                                </select>
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Название</label>
+                                <input class="form-control" name="name" type="text" value="{{ company.account_r }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>ИНН</label>
+                                <input class="form-control" name="inn" type="text" value="{{ company.inn }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label class="change-for-ip">ОГРН</label>
+                                <input class="form-control" name="ogrn" type="text" value="{{ company.ogrn }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Юридический адрес</label>
+                                <input class="form-control" name="firm_address" type="text" value="{{ company.firm_address }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Фактический адрес</label>
+                                <input class="form-control" name="fact_address" type="text" value="{{ company.fact_address }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Расчетный счет</label>
+                                <input class="form-control" name="account_r" type="text" value="{{ company.account_r }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Коррсчет</label>
+                                <input class="form-control" name="account_k" type="text" value="{{ company.account_k }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>БИК</label>
+                                <input class="form-control" name="bik" type="text" value="{{ company.bik }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Банк</label>
+                                <input class="form-control" name="bank" type="text" value="{{ company.bank }}">
+                                <p></p>
+                            </div>
+                            <div class="row hide-for-ip">
+                                <label>Ген. Директор</label>
+                                <input class="form-control" name="director" type="text" value="{{ company.director }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>По Доверенности</label>
+                                <input class="form-control" name="dover" type="text" value="{{ company.dover }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Добавить</button>
+                            </div>
+                        </form>
+                        <br>
+                        <form method="POST" action="/client/profile/{{ user.id }}?address=1" class="form-withlogo cart" enctype="multipart/form-data">
+                            <div class="row">
+                                <h3><b>Адреса</b></h3>
+                                <p></p>
+                                <br>
+                            </div>
+                            <div class="row">
+                                <label>Юрлицо</label>
+                                <select class="form-control" name="company">
+                                    {% for i in company %}
+                                        <option value="{{ i.id }}">{{ i.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Название</label>
+                                <input class="form-control" name="name" type="text" value="{{ client.name }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Город:</label>
+                                <input class="form-control" name="city" type="text" value="{{ client.city }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Улица, проспект и пр.:</label>
+                                <input class="form-control" name="street" type="text" value="{{ client.street }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Номер дома:</label>
+                                    <input class="form-control" name="house" type="text" value="{{ client.house }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Строение:</label>
+                                    <input class="form-control" name="block" type="text" value="{{ client.block }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>офис:</label>
+                                    <input class="form-control" name="house" type="text" value="{{ client.office }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label>Телефон</label>
+                                <input class="form-control" name="phone" type="text" value="{{ address.phone }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Время работы Вашей компании:</label>
+                                <input class="form-control" name="work_time" type="text" value="{{ client.work_time }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Пропуск:</label>
+                                <input class="form-control" name="pass" type="text" value="{{ client.pass }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <label>Комментарий:</label>
+                                <input class="form-control" name="comment" type="text" value="{{ client.comment }}">
+                                <p></p>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit" name="submit" value="client">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-2">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <h3 ><b>Юрлицо</b></h3>
+                            <p></p>
+                            {% for i in company %}
+
+                                <div>Тип - {% if i.company_type == 'ip' %}ИП{% else %}ООО{% endif %}</div>
+                                <div>{{ i.name }}</div>
+                                <div>Расчетный счет - {{ i.account_r }}</div>
+                                <div>Коррсчет - {{ i.account_k }}</div>
+                                <div>ИНН - {{ i.inn }}</div>
+                                <div>ОГРН - {{ i.ogrn }}</div>
+                                <div>БИК - {{ i.bik }}</div>
+                                <div>Банк - {{ i.bank }}</div>
+                                <div>Ген. Директор - {{ i.director }}</div>
+                                <div>Юридический адрес - {{ i.firm_address }}</div>
+                                <div>Фактический адрес - {{ i.fact_address }}</div>
+                                <div>По доверенности - {{ i.dover }}</div>
+                                <div><a href="/client/profile/{{ user.id }}/remove?face={{ i.id }}">Удалить</a></div>
+                                <br>
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            <h3 ><b>Адреса</b></h3>
+                            <p></p>
+                            {% for i in address %}
+                                <div>{{ i.getCompany.name }}</div>
+                                <div>{{ i.name }}</div>
+                                <div>Адрес - {{ i.city }} {{ i.street }} {{ i.house }} {{ i.block }}</div>
+                                <div><a href="/client/profile/{{ user.id }}/remove?address={{ i.id }}">Удалить</a></div>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.company-type').change(e => {
+
+            if ($(e.target).val() === 'ooo') {
+                $('.change-for-ip').text('ОГРН');
+                $('.hide-for-ip').show();
+            }
+            if ($(e.target).val() === 'ip') {
+                $('.change-for-ip').text('ОГРНИП');
+                $('.hide-for-ip').hide();
+            }
+        })
+    </script>
+{% endblock %}

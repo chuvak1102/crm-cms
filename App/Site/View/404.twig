@@ -1,0 +1,30 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <style>
+        h1, .h1 {
+            padding: 25px 0;
+            color: #488ca6;
+            font: 15px "Calibri";
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .contacts-l-tab {
+            margin-bottom: 25px;
+        }
+        .contacts-bar p {
+            line-height: 20px;
+        }
+        .contacts-bar p a{
+            font-size: 16px;
+        }
+
+    </style>
+    <div class="contacts-bar clearfix">
+        <div>
+            <h1>Страница не найдена</h1>
+            <div class="contacts-l-tab">
+                <p>Пожалуйста, перейдите в наш <a href="http://ecopacking.ru/katalog-tovarov">Каталог</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

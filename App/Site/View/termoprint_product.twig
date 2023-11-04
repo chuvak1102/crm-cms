@@ -1,0 +1,66 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="product-single">
+        <div class="product">
+            <div class="left">
+                <img src="/files/{{ product.image }}" alt="">
+            </div>
+            <div class="right">
+                <h1 class="name">{{ product.name | raw }}</h1>
+                <div class="article">Артикул: {{ product.article }}</div>
+                <div class="price">Цена за 1 шт. <i>{{ product.price_site }} руб.</i></div>
+                <span class="count">
+                    <span class="price-cont">
+                        <input type="text" value="{{ product.getPackCount().value }}">
+                        <span class="plus">+</span>
+                        <span class="minus">-</span>
+                    </span>
+                </span>
+                <div class="cart-add">в корзину</div>
+                <div class="params">
+                    <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
+                                class="shop_param_value">500 штук</span></div>
+                    <div class="shop_param"><span class="td_fir"><span>Количество товара в упаковке</span></span><span
+                                class="shop_param_value">25 шт.</span></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="product">
+            <div class="params-name">Характеристики:</div>
+            <div class="params">
+                <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
+                            class="shop_param_value">500 штук</span></div>
+                <div class="shop_param"><span class="td_fir"><span>Количество товара в упаковке</span></span><span
+                            class="shop_param_value">25 шт.</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="bread">
+        <h4>С ЭТИМ ТОВАРОМ ОБЫЧНО ПОКУПАЮТ</h4>
+    </div>
+    <ul class="index-catalog product">
+        <li>
+            <span class="product">
+                <a href="/">
+                    <div class="img">
+                        <img class="image" src="http://ecopacking.ru/userfiles/shop/preview/1839_plastik-stakan-pivnoy-500ml-.png" alt="">
+                    </div>
+                    <span class="name">asdasd</span>
+                </a>
+                <span class="price">Цена: <i>123.5 руб.</i></span>
+                <span class="count">
+                    <span class="price-cont">
+                        <input type="text" value="50">
+                        <span class="plus">+</span>
+                        <span class="minus">-</span>
+                    </span>
+                </span>
+                <span class="cart-add">в корзину</span>
+            </span>
+        </li>
+    </ul>
+
+    <div class="clear"></div>
+    {{ dump() }}
+{% endblock %}

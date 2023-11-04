@@ -1,0 +1,57 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div>
+{#                            <a class="btn btn-sm btn-primary" href="#">Настроить</a>#}
+{#                            <a class="btn btn-sm btn-primary" href="#">Добавить фильтр</a>#}
+                        </div>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker checkbox-container">
+                                <tbody>
+                                <tr>
+                                    {% for i in fields %}
+                                        <th style="width: 15%">{{ i }}</th>
+                                    {% endfor %}
+                                    <th style="width: 5%"></th>
+                                </tr>
+                                {% for row in data %}
+                                    <tr>
+                                        {% set delete = 0 %}
+                                        {% for column in columns %}
+                                            {% for items in row %}
+                                                {% set delete = items.data.id %}
+                                                {% if items.field.column_name == column.Field %}
+
+                                                    {% if items.type.value == 'id' %}
+                                                        <td style="width: 15%">{{ items.data[column.Field] }}</td>
+                                                    {% endif %}
+
+                                                    {% if items.type.value == 'text' %}
+                                                        <td style="width: 15%">{{ items.data[column.Field] }}</td>
+                                                    {% endif %}
+
+                                                    {% if items.type.value == 'file_image' %}
+                                                        <td><img style="max-height: 50px; max-width: 50px" src="/files/{{ items.data[column.Field] }}" alt=""></td>
+                                                    {% endif %}
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        <td style="width: 5%"><a href="/content/{{ content.id }}/delete/{{ delete }}" class="btn btn-danger">Удалить</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <a href="/content/{{ content.id }}/create" class="btn btn-primary">Добавить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

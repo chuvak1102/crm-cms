@@ -1,0 +1,133 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row  border-bottom white-bg dashboard-header">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1">Заказы</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-2">Карточка клиента / статистика</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-3">Список товаров</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <th style="border-top: none">Дата Заказа</th>
+                                            <th style="border-top: none">Дата Доставки</th>
+                                            <th style="border-top: none">Статус офис</th>
+                                            <th style="border-top : none">Статус склад</th>
+                                            <th style="border-top: none">Адрес доставки</th>
+                                            <th style="border-top: none">Сумма заказа</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        {% for i in orders %}
+                                            <tr>
+                                                <td>{{ i.created | date('d.m.Y') }}</td>
+                                                <td>{% if i.shipped %}{{ i.shipped | date('d.m.Y') }}{% else %} - {% endif %}</td>
+                                                <td style="color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</td>
+                                                <td style="color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</td>
+                                                <td>{{ i.getAddress }}</td>
+                                                <td style="color: #0f4bac">{{ i.getTotalPrice }} руб.</td>
+                                                <td><a class="btn btn-primary" target="_blank" href="http://{{ site_domain }}/reorder/{{ i.id }}">Повторить заказ</a></td>
+                                                <td><a class="btn btn-primary" href="/order/show/{{ i.id }}">Просмотреть заказ</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="col-sm-3">
+                                        <p>Реквизиты</p>
+                                        {% for i in company %}
+                                            <div>{{ i.name }}</div>
+                                            <div>Расчетный счет - {{ i.account_r }}</div>
+                                            <div>Коррсчет - {{ i.account_k }}</div>
+                                            <div>ИНН - {{ i.inn }}</div>
+                                            <div>ОГРН - {{ i.ogrn }}</div>
+                                            <div>БИК - {{ i.bik }}</div>
+                                            <div>Банк - {{ i.bank }}</div>
+                                            <div>Ген. Директор - {{ i.director }}</div>
+                                            <br>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p>Договор</p>
+                                        <div class="contract contract-red"><b>Без договора</b></div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p>Адреса / Контакты</p>
+                                        {% for i in address %}
+                                            <div>Адрес - {{ i.address }}</div>
+                                            <div>Почта - {{ i.email }}</div>
+                                            <div>Телефон - {{ i.phone }}</div>
+                                            <br>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p>Статистика</p>
+                                            <div>Кол-во заказов в месяц - <span style="color: #0d8ddb">{{ order_per_month }}</span></div>
+                                            <div>Сумма в месяц - <span style="color: #0d8ddb">{{ money_per_month }} руб.</span></div>
+                                            <div>Сумма скидки в месяц - <span style="color: #0d8ddb">{{ discount_per_month }} руб.</span></div>
+                                            <div>Товаров - <span style="color: #0d8ddb">{{ items_per_month }}</span></div>
+                                            <div>Сумма заказов год - <span style="color: #0d8ddb">{{ money_per_year }} руб.</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-3" class="tab-pane">
+                                <div class="panel-body">
+                                    <form action="/order" method="post">
+                                        <table class="table" style="width: 100%">
+                                            <tbody>
+                                            <tr>
+                                                <th style="border-top: none; width: 25px"></th>
+                                                <th style="border-top: none"></th>
+                                                <th style="border-top: none">Наименование товара</th>
+                                                <th style="border-top: none">Статистика в месяц</th>
+                                                <th style="border-top: none">Цена</th>
+                                                <th style="border-top: none">Скидка</th>
+                                                <th style="border-top: none">Резерв</th>
+                                                <th style="border-top: none">Заказать</th>
+                                            </tr>
+                                            {% for i in product %}
+                                                <tr>
+                                                    <td style="width: 25px"><input name="order[{{ i.id }}][checked]" value="1" type="checkbox" class="form-control small"></td>
+                                                    <td><img style="max-width: 40px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                                    <td>{{ i.name | raw }}</td>
+                                                    <td>{{ i.ordersPerMonth }}</td>
+                                                    <td>{{ i.getPrice }}</td>
+                                                    <td>{{ i.getDiscount }}</td>
+                                                    <td>{{ i.reserved }}</td>
+                                                    <td><input style="width: 75px" name="order[{{ i.id }}][count]" value="{{ i.pack_count }}" type="text" class="form-control"></td>
+                                                </tr>
+                                            {% endfor %}
+                                                <tr>
+                                                    <td>
+                                                        <button class="btn btn-primary" type="submit" name="submit" value="1">Заказать</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="ibox">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

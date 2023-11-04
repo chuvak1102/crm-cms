@@ -1,0 +1,54 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="slider-cont">
+            <div class="index-slider">
+                {% for i in slider %}
+                    <div class="slide" style="object-fit: cover"><a href="{{ i.link }}"><img src="/files/{{ i.image }}" alt=""></a></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h2 class="index-head">Наша продукция</h2>
+        <ul class="index-catalog main">
+            {% for i in our_product %}
+                <li>
+                    <a href="/gallery/{{ i.alias }}">
+                        <img src="/files/{{ i.image }}" alt="">
+                        <p>{{ i.name }}</p>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="row">
+        <div class="index-news">
+            <h2 class="index-head">Новости</h2>
+            <ul>
+                <li>
+                    <p class="date">31 декабря</p>
+                    <p class="name">режим работы в новогодние праздники 2018 года</p>
+                    <p class="text">Уважаемые клиенты, поздравляем Вас с новым годом и рождеством! Сообщаем Вам.что мы работаем для
+                        Вас 3-5 января,далее с 9-го.</p>
+                    <p><a href="/">Подробнее</a></p>
+                </li>
+                <li>
+                    <p class="date">04 июля</p>
+                    <p class="name">Двухслойные стаканы "красные"</p>
+                    <p class="text"></p>
+                    <p><a href="/">Подробнее</a></p>
+                </li>
+                <li>
+                    <p class="date">10 января</p>
+                    <p class="name">Акция на бумажные стаканы для горячих напитков</p>
+                    <p class="text"></p>
+                    <p><a href="/">Подробнее</a></p>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endblock %}

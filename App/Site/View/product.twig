@@ -1,0 +1,84 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="product-single">
+        <div class="product">
+            <div class="left">
+                <div class="im" style="height: 330px">
+                    <img class="product-image" src="/files/{{ product.image }}" alt="">
+                </div>
+                {% if product.advancedImages is not empty %}
+                <br>
+                <div class="galley" style="margin-top: 10px; cursor: pointer">
+                    <img class="gallery-image" data-name="{{ product.image }}" style="max-width: 100px; max-height: 100px" src="/files/{{ product.image }}" alt="">
+                    {% for i in product.advancedImages %}
+                        <img class="gallery-image" data-name="{{ i.href }}" style="max-width: 100px; max-height: 100px" src="/files/mini/{{ i.href }}" alt="image-1">
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="right">
+                <h1 class="name">{{ product.name | raw }}</h1>
+                <div class="article">Артикул: {{ product.article }}</div>
+                <div class="price">Цена за 1 шт. <i>{{ product.price_site }} руб.</i></div>
+                <span class="count">
+                    <span class="price-cont count-container">
+                        <input data-product="{{ product.id }}" class="count-value" type="text" value="{{ product.pack_count }}" data-multiply-value="{{ product.pack_count }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ product.pack_count }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ product.pack_count }}">-</span>
+                    </span>
+                </span>
+                <div class="cart-add">в корзину</div>
+                <i class="in-cart" style="margin-top: 0">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
+                <div class="params">
+                    <div class="shop_param"><span class="td_fir"><span>Количество товара в коробке</span></span><span
+                                class="shop_param_value">{{ product.box_count }} штук</span></div>
+                    <div class="shop_param"><span class="td_fir"><span>Количество товара в упаковке</span></span><span
+                                class="shop_param_value">{{ product.pack_count }} шт.</span></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="product">
+            <div class="params-name">Описание:</div>
+            <div class="params">
+                <div class="shop_param" style="margin-top: 10px">
+                    {{ product.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bread">
+        <h1>С ЭТИМ ТОВАРОМ ОБЫЧНО ПОКУПАЮТ</h1>
+    </div>
+    <ul class="index-catalog product">
+        {% for i in similar %}
+            <li>
+            <span class="product">
+                <a href="{{ path }}/{{ i.alias }}">
+                    <div class="img">
+                        <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                    </div>
+                    <span class="name">{{ i.name | raw }}</span>
+                </a>
+                <span class="price">Цена: <i>{{ i.price_site }} руб.</i></span>
+                <span class="count">
+                    <span class="price-cont count-container">
+                        <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.pack_count }}" data-multiply-value="{{ i.pack_count }}">
+                        <span class="plus count-plus-btn" data-plus-value="{{ i.pack_count }}">+</span>
+                        <span class="minus count-minus-btn" data-minus-value="{{ i.pack_count }}">-</span>
+                    </span>
+                </span>
+                <span class="cart-add">в корзину</span>
+                <i class="in-cart">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
+            </span>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="clear"></div>
+
+    <script>
+        $('.gallery-image').mouseenter(e => {
+            $('.product-image').attr('src', `/files/${$(e.target).data('name')}`)
+        })
+    </script>
+{% endblock %}

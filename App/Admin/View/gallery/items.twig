@@ -1,0 +1,137 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <div class="col-md-6">
+                            <input data-gallery="{{ gallery }}" name="catalog" type="text" class="form-control" placeholder="Поиск по каталогу">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="btn btn-primary save">Сохранить</div>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="ibox-content" style="min-height: 1000px">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table catalog-table"></table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table gallery-table">
+                                        <tbody id="sortable">
+                                            {% for i in items %}
+                                                <tr style="height: 50px" class="gallery-item" data-id="{{ i.id }}" data-gallery="{{ gallery }}">
+                                                    <td width="5%" class="sorting-handle" data-id="{{ i.id }}" align="center"><i style="cursor: move; opacity: 0.7" class="fa fa-arrows fa-2x"></i></td>
+                                                    <td width="10%"><img style="max-width: 50px; max-height: 50px" src="/files/{{ i.image }}" alt=""></td>
+                                                    <td width="75%">{{ i.name }}</td>
+                                                    <td width="5%" class="gallery-delete"><div href="" class="btn btn-danger"><i class="fa fa-trash"></i></div></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('[name=catalog]').on('input', e => {
+
+            let gallery = $(e.target).data('gallery');
+
+            if ($(e.target).val().length >= 3) {
+                $.ajax({
+                    url: "/gallery/search",
+                    method: "post",
+                    data: {
+                        value: $(e.target).val()
+                    },
+                    success: text => {
+                        if (text) {
+
+                            $('.catalog-table').empty();
+
+                            let json = JSON.parse(text);
+
+                            json.map((e, i) => {
+
+                                $('.catalog-table').append(
+                                    `
+                                        <tr style="height: 50px">
+                                            <td width="10%"><img style="max-width: 50px; max-height: 50px" src="/files/${e.image}" alt=""></td>
+                                            <td width="75%">${e.name}</td>
+                                            <td width="5%"><div class="btn btn-primary move-right" data-id="${e.id}" data-name="${e.name}" data-image="${e.image}" data-gallery="${gallery}"><i class="fa fa-angle-double-right"></i></div></td>
+                                        </tr>
+                                    `
+                                );
+                            })
+                        }
+                    }
+                });
+            }
+        })
+        $(document).on('click', '.move-right', e => {
+
+            let id = $(e.target).closest('.move-right').data('id');
+            let name = $(e.target).closest('.move-right').data('name');
+            let image = $(e.target).closest('.move-right').data('image');
+            let gallery = $(e.target).closest('.move-right').data('gallery');
+
+            $('.gallery-table tbody').append(
+                `
+                    <tr style="height: 50px" class="gallery-item" data-id="${id}" data-gallery="${gallery}">
+                        <td width="5%" class="sorting-handle" data-id="${id}" align="center"><i style="cursor: move; opacity: 0.7" class="fa fa-arrows fa-2x"></i></td>
+                        <td width="10%"><img style="max-width: 50px; max-height: 50px" src="/files/${image}" alt=""></td>
+                        <td width="75%">${name}</td>
+                        <td width="5%" class="gallery-delete"><div href="" class="btn btn-danger"><i class="fa fa-trash"></i></div></td>
+                    </tr>
+                `
+            );
+        });
+
+        $(document).on('click', '.gallery-delete', e => {
+            $(e.target).parents('tr').remove();
+        });
+
+        $('#sortable').sortable(
+            {
+                handle: '.sorting-handle',
+                tolerance: 'pointer',
+                forcePlaceholderSize: true,
+                opacity: 0.8,
+                update: () => {},
+            })
+            .disableSelection();
+
+        $(document).on('click', '.save', ev => {
+
+            let list = $('.gallery-item');
+            let data = [];
+
+            list.map((i, e) => {
+                data.push($(e).data('id'));
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/gallery/save',
+                data: {items: data, gallery: $('[name=catalog]').data('gallery')},
+                success: e => {
+                    window.location.href = '/gallery';
+                }
+            })
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ task.name }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form method="post" action="/task/update/{{ task.id }}">
+                            <div class="row">
+                                <div class="col-md-12 m-b">
+                                    <label for="">Статус</label>
+                                    <select class="form-control" name="status">
+                                        {% for i in status %}
+                                            <option {% if i.id == task.status_id %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-12 m-b">
+                                    <label for="">Приоритет</label>
+                                    <select class="form-control" name="priority">
+                                        {% for i in priority %}
+                                            <option {% if i.id == task.priority_id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-12 m-b">
+                                    <label for="">Назначена</label>
+                                    <select class="form-control" name="user">
+                                        {% for i in users %}
+                                            <option {% if i.id == task.user_id %}selected{% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-12 m-b">
+                                    <label for="">Создана</label>
+                                    <input value="{{ task.start | date('d m Y h:i') }}" name="created" type="text" disabled class="form-control">
+                                </div>
+                                <div class="col-md-12 m-b">
+                                    <label for="">Завершена</label>
+                                    {% if i.end is not empty %}
+                                        {{ task.end | date('d m Y h:i') }}
+                                        <input value="{{ task.end | date('d m Y h:i') }}" name="created" type="text" disabled class="form-control">
+                                    {% else %}
+                                        <input name="created" type="text" disabled class="form-control">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12 m-b">
+                                    <label for="">Название</label>
+                                    <input value="{{ task.name }}" name="name" type="text" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea required name="text" placeholder="Содержание" class="form-control" id="exampleFormControlTextarea1" rows="15">{{ task.text }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    {% if task.end is empty %}
+                                        <button type="submit" class="btn btn-w-m btn-primary">Изменить</button>
+                                        <button name="finished" value="finished" type="submit" class="btn btn-w-m btn-primary">Завершить задачу</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for i in comment %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>{{ i.name }} - {{ i.created | date('d m Y h:i') }}</h5>
+                        </div>
+                        <div class="ibox-content">
+                            {{ i.comment }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Комментарий</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal" method="post" action="/task/comment/{{ task.id }}">
+                            <div class="col-lьв-12">
+                                <textarea required name="text" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                            </div>
+                            <br>
+                            <input type="hidden" name="user" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-w-m btn-primary">Добавить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

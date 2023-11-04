@@ -1,0 +1,180 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Текущая дата -  {{ 'now' | date('d.m.Y') }}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="/order" role="form" class="form-inline">
+                            <div class="form-group" style="width: 15%"><input value="{{ filter.from }}" name="from" type="date" class="form-control" placeholder="С"></div>
+                            <div class="form-group" style="width: 15%"><input value="{{ filter.to }}" name="to" type="date" class="form-control" placeholder="По"></div>
+                            <div class="form-group" style="width: 15%"><input value="{{ filter.number }}" name="number" type="text" class="form-control" placeholder="Номер"></div>
+                            <div class="form-group" style="width: 15%">
+                                <select name="status" class="form-control" style="width: 100%">
+                                    <option value="0">Статус</option>
+                                    {% for i in filter_status %}
+                                        <option {% if i.id == filter.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group" style="width: 20%"><input value="{{ filter.client }}" name="client" type="text" class="form-control" placeholder="Клиент"></div>
+                            <div class="form-group" style="width: 8%"><button style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Фильтровать</strong></button></div>
+                            <div class="form-group" style="width: 8%"><a style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" href="/order"><strong>Сбросить</strong></a></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if global.user.isManager %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <span class="">Заказов сегодня &nbsp;<label class="label label-success">{{ order_today }} шт.</label></span>
+                            &nbsp;
+                            <span class="">Сумма заказов сегодня &nbsp;<label class="label label-success">{{ sum_today }} руб.</label></span>
+                            &nbsp;
+                            <span class="">Сумма заказов месяц &nbsp;<label class="label label-success">{{ sum_month }} руб.</label></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div>
+                            <div class="form-inline">
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=new">Новые</a>
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=out">Просроченные</a>
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tod">За сегодня</a>
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tom">Доставка завтра</a>
+                                {% if global.user.isManager %}
+                                    <div class="form-group" style="margin-left: 20px">
+                                        <select name="warehouse" class="form-control">
+                                            <option value="0">Статус склада</option>
+                                            {% for i in statuses %}
+                                                <option value="{{ i.id }}">{{ i.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <a id="status" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Изменить</a>
+                                    <div class="form-group" style="margin-left: 20px">
+                                        <select name="driver" class="form-control">
+                                            <option value="0">Водитель</option>
+                                            {% for i in drivers %}
+                                                <option value="{{ i.id }}">{{ i.name }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                    <a id="driver" style="display: inline-block" class="btn btn-sm btn-primary" href="#">Назначить</a>
+                                {% endif %}
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order/today">Товары на сегодня</a>
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order/tomorrow">Товары на завтра</a>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker checkbox-container">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 5%">
+                                        <input class="checkbox-all" type="checkbox" value="0">
+                                    </th>
+                                    <th style="width: 10%">Дата заказа</th>
+                                    <th style="width: 5%">Доставка</th>
+                                    <th style="width: 5%">Номер</th>
+                                    {% if global.user.isManager %}
+                                    <th style="width: 10%">Статус заказа</th>
+                                    {% endif %}
+                                    <th style="width: 10%">Статус склада</th>
+                                    <th style="width: 10%">Итого</th>
+                                    <th style="width: 10%">Клиент</th>
+                                    <th>Контакт</th>
+                                </tr>
+                                {% for i in orders %}
+                                    <tr>
+                                        <td><input class="checkbox-check" type="checkbox" data-value="{{ i.id }}"></td>
+                                        <td><a href="/order/edit/{{ i.id }}">{{ i.created | date('d.m.Y H:i') }}</a></td>
+                                        <td><a href="/order/edit/{{ i.id }}">{{ i.deliveryDate | date('d.m.Y') }}</a></td>
+                                        <td>{{ i.number }}</td>
+                                        {% if global.user.isManager %}
+                                        <td><b class="label label-success" style="background-color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</b></td>
+                                        {% endif %}
+                                        <td>{% if i.getDetail.driver %}<i class="fa fa-car" style="margin-right: 15px"></i>{% endif %}<b class="label label-success" style="background-color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</b></td>
+                                        <td>{{ i.getTotalPrice | number_format(2, '.', ' ') }}</td>
+                                        {% if i.user_id %}
+                                            <td><a href="/client/cabinet/{{ i.user_id }}"><b class="label label-success" >{{ i.getUser.getCompany.name }}</b></a></td>
+                                        {% else %}
+                                            <td><a href="/client/create"><b class="label label-danger" >Создать</b></a></td>
+                                        {% endif %}
+                                        <td style="width: 15%">{{ i.getClient }}</td>
+{#                                        <td></td>#}
+{#                                        <td></td>#}
+{#                                        <td></td>#}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pagination">
+            {{ pagination.render }}
+        </div>
+    </div>
+    <script>
+
+        $('#status').click(e => {
+
+            let ids = '';
+
+            $('.checkbox-check').map((i, el) => {
+                ids += (el.checked ? `&id[]=${$(el).data('value')}` : '')
+            });
+
+            $.ajax({
+                url: `/order/warehouse?${ids}`,
+                data: {
+                    warehouse: $('[name=warehouse]').val()
+                },
+                success: s => {
+                    location.reload();
+                }
+            });
+
+        });
+        $('#driver').click(e => {
+            let ids = '';
+
+            $('.checkbox-check').map((i, el) => {
+                ids += (el.checked ? `&id[]=${$(el).data('value')}` : '')
+            });
+
+            $.ajax({
+                url: `/order/driver?${ids}`,
+                data: {
+                    driver: $('[name=driver]').val()
+                },
+                success: s => {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+{% endblock %}

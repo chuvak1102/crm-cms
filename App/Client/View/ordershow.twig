@@ -1,0 +1,45 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <form action="/order/edit/{{ order.id }}" method="post">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="table-responsive">
+                                <table class="table table-hover issue-tracker checkbox-container">
+                                    <tbody>
+                                    <tr>
+                                        <th></th>
+                                        <th>Название</th>
+                                        <th>Количество</th>
+                                        <th>Цена</th>
+                                        <th>Скидка</th>
+                                        <th>Итоговая цена</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                    {% for i in items %}
+                                        <tr>
+                                            <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
+                                            <td>{{ i.getProduct.name | raw }}</td>
+                                            <td>{{ i.product_count }}</td>
+                                            <td>{{ i.getProduct.getPrice }}</td>
+                                            <td>{{ i.price_discount }}</td>
+                                            <td>{{ i.price_with_discount }}</td>
+                                            <td>{{ i.price_row_total }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }} руб.</h3></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

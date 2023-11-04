@@ -1,0 +1,53 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="row">
+        <div class="bread">
+            <h1>{% if category.name is not empty %} {{ category.name }} {% else %} Поиск {% endif %}</h1>
+            <div class="phone-book"><a href="/korzina-tovarov/">Корзина товаров</a></div>
+        </div>
+        {% if sub_category is not empty %}
+            <ul class="index-catalog category">
+                {% for i in sub_category %}
+                    {% if i.active %}
+                        <li>
+                            <span class="product">
+                                <a href="{{ path }}/{{ i.alias }}">
+                                    <div class="img">
+                                        <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                                    </div>
+                                    <span class="name">{{ i.name | raw }}</span>
+                                </a>
+                            </span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="clear"></div>
+        <ul class="index-catalog product">
+            {% for i in products %}
+                <li>
+                    <span class="product">
+                        <a href="{{ path }}/katalog-tovarov/{{ i.alias }}">
+                            <div class="img">
+                                <img class="image" src="/files/mini/{{ i.image }}" alt="">
+                            </div>
+                            <span class="name">{{ i.name | raw }}</span>
+                        </a>
+                        <span class="price">Цена: <i>{{ i.price_site }} руб.</i></span>
+                        <span class="count">
+                            <span class="price-cont count-container">
+                                <input data-product="{{ i.id }}" class="count-value" type="text" value="{{ i.pack_count }}" data-multiply-value="{{ i.pack_count }}">
+                                <span class="plus count-plus-btn" data-plus-value="{{ i.pack_count }}">+</span>
+                                <span class="minus count-minus-btn" data-minus-value="{{ i.pack_count }}">-</span>
+                            </span>
+                        </span>
+                        <span class="cart-add">в корзину</span>
+                        <i class="in-cart">Добавлено в <a href="/korzina-tovarov">корзину</a></i>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+{% endblock %}

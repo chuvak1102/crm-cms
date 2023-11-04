@@ -1,0 +1,55 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <form action="/supplier/list/edit/{{ supplier.id }}" method="post">
+                                <table class="table table-hover issue-tracker" style="width: 100%">
+                                    <tr>
+                                        <td>Название</td>
+                                        <td><input name="name" class="form-control" type="text" value="{{ supplier.name }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email, через запятую</td>
+                                        <td><input name="email" class="form-control" type="text" value="{{ supplier.email }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ООО</td>
+                                        <td><input name="ooo" class="form-control" type="text" value="{{ supplier.ooo }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ИНН</td>
+                                        <td><input name="inn" class="form-control" type="text" value="{{ supplier.inn }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Адрес склада</td>
+                                        <td><input name="warehouse_address" class="form-control" type="text" value="{{ supplier.warehouse_address }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Время работы</td>
+                                        <td><input name="work_time" class="form-control" type="text" value="{{ supplier.work_time }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ФИО</td>
+                                        <td><input name="fio" class="form-control" type="text" value="{{ supplier.fio }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Телефоны, через запятую</td>
+                                        <td><input name="phone" class="form-control" type="text" value="{{ supplier.phone }}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><button name="submit" value="submit" type="submit" class="btn btn-primary">Сохранить</button></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

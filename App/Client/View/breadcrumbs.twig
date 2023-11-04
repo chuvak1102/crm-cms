@@ -1,0 +1,22 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Личный кабинет - {{ global.client_name }}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Главная</a>
+            </li>
+            {% for i in application.breadcrumbs %}
+                {% if loop.last %}
+                    <li class="active">
+                        <strong>{{ i.name }}</strong>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ i.url }}">{{ i.name }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>

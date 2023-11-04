@@ -1,0 +1,138 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <a class="btn btn-primary" href="/supplier/order?id={{ supplier.id }}">Заявки поставщику</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker checkbox-container">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 10%">Изображение</th>
+                                    <th style="width: 25%">Название</th>
+                                    <th style="width: 10%">Текущий остаток</th>
+                                    <th style="width: 10%">Критичный остаток</th>
+                                    <th style="">Продажи в месяц</th>
+                                    <th style="width: 10%">Количество в коробке</th>
+                                    <th style="width: 10%">Коробок для заказа</th>
+                                    <th style="width: 15%">Последний заказ от</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                            {% for supplier_id, s in suppliers %}
+                                <form action="/critical" method="post">
+                                    <table class="table table-hover issue-tracker order-row">
+                                        <tbody>
+                                            {% for i in s %}
+                                                <tr>
+                                                    <td style="width: 10%"><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.image }}" alt=""></td>
+                                                    <td style="width: 25%"><a target="_blank" href="/product/edit/{{ i.id }}">{{ i.name | raw }}</a></td>
+                                                    <td style="width: 10%">{{ i.cur }}</td>
+                                                    <td style="width: 10%">{{ i.min }}</td>
+                                                    <td>{{ i.monthlySales }}</td>
+                                                    <td>{{ i.inBox }}</td>
+                                                    <td style="width: 10%"><input name="count[{{ i.id }}]" style="width: 100px" type="text" class="form-control"></td>
+                                                    <td style="width: 15%">{% if i.last_order is not empty %}{{ i.last_order | date('H:i d-m-Y') }}{% endif %}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <input data-id="{{ supplier_id }}" class="form-control item-search" type="text" placeholder="Добавить...">
+                                                    <ul class="float-list"></ul>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p>Комментарий к заказу</p>
+                                    <input type="text" name="comment" class="form-control"><br>
+                                    <p>Адрес для отправки заказа</p>
+                                    {% if emails[0] is empty %}
+                                        <p>Не добавлено ни одной почты</p>
+                                    {% else %}
+                                        <select name="mail_to" id="" class="form-control">
+                                            {% for i in emails %}
+                                                <option value="{{ i }}">{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                    <br>
+                                    <button name="submit" value="{{ supplier_id }}" class="btn btn-primary" type="submit">Заказать</button>
+                                </form>
+                                <br><br>
+                            {% endfor %}
+                                <a href="/critical?all={{ supplier.id }}" class="btn btn-default">Показать все</a>
+                                <a href="/critical" class="btn btn-default">Назад</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.item-search').on('input', e => {
+
+            let list = $(e.target).parent().find('.float-list');
+
+            list.find('li').remove();
+
+            if ($(e.target).val().length >= 3) {
+
+                $.ajax({
+                    url: "/critical/items",
+                    data: {str: $(e.target).val(), id: $(e.target).data('id')},
+
+                    success: (json) => {
+
+                        let items = JSON.parse(json);
+                        items.map(e => {
+                            list.append(`<li data-id=${e.id} data-name="${e.name}" data-cur=${e.cur} data-min=${e.min} data-supplier="${e.supplier}"><span>${e.name}</span></li>`);
+                        });
+                        list.addClass('show');
+                    }
+                });
+            }
+        });
+
+        $('.float-list').on('click', 'li', e => {
+
+            let list = $(e.target).parents('.float-list');
+            let i = $(e.target).closest('li').data();
+
+            $(e.target).parents('.order-row').prepend(
+                `<tr>
+                    <td style="width: 10%"></td>
+                    <td style="width: 35%"><a target="_blank" href="/product/edit/${i.id}">${i.name}</a></td>
+                    <td style="width: 10%">${i.cur}</td>
+                    <td style="width: 10%">${i.min}</td>
+                    <td style="width: 10%"><input value="${i.min}" name="count[${i.supplier}]" style="width: 100px" type="text" class="form-control"></td>
+                    <td style="width: 15%"></td>
+                    <td ><button class="btn btn-danger" type="button">x</button></td>
+                </tr>`
+            );
+
+            list.find('li').remove();
+            list.hide();
+        });
+
+        $(document).on('click', 'button.btn-danger', e => {
+            $(e.target).parent().parent().remove();
+        });
+    </script>
+{% endblock %}
