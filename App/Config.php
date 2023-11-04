@@ -9,10 +9,10 @@ class Config
     const SECRET = 'lj*Y&^G%F%#S%$DF%^G&()OKIJNHBVCFDSW#$R^&OLKJUIOL<LOP:"":{}';
     // ну эт ясно
     const DB = [
-        'host' => 'localhost',
-        'base' => 'u0742521_ecopacking',
-        'user' => 'u0742521_default',
-        'pass' => 'j3x3HI!Q'
+        'host' => 'u390913.mysql.masterhost.ru',
+        'base' => 'u390913_ecopacking',
+        'user' => 'u390913',
+        'pass' => 'RIonoNT5.u'
     ];
     // если массив не пустой, то все что отправляет сайт отправляется только сюда:
     // для тестов
@@ -20,9 +20,9 @@ class Config
 //        'dan0@mail.ru',
     ];
     // домены для маршрутов
-    const SiteDomain = 'front.alkogram.ru';
-    const AdminDomain = 'crm.alkogram.ru';
-    const ClientDomain = 'client.alkogram.ru';
+    const SiteDomain = 'ecopacking.ru';
+    const AdminDomain = 'crm.ecopacking.ru';
+    const ClientDomain = 'lk.ecopacking.ru';
     const ShopEmailFrom = 'ecopackingmsk@gmail.com';
 }
 
