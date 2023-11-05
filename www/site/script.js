@@ -79,12 +79,13 @@ $(document).ready(e => {
         input.val(sum ? sum : "");
 
         let cont = $(e.target).parents('.count-container');
-        let count = $(cont).find('input').val();
         let id = $(cont).find('input').data('product');
 
         $.ajax({
-            url: `/cart/add/${id}/${count}`,
-            success: () => window.location.reload(),
+            url: `/cart/add/${id}/${sum}`,
+            success: (e) => {
+
+            },
             error: error => console.log(error),
         });
     });
@@ -105,7 +106,7 @@ $(document).ready(e => {
 
         $.ajax({
             url: `/cart/add/${id}/${count}`,
-            success: () => window.location.reload(),
+            success: () => {},
             error: error => console.log(error),
         });
     });
