@@ -49,8 +49,12 @@ $(document).ready(e => {
     $('.cart-add').click(e => {
 
         let cont = $(e.target).parent().find('.count-container');
+        let input = $(cont).find('input');
         let count = $(cont).find('input').val();
         let id = $(cont).find('input').data('product');
+
+        let diff = parseInt(input.data('multiply-value'));
+        let old = Math.abs(parseInt(input.val()));
 
         $.ajax({
             url: `/cart/add/${id}/${count}`,

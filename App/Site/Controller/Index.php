@@ -321,7 +321,11 @@ class Index extends Controller {
         return $this->render('Site:cart', [
             'cart' => $items,
             'client' => Session::instance()->get('client'),
-            'company' => $company
+            'company' => $company,
+            'sess' => [
+//                Session::instance()->get('cart'),
+                $_SESSION['car']
+            ],
         ]);
     }
 
@@ -400,6 +404,8 @@ class Index extends Controller {
 
                     if (!$client->name || !$client->email || !$client->phone) {
 
+                        return $this->redirectToRoute('/korzina-tovarov');
+                    } elseif (!filter_var($client->email, FILTER_VALIDATE_EMAIL)) {
                         return $this->redirectToRoute('/korzina-tovarov');
                     }
 

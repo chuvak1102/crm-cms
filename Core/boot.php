@@ -10,7 +10,7 @@ require_once '../Core/Router.php';
 require_once '../vendor/autoload.php'; // composer autoloader
 
 ini_set('display_errors', E_ALL);
-ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'],'.'),200));
+//ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'],'.'),200));
 
 session_start();
 

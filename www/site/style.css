@@ -105,7 +105,7 @@ a.logged-link{height: 15px; display: block}
 .index-catalog li .product .count .price-cont .plus:active, .minus:active {background-color: #e6e6e6}
 .index-catalog li .product .count .price-cont .plus{top: 0; right: -5px; border-radius: 0 3px 0 0}
 .index-catalog li .product .count .price-cont .minus{top: 12px; right: -5px; border-radius: 0 0 3px 0}
-.index-catalog li .product .cart-add {cursor: pointer;background: #99ab22;padding: 8px 13px;color: #fff;text-decoration: none;display: inline-block;text-transform: initial;white-space: normal;zoom: 1;border-radius: 5px;width: 101px;margin-bottom: 18px;font-size: 14px;margin-top: 10px;font-family: Tahoma, Geneva, sans-serif}
+.index-catalog li .product .cart-add {user-select: none;cursor: pointer;background: #99ab22;padding: 8px 13px;color: #fff;text-decoration: none;display: inline-block;text-transform: initial;white-space: normal;zoom: 1;border-radius: 5px;width: 101px;margin-bottom: 18px;font-size: 14px;margin-top: 10px;font-family: Tahoma, Geneva, sans-serif}
 .index-catalog.main li {min-height: 210px; max-height: 230px}
 .index-catalog.main li a img {max-height: 100px}
 .in-cart {font-family: arialn, sans-serif;margin-top: -20px;text-transform: lowercase; display: none; font-style: normal}

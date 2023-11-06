@@ -20,7 +20,7 @@ class Config
 //        'dan0@mail.ru',
     ];
     // домены для маршрутов
-    const SiteDomain = 'ecopacking.ru';
+    const SiteDomain = 'old.ecopacking.ru';
     const AdminDomain = 'crm.ecopacking.ru';
     const ClientDomain = 'lk.ecopacking.ru';
     const ShopEmailFrom = 'ecopackingmsk@gmail.com';

@@ -57,7 +57,7 @@ class Controller {
 
                     $appDir = new Twig_Loader_Filesystem("../App/{$template[0]}/View");
                     $twig = new Twig_Environment($appDir, [
-                        'cache' => '../App/tmp/templating',
+//                        'cache' => '../App/tmp',
                         'debug' => true
                     ]);
                     $twig->addExtension(new Twig_Extension_Debug());
