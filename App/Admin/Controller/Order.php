@@ -422,4 +422,26 @@ class Order extends Index {
 
         return $this->redirectToRoute("/order/edit/{$order}");
     }
+
+    function deleteOrder(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            foreach ($request->get('id') as $i) {
+
+                $id = intval($i);
+
+                DB::delete('order_item')
+                    ->where('order_id', '=', $id)
+                    ->execute();
+                DB::delete('order_detail')
+                    ->where('order_id', '=', $id)
+                    ->execute();
+                DB::delete('order')
+                    ->where('id', '=', $id)
+                    ->execute();
+            }
+        }
+
+        return new JsonResponse('ok');
+    }
 }

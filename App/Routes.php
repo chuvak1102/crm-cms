@@ -84,6 +84,7 @@ class Routes {
                 '{order}=>{today}' => [Admin\Controller\Order::class => 'today'],
                 '{order}=>{tomorrow}' => [Admin\Controller\Order::class => 'tomorrow'],
                 '{order}=>{edit}=>{[\d]+}=>{remove}=>{[\d]+}' => [Admin\Controller\Order::class => 'remove'],
+                '{order}=>{deleteOrder}' => [Admin\Controller\Order::class => 'deleteOrder'],
 
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
