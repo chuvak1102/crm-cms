@@ -105,7 +105,7 @@
                 {% set total_packs = total_packs + packs %}
                 {% set total_price = total_price + i.price_row_total %}
                 <tr>
-                    <td>{{ i.getProduct.name }} | raw</td>
+                    <td>{{ i.getProduct.name | raw }}</td>
                     <td>{{ i.getProduct.countCurrent.dictionaryField.name }}</td>
                     <td>{{ i.product_count }}</td>
                     <td>{{ i.price_one }}</td>
