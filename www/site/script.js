@@ -88,7 +88,7 @@ $(document).ready(e => {
         $.ajax({
             url: `/cart/add/${id}/${sum}`,
             success: (e) => {
-
+                window.location.reload();
             },
             error: error => console.log(error),
         });
@@ -110,7 +110,9 @@ $(document).ready(e => {
 
         $.ajax({
             url: `/cart/add/${id}/${count}`,
-            success: () => {},
+            success: () => {
+                window.location.reload();
+            },
             error: error => console.log(error),
         });
     });

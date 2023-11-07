@@ -43,7 +43,7 @@
                                             <td><input name="product[{{ i.getProduct.id }}][discount]" style="width: 75px" type="text" class="form-control" value="{{ i.price_discount }}"></td>
                                             <td><input name="product[{{ i.getProduct.id }}][price_one_total]" style="width: 75px" type="text" class="form-control" value="{{ i.price_with_discount }}"></td>
                                             <td><input name="product[{{ i.getProduct.id }}][price_all]" style="width: 75px" type="text" class="form-control" value="{{ i.price_row_total }}"></td>
-                                            <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.id }}">X</a></td>
+                                            <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.getProduct.id }}">X</a></td>
                                         </tr>
                                     {% endfor %}
                                         <tr>

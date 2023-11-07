@@ -181,7 +181,7 @@ class Order extends Index {
                 ->where('order_id', '=', $request->seg(2))
                 ->execute();
 
-            return $this->redirectToRoute($request->uri());
+            return $this->redirectToRoute('/order');
         }
 
         $total = DB::select(DB::expr('SUM(price_row_total) price'))
@@ -408,5 +408,18 @@ class Order extends Index {
         $mpdf->writeHTML("</table>");
 
         $mpdf->Output();
+    }
+
+    function remove(Request $request)
+    {
+        $order = $request->seg(2);
+        $item = $request->seg(4);
+
+        DB::delete('order_item')
+            ->where('product_id', '=', intval($item))
+            ->where('order_id', '=', intval($order))
+            ->execute();
+
+        return $this->redirectToRoute("/order/edit/{$order}");
     }
 }

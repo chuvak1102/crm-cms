@@ -171,6 +171,63 @@ class Order extends Model {
         }
     }
 
+    function sendEmailToAdmin()
+    {
+        $email = 'dan0@mail.ru';
+
+        if (!$email) {
+            Error::add("{$this->id} заказ - отсутствует эмейл - {$email} письмо не ушло");
+            return;
+        }
+
+        $items = OrderItem::many($this->id, 'order_id');
+        $totalPrice = number_format($this->getTotalPrice(), 2, '.', ' ');
+
+        if (!$items) {
+            Error::add("{$this->id} заказ - нет товаров для отправки почты");
+            return;
+        }
+
+        try {
+
+            $mail = new PHPMailer(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->setFrom(Config::ShopEmailFrom);
+            if (!Config::TestEmails) {
+                $mail->addAddress($email);
+            } else {
+                foreach (Config::TestEmails as $e)
+                    $mail->addAddress($e);
+            }
+            $mail->isHTML(true);
+            $mail->Subject = 'ЭкоПак - ваш заказ принят';
+
+            $html = 'Здравствуйте! <br> Благодарим за заказ на сайте ecopacking.ru! <br><br>';
+            $html .= '<table border="1"  cellspacing="0" border="1" cellpadding="5"><tr><td><b>Состав заказа</b></td><td><b>Кол-во</b></td></tr>';
+
+            /** @var OrderItem $i */
+            foreach ($items as $i) {
+                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="right">'.$i->price_row_total.'</td></tr>';
+            }
+
+            $html .= '<tr><td>Итого</td><td width="100" align="right">'.$totalPrice.'</td></tr>';
+            $html .= '</table><br>';
+            $html .= 'Мы свяжемся с Вами в ближайшее время! Письмо отправлено автоматически, если вы не совершали заказ - проигнорируйте его';
+
+            $mail->Body = $html;
+            $mail->send();
+
+            DB::update('order')
+                ->set(['mailed' => 1])
+                ->where('id', '=', $this->id)
+                ->execute();
+
+        } catch (Exception $e) {
+
+            Error::add('ошибка письма клиенту order => '.$this->id.' - '.$e->getMessage());
+        }
+    }
+
     function deliveryDate()
     {
         // заказ до 16ч или после

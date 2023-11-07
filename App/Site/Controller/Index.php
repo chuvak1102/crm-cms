@@ -483,6 +483,7 @@ class Index extends Controller {
                     Session::instance()->remove('cart');
 
                     Order::one($number, 'number')->sendEmailToClient();
+                    Order::one($number, 'number')->sendEmailToAdmin();
 
                     return $this->render('Site:success', [
                         'message' => 'Заказ успешно создан! Мы свяжемся с вами в ближайшее время.'
