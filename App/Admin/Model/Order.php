@@ -41,8 +41,42 @@ class Order extends Model {
 
     function getClient()
     {
+        $user = User::one($this->user_id, 'id');
+        $detail = [];
         $i = OrderDetail::one($this->id, 'order_id');
-        return "{$i->city}, {$i->street}, {$i->house}, {$i->block}, {$i->office}";
+
+
+        if ($user->id) {
+            if (!empty($user->name)) {
+                array_push($detail, $user->name);
+            }
+        }
+
+        if ($i->phone) {
+            array_push($detail, $i->phone);
+        }
+
+        if ($i->city) {
+            array_push($detail, $i->city);
+        }
+
+        if ($i->street) {
+            array_push($detail, $i->street);
+        }
+
+        if ($i->house) {
+            array_push($detail, $i->house);
+        }
+
+        if ($i->block) {
+            array_push($detail, $i->block);
+        }
+
+        if ($i->office) {
+            array_push($detail, $i->office);
+        }
+
+        return implode(', ', $detail);
     }
 
     function getClientName()
