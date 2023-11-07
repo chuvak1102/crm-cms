@@ -64,46 +64,4 @@ $(document).ready(() => {
 
         window.open(`/product/print?${ids}`);
     });
-
-    $('[name=client_search]').on('input', e => {
-
-        if ($(e.target).val().length >= 3) {
-
-            $.ajax({
-                url: "/order/getClient",
-                data: {str: $(e.target).val()},
-                success: (json) => {
-
-                    let list = $('.float-list.client');
-
-                    let items = JSON.parse(json);
-
-                    list.find('li').remove();
-                    items.map(e => {
-                        list.append(`<li id=${e.user_id}>[${e.user_id}] <span>${e.name}</span></li>`);
-                    });
-                    list.addClass('show');
-                }
-            });
-        }
-    });
-
-    $('.float-list.client').on('click', 'li', e => {
-
-        let list = $('.float-list.client');
-        let id = parseInt($(e.target).attr('id'));
-        let order = $('[name=client_search]').data('order');
-
-        list.find('li').remove();
-        list.hide();
-
-        $.ajax({
-            url: "/order/setClient",
-            data: {
-                client: id,
-                order: order
-            },
-            success: (r) => window.location.reload()
-        });
-    });
 });

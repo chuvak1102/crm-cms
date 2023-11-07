@@ -117,7 +117,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <label>Привязать к клиенту</label>
-                    <input data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.client_search }}" placeholder="поиск...">
+                    <input data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.clientName }}" placeholder="поиск...">
                     <ul class="float-list client"></ul>
                 </div>
                 <div class="col-sm-4">
@@ -173,9 +173,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-8">
                     <label>Комментарий к заказу</label>
-                    <input class="form-control" name="office" type="text" value="{{ order.getDetail.advanced }}">
+                    <input disabled class="form-control" name="office" type="text" value="{{ order.getDetail.advanced }}">
+                </div>
+                <div class="col-sm-4">
+                    <label>Способ оплаты</label>
+                    <input disabled class="form-control" name="office" type="text" value="{% if order.getDetail.payment_type == 'online' %}На расчетный счет компании{% else %}Наличными курьеру{% endif %}">
                 </div>
             </div>
 
@@ -212,5 +216,49 @@
 
             a.attr('href', `/document/sticker/${a.data('order')}/${parseInt($(e.target).val())}`);
         })
+
+        $('[name=client_search]').on('input', e => {
+
+            if ($(e.target).val().length >= 3) {
+
+                $.ajax({
+                    url: "/order/getClient",
+                    data: {str: $(e.target).val()},
+                    success: (json) => {
+
+                        let list = $('.float-list.client');
+
+                        let items = JSON.parse(json);
+
+                        list.find('li').remove();
+                        items.map(e => {
+                            list.append(`<li id=${e.user_id}>[${e.user_id}] <span>${e.name}</span></li>`);
+                        });
+                        list.addClass('show');
+                    }
+                });
+            }
+        });
+
+        $('.float-list.client').on('click', 'li', e => {
+
+            let list = $('.float-list.client');
+            let id = parseInt($(e.target).closest('li').attr('id'));
+            let order = $('[name=client_search]').data('order');
+
+            // list.find('li').remove();
+            // list.hide();
+
+            $.ajax({
+                url: "/order/setClient",
+                data: {
+                    client: id,
+                    order: order
+                },
+                success: (r) => {
+                    window.location.reload()
+                }
+            });
+        });
     </script>
 {% endblock %}

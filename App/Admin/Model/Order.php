@@ -45,6 +45,11 @@ class Order extends Model {
         return "{$i->city}, {$i->street}, {$i->house}, {$i->block}, {$i->office}";
     }
 
+    function getClientName()
+    {
+        return User::one($this->user_id, 'id')->name;
+    }
+
     function getDetail()
     {
         return OrderDetail::one($this->id, 'order_id');
