@@ -202,16 +202,24 @@ class Index extends Controller {
 
                     $products = DB::select(DB::expr('product.*'))
                         ->from('product')
-                        ->join('product_to_category')
-                        ->on('product_to_category.product_id', '=', 'product.id')
-                        ->where('product.name', 'like', DB::expr("'%{$search}%'"))
-                        ->or_where('product.article', 'like', DB::expr("'%{$search}%'"))
-                        ->where('product.active', '=', 1)
+                        ->where('name', 'like', DB::expr("'%{$search}%'"))
+                        ->where('active', '=', 1)
                         ->limit(25)
                         ->execute()
                         ->fetch_all();
-
                     $ids = array_column($products, 'id');
+
+                    if (empty($ids)) {
+                        $products = DB::select(DB::expr('product.*'))
+                            ->from('product')
+                            ->where('article', 'like', DB::expr("'%{$search}%'"))
+                            ->where('active', '=', 1)
+                            ->limit(25)
+                            ->execute()
+                            ->fetch_all();
+
+                        $ids = array_column($products, 'id');
+                    }
 
                     $products = [];
                     foreach ($ids as $id) {
