@@ -9,6 +9,9 @@ use Core\Model\Model;
  */
 class OrderDetail extends Model {
 
-
+    function driverName()
+    {
+        return User::one($this->driver, 'id')->name;
+    }
 
 }

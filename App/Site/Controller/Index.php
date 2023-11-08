@@ -200,6 +200,8 @@ class Index extends Controller {
 
                     Page::instance()->push('title', "Поиск - ЭкоПак");
 
+//                    $search = trim(str_replace('-', '', $search));
+
                     $products = DB::select(DB::expr('product.*'))
                         ->from('product')
                         ->where('name', 'like', DB::expr("'%{$search}%'"))

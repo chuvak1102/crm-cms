@@ -85,18 +85,18 @@
                         {% endfor %}
                     </select>
 {#                    {% if global.user.isManager %}#}
-{#                    <label for="">Статус офиса</label>#}
-{#                    <select name="status_office" id="" class="form-control">#}
-{#                        <option value="0">Выберите</option>#}
-{#                        {% for i in status_office %}#}
-{#                            <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
 {#                    {% else %}#}
-{#                        <input type="hidden" name="status_office" value="{{ order.status }}">#}
+                        <input type="hidden" name="status_office" value="{{ order.status }}">
 {#                    {% endif %}#}
                 </div>
                 <div class="col-sm-4">
+                    <label for="">Статус офиса</label>
+                    <select name="status_office" id="" class="form-control">
+                        <option value="0">Выберите</option>
+                        {% for i in status_office %}
+                            <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
 {#                    <label for="">Менеджер</label>#}
 {#                    <select name="manager" id="" class="form-control">#}
 {#                        <option value="0">Выберите из списка</option>#}
@@ -104,13 +104,13 @@
 {#                            <option {% if i.id == order.manager %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
 {#                        {% endfor %}#}
 {#                    </select>#}
-                    <label for="">Комплектовщик</label>
-                    <select name="packing" id="" class="form-control">
-                        <option value="0">Выберите из списка</option>
-                        {% for i in users %}
-                            <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
-                        {% endfor %}
-                    </select>
+{#                    <label for="">Комплектовщик</label>#}
+{#                    <select name="packing" id="" class="form-control">#}
+{#                        <option value="0">Выберите из списка</option>#}
+{#                        {% for i in users %}#}
+{#                            <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
                 </div>
             </div>
             <br>
@@ -175,31 +175,12 @@
             <div class="row">
                 <div class="col-sm-8">
                     <label>Комментарий к заказу</label>
-                    <input disabled class="form-control" name="office" type="text" value="{{ order.getDetail.advanced }}">
+                    <input class="form-control" name="advanced" type="text" value="{{ order.getDetail.advanced }}">
                 </div>
                 <div class="col-sm-4">
                     <label>Способ оплаты</label>
                     <input disabled class="form-control" name="office" type="text" value="{% if order.getDetail.payment_type == 'online' %}На расчетный счет компании{% else %}Наличными курьеру{% endif %}">
                 </div>
-            </div>
-
-            <div class="row">
-{#                <div class="col-sm-6">#}
-{#                </div>#}
-{#                <div class="col-sm-6">#}
-{#                    <label>Способ оплаты:</label>#}
-{#                    <br>#}
-{#                    <label><b>На расчетный счет компании</b></label>#}
-{#                    <br>#}
-{#                    <input {% if order.getDetail.payment_type == 'online' %}checked{% endif %} class="" name="payment_type" type="radio" value="online">#}
-{#                    <br>#}
-{#                    <label><b>Наличными курьеру</b></label>#}
-{#                    <br>#}
-{#                    <input {% if order.getDetail.payment_type == 'cash' %}checked{% endif %} class="" name="payment_type" type="radio" value="cash">#}
-{#                    <br>#}
-{#                    <label>Дополнительно:</label>#}
-{#                    <textarea class="form-control" name="comment" id="" cols="10" rows="5" >{{ order.getDetail.advanced }}</textarea>#}
-{#                </div>#}
             </div>
             <div class="row">
                 <div class="col-lg-12">
