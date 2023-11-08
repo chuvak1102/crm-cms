@@ -212,7 +212,7 @@ class Order extends Model {
 
     function sendEmailToAdmin()
     {
-        $email = 'dan0@mail.ru';
+        $email = Config::ShopEmailFrom;
 
         if (!$email) {
             Error::add("{$this->id} заказ - отсутствует эмейл - {$email} письмо не ушло");

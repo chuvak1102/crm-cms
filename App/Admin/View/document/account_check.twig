@@ -134,46 +134,10 @@
             Телефон: {{ order.getDetail.phone }}<br>
             Адрес доставки: {{ order.getAddress }}<br>
             Дата доставки: {{ order.getDetail.delivery_date }}<br>
-
+            Комментарий к заказу: {{ order.getDetail.advanced }}<br>
             <hr>
-            <div id="map" style="width: 720px; height: 300px"></div>
         </div>
     </h1>
 </div>
-<script>
-    window.onload = () => {
-        console.log('asd');
-        ymaps.ready(function () {
-            var map = new ymaps.Map("map", {
-                center: [55.76, 37.64],
-                zoom: 10
-            });
-
-            if (map) {
-                ymaps.modules.require(['Placemark', 'Circle'], function (Placemark, Circle) {
-                    var placemark = new Placemark([55.37, 35.45]);
-                });
-            }
-
-            ymaps.geocode('Москва', {})
-                .then((res) => {
-
-                    var firstGeoObject = res.geoObjects.get(0),
-                        // Координаты геообъекта.
-                        coords = firstGeoObject.geometry.getCoordinates();
-                    console.log(res, coords);
-                });
-        });
-    };
-
-
-
-    // ymaps.ready(init);
-    //
-    // function init() {
-    //
-    // }
-
-</script>
 </body>
 </html>
