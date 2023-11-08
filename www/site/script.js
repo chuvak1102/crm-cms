@@ -1,5 +1,4 @@
 $(document).ready(e => {
-
     $('.index-slider').bxSlider({
         minSlides: 3,
         maxSlides: 3,
@@ -50,14 +49,19 @@ $(document).ready(e => {
 
         let cont = $(e.target).parent().find('.count-container');
         let input = $(cont).find('input');
-        let count = $(cont).find('input').val();
+        let count = parseInt($(cont).find('input').attr('value'));
         let id = $(cont).find('input').data('product');
+        let stored = $(e.target).parent().find('i.in-cart');
 
-        let diff = parseInt(input.data('multiply-value'));
-        let old = Math.abs(parseInt(input.val()));
+        let newVal = parseInt(input.val()) + stored.data('value');
+
+        stored.html(`Добавлено ${newVal}шт. в <a href="/korzina-tovarov">корзину</a>`)
+        stored.data('value', newVal);
+
+        console.log(count, newVal);
 
         $.ajax({
-            url: `/cart/add/${id}/${count}`,
+            url: `/cart/add/${id}/${newVal}`,
             success: cart => {
 
                 let price = JSON.parse(cart);
@@ -66,7 +70,7 @@ $(document).ready(e => {
                 $('#cart-global-price').html(price.total_price);
                 $(e.target).next('.in-cart')
                     .css({display: "block"})
-                    .html(`Добавлено ${count}шт. в <a href="/korzina-tovarov">корзину</a>`)
+                    .html(`Добавлено ${newVal}шт. в <a href="/korzina-tovarov">корзину</a>`)
             },
             error: error => console.log(error),
         })
