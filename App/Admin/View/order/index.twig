@@ -58,7 +58,7 @@
                             <div class="form-inline">
                                 <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=new">Новые</a>
 {#                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=out">Просроченные</a>#}
-                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tod">За сегодня</a>
+                                <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tod">Доставка сегодня</a>
                                 <a style="display: inline-block" class="btn btn-sm btn-primary" href="/order?show=tom">Доставка завтра</a>
 {#                                {% if global.user.isManager %}#}
                                     <div class="form-group" style="margin-left: 20px">
@@ -183,24 +183,25 @@
                 }
             });
 
-            if (orders > 0) {
-                alert(`Удалить заказы ${orders} шт. ?`)
-
-                $.ajax({
-                    url: `/order/deleteOrder?${ids}`,
-                    data: {
-                        remove: ids
-                    },
-                    success: s => {
-                        window.location.reload();
-                    },
-                    error: e => {
-                        console.log('error', e)
-                    }
-                });
+            if (confirm(`Удалить заказы ${orders} шт. ?`)) {
+                // if (orders > 0) {
+                    $.ajax({
+                        url: `/order/deleteOrder?${ids}`,
+                        data: {
+                            remove: ids
+                        },
+                        success: s => {
+                            window.location.reload();
+                        },
+                        error: e => {
+                            console.log('error', e)
+                        }
+                    });
+                // }
+            } else {
+                console.log("cancel");
             }
 
-            // console.log(ids);
         })
     </script>
 {% endblock %}

@@ -75,17 +75,30 @@ class Order extends Index {
                     break;
                 }
                 case 'tod' : {
-                    $from = (new \DateTime())->format('Y-m-d');
-                    $order = $order->where('created', '>=', $from);
+                    $from = (new \DateTime())->modify('-2 day');
+                    $from->setTime(16, 0, 0);
+                    $to = (new \DateTime())->modify('-1 day');
+                    $to->setTime(15, 59, 59);
+                    $from = $from->format('Y-m-d H:i:s');
+                    $to = $to->format('Y-m-d H:i:s');
+
+                    $order = $order
+                        ->where('created', '>', $from)
+                        ->where('created', '<', $to);
                     break;
                 }
                 case 'tom' : {
 
-                    // доставка на завтра - все заказы за сегодня у которых created до 16ч
-                    $from = (new \DateTime())->format('Y-m-d').' 00:00:00';
-                    $to = (new \DateTime())->format('Y-m-d').' 15:59:59';
+                    $from = (new \DateTime())->modify('-1 day');
+                    $from->setTime(16, 0, 0);
+                    $to = (new \DateTime());
+                    $to->setTime(15, 59, 59);
+                    $from = $from->format('Y-m-d H:i:s');
+                    $to = $to->format('Y-m-d H:i:s');
 
-                    $order = $order->where('created', 'between', DB::expr("'{$from}' and '{$to}'"));
+                    $order = $order
+                        ->where('created', '>', $from)
+                        ->where('created', '<', $to);
                     break;
                 }
             }
