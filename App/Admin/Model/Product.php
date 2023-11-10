@@ -30,7 +30,14 @@ class Product extends Model {
 
     public function countCurrent() : DictionaryValue
     {
-        return DictionaryValue::one($this->count_current);
+        $dv = DB::select('*')
+            ->from('dictionary_value')
+            ->where('external_table', '=', 'product')
+            ->where('external_column', '=', 'count_current')
+            ->where('external_id', '=', $this->id)
+            ->execute()
+            ->fetch();
+        return DictionaryValue::one($dv->id);
     }
 
     public function countMinimal() : DictionaryValue
@@ -136,7 +143,7 @@ class Product extends Model {
         $countReserve = $request->get('count_reserve');
 
         // запоминаем старые вместе сортировкой, удаляем всё,
-        // и записываем заново подсовывая сортировку если она была
+        // и записываем заново подсовывая сортировку у которых она была
         if ($request->get('category_extra')) {
 
             $categoryNew = $request->get('category_extra', []);
@@ -322,6 +329,14 @@ class Product extends Model {
             ->set($values)
             ->where('id', '=', $this->id)
             ->execute();
+
+        // count_current dv
+
+
+        DB::insert('order', ['id', 'number', 'status', 'status_warehouse', 'user_id'])
+            ->values([$number, $number, 1, 1, $client->user_id])
+            ->execute();
+
     }
 
     public static function getCategoryTree()

@@ -35,7 +35,7 @@
                                     {% for i in items %}
                                         <tr>
                                             <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
-                                            <td>{{ i.getProduct.name | raw }}</td>
+                                            <td><a href="/product/edit/{{ i.getProduct.id }}">{{ i.getProduct.name | raw }}</a></td>
                                             <td>{{ i.getProduct.countCurrent.value }}</td>
                                             <td>{{ i.getProduct.countReserve.value }}</td>
                                             <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>
@@ -84,10 +84,7 @@
                             <option {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
                         {% endfor %}
                     </select>
-{#                    {% if global.user.isManager %}#}
-{#                    {% else %}#}
-                        <input type="hidden" name="status_office" value="{{ order.status }}">
-{#                    {% endif %}#}
+                    <input type="hidden" name="status_office" value="{{ order.status }}">
                 </div>
                 <div class="col-sm-4">
                     <label for="">Статус офиса</label>
