@@ -135,28 +135,35 @@ class Product extends Model {
         $countMinimal = $request->get('count_minimal');
         $countReserve = $request->get('count_reserve');
 
+        // запоминаем старые вместе сортировкой, удаляем всё,
+        // и записываем заново подсовывая сортировку если она была
         if ($request->get('category_extra')) {
 
             $categoryNew = $request->get('category_extra', []);
-            $categoryExist = (array) DB::select('category_id')
+            $categoryExist = (array) DB::select('category_id', 'product_id', 'sort')
                 ->from('product_to_category')
                 ->where('product_id', '=', $this->id)
                 ->execute()
                 ->fetch_all();
-            $categoryExist = array_column($categoryExist, 'category_id');
+            $exist = array_column($categoryExist, 'category_id');
+            $stored = [];
+            foreach ($categoryExist as $i) {
+                $stored[$i->category_id] = $i;
+            }
 
             // drop exist
-            foreach ($categoryExist as $i) {
+            foreach ($exist as $i) {
                 DB::delete('product_to_category')
                     ->where('product_id', '=', $this->id)
                     ->where('category_id', '=', $i)
                     ->execute();
             }
 
-            // add new
             foreach ($categoryNew as $i) {
-                DB::insert('product_to_category', ['product_id', 'category_id'])
-                    ->values([$this->id, $i])
+                $sort = in_array($i, $exist) ? $stored[$i]->sort : 0;
+                $category = in_array($i, $exist) ? $stored[$i]->category_id : $i;
+                DB::insert('product_to_category', ['product_id', 'category_id', 'sort'])
+                    ->values([$this->id, $category, $sort])
                     ->execute();
             }
         }
