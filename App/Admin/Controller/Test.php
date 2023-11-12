@@ -27,6 +27,41 @@ class Test extends Index {
         }
     }
 
+    function alias()
+    {
+        $prodyct = DB::select('*')
+            ->from('product')
+            ->execute()
+            ->fetch_all();
+
+        echo '<pre>';
+
+        $old = [];
+        foreach ($prodyct as $p){
+
+            $old[$p->id] = [
+                'alias' => $p->alias
+            ];
+
+            $alias = \Core\Helpers\Text::alias(mb_strtolower($p->name));
+            $id = intval($p->id);
+
+            DB::update('product')
+                ->set([
+                    'alias' => $alias,
+                ])
+                ->where('id', '=', $id)
+                ->execute();
+        }
+
+        print_r($old);
+        dump("OK");
+
+        return $this->render('Admin:test', [
+            'tree' => 'asdfasdfasdf'
+        ]);
+    }
+
     function sync()
     {
         return;

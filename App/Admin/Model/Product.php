@@ -329,14 +329,6 @@ class Product extends Model {
             ->set($values)
             ->where('id', '=', $this->id)
             ->execute();
-
-        // count_current dv
-
-
-        DB::insert('order', ['id', 'number', 'status', 'status_warehouse', 'user_id'])
-            ->values([$number, $number, 1, 1, $client->user_id])
-            ->execute();
-
     }
 
     public static function getCategoryTree()

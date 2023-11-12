@@ -189,7 +189,8 @@ class Order extends Index {
 
             DB::update('order_detail')
                 ->set([
-                    'sticker' => $request->get('sticker')
+                    'sticker' => $request->get('sticker'),
+                    'advanced' => $request->get('advanced')
                 ])
                 ->where('order_id', '=', $request->seg(2))
                 ->execute();

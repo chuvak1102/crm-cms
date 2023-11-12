@@ -39,6 +39,7 @@ class Routes {
             ],
             Config::AdminDomain => [
                 '{test}=>{sync}' => [Admin\Controller\Test::class => 'sync'],
+                '{test}=>{alias}' => [Admin\Controller\Test::class => 'alias'],
                 '{test}=>{img}' => [Admin\Controller\Test::class => 'img'],
 
                 '' => [Admin\Controller\Index::class => 'index'],
