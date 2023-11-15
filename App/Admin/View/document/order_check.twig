@@ -95,9 +95,7 @@
                 <td><b>Наименование</b></td>
                 <td><b>Артикул</b></td>
                 <td><b>Ед. изм.</b></td>
-                <td><b>
-                        <nobr>Кол-во</nobr>
-                    </b></td>
+                <td><b><nobr>Кол-во</nobr></b></td>
                 <td><b>Кол-во упаковок</b></td>
                 <td><b>Цена, руб.</b></td>
                 <td><b>Сумма, руб.</b></td>
@@ -108,7 +106,7 @@
             {% set total_price = 0 %}
             {% for i in items %}
                 {% set total_count = total_count + i.product_count %}
-                {% set packs = i.pack_count / i.product_count %}
+                {% set packs = i.product_count / i.getProduct.pack_count %}
                 {% set total_packs = total_packs + packs %}
                 {% set total_price = total_price + i.price_row_total %}
             <tr>
