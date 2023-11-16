@@ -42,7 +42,18 @@ $(document).ready(e => {
         let old = Math.abs(parseInt(input.val()));
         let sum = old ? Math.ceil(old / diff) * diff : diff;
 
-        input.val(sum ? sum : "");
+        input.val(sum);
+
+        let cont = $(e.target).parents('.count-container');
+        let id = $(cont).find('input').data('product');
+
+        $.ajax({
+            url: `/cart/add/${id}/${sum}`,
+            success: (e) => {
+                window.location.reload();
+            },
+            error: error => console.log(error),
+        });
     });
 
     $('.cart-add').click(e => {
