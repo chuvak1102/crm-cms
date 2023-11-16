@@ -50,6 +50,8 @@ class Order extends Model {
             if (!empty($user->name)) {
                 array_push($detail, $user->name);
             }
+        } else {
+            array_push($detail, $i->name);
         }
 
         if ($i->phone) {
