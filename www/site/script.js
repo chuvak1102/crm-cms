@@ -43,6 +43,16 @@ $(document).ready(e => {
         let sum = old ? Math.ceil(old / diff) * diff : diff;
 
         input.val(sum);
+    });
+
+    $('.count-value-cart').on('focusout', e => {
+
+        let input = $(e.target);
+        let diff = parseInt(input.data('multiply-value'));
+        let old = Math.abs(parseInt(input.val()));
+        let sum = old ? Math.ceil(old / diff) * diff : diff;
+
+        input.val(sum);
 
         let cont = $(e.target).parents('.count-container');
         let id = $(cont).find('input').data('product');
