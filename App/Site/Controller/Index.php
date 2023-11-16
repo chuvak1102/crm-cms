@@ -23,6 +23,9 @@ use Framework\Modules\Mailer\Mailer;
 
 class Index extends Controller {
 
+    const PAYMENT_ONLINE = 4;
+    const PAYMENT_CASH = 5;
+
     public function before()
     {
         // catalog
@@ -426,8 +429,17 @@ class Index extends Controller {
                         ->id);
                     $number = $number ? $number + 1 : 10000;
 
+                    // дефолтный статус офиса в зависимости от корзины
+                    $statusOffice = 1;
+                    if ($request->get('payment_type') == 'cash') {
+                        $statusOffice = self::PAYMENT_CASH;
+                    }
+                    if ($request->get('payment_type') == 'online') {
+                        $statusOffice = self::PAYMENT_ONLINE;
+                    }
+
                     DB::insert('order', ['id', 'number', 'status', 'status_warehouse', 'user_id'])
-                        ->values([$number, $number, 1, 1, $client->user_id])
+                        ->values([$number, $number, $statusOffice, 1, $client->user_id])
                         ->execute();
 
                     DB::insert('order_detail', [
