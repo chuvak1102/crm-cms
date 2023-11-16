@@ -21,7 +21,7 @@ class Config
     ];
     // домены для маршрутов
     const SiteDomain = 'alkogram.ru';
-    const AdminDomain = 'crm.alkogram.ru';
+    const AdminDomain = 'admin.alkogram.ru';
     const ClientDomain = 'lk.alkogram.ru';
     const ShopEmailFrom = 'dan0@mail.ru';
 }

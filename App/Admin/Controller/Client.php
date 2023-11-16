@@ -311,13 +311,13 @@ class Client extends Index {
 
         $company = DB::select('*')
             ->from('user_detail_company')
-            ->where('user_id', '=', Auth::instance()->current()->id)
+            ->where('user_id', '=', $request->seg(2))
             ->execute()
             ->fetch_all();
 
         $address = DB::select('*')
             ->from('user_detail_address')
-            ->where('user_id', '=', Auth::instance()->current()->id)
+            ->where('user_id', '=', $request->seg(2))
             ->execute()
             ->fetch_all();
         $addresses = [];
@@ -326,7 +326,7 @@ class Client extends Index {
         }
 
         return $this->render('Admin:client/profile', [
-            'client' => UserDetail::one(Auth::instance()->current()->id, 'user_id'),
+            'client' => UserDetail::one($request->seg(2), 'user_id'),
             'user' => Auth::instance()->current(),
             'company' => $company,
             'address' => $addresses,

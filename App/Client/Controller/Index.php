@@ -25,7 +25,7 @@ class Index extends Controller {
         parent::before();
 
         if (!Auth::instance()->logged()) {
-            return $this->redirectToRoute('http://'.Config::SiteDomain);
+            return $this->redirectToRoute('https://'.Config::SiteDomain);
         }
 
         Page::instance()->push('client_name', Auth::instance()->current()->name);
