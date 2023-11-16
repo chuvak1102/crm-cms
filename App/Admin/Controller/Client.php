@@ -186,7 +186,7 @@ class Client extends Index {
                 'fio' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('fio')),
                 'phone' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('phone')),
                 'email' => preg_replace('/[\'\"\`\#\;\:]+/', '', $request->get('email')),
-                'user_id' => Auth::instance()->current()->id
+                'user_id' => $request->seg(2)
             ];
 
             DB::update('user_detail')
@@ -196,14 +196,14 @@ class Client extends Index {
                     'phone' => $client->phone,
                     'email' => $client->email,
                 ])
-                ->where('user_id', '=', Auth::instance()->current()->id)
+                ->where('user_id', '=', $request->seg(2))
                 ->execute();
 
             DB::update('user')
                 ->set([
                     'name' => $client->name
                 ])
-                ->where('id', '=', Auth::instance()->current()->id)
+                ->where('id', '=', $request->seg(2))
                 ->execute();
 
             return $this->redirectToRoute('/client/profile/'.$request->seg(2));
@@ -243,7 +243,7 @@ class Client extends Index {
                 'director',
                 'dover'
             ])->values([
-                Auth::instance()->current()->id,
+                $request->seg(2),
                 $client->company_type,
                 $client->name,
                 $client->inn,
@@ -291,7 +291,7 @@ class Client extends Index {
                 'pass',
                 'comment',
             ])->values([
-                Auth::instance()->current()->id,
+                $request->seg(2),
                 $request->get('company'),
                 $client->company,
                 $client->name,
@@ -327,7 +327,7 @@ class Client extends Index {
 
         return $this->render('Admin:client/profile', [
             'client' => UserDetail::one($request->seg(2), 'user_id'),
-            'user' => Auth::instance()->current(),
+            'user_id' => $request->seg(2),
             'company' => $company,
             'address' => $addresses,
         ]);

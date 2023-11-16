@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-4">
-                        <form method="POST" action="/client/profile/{{ user.id }}?main=1" class="form-withlogo cart" enctype="multipart/form-data">
+                        <form method="POST" action="/client/profile/{{ user_id }}?main=1" class="form-withlogo cart" enctype="multipart/form-data">
                             <div class="row">
                                 <h3 ><b>Основная информация</b></h3>
                                 <p></p>
@@ -14,7 +14,7 @@
                             </div>
                             <div class="row">
                                 <label>Название компании:</label>
-                                <input class="form-control" name="name" type="text" value="{{ user.name }}">
+                                <input class="form-control" name="name" type="text" value="{{ client.name }}">
                                 <p></p>
                             </div>
                             <div class="row">
@@ -37,7 +37,7 @@
                             </div>
                         </form>
                         <br>
-                        <form method="POST" action="/client/profile/{{ user.id }}?face=1" class="form-withlogo cart" enctype="multipart/form-data">
+                        <form method="POST" action="/client/profile/{{ user_id }}?face=1" class="form-withlogo cart" enctype="multipart/form-data">
                             <div class="row">
                                 <h3><b>Юрлицо</b></h3>
                                 <p></p>
@@ -111,7 +111,7 @@
                             </div>
                         </form>
                         <br>
-                        <form method="POST" action="/client/profile/{{ user.id }}?address=1" class="form-withlogo cart" enctype="multipart/form-data">
+                        <form method="POST" action="/client/profile/{{ user_id }}?address=1" class="form-withlogo cart" enctype="multipart/form-data">
                             <div class="row">
                                 <h3><b>Адреса</b></h3>
                                 <p></p>
@@ -201,7 +201,7 @@
                                 <div>Юридический адрес - {{ i.firm_address }}</div>
                                 <div>Фактический адрес - {{ i.fact_address }}</div>
                                 <div>По доверенности - {{ i.dover }}</div>
-                                <div><a href="/client/profile/{{ user.id }}/remove?face={{ i.id }}">Удалить</a></div>
+                                <div><a href="/client/profile/{{ user_id }}/remove?face={{ i.id }}">Удалить</a></div>
                                 <br>
                             {% endfor %}
                         </div>
@@ -212,7 +212,7 @@
                                 <div>{{ i.getCompany.name }}</div>
                                 <div>{{ i.name }}</div>
                                 <div>Адрес - {{ i.city }} {{ i.street }} {{ i.house }} {{ i.block }}</div>
-                                <div><a href="/client/profile/{{ user.id }}/remove?address={{ i.id }}">Удалить</a></div>
+                                <div><a href="/client/profile/{{ user_id }}/remove?address={{ i.id }}">Удалить</a></div>
                                 <br>
                             {% endfor %}
                         </div>
