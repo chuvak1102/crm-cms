@@ -190,7 +190,18 @@ class Order extends Index {
             DB::update('order_detail')
                 ->set([
                     'sticker' => $request->get('sticker'),
-                    'advanced' => $request->get('advanced')
+                    'name' => $request->get('company_name'),
+                    'email' => $request->get('email'),
+                    'phone' => $request->get('phone'),
+                    'delivery_date' => $request->get('delivery_date'),
+                    'work_time' => $request->get('work_time'),
+                    'address_index' => $request->get('index'),
+                    'city' => $request->get('city'),
+                    'street' => $request->get('street'),
+                    'house' => $request->get('house'),
+                    'block' => $request->get('block'),
+                    'office' => $request->get('office'),
+                    'advanced' => $request->get('advanced'),
                 ])
                 ->where('order_id', '=', $request->seg(2))
                 ->execute();
