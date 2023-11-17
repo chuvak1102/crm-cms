@@ -24,6 +24,7 @@
                                             <th style="border-top : none">Статус склад</th>
                                             <th style="border-top: none">Адрес доставки</th>
                                             <th style="border-top: none">Сумма заказа</th>
+                                            <th style="border-top: none"></th>
                                         </tr>
                                         {% for i in orders %}
                                             <tr>
@@ -34,6 +35,7 @@
                                                 <td style="color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</td>
                                                 <td>{{ i.getAddress }}</td>
                                                 <td style="color: #0f4bac">{{ i.getTotalPrice }} руб.</td>
+                                                <td><a class="btn btn-sm btn-primary" target="_blank" href="{{ protocol }}://{{ domain }}/reorder/{{ i.number }}">Повторить заказ</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

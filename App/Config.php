@@ -24,6 +24,10 @@ class Config
     const AdminDomain = 'admin.alkogram.ru';
     const ClientDomain = 'lk.alkogram.ru';
     const ShopEmailFrom = 'dan0@mail.ru';
+    // кто под кем
+    const SiteProtocol = 'https';
+    const AdminProtocol = 'http';
+    const ClientProtocol = 'http';
 }
 
 

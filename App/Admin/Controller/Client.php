@@ -7,6 +7,7 @@ use App\Admin\Model\Product;
 use App\Admin\Model\User;
 use App\Client\Model\UserDetail;
 use App\Client\Model\UserDetailAddress;
+use App\Config;
 use Core\Auth;
 use Core\BreadCrumbs;
 use Core\Request\Request;
@@ -173,7 +174,9 @@ class Client extends Index {
             'discount_per_month' => $discountPerMonth,
             'items_per_month' => $itemsPerMonth,
             'money_per_year' => $moneyPerYear,
-            'product' => $products
+            'product' => $products,
+            'domain' => Config::SiteDomain,
+            'protocol' => Config::SiteProtocol,
         ]);
     }
 
