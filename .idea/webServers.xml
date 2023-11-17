@@ -26,6 +26,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="37f967ef-f4be-4020-9523-4a729a592aaf" name="ALKOGRAM">
+        <fileTransfer rootFolder="/var/www/u0742521/data/www/alkogram.ru" accessType="SFTP" host="37.140.192.114" port="22" sshConfigId="66a88540-fa41-48e1-a3e1-01721f0fa3a7" sshConfig="u0742521@37.140.192.114:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

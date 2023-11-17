@@ -66,6 +66,16 @@ class User extends Model {
             ->fetch();
     }
 
+    function getClient()
+    {
+        return DB::select('name')
+        ->from('user_detail')
+        ->where('user_id', '=', $this->id)
+        ->limit(1)
+        ->execute()
+        ->fetch();
+    }
+
     function ordersPerMonth()
     {
         return intval(DB::select(DB::expr('sum(product_count * price_row_total) sum'))

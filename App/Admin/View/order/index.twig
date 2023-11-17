@@ -112,8 +112,8 @@
                                         <td>{% if i.getDetail.driver %}<i class="fa fa-car" style="margin-right: 15px" title="{{ i.getDetail.driverName }}"></i>{% endif %}<b class="label label-success" style="background-color: {{ i.getStatusWarehouse.color }}">{{ i.getStatusWarehouse.name }}</b></td>
                                         <td><b class="label label-success" style="background-color: {{ i.getStatus.color }}">{{ i.getStatus.name }}</b></td>
                                         <td>{{ i.getTotalPrice | number_format(2, '.', ' ') }}</td>
-                                        {% if i.user_id %}
-                                            <td><a href="/client/cabinet/{{ i.user_id }}"><b class="label label-success" >{{ i.getUser.getCompany.name }}</b></a></td>
+                                        {% if i.getUser.getClient.name %}
+                                            <td><a href="/client/cabinet/{{ i.user_id }}"><b class="label label-success" >{{ i.getUser.getClient.name }}</b></a></td>
                                         {% else %}
                                             <td><a href="/client/create"><b class="label label-danger" >Создать</b></a></td>
                                         {% endif %}
