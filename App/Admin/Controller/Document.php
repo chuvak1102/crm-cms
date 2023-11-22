@@ -35,14 +35,17 @@ class Document extends Index {
     }
 
     private function getCheck(Request $request){
-        $total = DB::select(
+        $items = DB::select(
             DB::expr('SUM(price_row_total) total_price'),
             DB::expr('SUM(product_count) total_count'),
-            DB::expr('SUM(product_count) total_count')
+            DB::expr('SUM(price_discount) total_discount')
         )
             ->from('order_item')
             ->where('order_id', '=', $request->seg(2))
-            ->execute()->fetch()->total;
+            ->execute()->fetch();
+
+        $total = $items->total_price;
+        $discount = floatval($items->total_discount);
         $order = \App\Admin\Model\Order::one($request->seg(2));
         $date = new \DateTime($order->created);
         $date = DataFormatter::unix_to_date($date->getTimestamp());
@@ -52,7 +55,8 @@ class Document extends Index {
             'total_price' => $total,
             'date' => $date,
             'order' => $order,
-            'items' => $order->getItems()
+            'items' => $order->getItems(),
+            'has_discount' => $discount > 0
         ];
 
     }

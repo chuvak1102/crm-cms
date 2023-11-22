@@ -98,6 +98,10 @@
                 <td><b><nobr>Кол-во</nobr></b></td>
                 <td><b>Кол-во упаковок</b></td>
                 <td><b>Цена, руб.</b></td>
+                {% if has_discount == true %}
+                    <td><b>Скидка, руб.</b></td>
+                    <td><b>Цена со скидкой, руб.</b></td>
+                {% endif %}
                 <td><b>Сумма, руб.</b></td>
                 <td><b>Место<br>(№&nbsp;коробки)</b></td>
             </tr>
@@ -116,6 +120,10 @@
                 <td>{{ i.product_count }}</td>
                 <td>{{ packs | round }}</td>
                 <td>{{ i.price_one }}</td>
+                {% if has_discount == true %}
+                    <td>{{ i.price_discount }}</td>
+                    <td>{{ i.price_with_discount }}</td>
+                {% endif %}
                 <td>{{ i.price_row_total }}</td>
                 <td></td>
             </tr>
@@ -127,8 +135,12 @@
                 <td><b>{{ total_count }}</b></td>
                 <td><b>{{ total_packs | round }}</b></td>
                 <td>&nbsp;</td>
+                {% if has_discount == true %}
+                    <td>000</td>
+                    <td>000</td>
+                {% endif %}
                 <td style="width: 15%"><b>{{ total_price | number_format(2, '.', ' ') }}</b></td>
-                <td style="border-right:none;border-bottom:none;">&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             </tbody>
         </table>
