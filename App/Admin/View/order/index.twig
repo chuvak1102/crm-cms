@@ -16,7 +16,7 @@
                         <form action="/order" role="form" class="form-inline">
                             <div class="form-group" style="width: 15%"><input value="{{ filter.from }}" name="from" type="date" class="form-control" placeholder="С"></div>
                             <div class="form-group" style="width: 15%"><input value="{{ filter.to }}" name="to" type="date" class="form-control" placeholder="По"></div>
-                            <div class="form-group" style="width: 15%"><input value="{{ filter.number }}" name="number" type="text" class="form-control" placeholder="Номер"></div>
+                            <div class="form-group" style="width: 15%"><input value="{{ filter.number }}" name="number" type="text" class="form-control" placeholder="Поиск по заказам"></div>
                             <div class="form-group" style="width: 15%">
                                 <select name="status" class="form-control" style="width: 100%">
                                     <option value="0">Статус</option>
@@ -25,8 +25,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group" style="width: 20%"><input value="{{ filter.client }}" name="client" type="text" class="form-control" placeholder="Клиент"></div>
-                            <div class="form-group" style="width: 8%"><button style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Фильтровать</strong></button></div>
+                            <div class="form-group" style="width: 10%"><button style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Фильтровать</strong></button></div>
                             <div class="form-group" style="width: 8%"><a style="margin-top: 0; margin-right: 5px" class="btn btn-sm btn-primary pull-right m-t-n-xs" href="/order"><strong>Сбросить</strong></a></div>
                         </form>
                     </div>

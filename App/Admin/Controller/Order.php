@@ -40,27 +40,8 @@ class Order extends Index {
             $order = $order->where('created', '<=', $to);
         }
 
-        if ($number = $request->get('number')) {
-            $order = $order->where('number', '=', $number);
-        }
-
         if ($status = $request->get('status')) {
             $order = $order->where('status', '=', $status);
-        }
-
-        if ($client = $request->get('client')) {
-            $order = $order
-                ->join(['order_detail', 'od'], 'left')
-                ->on('od.order_id', '=', 'order.id')
-                ->where_open()
-                ->or_where_open()
-                ->or_where('od.name', 'like', "%$client%")
-                ->or_where('od.email', 'like', "%$client%")
-                ->or_where('od.city', 'like', "%$client%")
-                ->or_where('od.street', 'like', "%$client%")
-                ->or_where('od.advanced', 'like', "%$client%")
-                ->or_where_close()
-                ->where_close();
         }
 
         // filter 2
@@ -104,6 +85,42 @@ class Order extends Index {
             }
         }
 
+        if ($search = $request->get('number')) {
+
+            $ids = DB::select('order.id')
+                ->from('order')
+                ->join(['order_detail', 'od'], 'left')
+                ->on('od.order_id', '=', 'order.id')
+                ->where(DB::expr("CONCAT(coalesce(order.number, ''), coalesce(od.name, ''), coalesce(od.email, ''), coalesce(od.city, ''), coalesce(od.street, ''), coalesce(od.advanced, ''))"), 'like', "%$search%")
+
+//                ->where_open()
+//                ->or_where_open()
+//                ->or_where('order.number', 'like', "%$search%")
+//                ->or_where('od.name', 'like', "%$search%")
+//                ->or_where('od.name', 'like', "%$search%")
+//                ->or_where('od.email', 'like', "%$search%")
+//                ->or_where('od.city', 'like', "%$search%")
+//                ->or_where('od.street', 'like', "%$search%")
+//                ->or_where('od.advanced', 'like', "%$search%")
+//                ->or_where_close()
+//                ->where_close()
+                ->execute()
+                ->fetch_all();
+//                ->compile();
+
+            $ids = array_column($ids, 'id');
+//            dump($ids);
+//            die();
+
+            $order = empty($ids)
+                ? $order->where('id', 'in', [0])
+                : $order->where('id', 'in', $ids);
+        }
+
+//        $order = $order->compile();
+//        dump($order);
+//        die();
+
         $order = $order->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
 
@@ -131,7 +148,7 @@ class Order extends Index {
                 $limit,
                 3,
                 $request->get('page', 1),
-                "/order?from={$from}&to={$to}&number={$number}&status={$status}&client={$client}&page={$page}"
+                "/order?from={$from}&to={$to}&number={$search}&status={$status}&page={$page}"
             ),
             'filter_status' => DB::select('*')
                 ->from('order_status')
@@ -141,9 +158,8 @@ class Order extends Index {
             'filter' => [
                 'from' => $from,
                 'to' => $to,
-                'number' => $number,
+                'number' => $search,
                 'status' => $status,
-                'client' => $client
             ],
             'order_today' => OrderModel::ordersTodayCount(),
             'sum_today' => OrderModel::orderSumToday(),
