@@ -485,4 +485,46 @@ class Order extends Index {
 
         return new JsonResponse('ok');
     }
+
+    function addProduct(Request $request)
+    {
+        $order = \App\Admin\Model\Order::one($request->get('order'));
+        $product = \App\Admin\Model\Product::one($request->get('id'));
+
+        DB::insert('order_item', [
+            'order_id',
+            'product_id',
+            'product_count',
+            'price_one',
+            'price_discount',
+            'price_with_discount',
+            'price_row_total'
+        ])
+            ->values([
+                $order->id,
+                $product->id,
+                '0',
+                $product->price_site,
+                '0',
+                $product->price_site,
+                '0'
+            ])
+            ->execute();
+
+
+        return new JsonResponse('ok');
+    }
+
+    function findProduct(Request $request)
+    {
+        $str = $request->get('str');
+        $all = DB::select('product.*')
+            ->from('product')
+            ->where('product.name', 'like', DB::expr("'%{$str}%'"))
+            ->limit(15)
+            ->execute()
+            ->fetch_all();
+
+        return new JsonResponse($all);
+    }
 }

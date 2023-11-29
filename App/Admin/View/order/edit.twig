@@ -10,7 +10,6 @@
                         </div>
                         <div class="ibox-content">
                             <div>
-                                <a class="btn btn-sm btn-primary" href="#">Добавить товар</a>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/order/{{ order.id }}">Товарная накладная</a>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/account/{{ order.id }}">Бухгалтерская накладная</a>
                                 <a class="btn btn-sm btn-primary sticker-btn" target="_blank" data-order="{{ order.id }}" href="/document/sticker/{{ order.id }}/1">Этикетки</a>
@@ -46,6 +45,21 @@
                                             <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.getProduct.id }}">X</a></td>
                                         </tr>
                                     {% endfor %}
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input data-id="{{ order.id }}" class="form-control item-search" type="text" placeholder="Добавить...">
+                                                <ul class="float-list product" data-order_id="{{ order.id }}"></ul>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <td></td>
                                             <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }} руб.</h3></td>
@@ -237,6 +251,68 @@
                     window.location.reload()
                 }
             });
+        });
+
+        $('.item-search').on('input', e => {
+
+            let list = $(e.target).parent().find('.float-list.product');
+            let order = parseInt(list.data('order_id'));
+
+            list.find('li').remove();
+
+            if ($(e.target).val().length >= 3) {
+
+                $.ajax({
+                    url: "/order/findProduct",
+                    data: {str: $(e.target).val(), id: $(e.target).data('id')},
+
+                    success: (json) => {
+
+                        let items = JSON.parse(json);
+                        items.map(e => {
+                            list.append(`<li data-id=${e.id} data-name="${e.name}" data-order="${order}"><span>${e.name}</span></li>`);
+                        });
+                        list.addClass('show');
+                    }
+                });
+            }
+        });
+
+        $('.float-list.product').on('click', 'li', e => {
+
+            let list = $(e.target).parents('.float-list.product');
+            let i = $(e.target).closest('li').data();
+            let order = $(e.target).closest('li').data('order');
+            let id = $(e.target).closest('li').data('id');
+
+            console.log(order, id)
+
+            $.ajax({
+                url: "/order/addProduct",
+                data: {order: order, id: id},
+
+                success: (json) => {
+
+                    console.log(json);
+
+                    window.location.reload();
+                }
+            });
+
+            $(e.target).parents('.order-row').prepend(
+                `<tr>
+                    <td style="width: 10%"></td>
+                    <td style="width: 35%"><a target="_blank" href="/product/edit/${i.id}">${i.name}</a></td>
+                    <td style="width: 10%">${i.cur}</td>
+                    <td style="width: 10%">${i.min}</td>
+                    <td style="width: 10%"><input value="${i.min}" name="count[${i.supplier}]" style="width: 100px" type="text" class="form-control"></td>
+                    <td style="width: 15%"></td>
+                    <td ><button class="btn btn-danger" type="button">x</button></td>
+                </tr>`
+            );
+
+            list.find('li').remove();
+            list.hide();
         });
     </script>
 {% endblock %}
