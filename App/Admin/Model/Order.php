@@ -25,15 +25,20 @@ class Order extends Model {
         return OrderStatus::one($this->status_warehouse);
     }
 
+    // колво товаров + скидка + доставка
     function getTotalPrice()
     {
         $id = $this->id;
-        $total = DB::query(Database::SELECT, "select sum(price_one * product_count) as total from order_item where order_id = $id")
+        // товары
+        $total = DB::query(Database::SELECT, "select sum(price_row_total) as total from order_item where order_id = $id")
             ->execute()
             ->current();
-
         if ($total) {
             $total = $total['total'];
+        }
+        // доставка
+        if ($this->getDetail()->deliveryCost()) {
+            $total = $total + $this->getDetail()->deliveryCost();
         }
 
         return $total;
