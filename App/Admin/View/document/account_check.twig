@@ -125,7 +125,7 @@
                 <td>&nbsp;</td>
                 <td><b>{{ total_count }}</b></td>
                 <td>&nbsp;</td>
-                <td style="width: 15%"><b>{{ total_price + delivery | number_format(2, '.', ' ') }}</b></td>
+                <td style="width: 15%"><b>{{ (total_price + delivery) | number_format(2, '.', ' ') }}</b></td>
             </tr>
             </tbody>
         </table>

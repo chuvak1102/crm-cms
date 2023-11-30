@@ -209,7 +209,7 @@ class Index extends Controller {
                         ->from('product')
                         ->where('name', 'like', DB::expr("'%{$search}%'"))
                         ->where('active', '=', 1)
-                        ->limit(25)
+                        ->limit(150)
                         ->execute()
                         ->fetch_all();
                     $ids = array_column($products, 'id');
@@ -219,7 +219,7 @@ class Index extends Controller {
                             ->from('product')
                             ->where('article', 'like', DB::expr("'%{$search}%'"))
                             ->where('active', '=', 1)
-                            ->limit(25)
+                            ->limit(150)
                             ->execute()
                             ->fetch_all();
 

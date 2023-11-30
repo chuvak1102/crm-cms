@@ -151,10 +151,10 @@
                 <td><b>{{ total_packs | round }}</b></td>
                 <td>&nbsp;</td>
                 {% if has_discount == true %}
-                    <td>000</td>
-                    <td>000</td>
+                    <td></td>
+                    <td></td>
                 {% endif %}
-                <td style="min-width: 90px"><b>{{ total_price + delivery | number_format(2, '.', ' ') }}</b></td>
+                <td style="min-width: 90px"><b>{{ (total_price + delivery) | number_format(2, '.', ' ') }}</b></td>
                 <td>&nbsp;</td>
             </tr>
             </tbody>
