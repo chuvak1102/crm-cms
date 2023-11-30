@@ -187,11 +187,11 @@ class Order extends Model {
             $mail->Subject = 'ЭкоПак - ваш заказ принят';
 
             $html = "Здравствуйте! <br> Благодарим за заказ на сайте ecopacking.ru! <br> Номер вашего заказа: {$this->number}<br><br>";
-            $html .= '<table border="1"  cellspacing="0" border="1" cellpadding="5"><tr><td><b>Состав заказа</b></td><td><b>Сумма</b></td><td><b>Количество</b></td></tr>';
+            $html .= '<table border="1"  cellspacing="0" border="1" cellpadding="5"><tr><td><b>Состав заказа</b></td><td><b>Количество</b></td><td><b>Сумма</b></td></tr>';
 
             /** @var OrderItem $i */
             foreach ($items as $i) {
-                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="center">'.$i->price_row_total.'</td><td width="100" align="center">'.$i->product_count.'</td></tr>';
+                $html .= '<tr><td>'.$i->getProduct()->name.'</td><td width="100" align="center">'.$i->product_count.'</td><td width="100" align="center">'.$i->price_row_total.'</td></tr>';
             }
 
             $html .= '<tr><td>Итого</td><td></td><td width="100" align="center">'.$totalPrice.'</td></tr>';
