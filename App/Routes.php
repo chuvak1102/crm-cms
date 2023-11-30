@@ -134,6 +134,9 @@ class Routes {
                 '{gallery}=>{sort}' => [Admin\Controller\Gallery::class => 'sort'],
                 '{gallery}=>{items}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'items'],
                 '{gallery}=>{delete}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'delete'],
+
+                '{migration}=>{migration_1}' => [Admin\Controller\Migration::class => 'migration_1'],
+
                 '403' => [Admin\Controller\Index::class => 'forbidden'],
                 // напоследок любая ссылка, на случай такой хуйни будем отдавать 404
                 '*' => [Admin\Controller\Index::class => 'notFound'],

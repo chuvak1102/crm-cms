@@ -218,6 +218,7 @@ class Order extends Index {
                     'block' => $request->get('block'),
                     'office' => $request->get('office'),
                     'advanced' => $request->get('advanced'),
+                    'delivery_cost' => $request->get('delivery_cost'),
                 ])
                 ->where('order_id', '=', $request->seg(2))
                 ->execute();
@@ -254,15 +255,18 @@ class Order extends Index {
             ->execute()
             ->fetch_all();
 
+        $deliveryCost = $order->getDetail()->deliveryCost();
+
         return $this->render('Admin:order/edit', [
             'items' => OrderItem::many($request->seg(2), 'order_id'),
             'order' => $order,
-            'total' => $total,
+            'total' => $total + $deliveryCost,
             'status_office' => $statusOffice,
             'status_warehouse' => $statusWarehouse,
             'delivery_company' => DB::select('*')->from('delivery_company')->execute()->fetch_all(),
             'delivery_self' => DB::select('*')->from('delivery_self')->execute()->fetch_all(),
-            'users' => $users
+            'users' => $users,
+            'delivery' => $deliveryCost
         ]);
     }
 

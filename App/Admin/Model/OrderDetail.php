@@ -14,4 +14,9 @@ class OrderDetail extends Model {
         return User::one($this->driver, 'id')->name;
     }
 
+    function deliveryCost()
+    {
+        return $this->delivery_cost;
+    }
+
 }

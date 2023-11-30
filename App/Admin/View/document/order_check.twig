@@ -105,6 +105,7 @@
                 <td><b>Сумма, руб.</b></td>
                 <td><b>Место<br>(№&nbsp;коробки)</b></td>
             </tr>
+            {% set delivery = order.getDetail.delivery_cost %}
             {% set total_count = 0 %}
             {% set total_packs = 0 %}
             {% set total_price = 0 %}
@@ -129,6 +130,20 @@
             </tr>
             {% endfor %}
             <tr>
+                <td>Доставка</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td><b></b></td>
+                <td><b></b></td>
+                <td>&nbsp;</td>
+                {% if has_discount == true %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                <td style="min-width: 90px"><b>{{ delivery | number_format(2, '.', ' ') }}</b></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
                 <td>Итого</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -139,7 +154,7 @@
                     <td>000</td>
                     <td>000</td>
                 {% endif %}
-                <td style="min-width: 90px"><b>{{ total_price | number_format(2, '.', ' ') }}</b></td>
+                <td style="min-width: 90px"><b>{{ total_price + delivery | number_format(2, '.', ' ') }}</b></td>
                 <td>&nbsp;</td>
             </tr>
             </tbody>

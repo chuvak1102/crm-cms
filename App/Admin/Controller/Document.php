@@ -44,9 +44,10 @@ class Document extends Index {
             ->where('order_id', '=', $request->seg(2))
             ->execute()->fetch();
 
-        $total = $items->total_price;
-        $discount = floatval($items->total_discount);
         $order = \App\Admin\Model\Order::one($request->seg(2));
+        $delivery = $order->getDetail()->deliveryCost();
+        $total = $items->total_price + $delivery;
+        $discount = floatval($items->total_discount);
         $date = new \DateTime($order->created);
         $date = DataFormatter::unix_to_date($date->getTimestamp());
 

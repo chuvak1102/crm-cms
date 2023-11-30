@@ -62,7 +62,24 @@
                                         </tr>
                                         <tr>
                                             <td></td>
-                                            <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }} руб.</h3></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><b>Доставка:</b></td>
+                                            <td>
+                                                <b>
+                                                    <input name="delivery_cost" class="form-control" min="0" step="1" type="number" value="{{ order.getDetail.delivery_cost }}">
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td></td>
+                                            <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }}</h3></td>
+
                                         </tr>
                                     </tbody>
                                 </table>

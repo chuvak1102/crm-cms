@@ -25,8 +25,10 @@
                     {% if global.user.isAdmin %}
                     <li class="{% if application.controller == 'Gallery' %}active{% endif %}"><a href="/gallery">Наша продукция</a></li>
                     <li class="{% if application.controller == 'Client' %}active{% endif %}"><a href="/client">Клиенты</a></li>
+                    {% endif %}
                     <li class="{% if application.controller == 'Callback' %}active{% endif %}"><a href="/callback">Обратный звонок</a></li>
                     <li class="{% if application.controller == 'Design' %}active{% endif %}"><a href="/design">Заказы с индивидуальным дизайном</a></li>
+                    {% if global.user.isAdmin %}
                     <li class="{% if application.controller == 'Supplier' %}active{% endif %}"><a href="/supplier/list">Поставщики</a></li>
                     {% endif %}
                 </ul>
