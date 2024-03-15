@@ -4,6 +4,7 @@ namespace App\Admin\Controller;
 
 use App\Admin\Model\DictionaryField;
 use App\Admin\Model\Supplier;
+use Core\Auth;
 use Core\BreadCrumbs;
 use Core\JsonResponse;
 use Core\Page;
@@ -14,6 +15,15 @@ use App\Admin\Model\Product as ProductModel;
 use Core\Session;
 
 class Product extends Index {
+
+    function before()
+    {
+//        dump(Auth::instance()->current());
+        parent::before();
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedWarehouse()) {
+            $this->redirectToRoute('/403');
+        }
+    }
 
     function index(Request $request)
     {
@@ -121,6 +131,10 @@ class Product extends Index {
 
     function create(Request $request)
     {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
+            $this->redirectToRoute('/403');
+        }
+
         BreadCrumbs::instance()
             ->push(['/product' => 'Товары'])
             ->push(['' => 'Добавить товар']);
@@ -153,6 +167,10 @@ class Product extends Index {
 
     function edit(Request $request)
     {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
+            $this->redirectToRoute('/403');
+        }
+
         $item = ProductModel::one(Router::seg(2));
         $category = ProductModel::getCategoryTree();
 

@@ -3,6 +3,7 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\DictionaryValue;
+use Core\Auth;
 use Core\Controller;
 use Core\Database\Database\Exception;
 use Core\Database\DB;
@@ -11,6 +12,14 @@ use Core\JsonResponse;
 use Core\Request\Request;
 
 class Document extends Index {
+
+    function before()
+    {
+        parent::before();
+//        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
+//            $this->redirectToRoute('/403');
+//        }
+    }
 
     function order(Request $request)
     {
@@ -30,7 +39,8 @@ class Document extends Index {
     {
         return $this->render('Admin:document/sticker', [
             'order' => \App\Admin\Model\Order::one($request->seg(2)),
-            'range' => range(1, $request->seg(3))
+            'range' => range(1, $request->seg(3)),
+            'total' => $request->seg(3)
         ]);
     }
 

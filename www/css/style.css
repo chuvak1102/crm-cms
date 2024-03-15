@@ -8480,8 +8480,17 @@ ul#sortable li{list-style: none; width: 100%}
 ul#sortable li div{display: inline-block}
 ul#sortable li div:nth-child(1){width: 10%}
 
-
-
+/* ADMIN CSS */
+.warehouse-status {
+  width: calc(100% - 30px);
+  display: block;
+  height: 33px;
+  line-height: 25px;
+  font-size: 13px;
+  position: absolute;
+  pointer-events: none;
+}
+.warehouse-status:hover{cursor: pointer}
 
 @media (min-width: 768px) {
   #page-wrapper {

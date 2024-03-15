@@ -25,6 +25,7 @@ class Index extends Controller {
 
     const PAYMENT_ONLINE = 4;
     const PAYMENT_CASH = 5;
+    const WAREHOUSE_21 = 21; // Новый,#920600,warehouse
 
     public function before()
     {
@@ -431,6 +432,7 @@ class Index extends Controller {
 
                     // дефолтный статус офиса в зависимости от корзины
                     $statusOffice = 1;
+                    $statusWarehouse = Order::ORDER_NEW;
                     if ($request->get('payment_type') == 'cash') {
                         $statusOffice = self::PAYMENT_CASH;
                     }
@@ -439,7 +441,7 @@ class Index extends Controller {
                     }
 
                     DB::insert('order', ['id', 'number', 'status', 'status_warehouse', 'user_id'])
-                        ->values([$number, $number, $statusOffice, 1, $client->user_id])
+                        ->values([$number, $number, $statusOffice, $statusWarehouse, $client->user_id])
                         ->execute();
 
                     DB::insert('order_detail', [

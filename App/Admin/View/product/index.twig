@@ -54,7 +54,9 @@
                     <div class="ibox-content">
                         <div>
                             <a class="btn btn-sm btn-primary print-price" href="#">Печатать ценники</a>
+                            {% if global.user.isGrantedManager %}
                             <a class="btn btn-sm btn-primary" href="/product/create">Добавить товар</a>
+                            {% endif %}
                         </div>
                         <br>
                         <div class="checkbox-container">
@@ -70,8 +72,10 @@
                                         <td width="10%">Цена на сайте</td>
                                         <td width="10%">В упаковке</td>
                                         <td width="10%">В коробке</td>
-                                        <td width="10%">Продажи за месяц</td>
-                                        <td width="10%">За прошлый месяц</td>
+                                        {% if global.user.isGrantedManager %}
+                                            <td width="10%">Продажи за месяц</td>
+                                            <td width="10%">За прошлый месяц</td>
+                                        {% endif %}
                                     </tr>
                                     </tbody>
                                 </table>
@@ -93,8 +97,10 @@
                                             <td width="10%">{{ i.price_site }}</td>
                                             <td width="10%">{{ i.pack_count }}</td>
                                             <td width="10%">{{ i.box_count }}</td>
-                                            <td width="10%">{{ i.salesPerCurrentMonth }}</td>
-                                            <td width="10%">{{ i.salesPerPastMonth }}</td>
+                                            {% if global.user.isGrantedManager %}
+                                                <td width="10%">{{ i.salesPerCurrentMonth }}</td>
+                                                <td width="10%">{{ i.salesPerPastMonth }}</td>
+                                            {% endif %}
 {#                                            <td><input name="sorting" data-id="{{ i.id }}" style="width: 60px" class="form-control" type="text" value="{{ i.sort }}"></td>#}
                                         </tr>
                                     {% endfor %}

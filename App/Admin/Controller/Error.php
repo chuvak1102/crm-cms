@@ -2,11 +2,20 @@
 
 namespace App\Admin\Controller;
 
+use Core\Auth;
 use Core\BreadCrumbs;
 use Core\Database\DB;
 use Core\Request\Request;
 
 class Error extends Index {
+
+    function before()
+    {
+        parent::before();
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedAdmin()) {
+            $this->redirectToRoute('/403');
+        }
+    }
 
     function index(Request $request)
     {

@@ -4,6 +4,7 @@ namespace App\Admin\Controller;
 
 use App\Admin\Model\OrderItem;
 use App\Admin\Model\OrderStatus;
+use Core\Auth;
 use Core\BreadCrumbs;
 use Core\Controller;
 use Core\Database\Database\Exception;
@@ -92,34 +93,14 @@ class Order extends Index {
                 ->join(['order_detail', 'od'], 'left')
                 ->on('od.order_id', '=', 'order.id')
                 ->where(DB::expr("CONCAT(coalesce(order.number, ''), coalesce(od.name, ''), coalesce(od.email, ''), coalesce(od.city, ''), coalesce(od.street, ''), coalesce(od.advanced, ''))"), 'like', "%$search%")
-
-//                ->where_open()
-//                ->or_where_open()
-//                ->or_where('order.number', 'like', "%$search%")
-//                ->or_where('od.name', 'like', "%$search%")
-//                ->or_where('od.name', 'like', "%$search%")
-//                ->or_where('od.email', 'like', "%$search%")
-//                ->or_where('od.city', 'like', "%$search%")
-//                ->or_where('od.street', 'like', "%$search%")
-//                ->or_where('od.advanced', 'like', "%$search%")
-//                ->or_where_close()
-//                ->where_close()
                 ->execute()
                 ->fetch_all();
-//                ->compile();
 
             $ids = array_column($ids, 'id');
-//            dump($ids);
-//            die();
-
             $order = empty($ids)
                 ? $order->where('id', 'in', [0])
                 : $order->where('id', 'in', $ids);
         }
-
-//        $order = $order->compile();
-//        dump($order);
-//        die();
 
         $order = $order->execute()->fetch_all();
         $count = DB::select(DB::expr('FOUND_ROWS() as cnt'))->execute()->current()['cnt'];
@@ -172,12 +153,46 @@ class Order extends Index {
     function edit(Request $request)
     {
         $order = \App\Admin\Model\Order::one($request->seg(2));
+        $current = $order->status_warehouse;
+        $prev = $order->status_prev;
 
         BreadCrumbs::instance()
             ->push(['/order' => 'Заказы'])
             ->push(['' => 'Редактировать заказ №'.$order->number]);
 
         if($request->get('submit')) {
+
+            // если получили статус заказ собран то очистим список товаров от подсветки
+            if ($request->get('status_warehouse') == \App\Admin\Model\Order::ORDER_READY) {
+                DB::update('order_item')
+                    ->set([
+                        'is_extra' => 0,
+                        'alert' => 0,
+                        'color' => '#ffffff'
+                    ])
+                    ->where('order_id', '=', $order->id)
+                    ->execute();
+            }
+
+            // если обновляли заказ с ролью склад
+            if ($request->get('submit') == 'submit_warehouse') {
+                DB::update('order_detail')
+                    ->set([
+                        'sticker' => $request->get('sticker'),
+                    ])
+                    ->where('order_id', '=', $request->seg(2))
+                    ->execute();
+                // если статус не меняется то не трогать статусы
+                DB::update('order')
+                    ->set([
+                        'status_warehouse' => $request->get('status_warehouse') == 0 ? $current : $request->get('status_warehouse'),
+                        'packing' => $request->get('packing'),
+                        'status_prev' => $request->get('status_warehouse') == 0 ? $prev : $current
+                    ])
+                    ->where('id', '=', $request->seg(2))
+                    ->execute();
+                return $this->redirectToRoute('/order');
+            }
             foreach ($request->get('product') as $id => $item) {
                 DB::update('order_item')
                     ->set([
@@ -191,14 +206,16 @@ class Order extends Index {
                     ->where('product_id', '=', $id)
                     ->execute();
             }
+            // если статус не меняется то не трогать статусы
             DB::update('order')
                 ->set([
                     'status' => $request->get('status_office'),
-                    'status_warehouse' => $request->get('status_warehouse'),
+                    'status_warehouse' => $request->get('status_warehouse') == 0 ? $current : $request->get('status_warehouse'),
                     'delivery_company' => $request->get('delivery_company'),
                     'delivery_self' => $request->get('delivery_self'),
                     'manager' => $request->get('manager'),
                     'packing' => $request->get('packing'),
+                    'status_prev' => $request->get('status_warehouse') == 0 ? $prev : $current
                 ])
                 ->where('id', '=', $request->seg(2))
                 ->execute();
@@ -237,25 +254,35 @@ class Order extends Index {
             ->execute()
             ->fetch_all();
 
+        $usersWarehouse = DB::select('id', 'name', 'department')
+            ->from('user')
+            ->where('department', '=', \App\Admin\Model\User::ROLE_WAREHOUSE)
+            ->execute()
+            ->fetch_all();
+
         $statusOffice = DB::select('order_status.*')
             ->from('order_status')
             ->where('order_status.category', '=', 'office')
             ->execute()
             ->fetch_all();
-        $statusTo = DB::select('status_to')
-            ->from('order_status_to_status')
-            ->where('status_from', '=', $order->status)
-            ->execute()
-            ->fetch_all();
-        $statusTo = array_column($statusTo,'status_to');
-        $statusWarehouse = DB::select('order_status.*')
-            ->from('order_status')
-//            ->where('order_status.id', 'in', $statusTo ? $statusTo : [0])
-            ->where('category', '=', 'warehouse')
-            ->execute()
-            ->fetch_all();
+        $statusWarehouse = $order->getPossibleStatuses();
 
         $deliveryCost = $order->getDetail()->deliveryCost();
+
+        $lowProductAlert = DB::select(DB::expr('max(alert) as alert'))
+            ->from('order_item')
+            ->where('order_id', '=', $order->id)
+            ->execute()
+            ->fetch()
+            ->alert;
+
+        // если менеджер добавлял дополнительные товары в заказ руками
+        $orderHasExtraItems = DB::select(DB::expr('max(is_extra) as extra'))
+            ->from('order_item')
+            ->where('order_id', '=', $order->id)
+            ->execute()
+            ->fetch()
+            ->extra;
 
         return $this->render('Admin:order/edit', [
             'items' => OrderItem::many($request->seg(2), 'order_id'),
@@ -266,7 +293,16 @@ class Order extends Index {
             'delivery_company' => DB::select('*')->from('delivery_company')->execute()->fetch_all(),
             'delivery_self' => DB::select('*')->from('delivery_self')->execute()->fetch_all(),
             'users' => $users,
-            'delivery' => $deliveryCost
+            'users_warehouse' => $usersWarehouse,
+            'delivery' => $deliveryCost,
+            'packing' => $order->packing,
+            'ready_status' => \App\Admin\Model\Order::ORDER_READY,
+            'current_status_color' => $order->getStatus()->color,
+            'low_product_status' => \App\Admin\Model\Order::ORDER_LOW_PRODUCT,
+            'order_packing_advanced_status' => \App\Admin\Model\Order::ORDER_PACKING_ADVANCED,
+            'order_has_alert' => $lowProductAlert,
+            'order_has_extra' => $orderHasExtraItems,
+            'order_new_status' => \App\Admin\Model\Order::ORDER_NEW,
         ]);
     }
 
@@ -314,12 +350,21 @@ class Order extends Index {
     {
         if ($request->get('driver')) {
             if ($request->get('id')) {
-                DB::update('order_detail')
-                    ->set([
-                        'driver' => $request->get('driver'),
-                    ])
-                    ->where('order_id', 'in', $request->get('id'))
-                    ->execute();
+
+                // назначить можно только если в статусе заказ собран
+                foreach ($request->get('id') as $id) {
+                    $order = \App\Admin\Model\Order::one($id);
+                    if ($order->status_warehouse == \App\Admin\Model\Order::ORDER_READY) {
+
+                        DB::update('order')
+                            ->set([
+                                'driver' => $request->get('driver'),
+                            ])
+                            ->where('order.id', '=', $id)
+                            ->execute();
+
+                    }
+                }
             }
         }
     }
@@ -502,7 +547,9 @@ class Order extends Index {
             'price_one',
             'price_discount',
             'price_with_discount',
-            'price_row_total'
+            'price_row_total',
+            'color',
+            'is_extra'
         ])
             ->values([
                 $order->id,
@@ -511,7 +558,9 @@ class Order extends Index {
                 $product->price_site,
                 '0',
                 $product->price_site,
-                '0'
+                '0',
+                '#DAE8FC',
+                1
             ])
             ->execute();
 
@@ -530,5 +579,22 @@ class Order extends Index {
             ->fetch_all();
 
         return new JsonResponse($all);
+    }
+
+    function setItemAlert(Request $request)
+    {
+        $order = $request->seg(2);
+        $item = $request->seg(3);
+        $alert = !($request->seg(4));
+
+        DB::update('order_item')
+            ->set([
+                'alert' => $alert
+            ])
+            ->where("order_id", '=', $order)
+            ->where('id', '=', $item)
+            ->execute();
+
+        return $this->redirectToRoute("/order/edit/{$order}");
     }
 }

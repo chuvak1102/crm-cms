@@ -126,7 +126,7 @@ class Product extends Model {
                 'alias',
             ])->values([
                 $request->get('name'),
-                Text::alias($request->get('name'))
+                Text::alias(mb_strtolower($request->get('name')))
             ])
                 ->execute();
 
@@ -229,7 +229,7 @@ class Product extends Model {
 
         $values = [
             'name' => $request->get('name'),
-            'alias' => Text::alias($request->get('name')),
+            'alias' => Text::alias(mb_strtolower($request->get('name'))),
             'article' => $request->get('article'),
             'active' => $request->get('active') ? 1 : 0,
             'price_site' => str_replace(',', '.', $request->get('price_site')),

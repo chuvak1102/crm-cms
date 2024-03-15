@@ -14,6 +14,11 @@ class OrderDetail extends Model {
         return User::one($this->driver, 'id')->name;
     }
 
+    function userColor()
+    {
+        return User::one($this->driver, 'id')->color;
+    }
+
     function deliveryCost()
     {
         return $this->delivery_cost;

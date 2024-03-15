@@ -12,75 +12,60 @@
                             <div>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/order/{{ order.id }}">Товарная накладная</a>
                                 <a class="btn btn-sm btn-primary" target="_blank" href="/document/account/{{ order.id }}">Бухгалтерская накладная</a>
-                                <a class="btn btn-sm btn-primary sticker-btn" target="_blank" data-order="{{ order.id }}" href="/document/sticker/{{ order.id }}/1">Этикетки</a>
-                                <input type="text" class="form-control sticker-count" style="width: 50px; display: inline-block">
+                                <a class="btn btn-sm btn-primary sticker-btn" target="_blank" data-order="{{ order.id }}" href="/document/sticker/{{ order.id }}/{{ order.getDetail.sticker }}">Этикетки</a>
                             </div>
                             <br>
                             <div class="table-responsive">
                                 <table class="table table-hover issue-tracker checkbox-container">
                                     <tbody>
-                                    <tr>
-                                        <th></th>
-                                        <th>Название</th>
-                                        <th>На складе</th>
-                                        <th>Резерв</th>
-                                        <th>В заказе</th>
-                                        <th>Цена</th>
-                                        <th>Скидка</th>
-                                        <th>Итоговая цена</th>
-                                        <th>Сумма</th>
-                                        <th></th>
-                                    </tr>
-                                    {% for i in items %}
+                                    <tr><th></th><th></th><th>Название</th><th>На складе</th><th>Резерв</th><th>В заказе</th><th>Цена</th><th>Скидка</th><th>Итоговая цена</th><th>Сумма</th><th></th></tr>
+                                    {% if global.user.isGrantedManager %}
+                                        {% for i in items %}
+                                            <tr style="background-color: {% if i.alert == 0 %} {{ i.color }} {% else %} #F8CECC {% endif %}">
+                                                <td><a class="show-alert-items-button" href="/order/setItemAlert/{{ order.id }}/{{ i.id }}/{{ i.alert }}" style="visibility: hidden"><b class="label label-success" style="font-size: 20px">&nbsp;!&nbsp;</b></a></td>
+                                                <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
+                                                <td><a href="/product/edit/{{ i.getProduct.id }}">{{ i.getProduct.name | raw }}</a></td>
+                                                <td>{{ i.getProduct.countCurrent.value }}</td>
+                                                <td>{{ i.getProduct.countReserve.value }}</td>
+                                                <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>
+                                                <td><input name="product[{{ i.getProduct.id }}][price_one]" style="width: 75px" type="text" class="form-control" value="{{ i.getProduct.getPrice }}"></td>
+                                                <td><input name="product[{{ i.getProduct.id }}][discount]" style="width: 75px" type="text" class="form-control" value="{{ i.price_discount }}"></td>
+                                                <td><input name="product[{{ i.getProduct.id }}][price_one_total]" style="width: 75px" type="text" class="form-control" value="{{ i.price_with_discount }}"></td>
+                                                <td><input name="product[{{ i.getProduct.id }}][price_all]" style="width: 75px" type="text" class="form-control" value="{{ i.price_row_total }}"></td>
+                                                <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.getProduct.id }}">X</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% if global.user.isGrantedManager %}
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <input data-id="{{ order.id }}" class="form-control item-search" type="text" placeholder="Добавить...">
+                                                    <ul class="float-list product" data-order_id="{{ order.id }}"></ul>
+                                                </td>
+                                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                            </tr>
+                                        {% endif %}
                                         <tr>
-                                            <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
-                                            <td><a href="/product/edit/{{ i.getProduct.id }}">{{ i.getProduct.name | raw }}</a></td>
-                                            <td>{{ i.getProduct.countCurrent.value }}</td>
-                                            <td>{{ i.getProduct.countReserve.value }}</td>
-                                            <td><input name="product[{{ i.getProduct.id }}][count]" style="width: 75px" type="text" class="form-control" value="{{ i.product_count }}"></td>
-                                            <td><input name="product[{{ i.getProduct.id }}][price_one]" style="width: 75px" type="text" class="form-control" value="{{ i.getProduct.getPrice }}"></td>
-                                            <td><input name="product[{{ i.getProduct.id }}][discount]" style="width: 75px" type="text" class="form-control" value="{{ i.price_discount }}"></td>
-                                            <td><input name="product[{{ i.getProduct.id }}][price_one_total]" style="width: 75px" type="text" class="form-control" value="{{ i.price_with_discount }}"></td>
-                                            <td><input name="product[{{ i.getProduct.id }}][price_all]" style="width: 75px" type="text" class="form-control" value="{{ i.price_row_total }}"></td>
-                                            <td><a class="btn btn-danger" href="/order/edit/{{ order.number }}/remove/{{ i.getProduct.id }}">X</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                <input data-id="{{ order.id }}" class="form-control item-search" type="text" placeholder="Добавить...">
-                                                <ul class="float-list product" data-order_id="{{ order.id }}"></ul>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                             <td><b>Доставка:</b></td>
-                                            <td>
-                                                <b>
-                                                    <input name="delivery_cost" class="form-control" min="0" step="1" type="number" value="{{ order.getDetail.delivery_cost }}">
-                                                </b>
-                                            </td>
+                                            <td><b><input style="width: 80px" name="delivery_cost" class="form-control" min="0" step="1" type="number" value="{{ order.getDetail.delivery_cost }}"></b></td>
                                         </tr>
                                         <tr>
-
                                             <td></td>
                                             <td><h3>Итого: {{ total | number_format(2, '.', ' ')  }}</h3></td>
-
                                         </tr>
+                                    {% else %}
+                                        {% for i in items %}
+                                            <tr style="background-color: {% if i.alert == 0 %} {{ i.color }} {% else %} #F8CECC {% endif %}">
+                                                <td><a class="show-alert-items-button" href="/order/setItemAlert/{{ order.id }}/{{ i.id }}/{{ i.alert }}" style="visibility: hidden"><b class="label label-success" style="font-size: 20px">&nbsp;!&nbsp;</b></a></td>
+                                                <td><img style="max-width: 50px; max-height: 50px" src="/files/mini/{{ i.getProduct.image }}" alt=""></td>
+                                                <td><a href="/product/edit/{{ i.getProduct.id }}">{{ i.getProduct.name | raw }}</a></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{ i.product_count }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -88,144 +73,213 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4">
-{#                    <label for="">Отправить транспортной компанией</label>#}
-{#                    <select name="delivery_company" id="" class="form-control">#}
-{#                            <option value="0">Выберите из списка</option>#}
-{#                        {% for i in delivery_company %}#}
-{#                            <option {% if i.id == order.delivery_company %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                    <label for="">Самовывоз</label>#}
-{#                    <select name="delivery_self" id="" class="form-control">#}
-{#                            <option value="0">Выберите из списка</option>#}
-{#                        {% for i in delivery_self %}#}
-{#                            <option {% if i.id == order.delivery_self %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-                    <label for="">Число мест</label>
-                    <input type="text" class="form-control" value="{{ order.getDetail.sticker }}" name="sticker">
+            {% if global.user.isGrantedManager %}
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="">Число мест</label>
+                        <input min="0" type="number" class="form-control sticker-count" value="{{ order.getDetail.sticker }}" name="sticker">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="">Статус склада</label>
+                        <b class="label label-success warehouse-status" style="background-color: {{ order.getStatusWarehouse.color }}">{{ order.getStatusWarehouse.name }}</b>
+                        <select name="status_warehouse" class="form-control" style="cursor: pointer">
+                            <option value="0">Выберите</option>
+                            {% for i in status_warehouse %}
+                                <option data-color="{{ i.color }}" data-name="{{ i.name }}" {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="status_office" value="{{ order.status }}">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="">Статус офиса</label>
+                        <select name="status_office" id="" class="form-control">
+                            <option value="0">Выберите</option>
+                            {% for i in status_office %}
+                                <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="">Комплектовщик</label>
+                        <select name="packing" id="" class="form-control">
+                            <option value="0">Выберите из списка</option>
+                            {% for i in users %}
+                                <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label for="">Статус склада</label>
-                    <select name="status_warehouse" id="" class="form-control">
-                        <option value="0">Выберите</option>
-                        {% for i in status_warehouse %}
-                            <option {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="hidden" name="status_office" value="{{ order.status }}">
+                <br>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Привязать к клиенту</label>
+                        <input data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.clientName }}" placeholder="поиск...">
+                        <ul class="float-list client"></ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>ФИО или название компании</label>
+                        <input class="form-control" name="company_name" type="text" value="{{ order.getDetail.name }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>E-mail</label>
+                        <input class="form-control" name="email" type="text" value="{{ order.getDetail.email }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label for="">Статус офиса</label>
-                    <select name="status_office" id="" class="form-control">
-                        <option value="0">Выберите</option>
-                        {% for i in status_office %}
-                            <option {% if i.id == order.status %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
-                        {% endfor %}
-                    </select>
-{#                    <label for="">Менеджер</label>#}
-{#                    <select name="manager" id="" class="form-control">#}
-{#                        <option value="0">Выберите из списка</option>#}
-{#                        {% for i in users %}#}
-{#                            <option {% if i.id == order.manager %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                    <label for="">Комплектовщик</label>#}
-{#                    <select name="packing" id="" class="form-control">#}
-{#                        <option value="0">Выберите из списка</option>#}
-{#                        {% for i in users %}#}
-{#                            <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Контактные телефоны (с кодом города)</label>
+                        <input class="form-control" name="phone" type="text" value="{{ order.getDetail.phone }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Дата доставки (когда Вам нужна поставка)</label>
+                        <input class="form-control" name="delivery_date" type="text"  value="{{ order.getDetail.delivery_date }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Время работы Вашей компании</label>
+                        <input class="form-control" name="work_time" type="text" value="{{ order.getDetail.work_time }}">
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>Привязать к клиенту</label>
-                    <input data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.clientName }}" placeholder="поиск...">
-                    <ul class="float-list client"></ul>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Индекс</label>
+                        <input class="form-control" name="index" type="text" value="{{ order.getDetail.address_index }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Город</label>
+                        <input class="form-control" name="city" type="text" value="{{ order.getDetail.city }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Улица, проспект и пр</label>
+                        <input class="form-control" name="street" type="text" value="{{ order.getDetail.street }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>ФИО или название компании</label>
-                    <input class="form-control" name="company_name" type="text" value="{{ order.getDetail.name }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Номер дома</label>
+                        <input class="form-control" name="house" type="text" value="{{ order.getDetail.house }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Корпус</label>
+                        <input class="form-control" name="block" type="text" value="{{ order.getDetail.block }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Квартира, офис</label>
+                        <input class="form-control" name="office" type="text" value="{{ order.getDetail.office }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>E-mail</label>
-                    <input class="form-control" name="email" type="text" value="{{ order.getDetail.email }}">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <label>Комментарий к заказу</label>
+                        <input class="form-control" name="advanced" type="text" value="{{ order.getDetail.advanced }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Способ оплаты</label>
+                        <input disabled class="form-control" name="office" type="text" value="{% if order.getDetail.payment_type == 'online' %}На расчетный счет компании{% else %}Наличными курьеру{% endif %}">
+                    </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>Контактные телефоны (с кодом города)</label>
-                    <input class="form-control" name="phone" type="text" value="{{ order.getDetail.phone }}">
+            {% else %}
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Привязать к клиенту</label>
+                        <input disabled data-order="{{ order.id }}" class="form-control" name="client_search" type="text" value="{{ order.clientName }}" placeholder="поиск...">
+                        <ul class="float-list client"></ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>ФИО или название компании</label>
+                        <input disabled class="form-control" name="company_name" type="text" value="{{ order.getDetail.name }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>E-mail</label>
+                        <input disabled class="form-control" name="email" type="text" value="{{ order.getDetail.email }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>Дата доставки (когда Вам нужна поставка)</label>
-                    <input class="form-control" name="delivery_date" type="text"  value="{{ order.getDetail.delivery_date }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Контактные телефоны (с кодом города)</label>
+                        <input disabled class="form-control" name="phone" type="text" value="{{ order.getDetail.phone }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Дата доставки (когда Вам нужна поставка)</label>
+                        <input disabled class="form-control" name="delivery_date" type="text"  value="{{ order.getDetail.delivery_date }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Время работы Вашей компании</label>
+                        <input disabled class="form-control" name="work_time" type="text" value="{{ order.getDetail.work_time }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>Время работы Вашей компании</label>
-                    <input class="form-control" name="work_time" type="text" value="{{ order.getDetail.work_time }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Индекс</label>
+                        <input disabled class="form-control" name="index" type="text" value="{{ order.getDetail.address_index }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Город</label>
+                        <input disabled class="form-control" name="city" type="text" value="{{ order.getDetail.city }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Улица, проспект и пр</label>
+                        <input class="form-control" name="street" type="text" value="{{ order.getDetail.street }}">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>Индекс</label>
-                    <input class="form-control" name="index" type="text" value="{{ order.getDetail.address_index }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Номер дома</label>
+                        <input disabled class="form-control" name="house" type="text" value="{{ order.getDetail.house }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Корпус</label>
+                        <input disabled class="form-control" name="block" type="text" value="{{ order.getDetail.block }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Квартира, офис</label>
+                        <input disabled class="form-control" name="office" type="text" value="{{ order.getDetail.office }}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>Город</label>
-                    <input class="form-control" name="city" type="text" value="{{ order.getDetail.city }}">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <label>Комментарий к заказу</label>
+                        <input disabled class="form-control" name="advanced" type="text" value="{{ order.getDetail.advanced }}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Способ оплаты</label>
+                        <input disabled class="form-control" name="office" type="text" value="{% if order.getDetail.payment_type == 'online' %}На расчетный счет компании{% else %}Наличными курьеру{% endif %}">
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <label>Улица, проспект и пр</label>
-                    <input class="form-control" name="street" type="text" value="{{ order.getDetail.street }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label for="">Число мест</label>
+                        <input min="0" type="number" class="form-control sticker-count" value="{{ order.getDetail.sticker }}" name="sticker">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="">Статус склада</label>
+                        <b class="label label-success warehouse-status" style="background-color: {{ order.getStatusWarehouse.color }}">{{ order.getStatusWarehouse.name }}</b>
+                        <select name="status_warehouse" class="form-control" style="cursor: pointer">
+                            <option value="0">Выберите</option>
+                            {% for i in status_warehouse %}
+                                <option data-color="{{ i.color }}" data-name="{{ i.name }}" {% if i.id == order.status_warehouse %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="">Комплектовщик</label>
+                        <select name="packing" id="" class="form-control packing">
+                            <option value="0">Выберите из списка</option>
+                            {% for i in users_warehouse %}
+                                <option {% if i.id == order.packing %} selected {% endif %} value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>Номер дома</label>
-                    <input class="form-control" name="house" type="text" value="{{ order.getDetail.house }}">
-                </div>
-                <div class="col-sm-4">
-                    <label>Корпус</label>
-                    <input class="form-control" name="block" type="text" value="{{ order.getDetail.block }}">
-                </div>
-                <div class="col-sm-4">
-                    <label>Квартира, офис</label>
-                    <input class="form-control" name="office" type="text" value="{{ order.getDetail.office }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <label>Комментарий к заказу</label>
-                    <input class="form-control" name="advanced" type="text" value="{{ order.getDetail.advanced }}">
-                </div>
-                <div class="col-sm-4">
-                    <label>Способ оплаты</label>
-                    <input disabled class="form-control" name="office" type="text" value="{% if order.getDetail.payment_type == 'online' %}На расчетный счет компании{% else %}Наличными курьеру{% endif %}">
-                </div>
-            </div>
+            {% endif %}
             <div class="row">
                 <div class="col-lg-12">
                     <br>
-                    <button name="submit" value="submit" type="submit" class="btn btn-primary">Сохранить</button>
+                    <button name="submit" value="{% if not global.user.isGrantedManager %}submit_warehouse{% else %}submit{% endif %}" type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>
         </form>
     </div>
     <script>
-        $('.sticker-count').on('input', e => {
-
-            let a = $('.sticker-btn');
-
-            a.attr('href', `/document/sticker/${a.data('order')}/${parseInt($(e.target).val())}`);
-        })
-
         $('[name=client_search]').on('input', e => {
 
             if ($(e.target).val().length >= 3) {
@@ -251,12 +305,8 @@
 
         $('.float-list.client').on('click', 'li', e => {
 
-            let list = $('.float-list.client');
             let id = parseInt($(e.target).closest('li').attr('id'));
             let order = $('[name=client_search]').data('order');
-
-            // list.find('li').remove();
-            // list.hide();
 
             $.ajax({
                 url: "/order/setClient",
@@ -264,9 +314,7 @@
                     client: id,
                     order: order
                 },
-                success: (r) => {
-                    window.location.reload()
-                }
+                success: s => window.location.reload()
             });
         });
 
@@ -331,5 +379,67 @@
             list.find('li').remove();
             list.hide();
         });
+
+        $('form').on('submit', e => {
+
+            let readyStatus = parseInt('{{ ready_status }}');
+            let selectedStatus = parseInt($('select[name=status_warehouse]').val());
+            let stickersCount = parseInt($('.sticker-count').val());
+            let packer = parseInt($('select[name=packing]').val());
+
+            // если переводим в статус заказ собран то надо указать число мест и сборщика
+            if (selectedStatus === readyStatus) {
+                if (stickersCount < 1) {
+                    e.preventDefault();
+                    alert('Укажите число мест!')
+                }
+                if (packer === 0) {
+                    e.preventDefault();
+                    alert('Укажите комплектовщика!')
+                }
+            }
+
+            // если переводим в статус не хватает товара то надо отметить товары которых не хватает
+            let lowProductStatus = parseInt('{{ low_product_status }}');
+            let lowProductAlert = parseInt('{{ order_has_alert }}');
+
+            if (selectedStatus === lowProductStatus) {
+                if (lowProductAlert === 0) {
+                    e.preventDefault();
+                    alert('Отметьте товары, которых не хватает!')
+                }
+            }
+
+            // если переводим в статус сборка заказа доп. то потребуется добавить товары в список
+            let packingAdvancedStatus = parseInt('{{ order_packing_advanced_status }}');
+            let orderHasExtraItems = parseInt('{{ order_has_extra }}');
+
+            if (selectedStatus === packingAdvancedStatus) {
+                if (!orderHasExtraItems) {
+                    e.preventDefault();
+                    alert('Добавьте требуемые товары в список!')
+                }
+            }
+            // e.preventDefault();
+        })
+        $('select[name=status_warehouse]').on('change', e => {
+
+            let name = $(e.target).find(":selected").data("name");
+            let color = $(e.target).find(":selected").data("color");
+
+            $('.warehouse-status')
+                .css({"background-color": color})
+                .text(name)
+
+            // если переводим в статус не хватает товара то показать кнопки которыми можно отметить товары которых не хватает
+            let selectedStatus = parseInt($('select[name=status_warehouse]').val());
+            let lowProductStatus = parseInt('{{ low_product_status }}');
+
+            if (selectedStatus === lowProductStatus) {
+                $('.show-alert-items-button').css({
+                    "visibility": "visible"
+                })
+            }
+        })
     </script>
 {% endblock %}

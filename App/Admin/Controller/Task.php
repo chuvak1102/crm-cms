@@ -14,7 +14,7 @@ class Task extends Index {
     function before()
     {
         parent::before();
-        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isAdmin()) {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
             $this->redirectToRoute('/403');
         }
     }
@@ -51,9 +51,9 @@ class Task extends Index {
             ->limit($limit)
             ->offset($offset);
 
-        if (!Auth::instance()->hasRole(self::RoleAdmin)) {
-            $task->where('user.id', '=', Auth::instance()->current()->id);
-        }
+//        if (!Auth::instance()->hasRole(self::RoleAdmin)) {
+//            $task->where('user.id', '=', Auth::instance()->current()->id);
+//        }
 
         $task = $task->execute();
         $count = DB::select('id')->from('task')->execute()->count();

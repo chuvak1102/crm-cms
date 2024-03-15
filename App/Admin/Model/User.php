@@ -15,26 +15,53 @@ use PHPMailer\PHPMailer\PHPMailer;
  */
 class User extends Model {
 
+    private $canAccessCRM = [2, 3, 5, 100];
+
+    const ROLE_MANAGER = 2;
+    const ROLE_WAREHOUSE = 3;
     const ROLE_DRIVER = 5;
-    private $roleDriver = [5];
-    private $roleWarehouse = [3];
-    private $roleManager = [6, 2];
-    private $roleAdmin = [100];
-    private $canAccessCRM = [100, 6, 2, 3];
+    const ROLE_ADMIN = 100;
 
-    function isWarehouse()
+    function isGrantedWarehouse()
     {
-        return in_array($this->department, $this->roleWarehouse);
+        if ($this->department == self::ROLE_ADMIN)
+            return true;
+        if ($this->department == self::ROLE_MANAGER)
+            return true;
+        if ($this->department == self::ROLE_WAREHOUSE)
+            return true;
+        if ($this->department == self::ROLE_DRIVER)
+            return true;
+
+        return false;
     }
 
-    function isManager()
+    function isGrantedManager()
     {
-        return in_array($this->department, $this->roleManager);
+        if ($this->department == self::ROLE_ADMIN)
+            return true;
+        if ($this->department == self::ROLE_MANAGER)
+            return true;
+        if ($this->department == self::ROLE_WAREHOUSE)
+            return false;
+        if ($this->department == self::ROLE_DRIVER)
+            return false;
+
+        return false;
     }
 
-    function isAdmin()
+    function isGrantedAdmin()
     {
-        return in_array($this->department, $this->roleAdmin);
+        if ($this->department == self::ROLE_ADMIN)
+            return true;
+        if ($this->department == self::ROLE_MANAGER)
+            return false;
+        if ($this->department == self::ROLE_WAREHOUSE)
+            return false;
+        if ($this->department == self::ROLE_DRIVER)
+            return false;
+
+        return false;
     }
 
     function canAccessCRM()

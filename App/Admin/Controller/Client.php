@@ -18,7 +18,7 @@ class Client extends Index {
     function before()
     {
         parent::before();
-        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isAdmin()) {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
             $this->redirectToRoute('/403');
         }
     }

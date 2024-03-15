@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://37.140.192.114:3306/u0742521_ecopacking</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="ALKOGRAM" uuid="6eb85ecc-bc06-4146-bf72-9850e866b739">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://37.140.192.114:3306/u0742521_ecopacking</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

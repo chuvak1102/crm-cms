@@ -3,12 +3,21 @@
 namespace App\Admin\Controller;
 
 use App\Admin\Model\SupplierOrder;
+use Core\Auth;
 use Core\BreadCrumbs;
 use Core\JsonResponse;
 use Core\Request\Request;
 use Core\Database\DB;
 
 class Critical extends Index {
+
+    function before()
+    {
+        parent::before();
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
+            $this->redirectToRoute('/403');
+        }
+    }
 
     function index(Request $request)
     {

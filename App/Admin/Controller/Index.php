@@ -12,8 +12,6 @@ use Core\Database\DB;
 
 class Index extends Controller {
 
-    const RoleUser = 'user';
-    const RoleAdmin = 'admin';
     const TaskStatusNew = 1;
 
     function before()
@@ -31,7 +29,7 @@ class Index extends Controller {
 
         // роли нет - нахуй
         if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->canAccessCRM()) {
-            $this->redirectToRoute('http://' . Config::SiteDomain);
+            $this->redirectToRoute('https://' . Config::SiteDomain);
         }
 
         Page::instance()->push('user',

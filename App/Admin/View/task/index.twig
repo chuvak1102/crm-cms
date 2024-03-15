@@ -7,7 +7,7 @@
                     <div class="ibox-title">
                         <h5>Задачи</h5>
                         <div class="ibox-tools">
-                            {% if application.isAdmin == true %}
+                            {% if global.user.isGrantedAdmin == true %}
                                 <a href="/task/create" class="btn btn-primary btn-xs">Новая</a>
                                 <a href="/task/template" class="btn btn-primary btn-xs">Шаблон</a>
                             {% endif %}

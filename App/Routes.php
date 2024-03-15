@@ -88,6 +88,7 @@ class Routes {
                 '{order}=>{deleteOrder}' => [Admin\Controller\Order::class => 'deleteOrder'],
                 '{order}=>{findProduct}' => [Admin\Controller\Order::class => 'findProduct'],
                 '{order}=>{addProduct}' => [Admin\Controller\Order::class => 'addProduct'],
+                '{order}=>{setItemAlert}=>{[\d]+}=>{[\d]+}=>{[\d]+}' => [Admin\Controller\Order::class => 'setItemAlert'],
 
                 '{content}' => [Admin\Controller\Content::class => 'index'],
                 '{content}=>{[\d]+}' => [Admin\Controller\Content::class => 'index'],
@@ -135,7 +136,8 @@ class Routes {
                 '{gallery}=>{items}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'items'],
                 '{gallery}=>{delete}=>{[\d]+}' => [Admin\Controller\Gallery::class => 'delete'],
 
-                '{migration}=>{migration_1}' => [Admin\Controller\Migration::class => 'migration_1'],
+                '{migration}' => [Admin\Controller\Migration::class => 'index'],
+                '{migration}=>{migrate}' => [Admin\Controller\Migration::class => 'migrate'],
 
                 '403' => [Admin\Controller\Index::class => 'forbidden'],
                 // напоследок любая ссылка, на случай такой хуйни будем отдавать 404

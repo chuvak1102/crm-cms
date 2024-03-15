@@ -22,7 +22,7 @@ class Test extends Index {
     function before()
     {
         parent::before();
-        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isAdmin()) {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedAdmin()) {
             $this->redirectToRoute('/403');
         }
     }
@@ -46,15 +46,18 @@ class Test extends Index {
             $alias = \Core\Helpers\Text::alias(mb_strtolower($p->name));
             $id = intval($p->id);
 
-            DB::update('product')
-                ->set([
-                    'alias' => $alias,
-                ])
-                ->where('id', '=', $id)
-                ->execute();
+            print_r($alias);
+//            print_r($p->name);
+
+//            DB::update('product')
+//                ->set([
+//                    'alias' => $alias,
+//                ])
+//                ->where('id', '=', $id)
+//                ->execute();
         }
 
-        print_r($old);
+
         dump("OK");
 
         return $this->render('Admin:test', [

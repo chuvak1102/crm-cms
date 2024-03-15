@@ -2,8 +2,8 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig authType="PASSWORD" host="37.140.192.114" id="66a88540-fa41-48e1-a3e1-01721f0fa3a7" port="22" nameFormat="DESCRIPTIVE" username="u0742521" />
-      <sshConfig authType="PASSWORD" host="u390913.ssh.masterhost.ru" id="b82a540b-29f9-478c-9e34-829c9cd88e30" port="22" nameFormat="DESCRIPTIVE" username="u390913" />
+      <sshConfig authType="PASSWORD" connectionConfig="{&quot;hostKeyVerifier&quot;:{&quot;hashKnownHosts&quot;:true,&quot;stringHostKeyChecking&quot;:&quot;NO&quot;},&quot;serverAliveInterval&quot;:30}" host="37.140.192.114" id="66a88540-fa41-48e1-a3e1-01721f0fa3a7" port="22" nameFormat="DESCRIPTIVE" username="u0742521" />
+      <sshConfig authType="PASSWORD" connectionConfig="{&quot;hostKeyVerifier&quot;:{&quot;stringHostKeyChecking&quot;:&quot;NO&quot;},&quot;serverAliveInterval&quot;:300}" host="u390913.ssh.masterhost.ru" id="78980f69-5022-420d-98db-206209d70e15" port="22" nameFormat="DESCRIPTIVE" username="u390913" />
     </configs>
   </component>
 </project>

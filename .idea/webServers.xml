@@ -6,30 +6,30 @@
         <fileTransfer mountedRoot="/Library/WebServer/Documents" accessType="MOUNT" port="0" />
       </webServer>
       <webServer id="ba2567aa-2585-4d24-a8f2-99fe3e2bff3b" name="remote">
-        <fileTransfer rootFolder="/var/www/u0742521/data/www/eco" accessType="SFTP" host="37.140.192.114" port="22" sshConfigId="66a88540-fa41-48e1-a3e1-01721f0fa3a7" sshConfig="u0742521@37.140.192.114:22 password">
+        <fileTransfer rootFolder="/var/www/u0742521/data/www/alkogram.ru" accessType="SFTP" host="37.140.192.114" port="22" sshConfigId="66a88540-fa41-48e1-a3e1-01721f0fa3a7" sshConfig="u0742521@37.140.192.114:22 password">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="30000" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>
       <webServer id="6e4c7b2e-318d-4cff-a30d-4247dd073e38" name="PRODUCTION">
-        <fileTransfer rootFolder="//home/u390913/ecopacking.ru" accessType="SFTP" host="u390913.ssh.masterhost.ru" port="22" sshConfigId="b82a540b-29f9-478c-9e34-829c9cd88e30" sshConfig="u390913@u390913.ssh.masterhost.ru:22 password">
+        <fileTransfer rootFolder="//home/u390913/ecopacking.ru" accessType="SFTP" host="u390913.ssh.masterhost.ru" port="22" sshConfigId="78980f69-5022-420d-98db-206209d70e15" sshConfig="u390913@u390913.ssh.masterhost.ru:22 password">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>
       <webServer id="777aa1d3-1b28-431e-a775-18a9a473ab35" name="OLD_EPOPACKING">
-        <fileTransfer rootFolder="//home/u390913/old.ecopacking.ru" accessType="SFTP" host="u390913.ssh.masterhost.ru" port="22" sshConfigId="b82a540b-29f9-478c-9e34-829c9cd88e30" sshConfig="u390913@u390913.ssh.masterhost.ru:22 password">
+        <fileTransfer rootFolder="//home/u390913/old.ecopacking.ru" accessType="SFTP" host="u390913.ssh.masterhost.ru" port="22" sshConfigId="78980f69-5022-420d-98db-206209d70e15" sshConfig="u390913@u390913.ssh.masterhost.ru:22 password">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>
       <webServer id="37f967ef-f4be-4020-9523-4a729a592aaf" name="ALKOGRAM">
         <fileTransfer rootFolder="/var/www/u0742521/data/www/alkogram.ru" accessType="SFTP" host="37.140.192.114" port="22" sshConfigId="66a88540-fa41-48e1-a3e1-01721f0fa3a7" sshConfig="u0742521@37.140.192.114:22 password">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="30000" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>

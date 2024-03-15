@@ -24,7 +24,7 @@
     >
         <div class="text14" style="position: absolute; top: -100px; left: {{ left }}px">
             <h1 style="text-align: center;">Заказ № {{ order.number }}</h1>
-            <div style="text-align: center; font-weight: bold; font-size: 20px">Место № {{ i }}</div>
+            <div style="text-align: center; font-weight: bold; font-size: 20px">Место № {{ i }} из {{ total }}</div>
             <div style="padding-top:20px; font-weight: bold; font: 20px Arial, Helvetica, sans-serif">
                 Клиент: {{ order.getDetail.name }} <br>
                 Город: {{ order.getDetail.city }}<br>

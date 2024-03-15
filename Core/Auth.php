@@ -93,10 +93,11 @@ class Auth {
         $password = Hash::hash($user['password']);
         $token = Hash::hash($login.$password.$login);
         $role = $user['role'] ? $user['role'] : 'anon';
+        $color = $user['color'] ? $user['color'] : '#1ab394';
 
         DB::insert("
-            INSERT INTO user (name, department, position, password, login, token, role) 
-            VALUES('{$name}','{$department}','{$position}','{$password}','{$login}', '{$token}', '{$role}');
+            INSERT INTO user (name, department, position, password, login, token, role, color) 
+            VALUES('{$name}','{$department}','{$position}','{$password}','{$login}', '{$token}', '{$role}', '{$color}');
         ");
     }
 

@@ -11,7 +11,7 @@ class User extends Index {
     function before()
     {
         parent::before();
-        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isAdmin()) {
+        if (!\App\Admin\Model\User::one(Auth::instance()->current()->id)->isGrantedManager()) {
             $this->redirectToRoute('/403');
         }
     }
@@ -52,7 +52,8 @@ class User extends Index {
             'position' => $request->get('position'),
             'login' => $request->get('login'),
             'password' => $request->get('password'),
-            'role' => 'manager'
+            'role' => $request->get('department'),
+            'color' => $request->get('color'),
         ]);
 
         $this->redirectToRoute("/user");
